@@ -1,8 +1,9 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -25,6 +26,10 @@ interface DataTableProps<T> {
   page: number;
   pageSize: number;
   onPageChange: (page: number) => void;
+  search?: string;
+  onSearchChange?: (search: string) => void;
+  searchPlaceholder?: string;
+  toolbar?: React.ReactNode;
   emptyText?: string;
   rowKey: (row: T) => string;
 }
@@ -36,6 +41,10 @@ export function DataTable<T>({
   page,
   pageSize,
   onPageChange,
+  search,
+  onSearchChange,
+  searchPlaceholder,
+  toolbar,
   emptyText,
   rowKey,
 }: DataTableProps<T>) {
@@ -45,6 +54,23 @@ export function DataTable<T>({
 
   return (
     <div className="space-y-4">
+      {(onSearchChange || toolbar) && (
+        <div className="flex items-center gap-2">
+          {onSearchChange && (
+            <div className="relative max-w-sm">
+              <Search className="absolute left-2.5 top-2.5 size-4 text-muted-foreground" />
+              <Input
+                value={search || ""}
+                onChange={(e) => onSearchChange(e.target.value)}
+                placeholder={searchPlaceholder || t("search.placeholder")}
+                className="pl-8 h-9"
+              />
+            </div>
+          )}
+          {toolbar}
+        </div>
+      )}
+
       <div className="overflow-x-auto">
         <Table>
           <TableHeader>

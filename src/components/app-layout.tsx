@@ -17,6 +17,7 @@ import { Separator } from "@/components/ui/separator";
 export function AppLayout({
   children,
   navItems,
+  footerNavItems,
   brand,
   brandHref = "/",
   mobileBrand,
@@ -26,6 +27,7 @@ export function AppLayout({
 }: {
   children: React.ReactNode;
   navItems: NavItem[];
+  footerNavItems?: NavItem[];
   brand: React.ReactNode;
   brandHref?: string;
   mobileBrand?: React.ReactNode;
@@ -78,6 +80,7 @@ export function AppLayout({
         brand={brand}
         brandHref={brandHref}
         navItems={navItems}
+        footerNavItems={footerNavItems}
         footer={
           <UserMenu
             name={session!.user.name || "User"}

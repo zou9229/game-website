@@ -38,11 +38,19 @@ export default function CreditsPage() {
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [tab, setTab] = useState<Tab>("all");
+  const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedSearch(search), 300);
+    return () => clearTimeout(timer);
+  }, [search]);
 
   const fetchCredits = useCallback(
     (p: number) => {
       const params = new URLSearchParams({ page: String(p), pageSize: String(PAGE_SIZE) });
       if (tab !== "all") params.set("transactionType", tab);
+      if (debouncedSearch) params.set("search", debouncedSearch);
       fetch(`/api/admin/credits?${params}`)
         .then((r) => r.json())
         .then((res) => {
@@ -52,13 +60,13 @@ export default function CreditsPage() {
           }
         });
     },
-    [tab]
+    [tab, debouncedSearch]
   );
 
   useEffect(() => {
     setPage(1);
     fetchCredits(1);
-  }, [tab, fetchCredits]);
+  }, [tab, debouncedSearch, fetchCredits]);
 
   useEffect(() => {
     fetchCredits(page);
@@ -126,7 +134,7 @@ export default function CreditsPage() {
         <p className="text-muted-foreground">{t("credits.description")}</p>
       </div>
 
-      <div className="flex gap-1 border-b border-border overflow-x-auto">
+      <div className="flex gap-1 border-b border-border overflow-x-auto overflow-y-hidden">
         {TABS.map((tb) => (
           <button
             key={tb}
@@ -158,6 +166,8 @@ export default function CreditsPage() {
             onPageChange={setPage}
             rowKey={(c) => c.id}
             emptyText={t("credits.no_credits")}
+            search={search}
+            onSearchChange={setSearch}
           />
         </CardContent>
       </Card>

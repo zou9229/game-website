@@ -4,7 +4,7 @@ import { getAuth } from '@/core/auth';
 import { hasPermission, createPermission, updatePermission, deletePermission } from '@/modules/rbac/service';
 import { db } from '@/core/db';
 import { permission } from '@/config/db/schema';
-import { count } from 'drizzle-orm';
+import { count, and, like, or, type SQL } from 'drizzle-orm';
 
 async function checkAdmin() {
   const auth = getAuth();
@@ -22,13 +22,21 @@ export async function GET(req: Request) {
     const page = Math.max(1, parseInt(searchParams.get('page') || '1'));
     const pageSize = Math.min(100, Math.max(1, parseInt(searchParams.get('pageSize') || '10')));
     const offset = (page - 1) * pageSize;
+    const search = searchParams.get('search');
 
-    const [totalResult] = await db().select({ count: count() }).from(permission);
+    const conditions: SQL[] = [];
+    if (search) {
+      conditions.push(or(like(permission.code, `%${search}%`), like(permission.title, `%${search}%`))!);
+    }
+    const where = conditions.length > 0 ? and(...conditions) : undefined;
+
+    const [totalResult] = await db().select({ count: count() }).from(permission).where(where);
     const total = totalResult.count;
 
     const permissions = await db()
       .select()
       .from(permission)
+      .where(where)
       .limit(pageSize)
       .offset(offset);
 

@@ -51,6 +51,8 @@ export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
 
   // Role management dialog
   const [managingUser, setManagingUser] = useState<User | null>(null);
@@ -58,8 +60,19 @@ export default function UsersPage() {
   const [userRoleIds, setUserRoleIds] = useState<Set<string>>(new Set());
   const [toggling, setToggling] = useState<string | null>(null);
 
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedSearch(search), 300);
+    return () => clearTimeout(timer);
+  }, [search]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearch]);
+
   const fetchUsers = useCallback((p: number) => {
-    fetch(`/api/admin/users?page=${p}&pageSize=${PAGE_SIZE}`)
+    const params = new URLSearchParams({ page: String(p), pageSize: String(PAGE_SIZE) });
+    if (debouncedSearch) params.set("search", debouncedSearch);
+    fetch(`/api/admin/users?${params}`)
       .then((r) => r.json())
       .then((res) => {
         if (res.code === 0) {
@@ -67,7 +80,7 @@ export default function UsersPage() {
           setTotal(res.data.total);
         }
       });
-  }, []);
+  }, [debouncedSearch]);
 
   useEffect(() => {
     fetchUsers(page);
@@ -190,6 +203,8 @@ export default function UsersPage() {
             onPageChange={setPage}
             rowKey={(u) => u.id}
             emptyText={t("users.no_users")}
+            search={search}
+            onSearchChange={setSearch}
           />
         </CardContent>
       </Card>

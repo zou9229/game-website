@@ -4,7 +4,7 @@ import { getAuth } from '@/core/auth';
 import { hasPermission } from '@/modules/rbac/service';
 import { db } from '@/core/db';
 import { user } from '@/config/db/schema';
-import { desc, count } from 'drizzle-orm';
+import { desc, count, or, like, and, type SQL } from 'drizzle-orm';
 
 export async function GET(req: Request) {
   try {
@@ -19,8 +19,20 @@ export async function GET(req: Request) {
     const page = Math.max(1, parseInt(searchParams.get('page') || '1'));
     const pageSize = Math.min(100, Math.max(1, parseInt(searchParams.get('pageSize') || '10')));
     const offset = (page - 1) * pageSize;
+    const search = searchParams.get('search');
 
-    const [totalResult] = await db().select({ count: count() }).from(user);
+    const conditions: SQL[] = [];
+    if (search) {
+      conditions.push(
+        or(
+          like(user.email, `%${search}%`),
+          like(user.name, `%${search}%`)
+        )!
+      );
+    }
+    const where = conditions.length > 0 ? and(...conditions) : undefined;
+
+    const [totalResult] = await db().select({ count: count() }).from(user).where(where);
     const total = totalResult.count;
 
     const users = await db()
@@ -32,6 +44,7 @@ export async function GET(req: Request) {
         createdAt: user.createdAt,
       })
       .from(user)
+      .where(where)
       .orderBy(desc(user.createdAt))
       .limit(pageSize)
       .offset(offset);

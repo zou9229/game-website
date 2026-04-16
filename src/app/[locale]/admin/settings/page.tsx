@@ -101,7 +101,7 @@ export default function AdminSettingsPage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1 border-b border-border overflow-x-auto">
+      <div className="flex gap-1 border-b border-border overflow-x-auto overflow-y-hidden">
         {tabs.map((tab) => (
           <button
             key={tab.name}

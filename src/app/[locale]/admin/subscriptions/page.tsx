@@ -40,12 +40,20 @@ export default function SubscriptionsPage() {
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [tab, setTab] = useState<Tab>("all");
+  const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedSearch(search), 300);
+    return () => clearTimeout(timer);
+  }, [search]);
 
   const fetchSubscriptions = useCallback(
     (p: number) => {
       const params = new URLSearchParams({ page: String(p), pageSize: String(PAGE_SIZE) });
       if (tab === "month") params.set("interval", "month");
       if (tab === "year") params.set("interval", "year");
+      if (debouncedSearch) params.set("search", debouncedSearch);
       fetch(`/api/admin/subscriptions?${params}`)
         .then((r) => r.json())
         .then((res) => {
@@ -55,13 +63,13 @@ export default function SubscriptionsPage() {
           }
         });
     },
-    [tab]
+    [tab, debouncedSearch]
   );
 
   useEffect(() => {
     setPage(1);
     fetchSubscriptions(1);
-  }, [tab, fetchSubscriptions]);
+  }, [tab, debouncedSearch, fetchSubscriptions]);
 
   useEffect(() => {
     fetchSubscriptions(page);
@@ -134,7 +142,7 @@ export default function SubscriptionsPage() {
         <p className="text-muted-foreground">{t("subscriptions.description")}</p>
       </div>
 
-      <div className="flex gap-1 border-b border-border overflow-x-auto">
+      <div className="flex gap-1 border-b border-border overflow-x-auto overflow-y-hidden">
         {TABS.map((tb) => (
           <button
             key={tb}
@@ -166,6 +174,8 @@ export default function SubscriptionsPage() {
             onPageChange={setPage}
             rowKey={(s) => s.id}
             emptyText={t("subscriptions.no_subscriptions")}
+            search={search}
+            onSearchChange={setSearch}
           />
         </CardContent>
       </Card>

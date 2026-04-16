@@ -14,7 +14,6 @@ export default function AdminLayout({
 
   const navItems = [
     { href: "/admin", label: t("nav.overview"), icon: LayoutDashboard },
-    { href: "/admin/settings", label: t("nav.settings"), icon: Settings },
     { href: "/admin/users", label: t("nav.users"), icon: Users, group: t("nav.rbac") },
     { href: "/admin/roles", label: t("nav.roles"), icon: Shield, group: t("nav.rbac") },
     { href: "/admin/permissions", label: t("nav.permissions"), icon: KeyRound, group: t("nav.rbac") },
@@ -23,9 +22,14 @@ export default function AdminLayout({
     { href: "/admin/credits", label: t("nav.credits"), icon: Coins, group: t("nav.billing") },
   ];
 
+  const footerNavItems = [
+    { href: "/admin/settings", label: t("nav.settings"), icon: Settings },
+  ];
+
   return (
     <AppLayout
       navItems={navItems}
+      footerNavItems={footerNavItems}
       brand={envConfigs.app_name}
       brandHref="/admin"
       requirePermission="admin.*"

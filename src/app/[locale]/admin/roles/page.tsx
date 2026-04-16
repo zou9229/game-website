@@ -48,6 +48,8 @@ export default function RolesPage() {
   const [roles, setRoles] = useState<Role[]>([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
 
   // Create dialog
   const [createOpen, setCreateOpen] = useState(false);
@@ -67,8 +69,19 @@ export default function RolesPage() {
   const [assignedPermIds, setAssignedPermIds] = useState<Set<string>>(new Set());
   const [permSaving, setPermSaving] = useState(false);
 
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedSearch(search), 300);
+    return () => clearTimeout(timer);
+  }, [search]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearch]);
+
   const fetchRoles = useCallback((p: number) => {
-    fetch(`/api/admin/roles?page=${p}&pageSize=${PAGE_SIZE}`)
+    const params = new URLSearchParams({ page: String(p), pageSize: String(PAGE_SIZE) });
+    if (debouncedSearch) params.set("search", debouncedSearch);
+    fetch(`/api/admin/roles?${params}`)
       .then((r) => r.json())
       .then((res) => {
         if (res.code === 0) {
@@ -76,7 +89,7 @@ export default function RolesPage() {
           setTotal(res.data.total);
         }
       });
-  }, []);
+  }, [debouncedSearch]);
 
   useEffect(() => {
     fetchRoles(page);
@@ -289,6 +302,8 @@ export default function RolesPage() {
             onPageChange={setPage}
             rowKey={(r) => r.id}
             emptyText={t("roles.no_roles")}
+            search={search}
+            onSearchChange={setSearch}
           />
         </CardContent>
       </Card>

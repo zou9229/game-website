@@ -1,8 +1,9 @@
 "use client";
 
-import { type LucideIcon } from "lucide-react";
+import { type LucideIcon, ChevronsUpDown, LayoutDashboard, Shield, Globe } from "lucide-react";
 import Image from "next/image";
 import { Link, usePathname } from "@/core/i18n/navigation";
+import { useTranslations } from "next-intl";
 import { envConfigs } from "@/config";
 import {
   Sidebar,
@@ -16,6 +17,14 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export interface NavItem {
   href: string;
@@ -24,18 +33,27 @@ export interface NavItem {
   group?: string;
 }
 
+const SYSTEMS = [
+  { key: "admin", href: "/admin", icon: Shield },
+  { key: "dashboard", href: "/dashboard", icon: LayoutDashboard },
+  { key: "landing", href: "/", icon: Globe },
+] as const;
+
 export function AppSidebar({
   brand,
   brandHref = "/",
   navItems,
+  footerNavItems,
   footer,
 }: {
   brand: React.ReactNode;
   brandHref?: string;
   navItems: NavItem[];
+  footerNavItems?: NavItem[];
   footer?: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const t = useTranslations("common");
 
   // Group nav items
   const groups: { label?: string; items: NavItem[] }[] = [];
@@ -49,19 +67,62 @@ export function AppSidebar({
     }
   }
 
+  // Detect current system
+  const currentSystem = SYSTEMS.find(
+    (s) => s.key !== "landing" && pathname.startsWith(s.href)
+  ) || SYSTEMS[2]; // fallback to landing
+
   return (
     <Sidebar variant="inset">
       <SidebarHeader>
-        <Link href={brandHref} className="flex items-center gap-2 px-2 py-1">
-          <Image
-            src={envConfigs.app_logo}
-            alt={typeof brand === 'string' ? brand : 'Logo'}
-            width={24}
-            height={24}
-            className="size-6 rounded-md"
-          />
-          <span className="text-sm font-semibold">{brand}</span>
-        </Link>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-sm hover:bg-sidebar-accent hover:text-sidebar-accent-foreground cursor-pointer outline-none"
+              >
+                <div className="flex size-6 items-center justify-center">
+                  <Image
+                    src={envConfigs.app_logo}
+                    alt={typeof brand === 'string' ? brand : 'Logo'}
+                    width={24}
+                    height={24}
+                    className="size-6 rounded-md"
+                  />
+                </div>
+                <div className="flex flex-1 flex-col gap-0.5 leading-none">
+                  <span className="font-semibold">{brand}</span>
+                  <span className="text-xs text-muted-foreground">
+                    {t(`systems.${currentSystem.key}`)}
+                  </span>
+                </div>
+                <ChevronsUpDown className="size-4 text-muted-foreground" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-[--radix-dropdown-menu-trigger-width]" align="start">
+                <DropdownMenuLabel>{t("systems.label")}</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                {SYSTEMS.map((sys) => {
+                  const Icon = sys.icon;
+                  const isCurrent = sys.key === currentSystem.key;
+                  return (
+                    <DropdownMenuItem
+                      key={sys.key}
+                      disabled={isCurrent}
+                      onClick={() => {
+                        if (!isCurrent) {
+                          window.open(sys.href, "_blank");
+                        }
+                      }}
+                    >
+                      <Icon className="size-4" />
+                      {t(`systems.${sys.key}`)}
+                    </DropdownMenuItem>
+                  );
+                })}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </SidebarMenuItem>
+        </SidebarMenu>
       </SidebarHeader>
 
       <SidebarContent>
@@ -93,11 +154,27 @@ export function AppSidebar({
         ))}
       </SidebarContent>
 
-      {footer && (
-        <SidebarFooter>
-          {footer}
-        </SidebarFooter>
-      )}
+      <SidebarFooter>
+        {footerNavItems && footerNavItems.length > 0 && (
+          <SidebarMenu>
+            {footerNavItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = pathname.startsWith(item.href);
+              return (
+                <SidebarMenuItem key={item.href}>
+                  <Link href={item.href}>
+                    <SidebarMenuButton tooltip={item.label} isActive={isActive}>
+                      <Icon />
+                      <span>{item.label}</span>
+                    </SidebarMenuButton>
+                  </Link>
+                </SidebarMenuItem>
+              );
+            })}
+          </SidebarMenu>
+        )}
+        {footer}
+      </SidebarFooter>
     </Sidebar>
   );
 }

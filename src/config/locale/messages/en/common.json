@@ -21,6 +21,15 @@
     "google_sign_in": "Sign in with Google",
     "github_sign_in": "Sign in with GitHub"
   },
+  "systems": {
+    "label": "Switch System",
+    "admin": "Admin",
+    "dashboard": "Dashboard",
+    "landing": "Website"
+  },
+  "search": {
+    "placeholder": "Search..."
+  },
   "table": {
     "no_data": "No data",
     "page_info": "Page {current} of {total}",

@@ -42,6 +42,8 @@ export default function PermissionsPage() {
   const [permissions, setPermissions] = useState<Permission[]>([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
 
   // Create
   const [createOpen, setCreateOpen] = useState(false);
@@ -55,8 +57,19 @@ export default function PermissionsPage() {
   // Delete
   const [deletingPerm, setDeletingPerm] = useState<Permission | null>(null);
 
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedSearch(search), 300);
+    return () => clearTimeout(timer);
+  }, [search]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearch]);
+
   const fetchPermissions = useCallback((p: number) => {
-    fetch(`/api/admin/permissions?page=${p}&pageSize=${PAGE_SIZE}`)
+    const params = new URLSearchParams({ page: String(p), pageSize: String(PAGE_SIZE) });
+    if (debouncedSearch) params.set("search", debouncedSearch);
+    fetch(`/api/admin/permissions?${params}`)
       .then((r) => r.json())
       .then((res) => {
         if (res.code === 0) {
@@ -64,7 +77,7 @@ export default function PermissionsPage() {
           setTotal(res.data.total);
         }
       });
-  }, []);
+  }, [debouncedSearch]);
 
   useEffect(() => {
     fetchPermissions(page);
@@ -241,6 +254,8 @@ export default function PermissionsPage() {
             onPageChange={setPage}
             rowKey={(p) => p.id}
             emptyText={t("permissions.no_permissions")}
+            search={search}
+            onSearchChange={setSearch}
           />
         </CardContent>
       </Card>

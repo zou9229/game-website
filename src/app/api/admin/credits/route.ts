@@ -4,7 +4,7 @@ import { getAuth } from '@/core/auth';
 import { hasPermission } from '@/modules/rbac/service';
 import { db } from '@/core/db';
 import { credit } from '@/config/db/schema';
-import { desc, count, eq, and, type SQL } from 'drizzle-orm';
+import { desc, count, eq, and, like, or, type SQL } from 'drizzle-orm';
 
 export async function GET(req: Request) {
   try {
@@ -23,10 +23,15 @@ export async function GET(req: Request) {
     const transactionType = searchParams.get('transactionType');
     const status = searchParams.get('status');
 
+    const search = searchParams.get('search');
+
     const conditions: SQL[] = [];
     if (transactionType) conditions.push(eq(credit.transactionType, transactionType));
     if (status) conditions.push(eq(credit.status, status));
     else conditions.push(eq(credit.status, 'active'));
+    if (search) {
+      conditions.push(or(like(credit.transactionNo, `%${search}%`), like(credit.userEmail, `%${search}%`))!);
+    }
 
     const where = conditions.length > 0 ? and(...conditions) : undefined;
 
