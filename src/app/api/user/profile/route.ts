@@ -30,7 +30,7 @@ export async function PATCH(request: Request) {
       if (isDataUrl) {
         // Cap inline base64 to avoid bloating the user row (matches upload route default).
         const maxBytes =
-          (Number(process.env.INLINE_IMAGE_MAX_KB) || 512) * 1024;
+          (Number(process.env.INLINE_IMAGE_MAX_KB) || 2048) * 1024;
         // base64 length ≈ ceil(bytes / 3) * 4; reverse with a small slack.
         const approxBytes = Math.floor((image.length - image.indexOf(',') - 1) * 0.75);
         if (approxBytes > maxBytes) {

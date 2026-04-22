@@ -22,7 +22,7 @@ const extFromMime = (mimeType: string) => {
 
 // Hard cap for inline base64 (no storage configured). Keep small — fits comfortably
 // in a TEXT column and a JSON response. Configurable via INLINE_IMAGE_MAX_KB.
-const INLINE_MAX_BYTES = (Number(envConfigs.inline_image_max_kb) || 512) * 1024;
+const INLINE_MAX_BYTES = (Number(envConfigs.inline_image_max_kb) || 2048) * 1024;
 
 export async function POST(req: Request) {
   try {

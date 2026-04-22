@@ -26,7 +26,19 @@
     "title": "Billing",
     "description": "Manage your subscription and credits",
     "credits": "Credits",
-    "credits_description": "Your available credit balance"
+    "credits_description": "Your available credit balance",
+    "subscription": "Subscription",
+    "no_subscription": "No active subscription",
+    "plan": "Plan",
+    "status": "Status",
+    "renews_on": "Renews on {date}",
+    "ends_on": "Ends on {date}",
+    "payments": "Payments",
+    "no_payments": "No payments yet",
+    "order_no": "Order",
+    "amount": "Amount",
+    "provider": "Provider",
+    "date": "Date"
   },
   "apikeys": {
     "title": "API Keys",

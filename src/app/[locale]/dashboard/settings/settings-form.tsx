@@ -67,13 +67,13 @@ export function SettingsForm({
         <CardHeader>
           <CardTitle>{t("dashboard.settings.profile")}</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-6 pb-6">
+        <CardContent className="space-y-6 pb-2">
           <div className="space-y-2">
             <Label>{t("dashboard.settings.avatar")}</Label>
             <ImageUploader
               defaultPreviews={image ? [image] : []}
               onChange={handleAvatarChange}
-              maxSizeMB={0.5}
+              maxSizeMB={2}
               emptyHint={t("dashboard.settings.avatar_hint")}
             />
           </div>

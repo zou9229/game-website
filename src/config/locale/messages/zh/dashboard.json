@@ -26,7 +26,19 @@
     "title": "账单",
     "description": "管理你的订阅和额度",
     "credits": "额度",
-    "credits_description": "你的可用额度余额"
+    "credits_description": "你的可用额度余额",
+    "subscription": "订阅",
+    "no_subscription": "没有活跃的订阅",
+    "plan": "套餐",
+    "status": "状态",
+    "renews_on": "{date} 续订",
+    "ends_on": "{date} 到期",
+    "payments": "付款记录",
+    "no_payments": "暂无付款记录",
+    "order_no": "订单号",
+    "amount": "金额",
+    "provider": "支付方式",
+    "date": "日期"
   },
   "apikeys": {
     "title": "API 密钥",
