@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { Copy, Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -21,7 +21,7 @@ import { DataTable, type Column } from "@/components/data-table";
 
 interface ApiKey {
   id: string;
-  key: string;
+  keyPrefix: string;
   title: string;
   createdAt: string;
 }
@@ -96,11 +96,6 @@ export default function ApiKeysPage() {
     }
   }
 
-  async function handleCopy(key: string) {
-    await navigator.clipboard.writeText(key);
-    toast.success(t("settings.apikeys.copied"));
-  }
-
   const columns: Column<ApiKey>[] = [
     {
       header: t("settings.apikeys.name_col"),
@@ -109,7 +104,7 @@ export default function ApiKeysPage() {
     {
       header: t("settings.apikeys.key_col"),
       cell: (k) => (
-        <span className="font-mono text-xs">{k.key.slice(0, 12)}...</span>
+        <span className="font-mono text-xs">{k.keyPrefix}…</span>
       ),
     },
     {
@@ -117,14 +112,6 @@ export default function ApiKeysPage() {
       className: "w-[100px]",
       cell: (k) => (
         <div className="flex gap-1">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="size-7"
-            onClick={() => handleCopy(k.key)}
-          >
-            <Copy className="size-3" />
-          </Button>
           <Button
             variant="ghost"
             size="icon"

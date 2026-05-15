@@ -232,23 +232,11 @@ export default function VerifyEmailPage() {
       await checkSessionAndRedirect();
       const { data } = await authClient.getSession();
       if (!data?.user) {
+        // Always send the user to sign-in. If they haven't verified yet,
+        // sign-in will surface the correct error there — we deliberately
+        // don't expose an unauthenticated "is X verified?" oracle.
         const targetEmail = String(email || "").trim().toLowerCase();
-        if (targetEmail) {
-          try {
-            const res = await fetch("/api/user/is-email-verified", {
-              method: "POST",
-              headers: { "content-type": "application/json" },
-              body: JSON.stringify({ email: targetEmail }),
-            });
-            const json = await res.json().catch(() => null);
-            const verified = Boolean(json?.data?.emailVerified);
-            if (verified) {
-              hardNavigateToSignIn(targetEmail);
-              return;
-            }
-          } catch {}
-        }
-        toast.error(t("verify_email_not_verified_yet"));
+        hardNavigateToSignIn(targetEmail);
       }
     })();
   };

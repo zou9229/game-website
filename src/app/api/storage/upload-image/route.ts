@@ -4,6 +4,7 @@ import { md5 } from '@/lib/hash';
 import { respData, respErr } from '@/lib/resp';
 import { getAuth } from '@/core/auth';
 import { getStorage, isStorageConfigured } from '@/modules/storage/service';
+import { enforceMinIntervalRateLimit } from '@/lib/rate-limit';
 
 const extFromMime = (mimeType: string) => {
   const map: Record<string, string> = {
@@ -25,6 +26,12 @@ const extFromMime = (mimeType: string) => {
 const INLINE_MAX_BYTES = (Number(envConfigs.inline_image_max_kb) || 2048) * 1024;
 
 export async function POST(req: Request) {
+  const limited = enforceMinIntervalRateLimit(req, {
+    intervalMs: 1000,
+    keyPrefix: 'upload-image',
+  });
+  if (limited) return limited;
+
   try {
     const auth = getAuth();
     const session = await auth.api.getSession({ headers: await headers() });

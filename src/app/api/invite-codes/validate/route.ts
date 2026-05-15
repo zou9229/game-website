@@ -1,7 +1,14 @@
 import { respData, respErr } from '@/lib/resp';
 import { validateInviteCode } from '@/modules/invite-codes/service';
+import { enforceMinIntervalRateLimit } from '@/lib/rate-limit';
 
 export async function POST(req: Request) {
+  const limited = enforceMinIntervalRateLimit(req, {
+    intervalMs: 1000,
+    keyPrefix: 'invite-validate',
+  });
+  if (limited) return limited;
+
   try {
     const body = await req.json().catch(() => ({}));
     const code = String(body?.code || '').trim();

@@ -8,8 +8,20 @@ import { handlePaymentCallback } from '@/modules/payment/service';
  * After payment (e.g. Alipay return_url), this endpoint:
  * 1. Queries the payment provider for the latest order status
  * 2. Updates the order in DB if paid
- * 3. Redirects to the final destination
+ * 3. Redirects to the final destination (same-origin only)
  */
+function resolveSameOriginRedirect(input: string | null, fallbackUrl: string): string {
+  if (!input) return fallbackUrl;
+  try {
+    const appUrl = new URL(envConfigs.app_url || 'http://localhost:3000');
+    const target = new URL(input, appUrl);
+    if (target.origin !== appUrl.origin) return fallbackUrl;
+    return target.toString();
+  } catch {
+    return fallbackUrl;
+  }
+}
+
 export async function GET(req: Request) {
   const url = new URL(req.url);
   const orderNo = url.searchParams.get('order_no');
@@ -24,5 +36,5 @@ export async function GET(req: Request) {
     console.error('payment callback error:', error);
   }
 
-  return NextResponse.redirect(redirect || fallback);
+  return NextResponse.redirect(resolveSameOriginRedirect(redirect, fallback));
 }

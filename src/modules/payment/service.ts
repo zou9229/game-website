@@ -99,6 +99,7 @@ async function getPaymentManager(): Promise<PaymentManager> {
         privateKey: c('wechat_private_key'),
         serialNo: c('wechat_serial_no'),
         notifyUrl: c('wechat_notify_url') || undefined,
+        platformCert: c('wechat_platform_cert') || undefined,
       }),
       isDefault
     );
@@ -226,7 +227,16 @@ export async function handleWebhook(params: {
 // --- Checkout Success: update order + create subscription + grant credits ---
 
 async function handleCheckoutSuccess(session: any, provider: string) {
-  const sessionId = session.paymentResult?.id || session.paymentResult?.object?.id || '';
+  // Different providers expose the session identifier under different keys.
+  // We try the common shapes; for Alipay the natural key is out_trade_no
+  // (which equals our orderNo and the value we stored in paymentSessionId).
+  const result = session.paymentResult || {};
+  const sessionId: string =
+    result.id ||
+    result.object?.id ||
+    result.out_trade_no ||
+    result.outTradeNo ||
+    '';
   if (!sessionId) return;
 
   // Find order by session ID
@@ -353,6 +363,22 @@ export async function handleSubscriptionRenewal(session: any, provider: string) 
   if (session.paymentStatus !== PaymentStatus.SUCCESS) return;
 
   const paymentInfo = session.paymentInfo;
+
+  // Idempotency: drop duplicate renewals for the same provider transaction.
+  if (paymentInfo?.transactionId) {
+    const [dup] = await db()
+      .select({ id: order.id })
+      .from(order)
+      .where(
+        and(
+          eq(order.transactionId, paymentInfo.transactionId),
+          eq(order.paymentProvider, provider)
+        )
+      )
+      .limit(1);
+    if (dup) return;
+  }
+
   const renewalOrderNo = getSnowId();
 
   await db().transaction(async (tx: any) => {

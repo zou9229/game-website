@@ -321,7 +321,8 @@ export const apikey = table(
     userId: varchar191('user_id')
       .notNull()
       .references(() => user.id, { onDelete: 'cascade' }),
-    key: varchar191('key').notNull(),
+    keyHash: varchar191('key_hash').notNull(),
+    keyPrefix: varchar191('key_prefix').notNull(),
     title: varchar191('title').notNull(),
     status: varchar('status', { length: 50 }).notNull(),
     createdAt: timestamp('created_at').defaultNow().notNull(),
@@ -330,7 +331,7 @@ export const apikey = table(
   },
   (table) => [
     index('idx_apikey_user_status').on(table.userId, table.status),
-    index('idx_apikey_key_status').on(table.key, table.status),
+    index('idx_apikey_keyhash_status').on(table.keyHash, table.status),
   ]
 );
 

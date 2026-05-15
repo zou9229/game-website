@@ -434,51 +434,32 @@ export class PayPalProvider implements PaymentProvider {
         transmissionTime
       );
 
-      // If signature headers are present, verify the signature
-      if (hasSignatureHeaders) {
-        const verifyPayload = {
-          auth_algo: authAlgo,
-          cert_url: certUrl,
-          transmission_id: transmissionId,
-          transmission_sig: transmissionSig,
-          transmission_time: transmissionTime,
-          webhook_id: this.configs.webhookId,
-          webhook_event: event,
-        };
-
-        const verifyResponse = await this.makeRequest(
-          '/v1/notifications/verify-webhook-signature',
-          'POST',
-          verifyPayload
+      // Always require signature headers — fail closed regardless of environment.
+      if (!hasSignatureHeaders) {
+        throw new Error(
+          'Missing PayPal webhook signature headers — rejecting event'
         );
+      }
 
-        if (verifyResponse.verification_status !== 'SUCCESS') {
-          // In production, always reject invalid signatures
-          if (this.configs.environment === 'production') {
-            throw new Error(
-              `Invalid webhook signature: ${verifyResponse.verification_status}`
-            );
-          }
+      const verifyPayload = {
+        auth_algo: authAlgo,
+        cert_url: certUrl,
+        transmission_id: transmissionId,
+        transmission_sig: transmissionSig,
+        transmission_time: transmissionTime,
+        webhook_id: this.configs.webhookId,
+        webhook_event: event,
+      };
 
-          // In sandbox, log warning but continue processing
-          // PayPal sandbox signature verification is known to be unreliable
-          console.warn(
-            `PayPal webhook signature verification failed in sandbox: ${verifyResponse.verification_status}. ` +
-              'Continuing anyway as this is a known issue with PayPal sandbox.'
-          );
-        }
-      } else {
-        // No signature headers - this is a simulated/test event from PayPal Dashboard
-        if (this.configs.environment === 'production') {
-          // In production, reject events without signature headers
-          throw new Error(
-            'Missing webhook signature headers - rejecting event'
-          );
-        }
+      const verifyResponse = await this.makeRequest(
+        '/v1/notifications/verify-webhook-signature',
+        'POST',
+        verifyPayload
+      );
 
-        // In sandbox, allow events without headers (simulated events from Dashboard)
-        console.warn(
-          'PayPal webhook: No signature headers present (simulated event). Skipping verification in sandbox.'
+      if (verifyResponse.verification_status !== 'SUCCESS') {
+        throw new Error(
+          `Invalid PayPal webhook signature: ${verifyResponse.verification_status}`
         );
       }
 

@@ -1,3 +1,4 @@
+import { timingSafeEqual } from 'crypto';
 import {
   CheckoutSession,
   PaymentBilling,
@@ -148,7 +149,17 @@ export class CreemProvider implements PaymentProvider {
         this.configs.signingSecret
       );
 
-      if (computedSignature !== signature) {
+      let sigOk = false;
+      try {
+        const expected = Buffer.from(computedSignature, 'hex');
+        const provided = Buffer.from(signature, 'hex');
+        sigOk =
+          expected.length === provided.length &&
+          timingSafeEqual(expected, provided);
+      } catch {
+        sigOk = false;
+      }
+      if (!sigOk) {
         throw new Error('Invalid webhook signature');
       }
 

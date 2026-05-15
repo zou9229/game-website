@@ -3,11 +3,25 @@ import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { getUuid } from '@/lib/hash';
 
 import { db } from '@/core/db';
-import { envConfigs } from '@/config';
+import { envConfigs, AUTH_SECRET_PLACEHOLDER } from '@/config';
 import { getAllConfigs } from '@/modules/config/service';
 import { ResendProvider } from '@/core/email/resend';
 import { VerifyEmail } from '@/core/email/templates/verify-email';
 import * as schema from '@/config/db/schema';
+
+function assertProductionAuthSecret() {
+  // Only enforce at runtime, not during `next build` static analysis where
+  // NEXT_PHASE is set to 'phase-production-build'.
+  if (process.env.NODE_ENV !== 'production') return;
+  if (process.env.NEXT_PHASE === 'phase-production-build') return;
+  const secret = envConfigs.auth_secret;
+  if (!secret || secret === AUTH_SECRET_PLACEHOLDER) {
+    throw new Error(
+      'AUTH_SECRET is missing or still set to the development placeholder. ' +
+        'Generate one with `openssl rand -base64 32` and set it before serving traffic.'
+    );
+  }
+}
 
 const recentVerificationEmailSentAt = new Map<string, number>();
 const VERIFICATION_EMAIL_MIN_INTERVAL_MS = 60_000;
@@ -54,6 +68,7 @@ function getSocialProviders(configs: Record<string, string>) {
 }
 
 export function getAuth(configs?: Record<string, string>) {
+  assertProductionAuthSecret();
   // Rebuild if social configs just became available
   if (configs && !socialConfigsLoaded) {
     const social = getSocialProviders(configs);

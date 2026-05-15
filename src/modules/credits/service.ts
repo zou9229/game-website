@@ -227,20 +227,14 @@ export async function revoke(consumeCreditId: string) {
   const items = JSON.parse(consumeRecord.consumedDetail);
 
   await db().transaction(async (tx: any) => {
-    // Restore credits to source grant records
+    // Atomic increment per source grant — no read-modify-write race.
     for (const item of items) {
-      const [source] = await tx
-        .select()
-        .from(credit)
-        .where(eq(credit.id, item.creditId))
-        .limit(1);
-
-      if (source) {
-        await tx
-          .update(credit)
-          .set({ remainingCredits: source.remainingCredits + item.creditsConsumed })
-          .where(eq(credit.id, item.creditId));
-      }
+      await tx
+        .update(credit)
+        .set({
+          remainingCredits: sql`${credit.remainingCredits} + ${item.creditsConsumed}`,
+        })
+        .where(eq(credit.id, item.creditId));
     }
 
     // Mark consumption record as deleted

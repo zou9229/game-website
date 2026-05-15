@@ -1,20 +1,37 @@
+import { headers } from 'next/headers';
 import { eq } from 'drizzle-orm';
 import { respData, respErr } from '@/lib/resp';
 import { db } from '@/core/db';
 import { user } from '@/config/db/schema';
+import { getAuth } from '@/core/auth';
+import { enforceMinIntervalRateLimit } from '@/lib/rate-limit';
 
+/**
+ * POST /api/user/is-email-verified
+ *
+ * Authenticated-only. Returns whether the requesting user's own email has been
+ * verified. Lookup is keyed by the SESSION user id, not the request body —
+ * this prevents the endpoint from being used as a user-enumeration oracle.
+ */
 export async function POST(req: Request) {
+  const limited = enforceMinIntervalRateLimit(req, {
+    intervalMs: 1000,
+    keyPrefix: 'is-email-verified',
+  });
+  if (limited) return limited;
+
   try {
-    const body = await req.json().catch(() => ({}));
-    const email = String(body?.email || '').trim().toLowerCase();
-    if (!email) {
-      return respErr('email is required');
+    const auth = getAuth();
+    const headersList = await headers();
+    const session = await auth.api.getSession({ headers: headersList });
+    if (!session?.user) {
+      return respErr('Unauthorized');
     }
 
     const [row] = await db()
       .select({ emailVerified: user.emailVerified })
       .from(user)
-      .where(eq(user.email, email))
+      .where(eq(user.id, session.user.id))
       .limit(1);
 
     return respData({ emailVerified: !!row?.emailVerified });

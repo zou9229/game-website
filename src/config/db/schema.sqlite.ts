@@ -359,7 +359,8 @@ export const apikey = table(
     userId: text('user_id')
       .notNull()
       .references(() => user.id, { onDelete: 'cascade' }),
-    key: text('key').notNull(),
+    keyHash: text('key_hash').notNull(),
+    keyPrefix: text('key_prefix').notNull(),
     title: text('title').notNull(),
     status: text('status').notNull(),
     createdAt: integer('created_at', { mode: 'timestamp_ms' })
@@ -373,7 +374,7 @@ export const apikey = table(
   },
   (table) => [
     index('idx_apikey_user_status').on(table.userId, table.status),
-    index('idx_apikey_key_status').on(table.key, table.status),
+    index('idx_apikey_keyhash_status').on(table.keyHash, table.status),
   ]
 );
 

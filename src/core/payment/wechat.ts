@@ -22,6 +22,7 @@ export interface WechatPayConfigs extends PaymentConfigs {
   privateKey: string; // 商户API私钥 (PEM)
   serialNo: string; // 商户API证书序列号
   notifyUrl?: string; // 支付结果通知 URL
+  platformCert?: string; // 平台证书 PEM (用于 webhook 签名验证) — required for notify
 }
 
 /**
@@ -137,9 +138,35 @@ export class WechatPayProvider implements PaymentProvider {
       throw new Error('Missing WeChat Pay webhook headers');
     }
 
-    // Note: Full signature verification requires WeChat platform certificate.
-    // For now we decrypt the resource and trust the HTTPS channel.
-    // In production, you should verify the signature with the platform cert.
+    // Fail-closed: refuse to process notifications without the platform cert.
+    if (!this.configs.platformCert) {
+      throw new Error(
+        'WeChat platform certificate not configured — refusing webhook'
+      );
+    }
+
+    // Reject stale or future-dated notifications (±5 min window).
+    const tsNum = parseInt(timestamp, 10);
+    const nowSec = Math.floor(Date.now() / 1000);
+    if (!Number.isFinite(tsNum) || Math.abs(nowSec - tsNum) > 300) {
+      throw new Error('WeChat webhook timestamp outside acceptable window');
+    }
+
+    // Verify signature: signed payload is `timestamp\nnonce\nbody\n`
+    // signed with merchant platform certificate (RSA-SHA256).
+    const signedPayload = `${timestamp}\n${nonce}\n${body}\n`;
+    let sigOk = false;
+    try {
+      sigOk = crypto
+        .createVerify('RSA-SHA256')
+        .update(signedPayload)
+        .verify(this.normalizePlatformCert(this.configs.platformCert), signature, 'base64');
+    } catch (e) {
+      sigOk = false;
+    }
+    if (!sigOk) {
+      throw new Error('Invalid WeChat webhook signature');
+    }
 
     const notification = JSON.parse(body);
     const resource = notification.resource;
@@ -267,6 +294,11 @@ export class WechatPayProvider implements PaymentProvider {
   private normalizePrivateKey(key: string): string {
     if (key.includes('-----BEGIN')) return key;
     return `-----BEGIN PRIVATE KEY-----\n${key}\n-----END PRIVATE KEY-----`;
+  }
+
+  private normalizePlatformCert(cert: string): string {
+    if (cert.includes('-----BEGIN')) return cert;
+    return `-----BEGIN CERTIFICATE-----\n${cert}\n-----END CERTIFICATE-----`;
   }
 }
 

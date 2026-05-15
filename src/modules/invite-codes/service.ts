@@ -1,6 +1,7 @@
 import { db } from '@/core/db';
 import { inviteCode, userInvite, subscription } from '@/config/db/schema';
 import { eq, sql, and } from 'drizzle-orm';
+import { randomBytes } from 'crypto';
 import { getUuid } from '@/lib/hash';
 
 // ─── Admin: Create invite codes ──────────────────────────────────────────────
@@ -89,31 +90,73 @@ export async function validateInviteCode(code: string): Promise<{
   return { valid: true, inviteCodeId: row.id, trialDays: row.trialDays };
 }
 
+/**
+ * Atomically redeem an invite code for a user.
+ *
+ * The row is locked inside a transaction so that concurrent requests can't
+ * over-redeem (usedCount > maxUses). If the user has already redeemed any
+ * code, returns the existing trialEndsAt unchanged.
+ */
 export async function redeemInviteCode(params: {
   userId: string;
-  inviteCodeId: string;
-  trialDays: number;
-}) {
-  const id = getUuid();
-  const now = new Date();
-  const trialEndsAt = new Date(now.getTime() + params.trialDays * 24 * 60 * 60 * 1000);
+  code: string;
+}): Promise<{
+  ok: boolean;
+  error?: string;
+  trialEndsAt?: Date;
+}> {
+  return db().transaction(async (tx: any) => {
+    // 1. Idempotency: user already has an invite record → return it
+    const [existing] = await tx
+      .select()
+      .from(userInvite)
+      .where(eq(userInvite.userId, params.userId))
+      .limit(1);
+    if (existing) {
+      return { ok: true, trialEndsAt: existing.trialEndsAt };
+    }
 
-  // Create user_invite record
-  await db().insert(userInvite).values({
-    id,
-    userId: params.userId,
-    inviteCodeId: params.inviteCodeId,
-    activatedAt: now,
-    trialEndsAt,
+    // 2. Lock the invite-code row (postgres/mysql honor FOR UPDATE;
+    //    sqlite serializes writes inside the transaction anyway).
+    const lockedQuery = tx
+      .select()
+      .from(inviteCode)
+      .where(eq(inviteCode.code, params.code))
+      .limit(1);
+    const [row] = await (lockedQuery.for
+      ? lockedQuery.for('update')
+      : lockedQuery);
+    if (!row) {
+      return { ok: false, error: 'Invalid invite code' };
+    }
+    if (row.expiresAt && row.expiresAt < new Date()) {
+      return { ok: false, error: 'Invite code has expired' };
+    }
+    if (row.usedCount >= row.maxUses) {
+      return { ok: false, error: 'Invite code has been fully used' };
+    }
+
+    // 3. Insert user_invite and bump usedCount in the same transaction
+    const id = getUuid();
+    const now = new Date();
+    const trialEndsAt = new Date(
+      now.getTime() + row.trialDays * 24 * 60 * 60 * 1000
+    );
+
+    await tx.insert(userInvite).values({
+      id,
+      userId: params.userId,
+      inviteCodeId: row.id,
+      activatedAt: now,
+      trialEndsAt,
+    });
+    await tx
+      .update(inviteCode)
+      .set({ usedCount: sql`${inviteCode.usedCount} + 1` })
+      .where(eq(inviteCode.id, row.id));
+
+    return { ok: true, trialEndsAt };
   });
-
-  // Increment used_count
-  await db()
-    .update(inviteCode)
-    .set({ usedCount: sql`${inviteCode.usedCount} + 1` })
-    .where(eq(inviteCode.id, params.inviteCodeId));
-
-  return { trialEndsAt };
 }
 
 // ─── User status ─────────────────────────────────────────────────────────────
@@ -162,10 +205,19 @@ export async function getUserPlan(userId: string): Promise<{
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function generateCode(): string {
+  // 12 chars from a 32-symbol alphabet → 60 bits entropy.
+  // Sampled from CSPRNG, with rejection sampling to avoid modulo bias.
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  let code = '';
-  for (let i = 0; i < 8; i++) {
-    code += chars[Math.floor(Math.random() * chars.length)];
+  const out: string[] = [];
+  while (out.length < 12) {
+    const buf = randomBytes(16);
+    for (let i = 0; i < buf.length && out.length < 12; i++) {
+      const b = buf[i];
+      // 8 bits → only use values < 256-256%32 = 256 (exactly divisible), no bias
+      if (b < 256 - (256 % chars.length)) {
+        out.push(chars[b % chars.length]);
+      }
+    }
   }
-  return code;
+  return out.join('');
 }

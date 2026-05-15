@@ -1,3 +1,5 @@
+export const AUTH_SECRET_PLACEHOLDER = 'shipany-dev-secret-change-in-production';
+
 export const envConfigs: Record<string, string> = {
   // App
   app_url: process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000',
@@ -26,7 +28,7 @@ export const envConfigs: Record<string, string> = {
   paypal_client_id: process.env.PAYPAL_CLIENT_ID ?? '',
   paypal_client_secret: process.env.PAYPAL_CLIENT_SECRET ?? '',
   paypal_webhook_id: process.env.PAYPAL_WEBHOOK_ID ?? '',
-  paypal_environment: process.env.PAYPAL_ENVIRONMENT ?? 'sandbox',
+  paypal_environment: process.env.PAYPAL_ENVIRONMENT ?? 'production',
 
   // Payment - Alipay
   alipay_app_id: process.env.ALIPAY_APP_ID ?? '',
@@ -41,6 +43,7 @@ export const envConfigs: Record<string, string> = {
   wechat_private_key: process.env.WECHAT_PRIVATE_KEY ?? '',
   wechat_serial_no: process.env.WECHAT_SERIAL_NO ?? '',
   wechat_notify_url: process.env.WECHAT_NOTIFY_URL ?? '',
+  wechat_platform_cert: process.env.WECHAT_PLATFORM_CERT ?? '',
 
   // Email - Resend
   resend_api_key: process.env.RESEND_API_KEY ?? '',

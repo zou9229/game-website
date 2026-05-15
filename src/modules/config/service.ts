@@ -49,11 +49,38 @@ export async function getAllConfigs(): Promise<ConfigMap> {
 }
 
 /**
- * Save multiple configs to database (upsert).
+ * Keys that must never be written through the admin UI / DB config layer.
+ *
+ * These are infrastructure-critical or session-signing secrets that should
+ * only ever come from environment variables. Allowing a compromised admin
+ * (or a confused-deputy bug) to overwrite them would let an attacker rotate
+ * the session-signing key out from under us, swap the database connection,
+ * etc.
+ */
+const PROTECTED_CONFIG_KEYS: ReadonlySet<string> = new Set([
+  'auth_secret',
+  'database_url',
+  'database_auth_token',
+  'database_provider',
+  'db_schema',
+  'db_singleton_enabled',
+  'db_max_connections',
+]);
+
+/**
+ * Save multiple configs to database (upsert). Protected keys are silently
+ * dropped — see PROTECTED_CONFIG_KEYS.
  */
 export async function saveConfigs(configs: ConfigMap) {
+  const entries = Object.entries(configs).filter(
+    ([name]) => !PROTECTED_CONFIG_KEYS.has(name)
+  );
+  if (entries.length === 0) {
+    return;
+  }
+
   await db().transaction(async (tx: any) => {
-    for (const [name, value] of Object.entries(configs)) {
+    for (const [name, value] of entries) {
       const [existing] = await tx
         .select()
         .from(config)
