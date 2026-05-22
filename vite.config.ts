@@ -30,14 +30,27 @@ export default defineConfig({
     exclude: ["next-intl"],
   },
   resolve: {
-    // In dev (no @cloudflare/vite-plugin), `cloudflare:workers` doesn't resolve
-    // because it's a workerd-only built-in. src/core/db/d1.ts statically imports
-    // `{ env }` from it for the D1 binding; even though createD1Db() is never
-    // called when DATABASE_PROVIDER=sqlite locally, the static import is parsed
-    // and fails module resolution. Alias to a stub that throws on actual access.
     alias: useCloudflare
-      ? []
+      ? [
+          // Cloudflare build: `DATABASE_PROVIDER=d1` means we only run drizzle-orm/d1.
+          // The other 3 DB drivers (libsql/mysql2/postgres) and their drizzle
+          // sub-paths are pulled in by static imports in src/core/db/{sqlite,mysql,postgres}.ts
+          // but the corresponding createXxxDb() is never called at runtime in Workers.
+          // Alias them to a throwing stub to shave ~150-300 KB gzipped from the
+          // Worker script (plus their transitive CJS deps like iconv-lite).
+          ...["@libsql/client", "mysql2", "postgres", "drizzle-orm/libsql", "drizzle-orm/mysql2", "drizzle-orm/postgres-js"].map((find) => ({
+            find,
+            replacement: fileURLToPath(
+              new URL("./src/core/db/stubs/disabled-driver.ts", import.meta.url)
+            ),
+          })),
+        ]
       : [
+          // Dev (no @cloudflare/vite-plugin): `cloudflare:workers` doesn't resolve
+          // because it's a workerd-only built-in. src/core/db/d1.ts statically imports
+          // `{ env }` from it for the D1 binding; even though createD1Db() is never
+          // called when DATABASE_PROVIDER=sqlite locally, the static import is parsed
+          // and fails module resolution. Alias to a stub that throws on actual access.
           {
             find: "cloudflare:workers",
             replacement: fileURLToPath(
