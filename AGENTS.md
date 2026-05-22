@@ -289,6 +289,39 @@ NEXT_PUBLIC_DEFAULT_LOCALE=en
 # Other optional: RESEND_API_KEY, STORAGE_*, REPLICATE_API_TOKEN
 ```
 
+## Deploying to Cloudflare Workers
+
+You are on the **`vinext` branch** — the Cloudflare-only branch. `dev` and `main` target Node/Docker/Vercel; only `vinext` runs `vinext deploy` to Cloudflare Workers.
+
+**Branch model (do not violate):**
+- `dev` — active development for all non-Cloudflare environments
+- `main` — stable snapshot of `dev`
+- `vinext` — Cloudflare-only; receives one-way merges from `dev`
+- **Never merge `vinext` back into `dev` or `main`.** Vite-specific adaptations (`import.meta.glob`, MDX components-as-prop, vite.config.ts, wrangler.jsonc) only work under Vite and would break Next.js on `dev`/`main`.
+
+**Trigger deploy:**
+
+```
+/deploy-cloudflare
+```
+
+Or natural language: "部署到 cloudflare", "deploy to cloudflare", "ship to workers". For a preview Worker URL: `/deploy-cloudflare --preview`.
+
+**What the skill does** (`.claude/skills/deploy-cloudflare/SKILL.md`):
+1. Preflight: branch check, `wrangler login`, local `pnpm build`
+2. Compatibility scan: flags Node-native deps (`@libsql/client`, `mysql2`, `postgres`) and the D1 binding stub in `src/core/db/d1.ts`
+3. First-time vs incremental detection
+4. First-time: `wrangler d1 create`, wires `getD1Binding()` to read `env.DB` from `cloudflare:workers`, sets `DATABASE_PROVIDER=d1`, pushes schema via `wrangler d1 migrations apply --remote`
+5. Secrets and vars: classifies `.env.local` into Workers secrets (`wrangler secret put`) vs `wrangler.jsonc.vars`
+6. `vinext deploy --dry-run`, then **confirms** before `pnpm deploy`
+7. Verifies live URL + suggests `wrangler tail`
+
+**Hard rules baked into the skill:**
+- Never auto-runs `vinext deploy`, `wrangler secret put`, or `wrangler d1 migrations apply --remote` — always asks first
+- Never accepts secret values in chat — user runs `wrangler secret put <NAME>` interactively
+- Never writes secrets into `wrangler.jsonc.vars` (vars are public)
+- Refuses to run if branch is not `vinext`
+
 ## Critical Rules
 
 1. **Don't import between modules** (except the documented payment→credits/subscriptions dependency)
