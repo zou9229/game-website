@@ -1,9 +1,11 @@
+import type { MDXComponents } from 'mdx/types';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 
 import { envConfigs } from '@/config';
 import { defaultLocale, locales } from '@/config/locale';
+import { useMDXComponents } from '@/../mdx-components';
 
 const PAGE_SLUGS = ['privacy-policy', 'terms-of-service'] as const;
 type PageSlug = (typeof PAGE_SLUGS)[number];
@@ -14,10 +16,18 @@ type PageMeta = {
   updated_at: string;
 };
 
+type MDXContentProps = { components?: MDXComponents };
+
 type PageModule = {
-  default: React.ComponentType;
+  default: React.ComponentType<MDXContentProps>;
   meta: PageMeta;
 };
+
+// Vite-only: import.meta.glob replaces `import('@/...${var}.mdx')` which
+// Vite's dynamic-import-vars can't resolve via the `@/` alias.
+const pageModules = import.meta.glob<PageModule>(
+  '../../../../content/pages/*.mdx'
+);
 
 async function loadPage(
   slug: string,
@@ -25,16 +35,20 @@ async function loadPage(
 ): Promise<PageModule | null> {
   if (!PAGE_SLUGS.includes(slug as PageSlug)) return null;
 
+  const primaryKey = `../../../../content/pages/${slug}.${locale}.mdx`;
+  const fallbackKey = `../../../../content/pages/${slug}.${defaultLocale}.mdx`;
+
+  const loader = pageModules[primaryKey] ?? pageModules[fallbackKey];
+  if (!loader) return null;
+
   try {
-    return (await import(
-      `@/content/pages/${slug}.${locale}.mdx`
-    )) as PageModule;
+    return await loader();
   } catch {
     if (locale === defaultLocale) return null;
+    const fb = pageModules[fallbackKey];
+    if (!fb || fb === loader) return null;
     try {
-      return (await import(
-        `@/content/pages/${slug}.${defaultLocale}.mdx`
-      )) as PageModule;
+      return await fb();
     } catch {
       return null;
     }
@@ -79,6 +93,9 @@ export default async function StaticPage({
 
   const Content = page.default;
   const t = await getTranslations('common.pages');
+  // RSC has no React.createContext, so MDXProvider is out. Pass component
+  // overrides directly via the compiled MDX component's `components` prop.
+  const mdxComponents = useMDXComponents({});
 
   return (
     <article>
@@ -94,7 +111,7 @@ export default async function StaticPage({
         </p>
       </header>
       <div className="text-[15px] leading-7 text-foreground/90">
-        <Content />
+        <Content components={mdxComponents} />
       </div>
     </article>
   );

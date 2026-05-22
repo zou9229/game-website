@@ -2,23 +2,32 @@ import { getRequestConfig } from 'next-intl/server';
 
 import { defaultLocale, localeMessagesPaths } from '@/config/locale';
 
-import { routing } from './config';
+import { routing } from '@/core/i18n/config';
+
+// Vite's dynamic-import-vars can't resolve `@/` alias inside template literals,
+// so eager-glob all locale JSONs and look up by computed key. import.meta.glob
+// is Vite-only; this file path only exists on the vinext (Cloudflare) branch.
+const messageModules = import.meta.glob<{ default: Record<string, unknown> }>(
+  '../config/locale/messages/*/*.json'
+);
 
 export async function loadMessages(
   path: string,
   locale: string = defaultLocale
 ) {
+  const primaryKey = `../config/locale/messages/${locale}/${path}.json`;
+  const fallbackKey = `../config/locale/messages/${defaultLocale}/${path}.json`;
+
+  const loader = messageModules[primaryKey] ?? messageModules[fallbackKey];
+  if (!loader) return {};
+
   try {
-    const messages = await import(
-      `@/config/locale/messages/${locale}/${path}.json`
-    );
-    return messages.default;
+    return (await loader()).default;
   } catch {
+    const fb = messageModules[fallbackKey];
+    if (!fb || fb === loader) return {};
     try {
-      const messages = await import(
-        `@/config/locale/messages/${defaultLocale}/${path}.json`
-      );
-      return messages.default;
+      return (await fb()).default;
     } catch {
       return {};
     }
