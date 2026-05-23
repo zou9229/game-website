@@ -137,7 +137,7 @@ DB_NAME="$WORKER"   # default; may be overridden by user in Phase 3.1
 
 # Resource existence
 npx wrangler d1 list 2>&1 | grep -w "$DB_NAME"                       # D1 created?
-test -f wrangler.jsonc && grep -q '"database_id":' wrangler.jsonc    # wrangler.jsonc populated with binding?
+test -f wrangler.jsonc && grep -q '"database_id":' wrangler.jsonc && ! grep -q 'REPLACE_WITH_OUTPUT_OF_WRANGLER_D1_CREATE' wrangler.jsonc    # wrangler.jsonc populated with real D1 id (not placeholder)?
 npx wrangler deployments list --name "$WORKER" 2>&1 | grep -q 'Created'  # Worker ever deployed?
 
 # Schema delta

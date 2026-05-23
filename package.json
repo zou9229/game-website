@@ -9,7 +9,7 @@
     "start": "vinext start",
     "deploy": "sh -c 'set -a && [ -f .env.production ] && . ./.env.production; set +a && exec npx vinext deploy'",
     "lint": "vinext lint",
-    "postinstall": "mkdir -p data && (test -f src/config/db/schema.ts || node scripts/db-setup.mjs)",
+    "postinstall": "mkdir -p data && (test -f src/config/db/schema.ts || node scripts/db-setup.mjs) && (test -f wrangler.jsonc || cp wrangler.example.jsonc wrangler.jsonc)",
     "db:setup": "node scripts/db-setup.mjs",
     "db:push": "tsx scripts/with-env.ts drizzle-kit push --config=drizzle.config.ts",
     "db:generate": "tsx scripts/with-env.ts drizzle-kit generate --config=drizzle.config.ts",
