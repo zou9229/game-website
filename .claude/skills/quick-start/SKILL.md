@@ -7,11 +7,7 @@ user-invocable: true
 
 # Quick Start — $ARGUMENTS
 
-You are building a complete SaaS project. Parse the user's input to determine which mode to run.
-
-## Read First: design-taste
-
-**Before generating ANY landing page, hero, feature block, or marketing surface, read `.claude/skills/design-taste/SKILL.md` once.** It encodes the anti-slop rules that make output not look templated: typography defaults, color discipline, the em-dash ban, banned AI tells (V0.6 hero pills, fake `<div>` product UI, three equal feature cards, generic names, scroll cues), and the Pre-Flight Check. The rules apply for the whole session — load them up front, then proceed.
+You are building a complete SaaS project. Parse the user's input to determine which mode to run:
 
 ## Input Parsing
 
@@ -63,7 +59,7 @@ If the user doesn't specify, default to **SQLite** and move on — don't block o
 
 ### 0.2 Configure environment
 
-Update `.env.local`:
+If `.env.development` doesn't exist yet, copy the template first: `cp .env.example .env.development`. Then set the values in `.env.development` (the canonical local-dev env file — loaded by both `next dev` and the `db:*` scripts, ahead of `.env.local`/`.env`):
 ```env
 NEXT_PUBLIC_APP_URL=<domain or http://localhost:3000>
 NEXT_PUBLIC_APP_NAME=<App Name>
@@ -82,7 +78,7 @@ Default `DATABASE_URL` values:
 Run `pnpm db:setup` — this copies the matching dialect template into `schema.ts` based on `DATABASE_PROVIDER`:
 
 ```bash
-pnpm db:setup    # reads DATABASE_PROVIDER from .env.local, copies the right template
+pnpm db:setup    # reads DATABASE_PROVIDER from .env.development, copies the right template
 ```
 
 Or manually:
@@ -260,9 +256,8 @@ Connect landing page elements to modules:
 1. **Test at 3 viewports** — 1440px, 768px, 390px
 2. For Mode A/B: already handled by `/clone-website` visual QA
 3. For Mode C: ensure mobile-first responsive design
-4. **Scroll animations** — add `IntersectionObserver`-based fade-in for sections (Motion `whileInView`, or pure CSS for reduced-motion compliance)
-5. **Run the design-taste Pre-Flight Check** (Section 12 of `.claude/skills/design-taste/SKILL.md`). Walk every box. The em-dash audit is the most-violated — search the whole page output for `—` and `–` and replace before declaring done.
-6. Verify: `pnpm build`
+4. **Scroll animations** — add `IntersectionObserver`-based fade-in for sections
+5. Verify: `pnpm build`
 
 ---
 
