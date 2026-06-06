@@ -9,6 +9,22 @@ user-invocable: true
 
 You are driving a Cloudflare Workers deployment via `vinext deploy`. The project's `vinext` branch is the only branch that supports this — `dev` and `main` target Node/Docker/Vercel and must not be deployed to Workers.
 
+## Database backend: D1 (default) or Postgres via Hyperdrive
+
+Two supported backends on Workers, chosen by `wrangler.jsonc` `vars.DATABASE_PROVIDER`:
+
+| | **D1** (`d1`) | **Postgres + Hyperdrive** (`postgresql`) |
+|---|---|---|
+| When | Default. Zero external infra. | User already has a Postgres (Neon/Supabase/RDS/self-hosted) or needs PG features |
+| Binding | `d1_databases` → `DB` | `hyperdrive` → `HYPERDRIVE` (`src/core/db/postgres.ts` reads `connectionString` at runtime) |
+| Schema push | `wrangler d1 migrations apply --remote` | `pnpm db:migrate` directly against the real PG (NOT through Hyperdrive) |
+| RBAC seed / admin | local-sqlite dump dance (Phase 4.5 / 9) | `pnpm rbac:init` directly against PG — no dance needed |
+| Bundle | postgres driver stubbed out | postgres driver kept (vite.config.ts reads `vars.DATABASE_PROVIDER`) |
+
+**Backend selection:** if `wrangler.jsonc` already has a populated `hyperdrive` or `d1_databases` binding, keep that backend (incremental run). On first-time setup, default to D1 unless the user mentioned Postgres/Hyperdrive/Neon/Supabase or `$ARGUMENTS` contains `--db=postgres` — then use the **Phase 3-PG** variant below.
+
+If the chosen backend is Postgres: Phases 4 (D1 migrations), 4.5 (local-sqlite RBAC dance), and 9's D1 SQL steps are REPLACED by their direct-PG equivalents in Phase 3-PG step 4 — drizzle and `init-rbac.ts`/`assign-role.ts` talk to PG natively with `DATABASE_PROVIDER=postgresql DATABASE_URL=<direct PG url>`.
+
 ## Philosophy: minimal interruptions, fully idempotent
 
 The skill is designed to be run **any number of times**. A repeat invocation auto-detects what's already done and only redoes what's needed (e.g. a fresh build + deploy with the latest code). User interaction is capped at:
@@ -312,7 +328,65 @@ In dev (`useCloudflare=false`), Vite intercepts `cloudflare:workers` imports →
 
 `.env.production` creation moved to Phase 5.5 — it's tied to the production URL choice and shouldn't be created before that decision.
 
+## Phase 3-PG: First-time setup — Postgres + Hyperdrive variant
+
+Use INSTEAD of Phase 3 when the backend decision (see "Database backend" above) is Postgres. Also REPLACES Phases 4 and 4.5 — schema and RBAC go directly to PG. Phase 9's admin steps run via `pnpm rbac:init` / `rbac:assign` against PG (no D1 SQL).
+
+### 1. Get the connection string
+
+Ask the user for their Postgres connection string if it's not already in `.env.local`/`.env.development` (`DATABASE_URL=postgres://...`). Requirements: publicly reachable from Cloudflare (or via Hyperdrive-supported access methods), TLS recommended. Treat the URL as a secret — never echo it back (it embeds the password).
+
+### 2. Create the Hyperdrive config (auto)
+
+```bash
+# pipe, don't paste into argv history where avoidable; name defaults to the worker name
+npx wrangler hyperdrive create <worker-name> --connection-string="$DATABASE_URL"
+```
+
+Capture the `id` from stdout. Narrate: "Hyperdrive created: `<name>` (id: `<id>`)". If it errors with "could not connect", the PG isn't reachable from Cloudflare — surface the error and stop (common causes: IP allowlist, no TLS, non-5432 port blocked).
+
+### 3. Materialize `wrangler.jsonc` (auto)
+
+```bash
+test -f wrangler.jsonc || cp wrangler.example.jsonc wrangler.jsonc
+```
+
+Edit `wrangler.jsonc`:
+- `name` ← chosen worker name
+- `vars.DATABASE_PROVIDER` ← `"postgresql"` (this also tells vite.config.ts to keep the postgres driver in the Worker bundle)
+- REMOVE the `d1_databases` block
+- ADD: `"hyperdrive": [{ "binding": "HYPERDRIVE", "id": "<id from step 2>" }]`
+
+Do NOT put `DATABASE_URL` in `vars` (vars are public). The runtime reads the connection string from the Hyperdrive binding; `DATABASE_URL` is only needed as a **secret** fallback if the user insists on running without Hyperdrive (discouraged): `grep "^DATABASE_URL=" .env.local | cut -d= -f2- | npx wrangler secret put DATABASE_URL`.
+
+### 4. Schema + RBAC directly against PG (auto, replaces Phases 4 & 4.5)
+
+```bash
+# Schema: drizzle talks to the real PG directly (NOT through Hyperdrive)
+DATABASE_PROVIDER=postgresql DATABASE_URL="$PG_URL" pnpm db:migrate
+
+# RBAC seed (idempotent — init-rbac has its own existence checks)
+DATABASE_PROVIDER=postgresql DATABASE_URL="$PG_URL" pnpm rbac:init
+```
+
+If `drizzle/` has no PG migrations yet (journal dialect mismatch with a previous sqlite/d1 setup), run `pnpm db:generate` first; if the journal is for another dialect, move the old `drizzle/` aside (`mv drizzle drizzle.d1.bak`) and generate fresh.
+
+Skip-detection for incremental runs: `SELECT COUNT(*) FROM role` via a quick `psql`-less check — run `DATABASE_PROVIDER=postgresql DATABASE_URL="$PG_URL" pnpm rbac:init` anyway; it's a no-op when seeded.
+
+### 5. Admin (replaces Phase 9's D1 SQL)
+
+```bash
+# create-account mode
+DATABASE_PROVIDER=postgresql DATABASE_URL="$PG_URL" pnpm rbac:init --admin-email="$EMAIL" --admin-password="$PASS"
+# promote-existing mode
+DATABASE_PROVIDER=postgresql DATABASE_URL="$PG_URL" pnpm rbac:assign "$EMAIL" super_admin
+```
+
+Then continue with Phase 5 (secrets), 5.5 (URL), 6 (deploy) unchanged.
+
 ## Phase 4: Schema push to D1 (auto, incremental)
+
+**Skip entirely if the backend is Postgres** — Phase 3-PG step 4 already handled schema.
 
 **Skip if:** Phase 2 found `LOCAL_MIGRATIONS == REMOTE_MIGRATIONS`. Narrate "Schema up to date (N migrations applied), skipping".
 
@@ -697,6 +771,10 @@ A bare `/deploy-cloudflare` is the answer to "再发布一下 / ship again" — 
 | Sign-in/sign-up returns 403 `Invalid origin` from a browser BUT `curl` without `Sec-Fetch-Site` returns 200 | `.env.local` (with `NEXT_PUBLIC_APP_URL=http://localhost:...`) overrode `.env.production` during the build, so `envConfigs.app_url` was baked as `http://localhost:...`. Browsers send `Sec-Fetch-Site: same-origin` which triggers better-auth's CSRF/trustedOrigins check; raw curl doesn't, so curl works while browsers don't. | Source `.env.production` BEFORE the build: change `package.json` `scripts.deploy` to `sh -c 'set -a && [ -f .env.production ] && . ./.env.production; set +a && exec npx vinext deploy'`. Verify after redeploy by `grep app_url: dist/server/index.js` — should show the prod URL, not `http://localhost:...`. (See Phase 0.4 / Phase 6.) |
 | `pnpm dev` errors with `Cannot find module 'cloudflare:workers' imported from src/core/db/d1.ts` | Phase 3.4 wired `getD1Binding` with `import { env } from 'cloudflare:workers'` (static import). Vite parses this at module load even though `createD1Db()` is never called when `DATABASE_PROVIDER=sqlite`. `cloudflare:workers` only resolves in workerd. | Add the stub + `resolve.alias` (see Phase 3.4 "Critical companion step"). One-liner check: `test -f src/core/db/cloudflare-workers-stub.ts && grep -q 'cloudflare:workers' vite.config.ts && echo OK`. |
 | `pnpm dev` says "Another vinext dev server is already running" but the listed PID is actually a stale `next dev` from before the vinext migration | Old Next.js dev process never exited; `lsof -nP -iTCP -sTCP:LISTEN` shows it bound to 3000 or 3001 | `kill -9 <pid>` (or `pkill -9 -f "next dev"` to nuke any old next-server processes), then re-run `pnpm dev` |
+| Runtime throws "This DB driver was stubbed out of the Cloudflare Workers build" | `wrangler.jsonc` `vars.DATABASE_PROVIDER` was changed AFTER the last build (vite.config.ts bakes the driver choice at build time) | Rebuild + redeploy (`pnpm run deploy`) so the bundle matches the provider |
+| Postgres mode: every query fails with connection errors but `wrangler hyperdrive create` succeeded | `hyperdrive` binding missing from `wrangler.jsonc`, or binding name ≠ `HYPERDRIVE` | `src/core/db/postgres.ts` expects binding name exactly `HYPERDRIVE`; fix wrangler.jsonc and redeploy |
+| Postgres mode: intermittent `Cannot perform I/O on behalf of a different request` | A postgres client got cached across requests (e.g. someone re-added a module-level cache for TCP drivers) | `src/core/db/index.ts` deliberately skips the singleton cache for postgres/mysql on Workers — restore that behavior |
+| `wrangler hyperdrive create` fails with connection error | Postgres unreachable from Cloudflare: IP allowlist, no TLS, or blocked port | Allow Cloudflare egress / enable TLS on the DB; for Neon/Supabase use the direct (non-pooler) connection string |
 
 ## What this skill never does
 

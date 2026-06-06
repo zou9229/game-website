@@ -312,11 +312,15 @@ You are on the **`vinext` branch** — the Cloudflare-only branch. `dev` and `ma
 
 Or natural language: "部署到 cloudflare", "deploy to cloudflare", "ship to workers". For a preview Worker URL: `/deploy-cloudflare --preview`.
 
+**Database backends on Workers** (chosen by `wrangler.jsonc` `vars.DATABASE_PROVIDER`):
+- **D1** (`d1`, default) — zero external infra; binding `DB` in `d1_databases`
+- **Postgres via Hyperdrive** (`postgresql`) — binding `HYPERDRIVE` in `hyperdrive`; `src/core/db/postgres.ts` reads `env.HYPERDRIVE.connectionString` from `cloudflare:workers` at runtime. `vite.config.ts` reads `vars.DATABASE_PROVIDER` at build time and keeps the matching driver in the Worker bundle (the others are stubbed). Schema/RBAC/admin scripts talk to the real Postgres directly (`DATABASE_URL`), never through Hyperdrive. Setup: `npx wrangler hyperdrive create <name> --connection-string="postgres://..."`, then fill the binding in `wrangler.jsonc` (template comments show the exact shape).
+
 **What the skill does** (`.claude/skills/deploy-cloudflare/SKILL.md`):
 1. Preflight: branch check, `wrangler login`, local `pnpm build`
 2. Compatibility scan: flags Node-native deps (`@libsql/client`, `mysql2`, `postgres`) and the D1 binding stub in `src/core/db/d1.ts`
 3. First-time vs incremental detection
-4. First-time: `wrangler d1 create`, wires `getD1Binding()` to read `env.DB` from `cloudflare:workers`, sets `DATABASE_PROVIDER=d1`, pushes schema via `wrangler d1 migrations apply --remote`
+4. First-time (D1): `wrangler d1 create`, wires `getD1Binding()` to read `env.DB` from `cloudflare:workers`, sets `DATABASE_PROVIDER=d1`, pushes schema via `wrangler d1 migrations apply --remote`. First-time (Postgres): `wrangler hyperdrive create`, sets `DATABASE_PROVIDER=postgresql` + `hyperdrive` binding, pushes schema via `pnpm db:migrate` directly against Postgres
 5. Secrets and vars: classifies `.env.local` into Workers secrets (`wrangler secret put`) vs `wrangler.jsonc.vars`
 6. `vinext deploy --dry-run`, then **confirms** before `pnpm deploy`
 7. Verifies live URL + suggests `wrangler tail`

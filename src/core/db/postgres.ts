@@ -1,10 +1,18 @@
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
+// `cloudflare:workers` resolves natively inside workerd. In local dev (Node),
+// vite.config.ts aliases it to ./cloudflare-workers-stub.ts so this static
+// import doesn't blow up at module-load time — the stub is never read because
+// every access below is gated on isCloudflareWorker.
+import { env as workersEnv } from 'cloudflare:workers';
 
 import type { DbConfig } from './types';
 
+// workerd sets navigator.userAgent — the documented Workers runtime detection.
 const isCloudflareWorker =
-  typeof globalThis !== 'undefined' && 'Cloudflare' in globalThis;
+  (typeof navigator !== 'undefined' &&
+    navigator.userAgent === 'Cloudflare-Workers') ||
+  (typeof globalThis !== 'undefined' && 'Cloudflare' in globalThis);
 
 // Global database connection instance (singleton pattern)
 let dbInstance: ReturnType<typeof drizzle> | null = null;
@@ -13,7 +21,6 @@ let client: ReturnType<typeof postgres> | null = null;
 export function createPostgresDb(config: DbConfig) {
   let databaseUrl = config.database_url;
 
-  let isHyperdrive = false;
   const schemaName = (config.db_schema || 'public').trim();
   const connectionSchemaOptions =
     schemaName && schemaName !== 'public'
@@ -21,12 +28,13 @@ export function createPostgresDb(config: DbConfig) {
       : {};
 
   if (isCloudflareWorker) {
-    const { env }: { env: any } = { env: {} };
-    // Detect if set Hyperdrive
-    isHyperdrive = 'HYPERDRIVE' in env;
-
-    if (isHyperdrive) {
-      const hyperdrive = env.HYPERDRIVE;
+    // Prefer the Hyperdrive binding — direct Workers→Postgres pays a full
+    // TCP+TLS+auth handshake per connection; Hyperdrive pools at the edge.
+    // Configure via wrangler.jsonc: "hyperdrive": [{ "binding": "HYPERDRIVE", "id": "..." }]
+    const hyperdrive = (
+      workersEnv as { HYPERDRIVE?: { connectionString: string } }
+    ).HYPERDRIVE;
+    if (hyperdrive?.connectionString) {
       databaseUrl = hyperdrive.connectionString;
     }
   }

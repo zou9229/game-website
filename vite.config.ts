@@ -3,6 +3,7 @@ import vinext from "vinext";
 import mdx from "@mdx-js/rollup";
 import { cloudflare } from "@cloudflare/vite-plugin";
 import { fileURLToPath } from "node:url";
+import { readFileSync } from "node:fs";
 
 // Dev uses Node so the Drizzle drivers (@libsql/client, mysql2, postgres) work
 // against a local DB. Build uses the Cloudflare plugin so `vinext build` and
@@ -13,6 +14,25 @@ import { fileURLToPath } from "node:url";
 // to fail and to wire D1/HTTP-based drivers instead.
 const isBuild = process.argv.includes("build") || process.argv.includes("deploy");
 const useCloudflare = isBuild || process.env.VINEXT_CLOUDFLARE_DEV === "1";
+
+// Which DB the Workers bundle targets. Runtime truth is wrangler.jsonc
+// `vars.DATABASE_PROVIDER` (that's what src/core/db reads on workerd), so
+// prefer it over the build-time env, which can be polluted by .env.local.
+function workersDbProvider(): string {
+  try {
+    const raw = readFileSync(new URL("./wrangler.jsonc", import.meta.url), "utf8");
+    const m = raw.match(/"DATABASE_PROVIDER"\s*:\s*"([^"]+)"/);
+    if (m) return m[1];
+  } catch {
+    // no wrangler.jsonc yet (fresh clone) — fall through
+  }
+  return process.env.DATABASE_PROVIDER || "d1";
+}
+
+const workersDb = useCloudflare ? workersDbProvider() : "";
+// postgres runs on Workers (nodejs_compat) — keep its driver in the bundle and
+// let src/core/db/postgres.ts pick up the Hyperdrive binding at runtime.
+const keepPostgres = workersDb === "postgresql" || workersDb === "postgres";
 
 export default defineConfig({
   plugins: [
@@ -32,13 +52,22 @@ export default defineConfig({
   resolve: {
     alias: useCloudflare
       ? [
-          // Cloudflare build: `DATABASE_PROVIDER=d1` means we only run drizzle-orm/d1.
-          // The other 3 DB drivers (libsql/mysql2/postgres) and their drizzle
-          // sub-paths are pulled in by static imports in src/core/db/{sqlite,mysql,postgres}.ts
-          // but the corresponding createXxxDb() is never called at runtime in Workers.
-          // Alias them to a throwing stub to shave ~150-300 KB gzipped from the
-          // Worker script (plus their transitive CJS deps like iconv-lite).
-          ...["@libsql/client", "mysql2", "postgres", "drizzle-orm/libsql", "drizzle-orm/mysql2", "drizzle-orm/postgres-js"].map((find) => ({
+          // Cloudflare build: only the provider named in wrangler.jsonc
+          // `vars.DATABASE_PROVIDER` runs at Workers runtime. The unused DB
+          // drivers and their drizzle sub-paths are pulled in by static imports
+          // in src/core/db/{sqlite,mysql,postgres}.ts but their createXxxDb()
+          // is never called. Alias them to a throwing stub to shave
+          // ~150-300 KB gzipped from the Worker script (plus their transitive
+          // CJS deps like iconv-lite). With DATABASE_PROVIDER=postgresql the
+          // postgres driver stays real (it works under nodejs_compat) and
+          // connects through the Hyperdrive binding.
+          ...[
+            "@libsql/client",
+            "drizzle-orm/libsql",
+            "mysql2",
+            "drizzle-orm/mysql2",
+            ...(keepPostgres ? [] : ["postgres", "drizzle-orm/postgres-js"]),
+          ].map((find) => ({
             find,
             replacement: fileURLToPath(
               new URL("./src/core/db/stubs/disabled-driver.ts", import.meta.url)
@@ -47,10 +76,11 @@ export default defineConfig({
         ]
       : [
           // Dev (no @cloudflare/vite-plugin): `cloudflare:workers` doesn't resolve
-          // because it's a workerd-only built-in. src/core/db/d1.ts statically imports
-          // `{ env }` from it for the D1 binding; even though createD1Db() is never
-          // called when DATABASE_PROVIDER=sqlite locally, the static import is parsed
-          // and fails module resolution. Alias to a stub that throws on actual access.
+          // because it's a workerd-only built-in. src/core/db/{d1,postgres}.ts
+          // statically import `{ env }` from it for the D1/Hyperdrive bindings;
+          // even though those code paths are never hit in local dev, the static
+          // import is parsed and fails module resolution. Alias to a stub that
+          // throws on actual access.
           {
             find: "cloudflare:workers",
             replacement: fileURLToPath(
@@ -64,6 +94,13 @@ export default defineConfig({
     // (Vite's `const module = { exports }` injection collides with `var module = ...` in
     // older CJS files like iconv-lite/encodings/index.js). Loading them via Node keeps
     // the original CJS scoping intact.
-    external: ["mysql2", "postgres", "@libsql/client", "iconv-lite"],
+    // When the Workers bundle keeps postgres (Hyperdrive), it must be BUNDLED,
+    // not externalized — workerd can't require() external node modules.
+    external: [
+      "mysql2",
+      "@libsql/client",
+      "iconv-lite",
+      ...(keepPostgres ? [] : ["postgres"]),
+    ],
   },
 });
