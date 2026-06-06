@@ -1,6 +1,8 @@
-# ShipAny Next
+# ShipAny vinext
 
-A headless SaaS engine for building AI-powered products with Claude Code. Pre-wired business logic (payments, credits, subscriptions, auth, RBAC, i18n, CMS) with minimal UI — you build your product pages on top.
+**The Cloudflare-native edition of [ShipAny Next](https://github.com/shipany-ai/shipany-next)** — a headless SaaS engine for building AI-powered products with Claude Code. Pre-wired business logic (payments, credits, subscriptions, auth, RBAC, i18n, CMS) with minimal UI — you build your product pages on top, and deploy to **Cloudflare Workers** with one command.
+
+Runs Next.js 15 on Vite via [vinext](https://www.npmjs.com/package/vinext) + `@cloudflare/vite-plugin`. Database: **D1** (zero infra, default) or **Postgres via Hyperdrive**. If you deploy to Node/Docker/Vercel instead, use upstream [shipany-next](https://github.com/shipany-ai/shipany-next).
 
 ## Quick Start
 
@@ -40,10 +42,23 @@ pnpm dev
 
 ## Tech Stack
 
-- Next.js 15 (App Router, React 19, TypeScript)
+- Next.js 15 (App Router, React 19, TypeScript) running on Vite via vinext
+- Cloudflare Workers runtime (`@cloudflare/vite-plugin`, wrangler)
 - shadcn/ui v4 (Base Nova style, Tailwind CSS 4)
-- better-auth + Drizzle ORM
+- better-auth + Drizzle ORM (D1 / Postgres+Hyperdrive in production, sqlite/postgres/mysql in local dev)
 - next-intl for i18n
+
+## Deploy to Cloudflare
+
+```
+/deploy-cloudflare
+```
+
+One Claude Code command handles everything: wrangler login, D1 create (or `wrangler hyperdrive create` for Postgres), schema migrations, RBAC seed, secrets upload, deploy, URL fixup, and admin account setup. Idempotent — re-run it any time to ship the latest code. See `.claude/skills/deploy-cloudflare/SKILL.md`.
+
+## Relationship to shipany-next (upstream)
+
+New features are developed in [shipany-next](https://github.com/shipany-ai/shipany-next) and pulled into this repo with the `/sync-upstream` skill. This repo owns the Vite/Cloudflare layer (`vite.config.ts`, `wrangler*`, Workers DB wiring, deploy skill); on sync conflicts in those paths, this repo's version wins. Never push this repo's commits back upstream.
 
 ## Project Structure
 
@@ -98,6 +113,8 @@ All admin pages include:
 | `/new-module` | Create a backend module (service + API) |
 | `/new-page` | Create a dashboard page (client component + nav) |
 | `/new-static-page` | Create an MDX content page (legal, about, FAQ) |
+| `/deploy-cloudflare` | Deploy to Cloudflare Workers (D1 or Postgres+Hyperdrive) |
+| `/sync-upstream` | Pull the latest features from shipany-next |
 
 ## Environment Variables
 

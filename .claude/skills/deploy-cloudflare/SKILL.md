@@ -1,13 +1,13 @@
 ---
 name: deploy-cloudflare
-description: "Deploy this project to Cloudflare Workers via vinext. Auto-handles D1 setup, secrets, schema push, and redeploy. Use when the user says 'deploy to cloudflare', 'ship to workers', 'push to cf', '部署到 cloudflare', or asks how to publish to Workers. ONLY runs on the vinext branch — refuses on dev/main."
+description: "Deploy this project to Cloudflare Workers via vinext. Auto-handles D1 setup, secrets, schema push, and redeploy. Use when the user says 'deploy to cloudflare', 'ship to workers', 'push to cf', '部署到 cloudflare', or asks how to publish to Workers. This repo (shipany-vinext) is Cloudflare-native — runs on any branch."
 argument-hint: "[--preview to deploy to a preview environment]"
 user-invocable: true
 ---
 
 # Deploy to Cloudflare Workers — $ARGUMENTS
 
-You are driving a Cloudflare Workers deployment via `vinext deploy`. The project's `vinext` branch is the only branch that supports this — `dev` and `main` target Node/Docker/Vercel and must not be deployed to Workers.
+You are driving a Cloudflare Workers deployment via `vinext deploy`. This repo (shipany-vinext) is Cloudflare-native — every branch builds with Vite + `@cloudflare/vite-plugin`. (Its upstream, shipany-next, targets Node/Docker/Vercel and must NOT be deployed with this skill.)
 
 ## Database backend: D1 (default) or Postgres via Hyperdrive
 
@@ -53,7 +53,7 @@ If the agent's auto-picked resource names don't fit, the user can interject — 
 
 ## Hard rules (do not violate)
 
-1. **Branch check first.** If not on `vinext`, STOP and tell the user to `git switch vinext`. Never run Cloudflare commands from dev/main.
+1. **Repo check first.** If `vite.config.ts` or `wrangler.example.jsonc` is missing, this is NOT the Cloudflare-native repo (you may be in upstream shipany-next) — STOP.
 2. **Never auto-run the final `pnpm run deploy` / `vinext deploy`.** This is the irreversible production push — always confirm. Redeploys to fix a baked URL after the first deploy are part of the same deploy event and do not need re-confirmation.
 3. **Never echo secret values to the user.** Generate secrets via `openssl`; pipe values from `.env.local` directly into `wrangler secret put` (`cut -d= -f2- | wrangler ...`). Never `cat .env.local` in front of the user.
 4. **Use `pnpm run deploy`, not `pnpm deploy`.** pnpm intercepts `pnpm deploy` as a workspace command and errors out.
@@ -62,15 +62,13 @@ If the agent's auto-picked resource names don't fit, the user can interject — 
 
 ## Phase 0: Preflight
 
-### 0.1 Branch check
+### 0.1 Repo check
 
 ```bash
-git branch --show-current
+test -f vite.config.ts && test -f wrangler.example.jsonc && echo OK
 ```
 
-If not exactly `vinext`, STOP:
-
-> Cloudflare deploy only runs on the `vinext` branch. You're on `<branch>`. Switch with `git switch vinext` and re-run.
+If either file is missing, STOP — this is not the Cloudflare-native repo (you may be in upstream `shipany-next`, which targets Node/Docker/Vercel). Clone `shipany-ai/shipany-vinext` instead.
 
 ### 0.2 Tool check (parallel)
 
@@ -781,5 +779,5 @@ A bare `/deploy-cloudflare` is the answer to "再发布一下 / ship again" — 
 - Run the final `pnpm run deploy` without explicit user `yes` (the redeploy in Phase 7 is part of the same already-confirmed deploy event)
 - Echo secret values to the user (generates with openssl, pipes from .env.local, prints names only)
 - Write secret values into `wrangler.jsonc.vars` (vars are public)
-- Push to dev or main — those branches do not deploy to Cloudflare
+- Run against upstream `shipany-next` — that repo targets Node/Docker/Vercel, not Workers
 - Make the user copy-paste any wrangler/openssl/db command for routine setup — those are agent-executed

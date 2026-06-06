@@ -296,13 +296,12 @@ NEXT_PUBLIC_DEFAULT_LOCALE=en
 
 ## Deploying to Cloudflare Workers
 
-You are on the **`vinext` branch** — the Cloudflare-only branch. `dev` and `main` target Node/Docker/Vercel; only `vinext` runs `vinext deploy` to Cloudflare Workers.
+This repo (**shipany-vinext**) is the **Cloudflare-native edition** of ShipAny — it builds with Vite (`vinext` + `@cloudflare/vite-plugin`) and deploys to Cloudflare Workers. Its upstream is `shipany-ai/shipany-next` (Node/Docker/Vercel edition).
 
-**Branch model (do not violate):**
-- `dev` — active development for all non-Cloudflare environments
-- `main` — stable snapshot of `dev`
-- `vinext` — Cloudflare-only; receives one-way merges from `dev`
-- **Never merge `vinext` back into `dev` or `main`.** Vite-specific adaptations (`import.meta.glob`, MDX components-as-prop, vite.config.ts, wrangler.jsonc) only work under Vite and would break Next.js on `dev`/`main`.
+**Repo model (do not violate):**
+- `upstream` remote = `shipany-ai/shipany-next` (`dev` branch) — new features are developed THERE and pulled in via the `sync-upstream` skill
+- This repo owns the Vite/Cloudflare layer: `vite.config.ts`, `wrangler*`, `package.json` scripts, `src/core/db` Workers wiring (`cloudflare:workers` imports, driver stubs), and the `deploy-cloudflare` skill — on sync conflicts in these paths, LOCAL wins
+- **Never push this repo's commits back to upstream.** Vite-specific adaptations (`import.meta.glob`, MDX components-as-prop, vite.config.ts, wrangler.jsonc) only work under Vite and would break Next.js upstream. If a fix is needed upstream too, re-implement it there.
 
 **Trigger deploy:**
 

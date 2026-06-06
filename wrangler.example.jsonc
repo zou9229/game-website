@@ -4,7 +4,7 @@
 // The real `wrangler.jsonc` is gitignored — it carries per-project IDs.
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "shipany-next",
+  "name": "shipany-vinext",
   "compatibility_date": "2026-02-12",
   "compatibility_flags": ["nodejs_compat"],
   "main": "vinext/server/app-router-entry",
@@ -17,7 +17,7 @@
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "shipany-next",
+      "database_name": "shipany-vinext",
       "database_id": "REPLACE_WITH_OUTPUT_OF_WRANGLER_D1_CREATE",
       "migrations_dir": "drizzle"
     }
