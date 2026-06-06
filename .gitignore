@@ -66,3 +66,6 @@ wrangler.jsonc
 /.agents/
 /.claude/skills/migrate-to-vinext
 skills-lock.json
+
+# user-uploaded files from local dev (ticket attachments etc.)
+public/uploads/
