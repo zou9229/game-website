@@ -1,12 +1,12 @@
 ---
 name: sync-upstream
-description: Pull the latest ShipAny Next template changes from the upstream repo (git@github.com:shipany-ai/shipany-next, dev branch) into this Cloudflare-native repo, preferring this repo's Vite/Cloudflare adaptations when they conflict. Use when the user asks to "update from upstream", "sync the template", "拉取上游更新", "更新模板", or wants the newest ShipAny features in shipany-vinext.
+description: Pull the latest ShipAny Next template changes from the upstream repo (git@github.com:shipany-ai/shipany-next, main branch) into this Cloudflare-native repo, preferring this repo's Vite/Cloudflare adaptations when they conflict. Use when the user asks to "update from upstream", "sync the template", "拉取上游更新", "更新模板", or wants the newest ShipAny features in shipany-vinext.
 ---
 
 # Sync Upstream (shipany-vinext ← shipany-next)
 
 Merge the latest features from `shipany-ai/shipany-next` (the Node/Docker/Vercel
-edition, `dev` branch) into this Cloudflare-native repo. This repo's Vite/Workers
+edition, `main` branch) into this Cloudflare-native repo. This repo's Vite/Workers
 layer always wins on conflict — upstream provides business features; this repo
 provides the build + deploy substrate.
 
@@ -31,20 +31,20 @@ provides the build + deploy substrate.
 git status --porcelain       # must be empty — ask the user to commit/stash first
 git remote get-url upstream 2>/dev/null \
   || git remote add upstream git@github.com:shipany-ai/shipany-next.git
-git fetch upstream dev
+git fetch upstream main
 ```
 
 If the SSH fetch fails (no key configured), switch to HTTPS and retry:
 
 ```bash
 git remote set-url upstream https://github.com/shipany-ai/shipany-next.git
-git fetch upstream dev
+git fetch upstream main
 ```
 
 ### 2. Preview what's incoming
 
 ```bash
-git log --oneline HEAD..upstream/dev
+git log --oneline HEAD..upstream/main
 ```
 
 - Empty → already up to date; report and stop.
@@ -56,7 +56,7 @@ Run a plain merge first so conflicts are *visible* (don't use `-X ours` blindly 
 it silently discards upstream hunks with no record of where):
 
 ```bash
-git merge upstream/dev --no-edit
+git merge upstream/main --no-edit
 ```
 
 On conflict, resolve each path per the ownership map:
