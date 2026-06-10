@@ -64,14 +64,21 @@ If `.env.development` doesn't exist yet, copy the template first: `cp .env.examp
 NEXT_PUBLIC_APP_URL=<domain or http://localhost:3000>
 NEXT_PUBLIC_APP_NAME=<App Name>
 NEXT_PUBLIC_APP_DESCRIPTION=<description>
-DATABASE_PROVIDER=<sqlite|postgres|mysql>
+DATABASE_PROVIDER=<sqlite|turso|postgres|mysql|d1>
 DATABASE_URL=<connection string>
+# Turso only — the remote libsql database also needs an auth token:
+# DATABASE_AUTH_TOKEN=<turso auth token>
 ```
 
 Default `DATABASE_URL` values:
 - SQLite: `file:data/local.db`
+- Turso: `libsql://<db>.turso.io` (also set `DATABASE_AUTH_TOKEN`)
 - PostgreSQL: `postgresql://user:pass@localhost:5432/dbname`
 - MySQL: `mysql://user:pass@localhost:3306/dbname`
+
+> **Turso:** `DATABASE_AUTH_TOKEN` is required — without it both the runtime
+> and `pnpm db:push`/`db:generate` fail to authenticate against the remote
+> database. The schema uses the SQLite template (Turso is libsql).
 
 ### 0.3 Initialize database schema
 
@@ -83,7 +90,7 @@ pnpm db:setup    # reads DATABASE_PROVIDER from .env.development, copies the rig
 
 Or manually:
 ```bash
-cp src/config/db/schema.sqlite.ts src/config/db/schema.ts    # SQLite
+cp src/config/db/schema.sqlite.ts src/config/db/schema.ts    # SQLite / Turso / D1
 cp src/config/db/schema.postgres.ts src/config/db/schema.ts  # PostgreSQL
 cp src/config/db/schema.mysql.ts src/config/db/schema.ts     # MySQL
 ```

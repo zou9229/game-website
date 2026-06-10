@@ -17,6 +17,7 @@ export async function POST(req: Request) {
     const body = await req.json();
     const group: string = body?.group;
     const inputs: Record<string, string> = body?.inputs || {};
+    const overrides: Record<string, string> = body?.configs || {};
     if (!group) return respErr('group is required');
 
     const spec = getTestSpec(group);
@@ -28,7 +29,15 @@ export async function POST(req: Request) {
       }
     }
 
+    // Test against the values currently entered in the form (possibly unsaved),
+    // falling back to saved config.
     const configs = await getAllConfigs();
+    for (const [key, value] of Object.entries(overrides)) {
+      if (typeof value === 'string') {
+        configs[key] = value;
+      }
+    }
+
     const result = await runTest(group, inputs, configs);
     return respData(result);
   } catch (error: any) {

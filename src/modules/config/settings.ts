@@ -38,6 +38,7 @@ export function getSettingTabs(): SettingTab[] {
     { name: 'storage', title: 'Storage' },
     { name: 'ai', title: 'AI' },
     { name: 'analytics', title: 'Analytics' },
+    { name: 'custom', title: 'Custom' },
   ];
 }
 
@@ -68,8 +69,9 @@ export function getSettingGroups(): SettingGroup[] {
     { name: 'r2', title: 'Cloudflare R2 / S3', description: 'Object storage settings', tab: 'storage' },
 
     // AI
+    { name: 'openai', title: 'OpenAI', description: 'OpenAI (or compatible) API', tab: 'ai' },
+    { name: 'anthropic', title: 'Anthropic', description: 'Anthropic Claude API', tab: 'ai' },
     { name: 'replicate', title: 'Replicate', description: 'Replicate AI API', tab: 'ai' },
-    { name: 'gemini', title: 'Gemini', description: 'Google Gemini API', tab: 'ai' },
     { name: 'fal', title: 'Fal', description: 'Fal AI API', tab: 'ai' },
 
     // Analytics
@@ -190,11 +192,16 @@ export function getSettings(): Setting[] {
     { name: 'storage_bucket', title: 'Bucket', type: 'text', placeholder: 'my-bucket', group: 'r2', tab: 'storage' },
     { name: 'storage_public_domain', title: 'Public Domain', type: 'text', placeholder: 'https://cdn.example.com', group: 'r2', tab: 'storage' },
 
+    // ─── AI / OpenAI ─────────────────────────────────────────────────
+    { name: 'openai_base_url', title: 'Base URL', type: 'text', placeholder: 'https://api.openai.com/v1', group: 'openai', tab: 'ai' },
+    { name: 'openai_api_key', title: 'API Key', type: 'password', placeholder: 'sk-xxx', group: 'openai', tab: 'ai' },
+
+    // ─── AI / Anthropic ──────────────────────────────────────────────
+    { name: 'anthropic_base_url', title: 'Base URL', type: 'text', placeholder: 'https://api.anthropic.com', group: 'anthropic', tab: 'ai' },
+    { name: 'anthropic_api_key', title: 'API Key', type: 'password', placeholder: 'sk-ant-xxx', group: 'anthropic', tab: 'ai' },
+
     // ─── AI / Replicate ──────────────────────────────────────────────
     { name: 'replicate_api_token', title: 'API Token', type: 'password', placeholder: 'r8_xxx', group: 'replicate', tab: 'ai' },
-
-    // ─── AI / Gemini ─────────────────────────────────────────────────
-    { name: 'gemini_api_key', title: 'API Key', type: 'password', placeholder: 'xxx', group: 'gemini', tab: 'ai' },
 
     // ─── AI / Fal ────────────────────────────────────────────────────
     { name: 'fal_api_key', title: 'API Key', type: 'password', placeholder: 'xxx', group: 'fal', tab: 'ai' },

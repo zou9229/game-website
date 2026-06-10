@@ -43,9 +43,24 @@ export default function SignInPage() {
     setCallbackUrl(params.get("callbackUrl"));
   }, []);
 
+  // Only allow same-site relative paths as callbackUrl (avoid open redirects).
+  const safeCallbackUrl =
+    callbackUrl && callbackUrl.startsWith("/") && !callbackUrl.startsWith("//")
+      ? callbackUrl
+      : null;
+
   const afterLoginUrl = redirectParam
     ? `/auth-callback?redirect=${encodeURIComponent(redirectParam)}`
-    : callbackUrl || "/settings";
+    : safeCallbackUrl || "/settings";
+
+  // Carry callbackUrl/redirect across to sign-up so the destination survives the switch.
+  const switchQuery = (() => {
+    const p = new URLSearchParams();
+    if (safeCallbackUrl) p.set("callbackUrl", safeCallbackUrl);
+    if (redirectParam) p.set("redirect", redirectParam);
+    const s = p.toString();
+    return s ? `?${s}` : "";
+  })();
 
   useEffect(() => {
     fetch("/api/config/public")
@@ -194,7 +209,7 @@ export default function SignInPage() {
                       </Button>
                       <FieldDescription className="text-center">
                         {t("sign.no_account")}{" "}
-                        <Link href="/sign-up" className="underline underline-offset-4">
+                        <Link href={`/sign-up${switchQuery}`} className="underline underline-offset-4">
                           {t("sign.sign_up_title")}
                         </Link>
                       </FieldDescription>

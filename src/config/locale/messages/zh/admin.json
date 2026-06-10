@@ -298,6 +298,15 @@
       "close": "关闭",
       "error": "测试失败"
     },
+    "custom": {
+      "title": "自定义配置",
+      "description": "添加自定义的 key/value 配置。Key 必须唯一，且不能与内置配置项重名。",
+      "empty": "暂无自定义配置，点击「添加」新建一条。",
+      "key_placeholder": "config_key",
+      "value_placeholder": "配置值",
+      "add": "添加",
+      "remove": "删除"
+    },
     "tabs": {
       "general": "常规",
       "auth": "认证",
@@ -305,7 +314,8 @@
       "email": "邮件",
       "storage": "存储",
       "ai": "AI",
-      "analytics": "统计"
+      "analytics": "统计",
+      "custom": "自定义"
     },
     "groups": {
       "appinfo": { "title": "应用信息", "description": "基本应用设置" },
@@ -322,8 +332,9 @@
       "wechat": { "title": "微信支付", "description": "微信支付网关（原生）" },
       "resend": { "title": "Resend", "description": "Resend 邮件服务" },
       "r2": { "title": "Cloudflare R2 / S3", "description": "对象存储设置" },
+      "openai": { "title": "OpenAI", "description": "OpenAI（或兼容）API" },
+      "anthropic": { "title": "Anthropic", "description": "Anthropic Claude API" },
       "replicate": { "title": "Replicate", "description": "Replicate AI API" },
-      "gemini": { "title": "Gemini", "description": "Google Gemini API" },
       "fal": { "title": "Fal", "description": "Fal AI API" },
       "google_analytics": { "title": "Google Analytics", "description": "按配置的 Measurement ID 注入 gtag.js" },
       "plausible": { "title": "Plausible", "description": "注入 plausible.js（云版或自托管）" }
@@ -387,8 +398,11 @@
       "storage_secret_key": "私有密钥",
       "storage_bucket": "存储桶",
       "storage_public_domain": "公共域名",
+      "openai_base_url": "Base URL",
+      "openai_api_key": "API 密钥",
+      "anthropic_base_url": "Base URL",
+      "anthropic_api_key": "API 密钥",
       "replicate_api_token": "API Token",
-      "gemini_api_key": "API 密钥",
       "fal_api_key": "API 密钥",
       "google_analytics_id": "Measurement ID",
       "plausible_domain": "域名",

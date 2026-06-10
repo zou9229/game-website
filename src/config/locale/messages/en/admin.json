@@ -298,6 +298,15 @@
       "close": "Close",
       "error": "Test failed"
     },
+    "custom": {
+      "title": "Custom Configs",
+      "description": "Add your own key/value configs. Keys must be unique and not collide with built-in settings.",
+      "empty": "No custom configs yet. Click \"Add\" to create one.",
+      "key_placeholder": "config_key",
+      "value_placeholder": "value",
+      "add": "Add",
+      "remove": "Remove"
+    },
     "tabs": {
       "general": "General",
       "auth": "Auth",
@@ -305,7 +314,8 @@
       "email": "Email",
       "storage": "Storage",
       "ai": "AI",
-      "analytics": "Analytics"
+      "analytics": "Analytics",
+      "custom": "Custom"
     },
     "groups": {
       "appinfo": { "title": "App Info", "description": "Basic application settings" },
@@ -322,8 +332,9 @@
       "wechat": { "title": "WeChat Pay", "description": "WeChat Pay gateway (native)" },
       "resend": { "title": "Resend", "description": "Resend email service" },
       "r2": { "title": "Cloudflare R2 / S3", "description": "Object storage settings" },
+      "openai": { "title": "OpenAI", "description": "OpenAI (or compatible) API" },
+      "anthropic": { "title": "Anthropic", "description": "Anthropic Claude API" },
       "replicate": { "title": "Replicate", "description": "Replicate AI API" },
-      "gemini": { "title": "Gemini", "description": "Google Gemini API" },
       "fal": { "title": "Fal", "description": "Fal AI API" },
       "google_analytics": { "title": "Google Analytics", "description": "Inject gtag.js with the configured Measurement ID" },
       "plausible": { "title": "Plausible", "description": "Inject plausible.js for self-hosted or cloud Plausible" }
@@ -387,8 +398,11 @@
       "storage_secret_key": "Secret Key",
       "storage_bucket": "Bucket",
       "storage_public_domain": "Public Domain",
+      "openai_base_url": "Base URL",
+      "openai_api_key": "API Key",
+      "anthropic_base_url": "Base URL",
+      "anthropic_api_key": "API Key",
       "replicate_api_token": "API Token",
-      "gemini_api_key": "API Key",
       "fal_api_key": "API Key",
       "google_analytics_id": "Measurement ID",
       "plausible_domain": "Domain",

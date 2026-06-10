@@ -22,9 +22,11 @@ interface Props {
   group: string;
   spec: TestSpec;
   groupTitle: string;
+  /** Current (possibly unsaved) form values for this group, merged over saved config server-side. */
+  configOverrides?: Record<string, string>;
 }
 
-export function SettingsTestDialog({ open, onOpenChange, group, spec, groupTitle }: Props) {
+export function SettingsTestDialog({ open, onOpenChange, group, spec, groupTitle, configOverrides }: Props) {
   const t = useTranslations("admin");
   const [inputs, setInputs] = useState<Record<string, string>>({});
   const [running, setRunning] = useState(false);
@@ -54,7 +56,7 @@ export function SettingsTestDialog({ open, onOpenChange, group, spec, groupTitle
       const res = await fetch("/api/admin/settings/test", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ group, inputs }),
+        body: JSON.stringify({ group, inputs, configs: configOverrides ?? {} }),
       });
       const data = await res.json();
       if (data.code !== 0) {

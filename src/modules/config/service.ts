@@ -2,6 +2,7 @@ import { eq } from 'drizzle-orm';
 import { db } from '@/core/db';
 import { config } from '@/config/db/schema';
 import { envConfigs } from '@/config';
+import { getSettings } from './settings';
 
 type ConfigMap = Record<string, string>;
 
@@ -106,6 +107,90 @@ export async function saveConfigs(configs: ConfigMap) {
 export async function getConfig(name: string): Promise<string | undefined> {
   const configs = await getAllConfigs();
   return configs[name];
+}
+
+// --- Custom configs -------------------------------------------------------
+
+/** Valid custom config key: letters, digits, and `_ . : -`. */
+const CUSTOM_KEY_PATTERN = /^[A-Za-z0-9_.:-]+$/;
+
+/**
+ * Keys that are "known" to the system — predefined settings plus every env
+ * config key — and therefore not user-managed custom keys.
+ */
+function reservedConfigKeys(): Set<string> {
+  return new Set<string>([
+    ...getSettings().map((s) => s.name),
+    ...Object.keys(envConfigs),
+    ...PROTECTED_CONFIG_KEYS,
+  ]);
+}
+
+export interface CustomConfig {
+  key: string;
+  value: string;
+}
+
+/**
+ * Custom (user-defined) configs: DB-stored key/value pairs that aren't part
+ * of any predefined setting or env key. Values are returned decrypted —
+ * admin-only, never expose this to non-admins.
+ */
+export async function getCustomConfigs(): Promise<CustomConfig[]> {
+  const reserved = reservedConfigKeys();
+  const dbConfigs = await getDbConfigs();
+  return Object.entries(dbConfigs)
+    .filter(([name]) => !reserved.has(name))
+    .map(([key, value]) => ({ key, value }))
+    .sort((a, b) => a.key.localeCompare(b.key));
+}
+
+/**
+ * Replace the entire set of custom configs: upsert the provided pairs and
+ * delete any previously-stored custom key that's no longer present. Reserved
+ * keys are rejected so the custom tab can't shadow a predefined setting.
+ */
+export async function replaceCustomConfigs(pairs: CustomConfig[]): Promise<void> {
+  const reserved = reservedConfigKeys();
+  const seen = new Set<string>();
+  const clean: Array<[string, string]> = [];
+
+  for (const pair of pairs) {
+    const key = (pair?.key ?? '').trim();
+    if (!key) continue; // skip blank rows
+    if (reserved.has(key)) throw new Error(`Reserved key not allowed: ${key}`);
+    if (!CUSTOM_KEY_PATTERN.test(key)) throw new Error(`Invalid key: ${key}`);
+    if (seen.has(key)) throw new Error(`Duplicate key: ${key}`);
+    seen.add(key);
+    clean.push([key, pair.value ?? '']);
+  }
+
+  const dbConfigs = await getDbConfigs();
+  const existingCustom = Object.keys(dbConfigs).filter((n) => !reserved.has(n));
+  const keep = new Set(clean.map(([k]) => k));
+  const toDelete = existingCustom.filter((k) => !keep.has(k));
+
+  await db().transaction(async (tx: any) => {
+    for (const name of toDelete) {
+      await tx.delete(config).where(eq(config.name, name));
+    }
+    for (const [name, value] of clean) {
+      const [existing] = await tx
+        .select()
+        .from(config)
+        .where(eq(config.name, name))
+        .limit(1);
+      if (existing) {
+        await tx.update(config).set({ value }).where(eq(config.name, name));
+      } else {
+        await tx.insert(config).values({ name, value });
+      }
+    }
+  });
+
+  // Invalidate cache
+  cachedConfigs = null;
+  cacheTime = 0;
 }
 
 /**

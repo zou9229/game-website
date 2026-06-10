@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useMessages, useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { Save, ChevronDown, FlaskConical } from "lucide-react";
+import { Save, ChevronDown, FlaskConical, Plus, Minus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -42,6 +42,7 @@ export default function AdminSettingsPage() {
   const [loaded, setLoaded] = useState(false);
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
   const [testingGroup, setTestingGroup] = useState<string | null>(null);
+  const [customRows, setCustomRows] = useState<{ key: string; value: string }[]>([]);
 
   function toggleCollapse(name: string) {
     setCollapsed((prev) => {
@@ -57,10 +58,13 @@ export default function AdminSettingsPage() {
   const settings = getSettings();
 
   useEffect(() => {
-    fetch("/api/admin/config")
-      .then((r) => r.json())
-      .then((res) => {
-        if (res.code === 0) setConfigs(res.data);
+    Promise.all([
+      fetch("/api/admin/config").then((r) => r.json()),
+      fetch("/api/admin/config/custom").then((r) => r.json()),
+    ])
+      .then(([cfg, custom]) => {
+        if (cfg.code === 0) setConfigs(cfg.data);
+        if (custom.code === 0) setCustomRows(custom.data);
         setLoaded(true);
       })
       .catch(() => setLoaded(true));
@@ -70,21 +74,48 @@ export default function AdminSettingsPage() {
     setConfigs((prev) => ({ ...prev, [name]: value }));
   }
 
+  function addCustomRow() {
+    setCustomRows((prev) => [...prev, { key: "", value: "" }]);
+  }
+
+  function removeCustomRow(index: number) {
+    setCustomRows((prev) => prev.filter((_, i) => i !== index));
+  }
+
+  function updateCustomRow(index: number, field: "key" | "value", value: string) {
+    setCustomRows((prev) =>
+      prev.map((row, i) => (i === index ? { ...row, [field]: value } : row)),
+    );
+  }
+
   async function handleSave() {
     setSaving(true);
     try {
-      const tabSettings = settings.filter((s) => s.tab === activeTab);
-      const toSave: Record<string, string> = {};
-      for (const s of tabSettings) {
-        if (configs[s.name] !== undefined) {
-          toSave[s.name] = configs[s.name];
+      const isCustom = activeTab === "custom";
+      const url = isCustom ? "/api/admin/config/custom" : "/api/admin/config";
+
+      let payload: unknown;
+      if (isCustom) {
+        payload = {
+          configs: customRows
+            .map((r) => ({ key: r.key.trim(), value: r.value }))
+            .filter((r) => r.key),
+        };
+      } else {
+        const tabSettings = settings.filter((s) => s.tab === activeTab);
+        const toSave: Record<string, string> = {};
+        for (const s of tabSettings) {
+          if (configs[s.name] !== undefined) {
+            toSave[s.name] = configs[s.name];
+          }
         }
+        payload = toSave;
       }
 
-      const res = await fetch("/api/admin/config", {
+      const res = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(toSave),
+        body: JSON.stringify(payload),
       });
       const data = await res.json();
       if (data.code === 0) {
@@ -136,6 +167,52 @@ export default function AdminSettingsPage() {
       {/* Groups */}
       {!loaded ? (
         <div className="text-muted-foreground">{t("loading")}</div>
+      ) : activeTab === "custom" ? (
+        <Card>
+          <CardHeader>
+            <CardTitle>{t("settings.custom.title")}</CardTitle>
+            <p className="text-sm text-muted-foreground">
+              {t("settings.custom.description")}
+            </p>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {customRows.length === 0 && (
+              <p className="text-sm text-muted-foreground">
+                {t("settings.custom.empty")}
+              </p>
+            )}
+            {customRows.map((row, i) => (
+              <div key={i} className="flex items-start gap-2">
+                <Input
+                  value={row.key}
+                  onChange={(e) => updateCustomRow(i, "key", e.target.value)}
+                  placeholder={t("settings.custom.key_placeholder")}
+                  className="w-1/3 shrink-0 font-mono"
+                />
+                <textarea
+                  value={row.value}
+                  onChange={(e) => updateCustomRow(i, "value", e.target.value)}
+                  placeholder={t("settings.custom.value_placeholder")}
+                  rows={1}
+                  className="flex h-8 min-h-8 max-h-48 flex-1 resize-y rounded-lg border border-input bg-transparent px-2.5 py-1 text-base leading-6 outline-none transition-colors placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 md:text-sm"
+                />
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="shrink-0"
+                  onClick={() => removeCustomRow(i)}
+                  aria-label={t("settings.custom.remove")}
+                >
+                  <Minus className="size-4" />
+                </Button>
+              </div>
+            ))}
+            <Button variant="outline" onClick={addCustomRow} className="gap-1.5">
+              <Plus className="size-4" />
+              {t("settings.custom.add")}
+            </Button>
+          </CardContent>
+        </Card>
       ) : (
         tabGroups.map((group) => {
           const groupSettings = tabSettings.filter((s) => s.group === group.name);
@@ -199,6 +276,11 @@ export default function AdminSettingsPage() {
           group={testingGroup}
           spec={getTestSpec(testingGroup)!}
           groupTitle={t(`settings.groups.${testingGroup}.title`)}
+          configOverrides={Object.fromEntries(
+            settings
+              .filter((s) => s.group === testingGroup && configs[s.name] !== undefined)
+              .map((s) => [s.name, configs[s.name]]),
+          )}
         />
       )}
     </div>

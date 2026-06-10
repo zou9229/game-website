@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useLocale } from "next-intl";
 import { useSession } from "@/core/auth/client";
 import { useRouter } from "@/core/i18n/navigation";
+import { defaultLocale } from "@/config/locale";
 import { AppSidebar, type NavItem } from "@/components/app-sidebar";
 import { UserMenu } from "@/components/user-menu";
 import {
@@ -37,6 +39,7 @@ export function AppLayout({
 }) {
   const { data: session, isPending } = useSession();
   const router = useRouter();
+  const locale = useLocale();
   const [authorized, setAuthorized] = useState(false);
 
   useEffect(() => {
@@ -44,7 +47,16 @@ export function AppLayout({
 
     if (!session?.user) {
       setAuthorized(false);
-      router.push("/sign-in");
+      // Remember where the user was headed so sign-in can send them back.
+      // Strip the locale prefix so the locale-aware router re-applies it.
+      let callbackUrl = window.location.pathname + window.location.search;
+      if (locale !== defaultLocale) {
+        if (callbackUrl === `/${locale}`) callbackUrl = "/";
+        else if (callbackUrl.startsWith(`/${locale}/`))
+          callbackUrl = callbackUrl.slice(locale.length + 1);
+      }
+      if (!callbackUrl.startsWith("/")) callbackUrl = "/";
+      router.push(`/sign-in?callbackUrl=${encodeURIComponent(callbackUrl)}`);
       return;
     }
 
@@ -66,7 +78,7 @@ export function AppLayout({
       .catch(() => {
         router.push(unauthorizedRedirect);
       });
-  }, [isPending, session, router, requirePermission, unauthorizedRedirect]);
+  }, [isPending, session, router, locale, requirePermission, unauthorizedRedirect]);
 
   if (isPending || !authorized || !session?.user) {
     return (

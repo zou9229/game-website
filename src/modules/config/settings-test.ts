@@ -20,7 +20,6 @@ import { PaymentType } from '@/core/payment/types';
 import { ResendProvider } from '@/core/email/resend';
 import { S3Provider } from '@/core/storage/s3';
 import { ReplicateProvider } from '@/core/ai/replicate';
-import { GeminiProvider } from '@/core/ai/gemini';
 import { FalProvider } from '@/core/ai/fal';
 import { AIMediaType } from '@/core/ai/types';
 import { getUniSeq } from '@/lib/hash';
@@ -51,10 +50,12 @@ export async function runTest(
         return await testWechat(inputs, configs);
       case 'r2':
         return await testR2(inputs, configs);
+      case 'openai':
+        return await testOpenAI(inputs, configs);
+      case 'anthropic':
+        return await testAnthropic(inputs, configs);
       case 'replicate':
         return await testReplicate(inputs, configs);
-      case 'gemini':
-        return await testGemini(inputs, configs);
       case 'fal':
         return await testFal(inputs, configs);
       default:
@@ -305,6 +306,71 @@ async function testR2(inputs: Record<string, string>, configs: Record<string, st
 
 // --- AI -------------------------------------------------------------------
 
+async function testOpenAI(inputs: Record<string, string>, configs: Record<string, string>): Promise<TestResult> {
+  const missing = need(configs, ['openai_api_key']);
+  if (missing) return { success: false, message: missing };
+
+  const baseUrl = (configs.openai_base_url || 'https://api.openai.com/v1').replace(/\/+$/, '');
+  const resp = await fetch(`${baseUrl}/chat/completions`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${configs.openai_api_key}`,
+    },
+    body: JSON.stringify({
+      model: inputs.model,
+      messages: [{ role: 'user', content: inputs.prompt }],
+      max_tokens: 64,
+    }),
+  });
+
+  const data: any = await resp.json().catch(() => ({}));
+  if (!resp.ok) {
+    return { success: false, message: data?.error?.message || `Request failed (${resp.status})` };
+  }
+
+  const reply = String(data?.choices?.[0]?.message?.content ?? '').trim();
+  return {
+    success: true,
+    message: 'OpenAI accepted the request',
+    details: { Model: data?.model || inputs.model, Reply: reply.slice(0, 200) || '(empty)' },
+  };
+}
+
+async function testAnthropic(inputs: Record<string, string>, configs: Record<string, string>): Promise<TestResult> {
+  const missing = need(configs, ['anthropic_api_key']);
+  if (missing) return { success: false, message: missing };
+
+  const baseUrl = (configs.anthropic_base_url || 'https://api.anthropic.com').replace(/\/+$/, '');
+  const resp = await fetch(`${baseUrl}/v1/messages`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': configs.anthropic_api_key,
+      'anthropic-version': '2023-06-01',
+    },
+    body: JSON.stringify({
+      model: inputs.model,
+      max_tokens: 64,
+      messages: [{ role: 'user', content: inputs.prompt }],
+    }),
+  });
+
+  const data: any = await resp.json().catch(() => ({}));
+  if (!resp.ok) {
+    return { success: false, message: data?.error?.message || `Request failed (${resp.status})` };
+  }
+
+  const reply = Array.isArray(data?.content)
+    ? data.content.map((b: any) => b?.text || '').join('').trim()
+    : '';
+  return {
+    success: true,
+    message: 'Anthropic accepted the request',
+    details: { Model: data?.model || inputs.model, Reply: reply.slice(0, 200) || '(empty)' },
+  };
+}
+
 async function testReplicate(inputs: Record<string, string>, configs: Record<string, string>): Promise<TestResult> {
   const missing = need(configs, ['replicate_api_token']);
   if (missing) return { success: false, message: missing };
@@ -320,25 +386,6 @@ async function testReplicate(inputs: Record<string, string>, configs: Record<str
   return {
     success: true,
     message: 'Replicate accepted the request',
-    details: { 'Task ID': result.taskId, Status: result.taskStatus },
-  };
-}
-
-async function testGemini(inputs: Record<string, string>, configs: Record<string, string>): Promise<TestResult> {
-  const missing = need(configs, ['gemini_api_key']);
-  if (missing) return { success: false, message: missing };
-
-  const provider = new GeminiProvider({ apiKey: configs.gemini_api_key });
-  const result = await provider.generate({
-    params: {
-      mediaType: AIMediaType.IMAGE,
-      model: inputs.model,
-      prompt: inputs.prompt,
-    },
-  });
-  return {
-    success: true,
-    message: 'Gemini accepted the request',
     details: { 'Task ID': result.taskId, Status: result.taskStatus },
   };
 }
