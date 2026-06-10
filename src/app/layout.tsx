@@ -26,6 +26,11 @@ const notoSerifSC = Noto_Serif_SC({
 export const metadata: Metadata = {
   title: envConfigs.app_name,
   description: envConfigs.app_description,
+  icons: {
+    icon: "/favicon.svg",
+    shortcut: "/favicon.svg",
+    apple: "/favicon.svg",
+  },
 };
 
 export default async function RootLayout({
