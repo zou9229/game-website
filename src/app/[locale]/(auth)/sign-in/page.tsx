@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { Link, useRouter } from "@/core/i18n/navigation";
-import { authClient, signIn } from "@/core/auth/client";
+import { authClient, signIn, useSession } from "@/core/auth/client";
 import { defaultLocale } from "@/config/locale";
 import { envConfigs } from "@/config";
 import { Button } from "@/components/ui/button";
@@ -26,6 +26,9 @@ export default function SignInPage() {
   const t = useTranslations("common");
   const router = useRouter();
   const locale = useLocale();
+  const { data: session, isPending: sessionPending } = useSession();
+  // Set right before we navigate so the already-signed-in effect doesn't also fire.
+  const navigatingRef = useRef(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -43,9 +46,22 @@ export default function SignInPage() {
     setCallbackUrl(params.get("callbackUrl"));
   }, []);
 
-  // Only allow same-site relative paths as callbackUrl (avoid open redirects).
+  // Already signed in (visited /sign-in directly, or a stale callbackUrl looped
+  // back here) → go home. The auth pages never gate themselves, so this can't loop.
+  useEffect(() => {
+    if (sessionPending || navigatingRef.current) return;
+    if (session?.user) {
+      navigatingRef.current = true;
+      router.push("/");
+    }
+  }, [sessionPending, session?.user, router]);
+
+  // Allow only same-site relative paths, and never an auth page (would loop).
   const safeCallbackUrl =
-    callbackUrl && callbackUrl.startsWith("/") && !callbackUrl.startsWith("//")
+    callbackUrl &&
+    callbackUrl.startsWith("/") &&
+    !callbackUrl.startsWith("//") &&
+    !/^\/(sign-in|sign-up|verify-email)(\/|\?|$)/.test(callbackUrl)
       ? callbackUrl
       : null;
 
@@ -105,6 +121,7 @@ export default function SignInPage() {
         // Hard navigation so the destination reloads with a fresh session
         // cookie — a client push would let the guard read a stale (logged-out)
         // session store and bounce straight back to /sign-in.
+        navigatingRef.current = true;
         const base = locale !== defaultLocale ? `/${locale}` : "";
         window.location.assign(`${base}${afterLoginUrl}`);
       }
