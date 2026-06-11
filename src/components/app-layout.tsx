@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocale } from "next-intl";
 import { useSession } from "@/core/auth/client";
 import { useRouter } from "@/core/i18n/navigation";
@@ -41,12 +41,17 @@ export function AppLayout({
   const router = useRouter();
   const locale = useLocale();
   const [authorized, setAuthorized] = useState(false);
+  // Redirect to sign-in exactly once, so a re-render mid-navigation can't
+  // recapture the callbackUrl as the sign-in path itself.
+  const redirectingRef = useRef(false);
 
   useEffect(() => {
     if (isPending) return;
 
     if (!session?.user) {
       setAuthorized(false);
+      if (redirectingRef.current) return;
+      redirectingRef.current = true;
       // Remember where the user was headed so sign-in can send them back.
       // Strip the locale prefix so the locale-aware router re-applies it.
       let callbackUrl = window.location.pathname + window.location.search;
