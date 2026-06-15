@@ -65,24 +65,42 @@ export function AppLayout({
       return;
     }
 
-    if (!requirePermission) {
-      setAuthorized(true);
-      return;
-    }
-
-    fetch("/api/user/permissions")
-      .then((r) => r.json())
-      .then((res) => {
-        const admin = res.code === 0 && res.data?.isAdmin === true;
-        if (admin) {
-          setAuthorized(true);
-        } else {
-          router.push(unauthorizedRedirect);
+    let cancelled = false;
+    setAuthorized(false);
+    (async () => {
+      // Invite-only gate: a new user (incl. social logins) with no redeemed
+      // invite must redeem one before entering the app. Admins are exempt
+      // (computed server-side in /api/user/info).
+      try {
+        const info = await fetch("/api/user/info").then((r) => r.json());
+        if (cancelled) return;
+        if (info.code === 0 && info.data?.needsInvite) {
+          if (!redirectingRef.current) {
+            redirectingRef.current = true;
+            router.push("/redeem-invite");
+          }
+          return;
         }
-      })
-      .catch(() => {
-        router.push(unauthorizedRedirect);
-      });
+      } catch {}
+      if (cancelled) return;
+
+      if (!requirePermission) {
+        setAuthorized(true);
+        return;
+      }
+
+      try {
+        const res = await fetch("/api/user/permissions").then((r) => r.json());
+        if (cancelled) return;
+        if (res.code === 0 && res.data?.isAdmin === true) setAuthorized(true);
+        else router.push(unauthorizedRedirect);
+      } catch {
+        if (!cancelled) router.push(unauthorizedRedirect);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
   }, [isPending, session, router, locale, requirePermission, unauthorizedRedirect]);
 
   if (isPending || !authorized || !session?.user) {

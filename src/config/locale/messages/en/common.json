@@ -55,7 +55,10 @@
     "invite_code_title": "Invite code",
     "invite_code_placeholder": "Enter your invite code",
     "invite_code_required": "Invite code is required",
-    "invite_code_invalid": "Invalid invite code"
+    "invite_code_invalid": "Invalid invite code",
+    "redeem_title": "Enter your invite code",
+    "redeem_description": "This app is invite-only. Enter a valid invite code to continue.",
+    "redeem_submit": "Continue"
   },
   "pricing": {
     "get_started": "Get Started",
