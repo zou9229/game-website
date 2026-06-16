@@ -38,6 +38,7 @@ export function getSettingTabs(): SettingTab[] {
     { name: 'storage', title: 'Storage' },
     { name: 'ai', title: 'AI' },
     { name: 'analytics', title: 'Analytics' },
+    { name: 'customer_service', title: 'Customer Service' },
     { name: 'custom', title: 'Custom' },
   ];
 }
@@ -124,9 +125,21 @@ export function getSettingGroups(): SettingGroup[] {
 
     // Email
     {
+      name: 'email_general',
+      title: 'General',
+      description: 'Email provider selection',
+      tab: 'email',
+    },
+    {
       name: 'resend',
       title: 'Resend',
       description: 'Resend email service',
+      tab: 'email',
+    },
+    {
+      name: 'cloudflare_email',
+      title: 'Cloudflare Email',
+      description: 'Cloudflare Email Service',
       tab: 'email',
     },
 
@@ -171,6 +184,22 @@ export function getSettingGroups(): SettingGroup[] {
       title: 'Plausible',
       description: 'Inject plausible.js for self-hosted or cloud Plausible',
       tab: 'analytics',
+    },
+
+    // Customer Service
+    {
+      name: 'crisp',
+      title: 'Crisp',
+      description:
+        '<a href="https://crisp.chat" class="text-primary" target="_blank">Crisp</a> live chat widget',
+      tab: 'customer_service',
+    },
+    {
+      name: 'tawk',
+      title: 'Tawk.to',
+      description:
+        '<a href="https://www.tawk.to" class="text-primary" target="_blank">Tawk.to</a> live chat widget',
+      tab: 'customer_service',
     },
   ];
 }
@@ -613,6 +642,20 @@ export function getSettings(): Setting[] {
       tab: 'payment',
     },
 
+    // ─── Email / General ────────────────────────────────────────────
+    {
+      name: 'email_provider',
+      title: 'Email Provider',
+      type: 'select',
+      options: [
+        { label: 'Resend', value: 'resend' },
+        { label: 'Cloudflare Email', value: 'cloudflare' },
+      ],
+      group: 'email_general',
+      tab: 'email',
+      defaultValue: 'resend',
+    },
+
     // ─── Email / Resend ──────────────────────────────────────────────
     {
       name: 'resend_api_key',
@@ -628,6 +671,32 @@ export function getSettings(): Setting[] {
       type: 'text',
       placeholder: 'hello@example.com',
       group: 'resend',
+      tab: 'email',
+    },
+
+    // ─── Email / Cloudflare Email ────────────────────────────────────
+    {
+      name: 'cloudflare_email_api_token',
+      title: 'API Token',
+      type: 'password',
+      placeholder: 'Bearer token with Email Send permission',
+      group: 'cloudflare_email',
+      tab: 'email',
+    },
+    {
+      name: 'cloudflare_email_account_id',
+      title: 'Account ID',
+      type: 'text',
+      placeholder: 'Cloudflare account ID',
+      group: 'cloudflare_email',
+      tab: 'email',
+    },
+    {
+      name: 'cloudflare_email_sender_email',
+      title: 'Sender Email',
+      type: 'text',
+      placeholder: 'hello@yourdomain.com',
+      group: 'cloudflare_email',
       tab: 'email',
     },
 
@@ -765,6 +834,48 @@ export function getSettings(): Setting[] {
       tip: 'Use https://plausible.io/js/script.js for cloud, or your self-hosted URL',
       group: 'plausible',
       tab: 'analytics',
+    },
+
+    // ─── Customer Service / Crisp ───────────────────────────────────
+    {
+      name: 'crisp_enabled',
+      title: 'Enable Crisp',
+      type: 'switch',
+      group: 'crisp',
+      tab: 'customer_service',
+    },
+    {
+      name: 'crisp_website_id',
+      title: 'Website ID',
+      type: 'text',
+      placeholder: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+      group: 'crisp',
+      tab: 'customer_service',
+    },
+
+    // ─── Customer Service / Tawk ────────────────────────────────────
+    {
+      name: 'tawk_enabled',
+      title: 'Enable Tawk.to',
+      type: 'switch',
+      group: 'tawk',
+      tab: 'customer_service',
+    },
+    {
+      name: 'tawk_property_id',
+      title: 'Property ID',
+      type: 'text',
+      placeholder: 'xxxxxxxxxxxxxxxxxxxxxxxx',
+      group: 'tawk',
+      tab: 'customer_service',
+    },
+    {
+      name: 'tawk_widget_id',
+      title: 'Widget ID',
+      type: 'text',
+      placeholder: 'xxxxxxxxxx',
+      group: 'tawk',
+      tab: 'customer_service',
     },
   ];
 }

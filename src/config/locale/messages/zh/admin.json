@@ -315,6 +315,7 @@
       "storage": "存储",
       "ai": "AI",
       "analytics": "统计",
+      "customer_service": "客服",
       "custom": "自定义"
     },
     "groups": {
@@ -336,7 +337,15 @@
       "paypal": { "title": "PayPal", "description": "PayPal 支付网关" },
       "alipay": { "title": "支付宝", "description": "支付宝支付（原生）" },
       "wechat": { "title": "微信支付", "description": "微信支付网关（原生）" },
+      "email_general": {
+        "title": "通用",
+        "description": "邮件服务商选择"
+      },
       "resend": { "title": "Resend", "description": "Resend 邮件服务" },
+      "cloudflare_email": {
+        "title": "Cloudflare 邮件",
+        "description": "Cloudflare Email Service"
+      },
       "r2": { "title": "Cloudflare R2 / S3", "description": "对象存储设置" },
       "openai": { "title": "OpenAI", "description": "OpenAI（或兼容）API" },
       "anthropic": {
@@ -352,6 +361,14 @@
       "plausible": {
         "title": "Plausible",
         "description": "注入 plausible.js（云版或自托管）"
+      },
+      "crisp": {
+        "title": "Crisp",
+        "description": "Crisp 客服聊天组件"
+      },
+      "tawk": {
+        "title": "Tawk.to",
+        "description": "Tawk.to 客服聊天组件"
       }
     },
     "fields": {
@@ -406,8 +423,12 @@
       "wechat_serial_no": "证书序列号",
       "wechat_notify_url": "回调地址（Webhook）",
       "wechat_test_amount": "测试金额（分）",
+      "email_provider": "邮件服务商",
       "resend_api_key": "API 密钥",
       "resend_email_from": "发件地址",
+      "cloudflare_email_api_token": "API 令牌",
+      "cloudflare_email_account_id": "账户 ID",
+      "cloudflare_email_sender_email": "发件地址",
       "storage_endpoint": "端点",
       "storage_region": "区域",
       "storage_access_key": "访问密钥",
@@ -422,7 +443,12 @@
       "fal_api_key": "API 密钥",
       "google_analytics_id": "Measurement ID",
       "plausible_domain": "域名",
-      "plausible_src": "脚本地址"
+      "plausible_src": "脚本地址",
+      "crisp_enabled": "启用 Crisp",
+      "crisp_website_id": "网站 ID",
+      "tawk_enabled": "启用 Tawk.to",
+      "tawk_property_id": "Property ID",
+      "tawk_widget_id": "Widget ID"
     },
     "placeholders": {
       "creem_product_ids_mapping": "{\"starter_monthly\": \"prod_xxx\"}",

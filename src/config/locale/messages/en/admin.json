@@ -315,6 +315,7 @@
       "storage": "Storage",
       "ai": "AI",
       "analytics": "Analytics",
+      "customer_service": "Customer Service",
       "custom": "Custom"
     },
     "groups": {
@@ -357,7 +358,15 @@
         "title": "WeChat Pay",
         "description": "WeChat Pay gateway (native)"
       },
+      "email_general": {
+        "title": "General",
+        "description": "Email provider selection"
+      },
       "resend": { "title": "Resend", "description": "Resend email service" },
+      "cloudflare_email": {
+        "title": "Cloudflare Email",
+        "description": "Cloudflare Email Service"
+      },
       "r2": {
         "title": "Cloudflare R2 / S3",
         "description": "Object storage settings"
@@ -379,6 +388,14 @@
       "plausible": {
         "title": "Plausible",
         "description": "Inject plausible.js for self-hosted or cloud Plausible"
+      },
+      "crisp": {
+        "title": "Crisp",
+        "description": "Crisp live chat widget"
+      },
+      "tawk": {
+        "title": "Tawk.to",
+        "description": "Tawk.to live chat widget"
       }
     },
     "fields": {
@@ -433,8 +450,12 @@
       "wechat_serial_no": "Certificate Serial No",
       "wechat_notify_url": "Notify URL (Webhook)",
       "wechat_test_amount": "Test amount (cents)",
+      "email_provider": "Email Provider",
       "resend_api_key": "API Key",
       "resend_email_from": "From Address",
+      "cloudflare_email_api_token": "API Token",
+      "cloudflare_email_account_id": "Account ID",
+      "cloudflare_email_sender_email": "Sender Email",
       "storage_endpoint": "Endpoint",
       "storage_region": "Region",
       "storage_access_key": "Access Key",
@@ -449,7 +470,12 @@
       "fal_api_key": "API Key",
       "google_analytics_id": "Measurement ID",
       "plausible_domain": "Domain",
-      "plausible_src": "Script Src"
+      "plausible_src": "Script Src",
+      "crisp_enabled": "Enable Crisp",
+      "crisp_website_id": "Website ID",
+      "tawk_enabled": "Enable Tawk.to",
+      "tawk_property_id": "Property ID",
+      "tawk_widget_id": "Widget ID"
     },
     "placeholders": {
       "creem_product_ids_mapping": "{\"starter_monthly\": \"prod_xxx\"}",

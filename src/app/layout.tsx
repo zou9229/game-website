@@ -6,6 +6,7 @@ import { ThemeProvider } from 'next-themes';
 import { envConfigs } from '@/config';
 import { locales } from '@/config/locale';
 import { Analytics } from '@/components/analytics';
+import { CustomerService } from '@/components/customer-service';
 import { GoogleOneTap } from '@/components/google-one-tap';
 import { Toaster } from '@/components/ui/sonner';
 
@@ -69,6 +70,7 @@ export default async function RootLayout({
           <GoogleOneTap />
         </ThemeProvider>
         <Analytics />
+        <CustomerService />
       </body>
     </html>
   );
