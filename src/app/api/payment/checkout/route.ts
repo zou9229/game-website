@@ -1,13 +1,17 @@
 import { headers } from 'next/headers';
-import { respData, respErr } from '@/lib/resp';
-import { getAuth } from '@/core/auth';
-import { createCheckout } from '@/modules/payment/service';
-import { envConfigs } from '@/config';
-import { getAllConfigs } from '@/modules/config/service';
-import { getPricingProduct } from '@/config/pricing';
-import { enforceMinIntervalRateLimit } from '@/lib/rate-limit';
 
-function safeSameOriginPath(input: string | undefined | null, fallbackPath: string): string {
+import { getAuth } from '@/core/auth';
+import { envConfigs } from '@/config';
+import { getPricingProduct } from '@/config/pricing';
+import { getAllConfigs } from '@/modules/config/service';
+import { createCheckout } from '@/modules/payment/service';
+import { enforceMinIntervalRateLimit } from '@/lib/rate-limit';
+import { respData, respErr } from '@/lib/resp';
+
+function safeSameOriginPath(
+  input: string | undefined | null,
+  fallbackPath: string
+): string {
   if (!input) return fallbackPath;
   try {
     const appUrl = new URL(envConfigs.app_url || 'http://localhost:3000');
@@ -20,7 +24,10 @@ function safeSameOriginPath(input: string | undefined | null, fallbackPath: stri
 }
 
 export async function POST(req: Request) {
-  const limited = enforceMinIntervalRateLimit(req, { intervalMs: 1000, keyPrefix: 'checkout' });
+  const limited = enforceMinIntervalRateLimit(req, {
+    intervalMs: 1000,
+    keyPrefix: 'checkout',
+  });
   if (limited) return limited;
 
   try {
@@ -51,7 +58,9 @@ export async function POST(req: Request) {
     // amount stored both come from the authoritative catalog.
     const configs = await getAllConfigs();
     const providerKey = payment_provider || configs.default_payment_provider;
-    const testAmountRaw = providerKey ? configs[`${providerKey}_test_amount`] : undefined;
+    const testAmountRaw = providerKey
+      ? configs[`${providerKey}_test_amount`]
+      : undefined;
     const testAmount = testAmountRaw ? parseInt(testAmountRaw) : 0;
     const chargeAmount = testAmount > 0 ? testAmount : product.priceInCents;
 

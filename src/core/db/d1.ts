@@ -1,8 +1,8 @@
-import { drizzle } from 'drizzle-orm/d1';
 // `cloudflare:workers` only resolves inside the Workers runtime. This file is
 // loaded lazily by createDb() based on DATABASE_PROVIDER, so the import is only
 // hit when running on Workers with DATABASE_PROVIDER=d1.
 import { env } from 'cloudflare:workers';
+import { drizzle } from 'drizzle-orm/d1';
 
 // Minimal D1Database type to avoid pulling in @cloudflare/workers-types globally
 type D1Database = {

@@ -6,7 +6,7 @@
 // with the HTML and is visible to everyone.
 export function Plausible({
   domain,
-  src = "https://plausible.io/js/script.js",
+  src = 'https://plausible.io/js/script.js',
 }: {
   domain: string;
   src?: string;

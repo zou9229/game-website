@@ -54,7 +54,11 @@ export class KieProvider implements AIProvider {
     }
   }
 
-  async generateMusic({ params }: { params: AIGenerateParams }): Promise<AITaskResult> {
+  async generateMusic({
+    params,
+  }: {
+    params: AIGenerateParams;
+  }): Promise<AITaskResult> {
     const apiUrl = `${this.baseUrl}/generate`;
     const headers = {
       'Content-Type': 'application/json',
@@ -112,7 +116,11 @@ export class KieProvider implements AIProvider {
     };
   }
 
-  async generateImage({ params }: { params: AIGenerateParams }): Promise<AITaskResult> {
+  async generateImage({
+    params,
+  }: {
+    params: AIGenerateParams;
+  }): Promise<AITaskResult> {
     const apiUrl = `${this.baseUrl}/jobs/createTask`;
     const headers = {
       'Content-Type': 'application/json',
@@ -178,7 +186,11 @@ export class KieProvider implements AIProvider {
     };
   }
 
-  async generateVideo({ params }: { params: AIGenerateParams }): Promise<AITaskResult> {
+  async generateVideo({
+    params,
+  }: {
+    params: AIGenerateParams;
+  }): Promise<AITaskResult> {
     const apiUrl = `${this.baseUrl}/jobs/createTask`;
     const headers = {
       'Content-Type': 'application/json',
@@ -246,9 +258,15 @@ export class KieProvider implements AIProvider {
     };
   }
 
-  async generate({ params }: { params: AIGenerateParams }): Promise<AITaskResult> {
+  async generate({
+    params,
+  }: {
+    params: AIGenerateParams;
+  }): Promise<AITaskResult> {
     if (
-      ![AIMediaType.MUSIC, AIMediaType.IMAGE, AIMediaType.VIDEO].includes(params.mediaType)
+      ![AIMediaType.MUSIC, AIMediaType.IMAGE, AIMediaType.VIDEO].includes(
+        params.mediaType
+      )
     ) {
       throw new Error(`mediaType not supported: ${params.mediaType}`);
     }

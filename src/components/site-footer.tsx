@@ -1,9 +1,10 @@
-import { Link } from "@/core/i18n/navigation";
-import type { ComponentType, SVGProps } from "react";
-import { envConfigs } from "@/config";
-import { cn } from "@/lib/utils";
-import { LocaleSelector } from "@/components/locale-selector";
-import { BuiltWithShipAny } from "@/components/built-with-shipany";
+import type { ComponentType, SVGProps } from 'react';
+
+import { Link } from '@/core/i18n/navigation';
+import { envConfigs } from '@/config';
+import { cn } from '@/lib/utils';
+import { BuiltWithShipAny } from '@/components/built-with-shipany';
+import { LocaleSelector } from '@/components/locale-selector';
 
 export interface FooterColumn {
   title: string;
@@ -33,7 +34,7 @@ export function SiteFooter({
     <footer className="bg-neutral-950 text-neutral-100">
       <div className="mx-auto max-w-7xl px-6 pt-14 pb-6 sm:px-10 sm:pt-16 lg:px-16">
         {tagline && (
-          <p className="font-serif italic text-3xl leading-[1.15] tracking-tight text-neutral-100 sm:text-4xl mb-12 max-w-2xl">
+          <p className="mb-12 max-w-2xl font-serif text-3xl leading-[1.15] tracking-tight text-neutral-100 italic sm:text-4xl">
             {tagline}
           </p>
         )}
@@ -41,12 +42,12 @@ export function SiteFooter({
         {columns && columns.length > 0 && (
           <div
             className={cn(
-              "grid gap-x-8 gap-y-10 sm:gap-x-12",
+              'grid gap-x-8 gap-y-10 sm:gap-x-12',
               columns.length <= 3
-                ? "grid-cols-2 sm:grid-cols-3"
+                ? 'grid-cols-2 sm:grid-cols-3'
                 : columns.length === 4
-                  ? "grid-cols-2 sm:grid-cols-4"
-                  : "grid-cols-2 sm:grid-cols-3 lg:grid-cols-5"
+                  ? 'grid-cols-2 sm:grid-cols-4'
+                  : 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-5'
             )}
           >
             {columns.map((col) => (
@@ -112,7 +113,8 @@ export function SiteFooter({
         <div className="mt-6 flex flex-col gap-3 border-t border-neutral-800 pt-5 sm:flex-row sm:items-center sm:justify-between">
           <BuiltWithShipAny />
           <span className="text-sm text-neutral-500">
-            {copyright || `© ${year} ${envConfigs.app_name}. All rights reserved.`}
+            {copyright ||
+              `© ${year} ${envConfigs.app_name}. All rights reserved.`}
           </span>
         </div>
       </div>

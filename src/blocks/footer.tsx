@@ -1,10 +1,11 @@
-import type { SVGProps } from "react";
-import { getTranslations } from "next-intl/server";
+import type { SVGProps } from 'react';
+import { getTranslations } from 'next-intl/server';
+
 import {
   SiteFooter,
   type FooterColumn,
   type FooterSocial,
-} from "@/components/site-footer";
+} from '@/components/site-footer';
 
 function GithubIcon(props: SVGProps<SVGSVGElement>) {
   return (
@@ -23,40 +24,44 @@ function XIcon(props: SVGProps<SVGSVGElement>) {
 }
 
 export async function Footer() {
-  const t = await getTranslations("landing");
+  const t = await getTranslations('landing');
 
   const columns: FooterColumn[] = [
     {
-      title: t("footer.feature"),
+      title: t('footer.feature'),
       links: [
-        { label: t("footer.settings"), href: "/settings", external: true},
-        { label: t("footer.admin"), href: "/admin", external: true },
+        { label: t('footer.settings'), href: '/settings', external: true },
+        { label: t('footer.admin'), href: '/admin', external: true },
       ],
     },
     {
-      title: t("footer.resources"),
+      title: t('footer.resources'),
       links: [
-        { label: t("footer.docs"), href: "/docs", external: true },
-        { label: t("footer.github"), href: "https://github.com", external: true },
+        { label: t('footer.docs'), href: '/docs', external: true },
+        {
+          label: t('footer.github'),
+          href: 'https://github.com',
+          external: true,
+        },
       ],
     },
     {
-      title: t("footer.legal"),
+      title: t('footer.legal'),
       links: [
-        { label: t("footer.privacy"), href: "/privacy-policy" },
-        { label: t("footer.terms"), href: "/terms-of-service" },
+        { label: t('footer.privacy'), href: '/privacy-policy' },
+        { label: t('footer.terms'), href: '/terms-of-service' },
       ],
     },
   ];
 
   const socials: FooterSocial[] = [
-    { icon: GithubIcon, href: "https://github.com", label: "GitHub" },
-    { icon: XIcon, href: "https://x.com", label: "X" },
+    { icon: GithubIcon, href: 'https://github.com', label: 'GitHub' },
+    { icon: XIcon, href: 'https://x.com', label: 'X' },
   ];
 
   return (
     <SiteFooter
-      tagline={t("footer.tagline")}
+      tagline={t('footer.tagline')}
       columns={columns}
       socials={socials}
     />

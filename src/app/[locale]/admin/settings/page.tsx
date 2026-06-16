@@ -1,48 +1,46 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { useMessages, useTranslations } from "next-intl";
-import { toast } from "sonner";
-import { Save, ChevronDown, FlaskConical, Plus, Minus } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
+import { useEffect, useState } from 'react';
+import { ChevronDown, FlaskConical, Minus, Plus, Save } from 'lucide-react';
+import { useMessages, useTranslations } from 'next-intl';
+import { toast } from 'sonner';
+
 import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+  getSettingGroups,
+  getSettings,
+  getSettingTabs,
+  type Setting,
+} from '@/modules/config/settings';
+import { getTestSpec } from '@/modules/config/settings-test-specs';
+import { cn } from '@/lib/utils';
+import { SettingsTestDialog } from '@/components/admin/settings-test-dialog';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { cn } from "@/lib/utils";
-import {
-  getSettingTabs,
-  getSettingGroups,
-  getSettings,
-  type Setting,
-} from "@/modules/config/settings";
-import { getTestSpec } from "@/modules/config/settings-test-specs";
-import { SettingsTestDialog } from "@/components/admin/settings-test-dialog";
+} from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
 
 export default function AdminSettingsPage() {
-  const t = useTranslations("admin");
+  const t = useTranslations('admin');
   const messages = useMessages() as Record<string, any>;
   const placeholders: Record<string, string> =
     messages?.admin?.settings?.placeholders || {};
   const [configs, setConfigs] = useState<Record<string, string>>({});
-  const [activeTab, setActiveTab] = useState("general");
+  const [activeTab, setActiveTab] = useState('general');
   const [saving, setSaving] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
   const [testingGroup, setTestingGroup] = useState<string | null>(null);
-  const [customRows, setCustomRows] = useState<{ key: string; value: string }[]>([]);
+  const [customRows, setCustomRows] = useState<
+    { key: string; value: string }[]
+  >([]);
 
   function toggleCollapse(name: string) {
     setCollapsed((prev) => {
@@ -59,8 +57,8 @@ export default function AdminSettingsPage() {
 
   useEffect(() => {
     Promise.all([
-      fetch("/api/admin/config").then((r) => r.json()),
-      fetch("/api/admin/config/custom").then((r) => r.json()),
+      fetch('/api/admin/config').then((r) => r.json()),
+      fetch('/api/admin/config/custom').then((r) => r.json()),
     ])
       .then(([cfg, custom]) => {
         if (cfg.code === 0) setConfigs(cfg.data);
@@ -75,24 +73,28 @@ export default function AdminSettingsPage() {
   }
 
   function addCustomRow() {
-    setCustomRows((prev) => [...prev, { key: "", value: "" }]);
+    setCustomRows((prev) => [...prev, { key: '', value: '' }]);
   }
 
   function removeCustomRow(index: number) {
     setCustomRows((prev) => prev.filter((_, i) => i !== index));
   }
 
-  function updateCustomRow(index: number, field: "key" | "value", value: string) {
+  function updateCustomRow(
+    index: number,
+    field: 'key' | 'value',
+    value: string
+  ) {
     setCustomRows((prev) =>
-      prev.map((row, i) => (i === index ? { ...row, [field]: value } : row)),
+      prev.map((row, i) => (i === index ? { ...row, [field]: value } : row))
     );
   }
 
   async function handleSave() {
     setSaving(true);
     try {
-      const isCustom = activeTab === "custom";
-      const url = isCustom ? "/api/admin/config/custom" : "/api/admin/config";
+      const isCustom = activeTab === 'custom';
+      const url = isCustom ? '/api/admin/config/custom' : '/api/admin/config';
 
       let payload: unknown;
       if (isCustom) {
@@ -113,18 +115,18 @@ export default function AdminSettingsPage() {
       }
 
       const res = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
       const data = await res.json();
       if (data.code === 0) {
-        toast.success(t("settings.save_success"));
+        toast.success(t('settings.save_success'));
       } else {
         toast.error(data.message);
       }
     } catch {
-      toast.error(t("settings.save_error"));
+      toast.error(t('settings.save_error'));
     } finally {
       setSaving(false);
     }
@@ -134,29 +136,29 @@ export default function AdminSettingsPage() {
   const tabSettings = settings.filter((s) => s.tab === activeTab);
 
   return (
-    <div className="p-6 space-y-6 md:max-w-3xl">
+    <div className="space-y-6 p-6 md:max-w-3xl">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">{t("settings.title")}</h1>
-          <p className="text-muted-foreground">{t("settings.description")}</p>
+          <h1 className="text-2xl font-bold">{t('settings.title')}</h1>
+          <p className="text-muted-foreground">{t('settings.description')}</p>
         </div>
         <Button onClick={handleSave} disabled={saving} className="gap-2">
           <Save className="size-4" />
-          {saving ? t("settings.saving") : t("settings.save")}
+          {saving ? t('settings.saving') : t('settings.save')}
         </Button>
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1 border-b border-border overflow-x-auto overflow-y-hidden">
+      <div className="border-border flex gap-1 overflow-x-auto overflow-y-hidden border-b">
         {tabs.map((tab) => (
           <button
             key={tab.name}
             onClick={() => setActiveTab(tab.name)}
             className={cn(
-              "px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors border-b-2 -mb-px",
+              '-mb-px border-b-2 px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors',
               activeTab === tab.name
-                ? "border-primary text-foreground"
-                : "border-transparent text-muted-foreground hover:text-foreground"
+                ? 'border-primary text-foreground'
+                : 'text-muted-foreground hover:text-foreground border-transparent'
             )}
           >
             {t(`settings.tabs.${tab.name}`)}
@@ -166,56 +168,62 @@ export default function AdminSettingsPage() {
 
       {/* Groups */}
       {!loaded ? (
-        <div className="text-muted-foreground">{t("loading")}</div>
-      ) : activeTab === "custom" ? (
+        <div className="text-muted-foreground">{t('loading')}</div>
+      ) : activeTab === 'custom' ? (
         <Card>
           <CardHeader>
-            <CardTitle>{t("settings.custom.title")}</CardTitle>
-            <p className="text-sm text-muted-foreground">
-              {t("settings.custom.description")}
+            <CardTitle>{t('settings.custom.title')}</CardTitle>
+            <p className="text-muted-foreground text-sm">
+              {t('settings.custom.description')}
             </p>
           </CardHeader>
           <CardContent className="space-y-4">
             {customRows.length === 0 && (
-              <p className="text-sm text-muted-foreground">
-                {t("settings.custom.empty")}
+              <p className="text-muted-foreground text-sm">
+                {t('settings.custom.empty')}
               </p>
             )}
             {customRows.map((row, i) => (
               <div key={i} className="flex items-start gap-2">
                 <Input
                   value={row.key}
-                  onChange={(e) => updateCustomRow(i, "key", e.target.value)}
-                  placeholder={t("settings.custom.key_placeholder")}
+                  onChange={(e) => updateCustomRow(i, 'key', e.target.value)}
+                  placeholder={t('settings.custom.key_placeholder')}
                   className="w-1/3 shrink-0 font-mono"
                 />
                 <textarea
                   value={row.value}
-                  onChange={(e) => updateCustomRow(i, "value", e.target.value)}
-                  placeholder={t("settings.custom.value_placeholder")}
+                  onChange={(e) => updateCustomRow(i, 'value', e.target.value)}
+                  placeholder={t('settings.custom.value_placeholder')}
                   rows={1}
-                  className="flex h-8 min-h-8 max-h-48 flex-1 resize-y rounded-lg border border-input bg-transparent px-2.5 py-1 text-base leading-6 outline-none transition-colors placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 md:text-sm"
+                  className="border-input placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 flex h-8 max-h-48 min-h-8 flex-1 resize-y rounded-lg border bg-transparent px-2.5 py-1 text-base leading-6 transition-colors outline-none focus-visible:ring-3 md:text-sm"
                 />
                 <Button
                   variant="outline"
                   size="icon"
                   className="shrink-0"
                   onClick={() => removeCustomRow(i)}
-                  aria-label={t("settings.custom.remove")}
+                  aria-label={t('settings.custom.remove')}
                 >
                   <Minus className="size-4" />
                 </Button>
               </div>
             ))}
-            <Button variant="outline" onClick={addCustomRow} className="gap-1.5">
+            <Button
+              variant="outline"
+              onClick={addCustomRow}
+              className="gap-1.5"
+            >
               <Plus className="size-4" />
-              {t("settings.custom.add")}
+              {t('settings.custom.add')}
             </Button>
           </CardContent>
         </Card>
       ) : (
         tabGroups.map((group) => {
-          const groupSettings = tabSettings.filter((s) => s.group === group.name);
+          const groupSettings = tabSettings.filter(
+            (s) => s.group === group.name
+          );
           if (groupSettings.length === 0) return null;
 
           const testSpec = getTestSpec(group.name);
@@ -226,7 +234,9 @@ export default function AdminSettingsPage() {
                 onClick={() => toggleCollapse(group.name)}
               >
                 <div className="flex items-center justify-between">
-                  <CardTitle>{t(`settings.groups.${group.name}.title`)}</CardTitle>
+                  <CardTitle>
+                    {t(`settings.groups.${group.name}.title`)}
+                  </CardTitle>
                   <div className="flex items-center gap-2">
                     {testSpec && (
                       <Button
@@ -239,12 +249,12 @@ export default function AdminSettingsPage() {
                         }}
                       >
                         <FlaskConical className="size-3.5" />
-                        {t("settings.test.button")}
+                        {t('settings.test.button')}
                       </Button>
                     )}
                     <ChevronDown
-                      className={`size-5 text-muted-foreground transition-transform ${
-                        collapsed.has(group.name) ? "-rotate-90" : ""
+                      className={`text-muted-foreground size-5 transition-transform ${
+                        collapsed.has(group.name) ? '-rotate-90' : ''
                       }`}
                     />
                   </div>
@@ -257,8 +267,12 @@ export default function AdminSettingsPage() {
                       key={setting.name}
                       setting={setting}
                       label={t(`settings.fields.${setting.name}`)}
-                      placeholder={placeholders[setting.name] ?? setting.placeholder}
-                      value={configs[setting.name] ?? setting.defaultValue ?? ""}
+                      placeholder={
+                        placeholders[setting.name] ?? setting.placeholder
+                      }
+                      value={
+                        configs[setting.name] ?? setting.defaultValue ?? ''
+                      }
                       onChange={(v) => handleChange(setting.name, v)}
                     />
                   ))}
@@ -278,8 +292,10 @@ export default function AdminSettingsPage() {
           groupTitle={t(`settings.groups.${testingGroup}.title`)}
           configOverrides={Object.fromEntries(
             settings
-              .filter((s) => s.group === testingGroup && configs[s.name] !== undefined)
-              .map((s) => [s.name, configs[s.name]]),
+              .filter(
+                (s) => s.group === testingGroup && configs[s.name] !== undefined
+              )
+              .map((s) => [s.name, configs[s.name]])
           )}
         />
       )}
@@ -300,28 +316,28 @@ function SettingField({
   value: string;
   onChange: (value: string) => void;
 }) {
-  if (setting.type === "switch") {
+  if (setting.type === 'switch') {
     return (
       <div className="space-y-2">
         <Label htmlFor={setting.name}>{label}</Label>
         <div>
           <Switch
             id={setting.name}
-            checked={value === "true"}
-            onCheckedChange={(checked) => onChange(checked ? "true" : "false")}
+            checked={value === 'true'}
+            onCheckedChange={(checked) => onChange(checked ? 'true' : 'false')}
           />
         </div>
       </div>
     );
   }
 
-  if (setting.type === "select" && setting.options) {
+  if (setting.type === 'select' && setting.options) {
     return (
       <div className="space-y-2">
         <Label htmlFor={setting.name}>{label}</Label>
-        <Select value={value} onValueChange={(v) => onChange(v || "")}>
+        <Select value={value} onValueChange={(v) => onChange(v || '')}>
           <SelectTrigger>
-            <SelectValue placeholder={placeholder || "Select..."} />
+            <SelectValue placeholder={placeholder || 'Select...'} />
           </SelectTrigger>
           <SelectContent>
             {setting.options.map((opt) => (
@@ -335,7 +351,7 @@ function SettingField({
     );
   }
 
-  if (setting.type === "textarea") {
+  if (setting.type === 'textarea') {
     return (
       <div className="space-y-2">
         <Label htmlFor={setting.name}>{label}</Label>
@@ -345,7 +361,7 @@ function SettingField({
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
           rows={3}
-          className="flex w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+          className="border-input placeholder:text-muted-foreground focus-visible:ring-ring flex w-full rounded-md border bg-transparent px-3 py-2 text-sm focus-visible:ring-1 focus-visible:outline-none"
         />
       </div>
     );
@@ -356,7 +372,13 @@ function SettingField({
       <Label htmlFor={setting.name}>{label}</Label>
       <Input
         id={setting.name}
-        type={setting.type === "password" ? "password" : setting.type === "number" ? "number" : "text"}
+        type={
+          setting.type === 'password'
+            ? 'password'
+            : setting.type === 'number'
+              ? 'number'
+              : 'text'
+        }
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}

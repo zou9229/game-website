@@ -13,9 +13,4 @@ export const localePrefix = 'as-needed' as const;
 
 export const localeDetection = false;
 
-export const localeMessagesPaths = [
-  'common',
-  'settings',
-  'admin',
-  'landing',
-];
+export const localeMessagesPaths = ['common', 'settings', 'admin', 'landing'];

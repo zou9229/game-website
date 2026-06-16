@@ -1,11 +1,12 @@
-"use client";
+'use client';
 
-import { useEffect, useState, useCallback } from "react";
-import { useTranslations } from "next-intl";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { DataTable, type Column } from "@/components/data-table";
-import { cn } from "@/lib/utils";
+import { useCallback, useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
+
+import { cn } from '@/lib/utils';
+import { DataTable, type Column } from '@/components/data-table';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
 
 interface Order {
   id: string;
@@ -25,17 +26,17 @@ interface Order {
 
 const PAGE_SIZE = 10;
 
-const TABS = ["all", "subscription", "one_time"] as const;
+const TABS = ['all', 'subscription', 'one_time'] as const;
 type Tab = (typeof TABS)[number];
 
 export default function PaymentsPage() {
-  const t = useTranslations("admin");
+  const t = useTranslations('admin');
   const [orders, setOrders] = useState<Order[]>([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
-  const [tab, setTab] = useState<Tab>("all");
-  const [search, setSearch] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [tab, setTab] = useState<Tab>('all');
+  const [search, setSearch] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
 
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedSearch(search), 300);
@@ -44,10 +45,13 @@ export default function PaymentsPage() {
 
   const fetchOrders = useCallback(
     (p: number) => {
-      const params = new URLSearchParams({ page: String(p), pageSize: String(PAGE_SIZE) });
-      if (tab === "subscription") params.set("paymentType", "subscription");
-      if (tab === "one_time") params.set("paymentType", "one_time");
-      if (debouncedSearch) params.set("search", debouncedSearch);
+      const params = new URLSearchParams({
+        page: String(p),
+        pageSize: String(PAGE_SIZE),
+      });
+      if (tab === 'subscription') params.set('paymentType', 'subscription');
+      if (tab === 'one_time') params.set('paymentType', 'one_time');
+      if (debouncedSearch) params.set('search', debouncedSearch);
       fetch(`/api/admin/orders?${params}`)
         .then((r) => r.json())
         .then((res) => {
@@ -71,42 +75,49 @@ export default function PaymentsPage() {
 
   function formatAmount(amount: number, currency: string) {
     const value = amount / 100;
-    return new Intl.NumberFormat("en-US", { style: "currency", currency: currency || "USD" }).format(value);
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: currency || 'USD',
+    }).format(value);
   }
 
   const statusVariant = (s: string) => {
-    if (s === "paid") return "default";
-    if (s === "failed") return "destructive";
-    return "secondary";
+    if (s === 'paid') return 'default';
+    if (s === 'failed') return 'destructive';
+    return 'secondary';
   };
 
   const columns: Column<Order>[] = [
     {
-      header: t("payments.order_no"),
+      header: t('payments.order_no'),
       cell: (o) => <span className="font-mono text-xs">{o.orderNo}</span>,
     },
     {
-      header: t("payments.user"),
+      header: t('payments.user'),
       cell: (o) => <span className="text-sm">{o.userEmail || o.userId}</span>,
     },
     {
-      header: t("payments.amount"),
-      cell: (o) => <span className="font-medium">{formatAmount(o.amount, o.currency)}</span>,
+      header: t('payments.amount'),
+      cell: (o) => (
+        <span className="font-medium">
+          {formatAmount(o.amount, o.currency)}
+        </span>
+      ),
     },
     {
-      header: t("payments.status"),
+      header: t('payments.status'),
       cell: (o) => <Badge variant={statusVariant(o.status)}>{o.status}</Badge>,
     },
     {
-      header: t("payments.type"),
-      cell: (o) => o.paymentType || "—",
+      header: t('payments.type'),
+      cell: (o) => o.paymentType || '—',
     },
     {
-      header: t("payments.provider"),
+      header: t('payments.provider'),
       cell: (o) => o.paymentProvider,
     },
     {
-      header: t("payments.created_at"),
+      header: t('payments.created_at'),
       cell: (o) => (
         <span className="text-muted-foreground text-sm">
           {new Date(o.createdAt).toLocaleDateString()}
@@ -116,22 +127,22 @@ export default function PaymentsPage() {
   ];
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-6 p-6">
       <div>
-        <h1 className="text-2xl font-bold">{t("payments.title")}</h1>
-        <p className="text-muted-foreground">{t("payments.description")}</p>
+        <h1 className="text-2xl font-bold">{t('payments.title')}</h1>
+        <p className="text-muted-foreground">{t('payments.description')}</p>
       </div>
 
-      <div className="flex gap-1 border-b border-border overflow-x-auto overflow-y-hidden">
+      <div className="border-border flex gap-1 overflow-x-auto overflow-y-hidden border-b">
         {TABS.map((tb) => (
           <button
             key={tb}
             onClick={() => setTab(tb)}
             className={cn(
-              "px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors border-b-2 -mb-px",
+              '-mb-px border-b-2 px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors',
               tab === tb
-                ? "border-primary text-foreground"
-                : "border-transparent text-muted-foreground hover:text-foreground"
+                ? 'border-primary text-foreground'
+                : 'text-muted-foreground hover:text-foreground border-transparent'
             )}
           >
             {t(`payments.tab_${tb}`)}
@@ -149,7 +160,7 @@ export default function PaymentsPage() {
             pageSize={PAGE_SIZE}
             onPageChange={setPage}
             rowKey={(o) => o.id}
-            emptyText={t("payments.no_payments")}
+            emptyText={t('payments.no_payments')}
             search={search}
             onSearchChange={setSearch}
             onRefresh={() => fetchOrders(page)}

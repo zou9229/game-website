@@ -322,8 +322,14 @@
       "user_role": { "title": "用户角色", "description": "新用户默认角色" },
       "credit": { "title": "积分", "description": "新用户初始积分" },
       "email_auth": { "title": "邮箱认证", "description": "邮箱/密码登录" },
-      "google_auth": { "title": "Google 认证", "description": "Google OAuth 登录" },
-      "github_auth": { "title": "GitHub 认证", "description": "GitHub OAuth 登录" },
+      "google_auth": {
+        "title": "Google 认证",
+        "description": "Google OAuth 登录"
+      },
+      "github_auth": {
+        "title": "GitHub 认证",
+        "description": "GitHub OAuth 登录"
+      },
       "basic_payment": { "title": "基础设置", "description": "支付通用设置" },
       "stripe": { "title": "Stripe", "description": "Stripe 支付网关" },
       "creem": { "title": "Creem", "description": "Creem 支付网关" },
@@ -333,11 +339,20 @@
       "resend": { "title": "Resend", "description": "Resend 邮件服务" },
       "r2": { "title": "Cloudflare R2 / S3", "description": "对象存储设置" },
       "openai": { "title": "OpenAI", "description": "OpenAI（或兼容）API" },
-      "anthropic": { "title": "Anthropic", "description": "Anthropic Claude API" },
+      "anthropic": {
+        "title": "Anthropic",
+        "description": "Anthropic Claude API"
+      },
       "replicate": { "title": "Replicate", "description": "Replicate AI API" },
       "fal": { "title": "Fal", "description": "Fal AI API" },
-      "google_analytics": { "title": "Google Analytics", "description": "按配置的 Measurement ID 注入 gtag.js" },
-      "plausible": { "title": "Plausible", "description": "注入 plausible.js（云版或自托管）" }
+      "google_analytics": {
+        "title": "Google Analytics",
+        "description": "按配置的 Measurement ID 注入 gtag.js"
+      },
+      "plausible": {
+        "title": "Plausible",
+        "description": "注入 plausible.js（云版或自托管）"
+      }
     },
     "fields": {
       "app_name": "应用名称",
@@ -369,6 +384,7 @@
       "creem_environment": "环境",
       "creem_api_key": "API 密钥",
       "creem_signing_secret": "Signing Secret",
+      "creem_product_ids_mapping": "产品 ID 映射",
       "creem_test_amount": "测试金额（分）",
       "paypal_enabled": "启用 PayPal",
       "paypal_client_id": "客户端 ID",
@@ -409,6 +425,7 @@
       "plausible_src": "脚本地址"
     },
     "placeholders": {
+      "creem_product_ids_mapping": "{\"starter_monthly\": \"prod_xxx\"}",
       "creem_test_amount": "留空使用实际金额，填 1 则支付 $0.01",
       "paypal_test_amount": "留空使用实际金额，填 1 则支付 $0.01",
       "alipay_test_amount": "留空使用实际金额，填 1 则支付 ¥0.01",

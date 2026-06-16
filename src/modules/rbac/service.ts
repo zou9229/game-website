@@ -1,28 +1,36 @@
-import { and, desc, eq, isNull, or, gt, inArray } from 'drizzle-orm';
-import { matchPermission, matchAnyPermission, ROLES } from '@/core/auth/rbac';
-import { getUuid } from '@/lib/hash';
+import { and, desc, eq, gt, inArray, isNull, or } from 'drizzle-orm';
+
+import { matchAnyPermission, matchPermission, ROLES } from '@/core/auth/rbac';
 import { db } from '@/core/db';
-import {
-  role,
-  permission,
-  rolePermission,
-  userRole,
-} from '@/config/db/schema';
+import { permission, role, rolePermission, userRole } from '@/config/db/schema';
+import { getUuid } from '@/lib/hash';
 
 export { ROLES } from '@/core/auth/rbac';
 
 // --- Role CRUD ---
 
 export async function getRoles() {
-  return db().select().from(role).where(eq(role.status, 'active')).orderBy(desc(role.createdAt));
+  return db()
+    .select()
+    .from(role)
+    .where(eq(role.status, 'active'))
+    .orderBy(desc(role.createdAt));
 }
 
 export async function getRoleByName(name: string) {
-  const [result] = await db().select().from(role).where(eq(role.name, name)).limit(1);
+  const [result] = await db()
+    .select()
+    .from(role)
+    .where(eq(role.name, name))
+    .limit(1);
   return result;
 }
 
-export async function createRole(data: { name: string; title: string; description?: string }) {
+export async function createRole(data: {
+  name: string;
+  title: string;
+  description?: string;
+}) {
   const [result] = await db()
     .insert(role)
     .values({ id: getUuid(), ...data, status: 'active' })
@@ -36,7 +44,12 @@ export async function getPermissions() {
   return db().select().from(permission);
 }
 
-export async function createPermission(data: { code: string; resource: string; action: string; title: string }) {
+export async function createPermission(data: {
+  code: string;
+  resource: string;
+  action: string;
+  title: string;
+}) {
   const [result] = await db()
     .insert(permission)
     .values({ id: getUuid(), ...data })
@@ -46,25 +59,34 @@ export async function createPermission(data: { code: string; resource: string; a
 
 // --- Role-Permission mapping ---
 
-export async function assignPermissionsToRole(roleId: string, permissionIds: string[]) {
+export async function assignPermissionsToRole(
+  roleId: string,
+  permissionIds: string[]
+) {
   // Remove existing
   await db().delete(rolePermission).where(eq(rolePermission.roleId, roleId));
 
   // Insert new
   if (permissionIds.length > 0) {
-    await db().insert(rolePermission).values(
-      permissionIds.map((pid) => ({
-        id: getUuid(),
-        roleId,
-        permissionId: pid,
-      }))
-    );
+    await db()
+      .insert(rolePermission)
+      .values(
+        permissionIds.map((pid) => ({
+          id: getUuid(),
+          roleId,
+          permissionId: pid,
+        }))
+      );
   }
 }
 
 // --- User-Role mapping ---
 
-export async function assignRoleToUser(userId: string, roleId: string, expiresAt?: Date) {
+export async function assignRoleToUser(
+  userId: string,
+  roleId: string,
+  expiresAt?: Date
+) {
   const [result] = await db()
     .insert(userRole)
     .values({ id: getUuid(), userId, roleId, expiresAt: expiresAt || null })
@@ -80,8 +102,15 @@ export async function removeRoleFromUser(userId: string, roleId: string) {
 
 // --- Role update/delete ---
 
-export async function updateRole(id: string, data: { name?: string; title?: string; description?: string }) {
-  const [result] = await db().update(role).set(data).where(eq(role.id, id)).returning();
+export async function updateRole(
+  id: string,
+  data: { name?: string; title?: string; description?: string }
+) {
+  const [result] = await db()
+    .update(role)
+    .set(data)
+    .where(eq(role.id, id))
+    .returning();
   return result;
 }
 
@@ -91,8 +120,21 @@ export async function deleteRole(id: string) {
 
 // --- Permission update/delete ---
 
-export async function updatePermission(id: string, data: { code?: string; resource?: string; action?: string; title?: string; description?: string }) {
-  const [result] = await db().update(permission).set(data).where(eq(permission.id, id)).returning();
+export async function updatePermission(
+  id: string,
+  data: {
+    code?: string;
+    resource?: string;
+    action?: string;
+    title?: string;
+    description?: string;
+  }
+) {
+  const [result] = await db()
+    .update(permission)
+    .set(data)
+    .where(eq(permission.id, id))
+    .returning();
   return result;
 }
 
@@ -127,7 +169,9 @@ export async function getUserRoles(userId: string) {
 
 // --- Permission checks ---
 
-export async function getUserPermissionCodes(userId: string): Promise<string[]> {
+export async function getUserPermissionCodes(
+  userId: string
+): Promise<string[]> {
   const now = new Date();
 
   // Get user's active roles
@@ -156,12 +200,18 @@ export async function getUserPermissionCodes(userId: string): Promise<string[]> 
   return [...new Set(perms.map((p: any) => p.code))] as string[];
 }
 
-export async function hasPermission(userId: string, permissionCode: string): Promise<boolean> {
+export async function hasPermission(
+  userId: string,
+  permissionCode: string
+): Promise<boolean> {
   const codes = await getUserPermissionCodes(userId);
   return matchPermission(permissionCode, codes);
 }
 
-export async function hasAnyPermission(userId: string, permissionCodes: string[]): Promise<boolean> {
+export async function hasAnyPermission(
+  userId: string,
+  permissionCodes: string[]
+): Promise<boolean> {
   const codes = await getUserPermissionCodes(userId);
   return matchAnyPermission(permissionCodes, codes);
 }

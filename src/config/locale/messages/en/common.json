@@ -96,6 +96,16 @@
     "theme_dark": "Dark",
     "theme_system": "System"
   },
+  "not_found": {
+    "message": "Page not found",
+    "back_home": "Back to home"
+  },
+  "error": {
+    "title": "Oops",
+    "message": "Something went wrong. Please try again.",
+    "retry": "Try again",
+    "back_home": "Back to home"
+  },
   "pages": {
     "back_to_home": "Back to home",
     "last_updated": "Last updated"

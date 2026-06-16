@@ -1,8 +1,9 @@
 import { and, desc, eq, isNull } from 'drizzle-orm';
-import { getUuid } from '@/lib/hash';
+
 import { db } from '@/core/db';
 import { aiTask } from '@/config/db/schema';
 import { consume, revoke } from '@/modules/credits/service';
+import { getUuid } from '@/lib/hash';
 
 export enum AITaskStatus {
   PENDING = 'pending',
@@ -24,7 +25,8 @@ export async function createTask(params: {
   costCredits?: number;
   options?: any;
 }): Promise<any> {
-  const { userId, mediaType, provider, model, prompt, costCredits, options } = params;
+  const { userId, mediaType, provider, model, prompt, costCredits, options } =
+    params;
 
   return db().transaction(async (tx: any) => {
     // 1. Insert task
@@ -60,7 +62,9 @@ export async function createTask(params: {
       if (result.consumedCredit) {
         await tx
           .update(aiTask)
-          .set({ taskInfo: JSON.stringify({ creditId: result.consumedCredit.id }) })
+          .set({
+            taskInfo: JSON.stringify({ creditId: result.consumedCredit.id }),
+          })
           .where(eq(aiTask.id, task.id));
       }
     }

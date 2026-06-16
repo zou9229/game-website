@@ -1,22 +1,23 @@
-"use client";
+'use client';
 
-import { useLocale } from "next-intl";
-import { usePathname, useRouter } from "@/core/i18n/navigation";
-import { localeNames, locales } from "@/config/locale";
-import { Languages, Check, Globe, ChevronDown } from "lucide-react";
+import { Check, ChevronDown, Globe, Languages } from 'lucide-react';
+import { useLocale } from 'next-intl';
+
+import { usePathname, useRouter } from '@/core/i18n/navigation';
+import { localeNames, locales } from '@/config/locale';
+import { cn } from '@/lib/utils';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { cn } from "@/lib/utils";
+} from '@/components/ui/dropdown-menu';
 
 export function LocaleSelector({
-  variant = "icon",
+  variant = 'icon',
   className,
 }: {
-  variant?: "icon" | "pill";
+  variant?: 'icon' | 'pill';
   className?: string;
 }) {
   const locale = useLocale();
@@ -31,14 +32,14 @@ export function LocaleSelector({
     <DropdownMenu>
       <DropdownMenuTrigger
         className={cn(
-          "inline-flex items-center transition-colors outline-none",
-          variant === "icon"
-            ? "justify-center rounded-md size-8 text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-            : "gap-2 rounded-full border px-4 h-9 text-sm",
+          'inline-flex items-center transition-colors outline-none',
+          variant === 'icon'
+            ? 'text-muted-foreground hover:bg-accent hover:text-accent-foreground size-8 justify-center rounded-md'
+            : 'h-9 gap-2 rounded-full border px-4 text-sm',
           className
         )}
       >
-        {variant === "icon" ? (
+        {variant === 'icon' ? (
           <>
             <Languages className="size-4" />
             <span className="sr-only">Switch language</span>

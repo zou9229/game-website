@@ -1,10 +1,11 @@
 import { headers } from 'next/headers';
-import { respPage, respErr } from '@/lib/resp';
+import { and, count, desc, eq, like, or, type SQL } from 'drizzle-orm';
+
 import { getAuth } from '@/core/auth';
-import { hasPermission } from '@/modules/rbac/service';
 import { db } from '@/core/db';
 import { credit, user } from '@/config/db/schema';
-import { desc, count, eq, and, like, or, type SQL } from 'drizzle-orm';
+import { hasPermission } from '@/modules/rbac/service';
+import { respErr, respPage } from '@/lib/resp';
 
 export async function GET(req: Request) {
   try {
@@ -17,7 +18,10 @@ export async function GET(req: Request) {
 
     const { searchParams } = new URL(req.url);
     const page = Math.max(1, parseInt(searchParams.get('page') || '1'));
-    const pageSize = Math.min(100, Math.max(1, parseInt(searchParams.get('pageSize') || '10')));
+    const pageSize = Math.min(
+      100,
+      Math.max(1, parseInt(searchParams.get('pageSize') || '10'))
+    );
     const offset = (page - 1) * pageSize;
 
     const transactionType = searchParams.get('transactionType');
@@ -26,16 +30,25 @@ export async function GET(req: Request) {
     const search = searchParams.get('search');
 
     const conditions: SQL[] = [];
-    if (transactionType) conditions.push(eq(credit.transactionType, transactionType));
+    if (transactionType)
+      conditions.push(eq(credit.transactionType, transactionType));
     if (status) conditions.push(eq(credit.status, status));
     else conditions.push(eq(credit.status, 'active'));
     if (search) {
-      conditions.push(or(like(credit.transactionNo, `%${search}%`), like(credit.userEmail, `%${search}%`))!);
+      conditions.push(
+        or(
+          like(credit.transactionNo, `%${search}%`),
+          like(credit.userEmail, `%${search}%`)
+        )!
+      );
     }
 
     const where = conditions.length > 0 ? and(...conditions) : undefined;
 
-    const [totalResult] = await db().select({ count: count() }).from(credit).where(where);
+    const [totalResult] = await db()
+      .select({ count: count() })
+      .from(credit)
+      .where(where);
     const total = totalResult.count;
 
     const rows = await db()
@@ -61,7 +74,7 @@ export async function GET(req: Request) {
       .limit(pageSize)
       .offset(offset);
 
-    const credits = rows.map((r: typeof rows[number]) => {
+    const credits = rows.map((r: (typeof rows)[number]) => {
       const { userTableEmail, ...rest } = r;
       return { ...rest, userEmail: rest.userEmail || userTableEmail || null };
     });

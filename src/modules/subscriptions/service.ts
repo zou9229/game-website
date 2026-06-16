@@ -1,7 +1,8 @@
 import { and, count, desc, eq, inArray } from 'drizzle-orm';
-import { getUuid, getSnowId } from '@/lib/hash';
+
 import { db } from '@/core/db';
 import { subscription } from '@/config/db/schema';
+import { getSnowId, getUuid } from '@/lib/hash';
 
 export enum SubscriptionStatus {
   PENDING = 'pending',
@@ -14,14 +15,19 @@ export enum SubscriptionStatus {
 }
 
 export type NewSubscription = typeof subscription.$inferInsert;
-export type UpdateSubscription = Partial<Omit<NewSubscription, 'id' | 'subscriptionNo' | 'createdAt'>>;
+export type UpdateSubscription = Partial<
+  Omit<NewSubscription, 'id' | 'subscriptionNo' | 'createdAt'>
+>;
 
 export async function createSubscription(data: NewSubscription) {
   const [result] = await db().insert(subscription).values(data).returning();
   return result;
 }
 
-export async function updateBySubscriptionNo(subscriptionNo: string, data: UpdateSubscription) {
+export async function updateBySubscriptionNo(
+  subscriptionNo: string,
+  data: UpdateSubscription
+) {
   const [result] = await db()
     .update(subscription)
     .set(data)

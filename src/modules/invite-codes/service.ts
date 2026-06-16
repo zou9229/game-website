@@ -1,7 +1,8 @@
-import { db } from '@/core/db';
-import { inviteCode, userInvite, subscription } from '@/config/db/schema';
-import { eq, sql, and } from 'drizzle-orm';
 import { randomBytes } from 'crypto';
+import { and, eq, sql } from 'drizzle-orm';
+
+import { db } from '@/core/db';
+import { inviteCode, subscription, userInvite } from '@/config/db/schema';
 import { getUuid } from '@/lib/hash';
 
 // ─── Admin: Create invite codes ──────────────────────────────────────────────
@@ -172,10 +173,7 @@ export async function getUserPlan(userId: string): Promise<{
     .select()
     .from(subscription)
     .where(
-      and(
-        eq(subscription.userId, userId),
-        eq(subscription.status, 'active')
-      )
+      and(eq(subscription.userId, userId), eq(subscription.status, 'active'))
     )
     .limit(1);
 

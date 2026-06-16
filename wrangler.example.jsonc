@@ -9,19 +9,19 @@
   "compatibility_flags": ["nodejs_compat"],
   "main": "vinext/server/app-router-entry",
   "assets": {
-    "not_found_handling": "none"
+    "not_found_handling": "none",
   },
   "vars": {
-    "DATABASE_PROVIDER": "d1"
+    "DATABASE_PROVIDER": "d1",
   },
   "d1_databases": [
     {
       "binding": "DB",
       "database_name": "shipany-vinext",
       "database_id": "REPLACE_WITH_OUTPUT_OF_WRANGLER_D1_CREATE",
-      "migrations_dir": "drizzle"
-    }
-  ]
+      "migrations_dir": "drizzle",
+    },
+  ],
   // ── Postgres via Hyperdrive (instead of D1) ────────────────────────────────
   // 1. npx wrangler hyperdrive create <name> --connection-string="postgres://user:pass@host:5432/db"
   // 2. Set vars.DATABASE_PROVIDER to "postgresql" and remove the d1_databases block

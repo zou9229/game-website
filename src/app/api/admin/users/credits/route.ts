@@ -1,16 +1,17 @@
 import { headers } from 'next/headers';
-import { respData, respErr } from '@/lib/resp';
+import { eq } from 'drizzle-orm';
+
 import { getAuth } from '@/core/auth';
-import { hasPermission } from '@/modules/rbac/service';
-import {
-  grant,
-  consume,
-  getBalance,
-  CreditTransactionScene,
-} from '@/modules/credits/service';
 import { db } from '@/core/db';
 import { user } from '@/config/db/schema';
-import { eq } from 'drizzle-orm';
+import {
+  consume,
+  CreditTransactionScene,
+  getBalance,
+  grant,
+} from '@/modules/credits/service';
+import { hasPermission } from '@/modules/rbac/service';
+import { respData, respErr } from '@/lib/resp';
 
 export async function POST(req: Request) {
   try {
@@ -30,11 +31,17 @@ export async function POST(req: Request) {
     };
 
     if (!userId) return respErr('Missing userId');
-    if (action !== 'grant' && action !== 'deduct') return respErr('Invalid action');
+    if (action !== 'grant' && action !== 'deduct')
+      return respErr('Invalid action');
     const amount = Number(credits);
-    if (!Number.isFinite(amount) || amount <= 0) return respErr('Invalid credits');
+    if (!Number.isFinite(amount) || amount <= 0)
+      return respErr('Invalid credits');
 
-    const [target] = await db().select().from(user).where(eq(user.id, userId)).limit(1);
+    const [target] = await db()
+      .select()
+      .from(user)
+      .where(eq(user.id, userId))
+      .limit(1);
     if (!target) return respErr('User not found');
 
     if (action === 'grant') {

@@ -1,7 +1,8 @@
 import { headers } from 'next/headers';
-import { respPage, respData, respOk, respErr } from '@/lib/resp';
+
 import { getAuth } from '@/core/auth';
 import * as apikeys from '@/modules/apikeys/service';
+import { respData, respErr, respOk, respPage } from '@/lib/resp';
 
 export async function GET(req: Request) {
   try {
@@ -15,10 +16,18 @@ export async function GET(req: Request) {
 
     const { searchParams } = new URL(req.url);
     const page = Math.max(1, parseInt(searchParams.get('page') || '1'));
-    const pageSize = Math.min(100, Math.max(1, parseInt(searchParams.get('pageSize') || '10')));
+    const pageSize = Math.min(
+      100,
+      Math.max(1, parseInt(searchParams.get('pageSize') || '10'))
+    );
     const search = searchParams.get('search') || undefined;
 
-    const { items, total } = await apikeys.list(session.user.id, page, pageSize, search);
+    const { items, total } = await apikeys.list(
+      session.user.id,
+      page,
+      pageSize,
+      search
+    );
     return respPage(items, total);
   } catch (error: any) {
     return respErr(error.message || 'Failed to list API keys');

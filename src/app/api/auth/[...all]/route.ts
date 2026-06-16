@@ -1,4 +1,5 @@
 import { toNextJsHandler } from 'better-auth/next-js';
+
 import { getAuth } from '@/core/auth';
 import { getDbConfigs } from '@/modules/config/service';
 

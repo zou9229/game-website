@@ -24,7 +24,10 @@ export function deleteCookie(name: string): void {
   document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
 }
 
-export function getCookieFromHeader(cookieHeader: string | null | undefined, name: string): string | undefined {
+export function getCookieFromHeader(
+  cookieHeader: string | null | undefined,
+  name: string
+): string | undefined {
   if (!cookieHeader) return undefined;
   const parts = cookieHeader.split(';');
   for (const part of parts) {
@@ -36,7 +39,10 @@ export function getCookieFromHeader(cookieHeader: string | null | undefined, nam
   return undefined;
 }
 
-export function getHeaderValue(ctx: any, headerName: string): string | undefined {
+export function getHeaderValue(
+  ctx: any,
+  headerName: string
+): string | undefined {
   const h = ctx?.headers ?? ctx?.request?.headers;
   if (!h) return undefined;
   if (typeof h.get === 'function') {
@@ -57,7 +63,9 @@ export function getCookieFromCtx(ctx: any, name: string): string | undefined {
   return getCookieFromHeader(cookieHeader, name);
 }
 
-export function guessLocaleFromAcceptLanguage(acceptLanguage: string | undefined) {
+export function guessLocaleFromAcceptLanguage(
+  acceptLanguage: string | undefined
+) {
   if (!acceptLanguage) return '';
   const first = acceptLanguage.split(',')[0]?.trim() ?? '';
   const lang = first.split('-')[0]?.trim() ?? '';

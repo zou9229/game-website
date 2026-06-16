@@ -1,8 +1,9 @@
 import { headers } from 'next/headers';
-import { respData, respErr } from '@/lib/resp';
+
 import { getAuth } from '@/core/auth';
 import { redeemInviteCode } from '@/modules/invite-codes/service';
 import { enforceMinIntervalRateLimit } from '@/lib/rate-limit';
+import { respData, respErr } from '@/lib/resp';
 
 export async function POST(req: Request) {
   const limited = enforceMinIntervalRateLimit(req, {

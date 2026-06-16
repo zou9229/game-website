@@ -68,7 +68,11 @@ export class WechatPayProvider implements PaymentProvider {
       attach: order.metadata ? JSON.stringify(order.metadata) : undefined,
     };
 
-    const result = await this.request('POST', '/v3/pay/transactions/native', payload);
+    const result = await this.request(
+      'POST',
+      '/v3/pay/transactions/native',
+      payload
+    );
 
     if (!result.code_url) {
       throw new Error(result.message || 'WeChat Pay create order failed');
@@ -160,7 +164,11 @@ export class WechatPayProvider implements PaymentProvider {
       sigOk = crypto
         .createVerify('RSA-SHA256')
         .update(signedPayload)
-        .verify(this.normalizePlatformCert(this.configs.platformCert), signature, 'base64');
+        .verify(
+          this.normalizePlatformCert(this.configs.platformCert),
+          signature,
+          'base64'
+        );
     } catch (e) {
       sigOk = false;
     }
@@ -179,9 +187,10 @@ export class WechatPayProvider implements PaymentProvider {
     const decrypted = this.decryptResource(resource);
     const trade = JSON.parse(decrypted);
 
-    const eventType = notification.event_type === 'TRANSACTION.SUCCESS'
-      ? PaymentEventType.PAYMENT_SUCCESS
-      : PaymentEventType.PAYMENT_FAILED;
+    const eventType =
+      notification.event_type === 'TRANSACTION.SUCCESS'
+        ? PaymentEventType.PAYMENT_SUCCESS
+        : PaymentEventType.PAYMENT_FAILED;
 
     const paymentSession: PaymentSession = {
       provider: this.name,
@@ -208,7 +217,11 @@ export class WechatPayProvider implements PaymentProvider {
 
   // ─── V3 API request helper ─────────────────────────────────────────────────
 
-  private async request(method: string, path: string, body?: any): Promise<any> {
+  private async request(
+    method: string,
+    path: string,
+    body?: any
+  ): Promise<any> {
     const timestamp = Math.floor(Date.now() / 1000).toString();
     const nonce = crypto.randomBytes(16).toString('hex');
     const bodyStr = body ? JSON.stringify(body) : '';
@@ -227,8 +240,8 @@ export class WechatPayProvider implements PaymentProvider {
       method,
       headers: {
         'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': authorization,
+        Accept: 'application/json',
+        Authorization: authorization,
       },
       body: body ? bodyStr : undefined,
     });
@@ -305,6 +318,8 @@ export class WechatPayProvider implements PaymentProvider {
 /**
  * Create WeChat Pay provider with configs
  */
-export function createWechatPayProvider(configs: WechatPayConfigs): WechatPayProvider {
+export function createWechatPayProvider(
+  configs: WechatPayConfigs
+): WechatPayProvider {
   return new WechatPayProvider(configs);
 }

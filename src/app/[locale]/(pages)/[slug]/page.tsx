@@ -1,11 +1,11 @@
-import type { MDXComponents } from 'mdx/types';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { useMDXComponents } from '@/../mdx-components';
+import type { MDXComponents } from 'mdx/types';
 import { getTranslations } from 'next-intl/server';
 
 import { envConfigs } from '@/config';
 import { defaultLocale, locales } from '@/config/locale';
-import { useMDXComponents } from '@/../mdx-components';
 
 const PAGE_SLUGS = ['privacy-policy', 'terms-of-service'] as const;
 type PageSlug = (typeof PAGE_SLUGS)[number];
@@ -99,18 +99,18 @@ export default async function StaticPage({
 
   return (
     <article>
-      <header className="mb-6 border-b border-border pb-5">
-        <h1 className="text-3xl font-semibold tracking-tight text-foreground md:text-4xl">
+      <header className="border-border mb-6 border-b pb-5">
+        <h1 className="text-foreground text-3xl font-semibold tracking-tight md:text-4xl">
           {page.meta.title}
         </h1>
-        <p className="mt-2 text-sm text-muted-foreground">
+        <p className="text-muted-foreground mt-2 text-sm">
           {page.meta.description}
         </p>
-        <p className="mt-2 text-xs text-muted-foreground">
+        <p className="text-muted-foreground mt-2 text-xs">
           {t('last_updated')}: {page.meta.updated_at}
         </p>
       </header>
-      <div className="text-[15px] leading-7 text-foreground/90">
+      <div className="text-foreground/90 text-[15px] leading-7">
         <Content components={mdxComponents} />
       </div>
     </article>

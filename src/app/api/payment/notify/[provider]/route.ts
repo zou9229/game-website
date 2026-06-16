@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
-import { respOk, respErr } from '@/lib/resp';
+
 import { handleWebhook } from '@/modules/payment/service';
+import { respErr, respOk } from '@/lib/resp';
 
 export async function POST(
   req: Request,
@@ -15,7 +16,10 @@ export async function POST(
 
     // Alipay expects plain text "success"
     if (provider === 'alipay') {
-      return new NextResponse('success', { status: 200, headers: { 'Content-Type': 'text/plain' } });
+      return new NextResponse('success', {
+        status: 200,
+        headers: { 'Content-Type': 'text/plain' },
+      });
     }
 
     // WeChat expects JSON { code, message }
@@ -28,7 +32,10 @@ export async function POST(
     console.error('webhook error:', error);
 
     if (provider === 'alipay') {
-      return new NextResponse('fail', { status: 200, headers: { 'Content-Type': 'text/plain' } });
+      return new NextResponse('fail', {
+        status: 200,
+        headers: { 'Content-Type': 'text/plain' },
+      });
     }
 
     return respErr(error.message || 'Webhook handling failed');

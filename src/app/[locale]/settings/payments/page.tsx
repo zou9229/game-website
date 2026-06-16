@@ -1,12 +1,13 @@
-"use client";
+'use client';
 
-import { useCallback, useEffect, useState } from "react";
-import { useTranslations } from "next-intl";
-import { ExternalLink } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { DataTable, type Column } from "@/components/data-table";
-import { cn } from "@/lib/utils";
+import { useCallback, useEffect, useState } from 'react';
+import { ExternalLink } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+
+import { cn } from '@/lib/utils';
+import { DataTable, type Column } from '@/components/data-table';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
 
 type Order = {
   id: string;
@@ -23,42 +24,46 @@ type Order = {
   createdAt: string;
 };
 
-const TABS = ["all", "one-time", "subscription", "renew"] as const;
+const TABS = ['all', 'one-time', 'subscription', 'renew'] as const;
 type Tab = (typeof TABS)[number];
 
 const PAGE_SIZE = 20;
 
 function formatAmount(amount: number, currency: string) {
-  const normalized = (currency || "usd").toUpperCase();
+  const normalized = (currency || 'usd').toUpperCase();
   return new Intl.NumberFormat(undefined, {
-    style: "currency",
+    style: 'currency',
     currency: normalized,
   }).format(amount / 100);
 }
 
-function statusVariant(status: string): "default" | "secondary" | "destructive" | "outline" {
+function statusVariant(
+  status: string
+): 'default' | 'secondary' | 'destructive' | 'outline' {
   const s = status.toLowerCase();
-  if (s === "paid" || s === "succeeded" || s === "active") return "default";
-  if (s === "failed" || s === "canceled") return "destructive";
-  return "secondary";
+  if (s === 'paid' || s === 'succeeded' || s === 'active') return 'default';
+  if (s === 'failed' || s === 'canceled') return 'destructive';
+  return 'secondary';
 }
 
 export default function PaymentsPage() {
-  const t = useTranslations("settings.payments");
+  const t = useTranslations('settings.payments');
   const [orders, setOrders] = useState<Order[]>([]);
   const [total, setTotal] = useState(0);
-  const [tab, setTab] = useState<Tab>("all");
+  const [tab, setTab] = useState<Tab>('all');
   const [page, setPage] = useState(1);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
 
   const fetchOrders = useCallback(async (p: number, tb: Tab, s: string) => {
     const params = new URLSearchParams({
       page: String(p),
       pageSize: String(PAGE_SIZE),
     });
-    if (tb !== "all") params.set("paymentType", tb);
-    if (s) params.set("search", s);
-    const res = await fetch(`/api/user/orders?${params}`).then((r) => r.json()).catch(() => null);
+    if (tb !== 'all') params.set('paymentType', tb);
+    if (s) params.set('search', s);
+    const res = await fetch(`/api/user/orders?${params}`)
+      .then((r) => r.json())
+      .catch(() => null);
     if (res?.code === 0) {
       setOrders(res.data.items);
       setTotal(res.data.total);
@@ -76,33 +81,35 @@ export default function PaymentsPage() {
 
   const columns: Column<Order>[] = [
     {
-      header: t("order_no"),
+      header: t('order_no'),
       cell: (o) => <span className="font-mono text-xs">{o.orderNo}</span>,
     },
     {
-      header: t("product"),
-      cell: (o) => <span>{o.planName || o.productName || "—"}</span>,
+      header: t('product'),
+      cell: (o) => <span>{o.planName || o.productName || '—'}</span>,
     },
     {
-      header: t("amount"),
+      header: t('amount'),
       cell: (o) => (
-        <span className="font-medium">{formatAmount(o.amount, o.currency)}</span>
+        <span className="font-medium">
+          {formatAmount(o.amount, o.currency)}
+        </span>
       ),
     },
     {
-      header: t("status"),
+      header: t('status'),
       cell: (o) => <Badge variant={statusVariant(o.status)}>{o.status}</Badge>,
     },
     {
-      header: t("type"),
-      cell: (o) => o.paymentType || "—",
+      header: t('type'),
+      cell: (o) => o.paymentType || '—',
     },
     {
-      header: t("provider"),
+      header: t('provider'),
       cell: (o) => <span className="capitalize">{o.paymentProvider}</span>,
     },
     {
-      header: t("date"),
+      header: t('date'),
       cell: (o) => (
         <span className="text-muted-foreground text-sm">
           {new Date(o.paidAt || o.createdAt).toLocaleDateString()}
@@ -110,16 +117,16 @@ export default function PaymentsPage() {
       ),
     },
     {
-      header: t("invoice"),
-      className: "w-[60px]",
+      header: t('invoice'),
+      className: 'w-[60px]',
       cell: (o) =>
         o.invoiceUrl ? (
           <a
             href={o.invoiceUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
-            aria-label={t("invoice")}
+            className="text-primary inline-flex items-center gap-1 text-sm hover:underline"
+            aria-label={t('invoice')}
           >
             <ExternalLink className="size-3.5" />
           </a>
@@ -130,25 +137,31 @@ export default function PaymentsPage() {
   ];
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-6 p-6">
       <div>
-        <h1 className="text-2xl font-bold">{t("title")}</h1>
-        <p className="text-muted-foreground">{t("description")}</p>
+        <h1 className="text-2xl font-bold">{t('title')}</h1>
+        <p className="text-muted-foreground">{t('description')}</p>
       </div>
 
-      <div className="flex gap-1 border-b border-border overflow-x-auto overflow-y-hidden">
+      <div className="border-border flex gap-1 overflow-x-auto overflow-y-hidden border-b">
         {TABS.map((tb) => (
           <button
             key={tb}
             onClick={() => setTab(tb)}
             className={cn(
-              "px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors border-b-2 -mb-px",
+              '-mb-px border-b-2 px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors',
               tab === tb
-                ? "border-primary text-foreground"
-                : "border-transparent text-muted-foreground hover:text-foreground",
+                ? 'border-primary text-foreground'
+                : 'text-muted-foreground hover:text-foreground border-transparent'
             )}
           >
-            {t(`tab_${tb.replace("-", "_")}` as "tab_all" | "tab_one_time" | "tab_subscription" | "tab_renew")}
+            {t(
+              `tab_${tb.replace('-', '_')}` as
+                | 'tab_all'
+                | 'tab_one_time'
+                | 'tab_subscription'
+                | 'tab_renew'
+            )}
           </button>
         ))}
       </div>
@@ -163,7 +176,7 @@ export default function PaymentsPage() {
             pageSize={PAGE_SIZE}
             onPageChange={setPage}
             rowKey={(o) => o.id}
-            emptyText={t("no_payments")}
+            emptyText={t('no_payments')}
             search={search}
             onSearchChange={setSearch}
             onRefresh={() => fetchOrders(page, tab, search)}

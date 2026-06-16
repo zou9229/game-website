@@ -1,8 +1,7 @@
 import { getRequestConfig } from 'next-intl/server';
 
-import { defaultLocale, localeMessagesPaths } from '@/config/locale';
-
 import { routing } from '@/core/i18n/config';
+import { defaultLocale, localeMessagesPaths } from '@/config/locale';
 
 // Vite's dynamic-import-vars can't resolve `@/` alias inside template literals,
 // so eager-glob all locale JSONs and look up by computed key. import.meta.glob

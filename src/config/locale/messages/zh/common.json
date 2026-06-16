@@ -96,6 +96,16 @@
     "theme_dark": "深色模式",
     "theme_system": "跟随系统"
   },
+  "not_found": {
+    "message": "页面不存在",
+    "back_home": "返回首页"
+  },
+  "error": {
+    "title": "出错了",
+    "message": "页面出现了一些问题，请重试。",
+    "retry": "重试",
+    "back_home": "返回首页"
+  },
   "pages": {
     "back_to_home": "返回首页",
     "last_updated": "最近更新"

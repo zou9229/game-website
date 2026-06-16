@@ -1,10 +1,11 @@
 import { headers } from 'next/headers';
 import { eq } from 'drizzle-orm';
-import { respData, respErr } from '@/lib/resp';
+
+import { getAuth } from '@/core/auth';
 import { db } from '@/core/db';
 import { user } from '@/config/db/schema';
-import { getAuth } from '@/core/auth';
 import { enforceMinIntervalRateLimit } from '@/lib/rate-limit';
+import { respData, respErr } from '@/lib/resp';
 
 /**
  * POST /api/user/is-email-verified

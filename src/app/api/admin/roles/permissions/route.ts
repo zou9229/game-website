@@ -1,7 +1,12 @@
 import { headers } from 'next/headers';
-import { respData, respOk, respErr } from '@/lib/resp';
+
 import { getAuth } from '@/core/auth';
-import { hasPermission, getRolePermissions, assignPermissionsToRole } from '@/modules/rbac/service';
+import {
+  assignPermissionsToRole,
+  getRolePermissions,
+  hasPermission,
+} from '@/modules/rbac/service';
+import { respData, respErr, respOk } from '@/lib/resp';
 
 async function checkAdmin() {
   const auth = getAuth();

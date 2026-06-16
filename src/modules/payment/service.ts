@@ -1,21 +1,33 @@
-import { eq, and, desc, isNull } from 'drizzle-orm';
-import { PaymentManager, StripeProvider, AlipayProvider, WechatPayProvider, CreemProvider } from '@/core/payment';
-import type { PaymentOrder, CheckoutSession, PaymentEvent } from '@/core/payment/types';
-import { PaymentStatus, PaymentType } from '@/core/payment/types';
-import { getUuid, getUniSeq, getSnowId } from '@/lib/hash';
+import { and, desc, eq, isNull } from 'drizzle-orm';
+
 import { db } from '@/core/db';
-import { order, subscription, credit } from '@/config/db/schema';
-import { envConfigs } from '@/config';
 import {
-  SubscriptionStatus,
-  type NewSubscription,
-  type UpdateSubscription,
+  AlipayProvider,
+  CreemProvider,
+  PaymentManager,
+  StripeProvider,
+  WechatPayProvider,
+} from '@/core/payment';
+import {
+  PaymentStatus,
+  PaymentType,
+  type CheckoutSession,
+  type PaymentEvent,
+  type PaymentOrder,
+} from '@/core/payment/types';
+import { envConfigs } from '@/config';
+import { credit, order, subscription } from '@/config/db/schema';
+import { getAllConfigs } from '@/modules/config/service';
+import { calculateCreditExpirationTime } from '@/modules/credits/service';
+import {
   findByProviderSubscriptionId,
   findBySubscriptionNo,
+  SubscriptionStatus,
   updateBySubscriptionNo,
+  type NewSubscription,
+  type UpdateSubscription,
 } from '@/modules/subscriptions/service';
-import { calculateCreditExpirationTime } from '@/modules/credits/service';
-import { getAllConfigs } from '@/modules/config/service';
+import { getSnowId, getUniSeq, getUuid } from '@/lib/hash';
 
 // --- Order types ---
 
@@ -51,12 +63,15 @@ async function getPaymentManager(): Promise<PaymentManager> {
 
   const stripeKey = c('stripe_secret_key') || c('stripe_api_key');
   if (stripeKey) {
-    const isDefault = !c('default_payment_provider') || c('default_payment_provider') === 'stripe';
+    const isDefault =
+      !c('default_payment_provider') ||
+      c('default_payment_provider') === 'stripe';
     manager.addProvider(
       new StripeProvider({
         secretKey: stripeKey,
         publishableKey: c('stripe_publishable_key'),
-        signingSecret: c('stripe_webhook_secret') || c('stripe_signing_secret') || undefined,
+        signingSecret:
+          c('stripe_webhook_secret') || c('stripe_signing_secret') || undefined,
         allowPromotionCodes: true,
         allowedPaymentMethods: ['card', 'wechat_pay', 'alipay'],
       }),
@@ -70,7 +85,8 @@ async function getPaymentManager(): Promise<PaymentManager> {
       new CreemProvider({
         apiKey: c('creem_api_key'),
         signingSecret: c('creem_signing_secret') || undefined,
-        environment: c('creem_environment') === 'production' ? 'production' : 'sandbox',
+        environment:
+          c('creem_environment') === 'production' ? 'production' : 'sandbox',
       }),
       isDefault
     );
@@ -133,40 +149,65 @@ export async function createCheckout(params: {
   const pm = await getPaymentManager();
   const orderNo = getUniSeq('ORD');
 
-  const finalSuccessUrl = paymentOrder.successUrl || `${envConfigs.app_url}/settings/billing?success=1`;
+  // Resolve provider-specific product ID (e.g. Creem product_ids_mapping)
+  const resolvedProvider = provider || pm.getDefaultProvider()?.name;
+  let resolvedProductId = paymentOrder.productId;
+  if (resolvedProvider === 'creem' && paymentOrder.productId) {
+    const configs = await getAllConfigs();
+    const mapping = configs.creem_product_ids_mapping;
+    if (mapping) {
+      try {
+        const map = JSON.parse(mapping) as Record<string, string>;
+        if (map[paymentOrder.productId]) {
+          resolvedProductId = map[paymentOrder.productId];
+        }
+      } catch {
+        // invalid JSON — fall through with original productId
+      }
+    }
+  }
+
+  const finalSuccessUrl =
+    paymentOrder.successUrl ||
+    `${envConfigs.app_url}/settings/billing?success=1`;
   const callbackSuccessUrl = `${envConfigs.app_url}/api/payment/callback?order_no=${orderNo}&redirect=${encodeURIComponent(finalSuccessUrl)}`;
 
   const session = await pm.createPayment({
     order: {
       ...paymentOrder,
+      productId: resolvedProductId,
       orderNo,
       successUrl: callbackSuccessUrl,
-      cancelUrl: paymentOrder.cancelUrl || `${envConfigs.app_url}/settings/billing?canceled=1`,
+      cancelUrl:
+        paymentOrder.cancelUrl ||
+        `${envConfigs.app_url}/settings/billing?canceled=1`,
     },
     provider,
   });
 
-  await db().insert(order).values({
-    id: getUuid(),
-    orderNo,
-    userId,
-    userEmail: userEmail || '',
-    status: OrderStatus.CREATED,
-    amount: paymentOrder.price?.amount || 0,
-    currency: paymentOrder.price?.currency || 'usd',
-    productId: paymentOrder.productId || '',
-    productName: productName || null,
-    planName: planName || null,
-    creditsAmount: credits ?? null,
-    creditsValidDays: creditsValidDays ?? null,
-    paymentType: paymentOrder.type || 'one-time',
-    paymentProvider: session.provider,
-    paymentSessionId: session.checkoutInfo.sessionId,
-    checkoutInfo: JSON.stringify(session.checkoutInfo),
-    checkoutResult: JSON.stringify(session.checkoutResult),
-    checkoutUrl: session.checkoutInfo.checkoutUrl,
-    description: paymentOrder.description || '',
-  });
+  await db()
+    .insert(order)
+    .values({
+      id: getUuid(),
+      orderNo,
+      userId,
+      userEmail: userEmail || '',
+      status: OrderStatus.CREATED,
+      amount: paymentOrder.price?.amount || 0,
+      currency: paymentOrder.price?.currency || 'usd',
+      productId: paymentOrder.productId || '',
+      productName: productName || null,
+      planName: planName || null,
+      creditsAmount: credits ?? null,
+      creditsValidDays: creditsValidDays ?? null,
+      paymentType: paymentOrder.type || 'one-time',
+      paymentProvider: session.provider,
+      paymentSessionId: session.checkoutInfo.sessionId,
+      checkoutInfo: JSON.stringify(session.checkoutInfo),
+      checkoutResult: JSON.stringify(session.checkoutResult),
+      checkoutUrl: session.checkoutInfo.checkoutUrl,
+      description: paymentOrder.description || '',
+    });
 
   return session;
 }
@@ -206,7 +247,10 @@ export async function handleWebhook(params: {
   provider: string;
 }): Promise<PaymentEvent> {
   const pm = await getPaymentManager();
-  const event = await pm.getPaymentEvent({ req: params.req, provider: params.provider });
+  const event = await pm.getPaymentEvent({
+    req: params.req,
+    provider: params.provider,
+  });
   const session = event.paymentSession;
   if (!session) return event;
 
@@ -250,7 +294,11 @@ async function handleCheckoutSuccess(session: any, provider: string) {
 
   // Idempotency: skip if already paid
   if (existingOrder.status === OrderStatus.PAID) return;
-  if (existingOrder.status !== OrderStatus.CREATED && existingOrder.status !== OrderStatus.PENDING) return;
+  if (
+    existingOrder.status !== OrderStatus.CREATED &&
+    existingOrder.status !== OrderStatus.PENDING
+  )
+    return;
 
   const paymentInfo = session.paymentInfo;
   const subscriptionInfo = session.subscriptionInfo;
@@ -282,7 +330,8 @@ async function handleCheckoutSuccess(session: any, provider: string) {
           id: getUuid(),
           subscriptionNo: subNo,
           userId: existingOrder.userId,
-          userEmail: existingOrder.userEmail || existingOrder.paymentEmail || '',
+          userEmail:
+            existingOrder.userEmail || existingOrder.paymentEmail || '',
           status: subscriptionInfo.status || SubscriptionStatus.ACTIVE,
           paymentProvider: provider,
           subscriptionId: session.subscriptionId,
@@ -307,7 +356,9 @@ async function handleCheckoutSuccess(session: any, provider: string) {
         await tx.insert(subscription).values(newSub);
         orderUpdate.subscriptionNo = subNo;
         orderUpdate.subscriptionId = session.subscriptionId;
-        orderUpdate.subscriptionResult = JSON.stringify(session.subscriptionResult);
+        orderUpdate.subscriptionResult = JSON.stringify(
+          session.subscriptionResult
+        );
       }
 
       // 2. Grant credits if applicable
@@ -326,7 +377,10 @@ async function handleCheckoutSuccess(session: any, provider: string) {
           subscriptionNo: orderUpdate.subscriptionNo || '',
           transactionNo: getSnowId(),
           transactionType: 'grant',
-          transactionScene: existingOrder.paymentType === 'subscription' ? 'subscription' : 'payment',
+          transactionScene:
+            existingOrder.paymentType === 'subscription'
+              ? 'subscription'
+              : 'payment',
           credits,
           remainingCredits: credits,
           description: 'Grant credit',
@@ -336,19 +390,31 @@ async function handleCheckoutSuccess(session: any, provider: string) {
       }
 
       // 3. Update order
-      await tx.update(order).set(orderUpdate).where(eq(order.id, existingOrder.id));
+      await tx
+        .update(order)
+        .set(orderUpdate)
+        .where(eq(order.id, existingOrder.id));
     });
-  } else if (session.paymentStatus === PaymentStatus.FAILED || session.paymentStatus === PaymentStatus.CANCELED) {
-    await db().update(order).set({
-      status: OrderStatus.FAILED,
-      paymentResult: JSON.stringify(session.paymentResult),
-    }).where(eq(order.id, existingOrder.id));
+  } else if (
+    session.paymentStatus === PaymentStatus.FAILED ||
+    session.paymentStatus === PaymentStatus.CANCELED
+  ) {
+    await db()
+      .update(order)
+      .set({
+        status: OrderStatus.FAILED,
+        paymentResult: JSON.stringify(session.paymentResult),
+      })
+      .where(eq(order.id, existingOrder.id));
   }
 }
 
 // --- Subscription Renewal ---
 
-export async function handleSubscriptionRenewal(session: any, provider: string) {
+export async function handleSubscriptionRenewal(
+  session: any,
+  provider: string
+) {
   if (!session.subscriptionId || !session.subscriptionInfo) return;
 
   const existingSub = await findByProviderSubscriptionId({
@@ -358,7 +424,11 @@ export async function handleSubscriptionRenewal(session: any, provider: string) 
   if (!existingSub || !existingSub.amount || !existingSub.currency) return;
 
   const subscriptionInfo = session.subscriptionInfo;
-  if (!subscriptionInfo.currentPeriodStart || !subscriptionInfo.currentPeriodEnd) return;
+  if (
+    !subscriptionInfo.currentPeriodStart ||
+    !subscriptionInfo.currentPeriodEnd
+  )
+    return;
 
   if (session.paymentStatus !== PaymentStatus.SUCCESS) return;
 
@@ -383,10 +453,13 @@ export async function handleSubscriptionRenewal(session: any, provider: string) 
 
   await db().transaction(async (tx: any) => {
     // 1. Update subscription period
-    await tx.update(subscription).set({
-      currentPeriodStart: subscriptionInfo.currentPeriodStart,
-      currentPeriodEnd: subscriptionInfo.currentPeriodEnd,
-    }).where(eq(subscription.subscriptionNo, existingSub.subscriptionNo));
+    await tx
+      .update(subscription)
+      .set({
+        currentPeriodStart: subscriptionInfo.currentPeriodStart,
+        currentPeriodEnd: subscriptionInfo.currentPeriodEnd,
+      })
+      .where(eq(subscription.subscriptionNo, existingSub.subscriptionNo));
 
     // 2. Create renewal order
     await tx.insert(order).values({

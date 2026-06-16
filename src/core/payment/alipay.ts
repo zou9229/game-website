@@ -249,9 +249,7 @@ export class AlipayProvider implements PaymentProvider {
   /**
    * Sign parameters with RSA2
    */
-  private signParams(
-    params: Record<string, string>
-  ): Record<string, string> {
+  private signParams(params: Record<string, string>): Record<string, string> {
     // Sort params alphabetically and build sign string
     const sortedKeys = Object.keys(params).sort();
     const signStr = sortedKeys

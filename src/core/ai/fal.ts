@@ -53,7 +53,11 @@ export class FalProvider implements AIProvider {
     }
   }
 
-  async generate({ params }: { params: AIGenerateParams }): Promise<AITaskResult> {
+  async generate({
+    params,
+  }: {
+    params: AIGenerateParams;
+  }): Promise<AITaskResult> {
     const { mediaType, model, prompt, options, callbackUrl } = params;
 
     if (!mediaType) {

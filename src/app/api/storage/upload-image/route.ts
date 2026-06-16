@@ -1,10 +1,11 @@
 import { headers } from 'next/headers';
-import { envConfigs } from '@/config';
-import { md5 } from '@/lib/hash';
-import { respData, respErr } from '@/lib/resp';
+
 import { getAuth } from '@/core/auth';
+import { envConfigs } from '@/config';
 import { getStorage, isStorageConfigured } from '@/modules/storage/service';
+import { md5 } from '@/lib/hash';
 import { enforceMinIntervalRateLimit } from '@/lib/rate-limit';
+import { respData, respErr } from '@/lib/resp';
 
 const extFromMime = (mimeType: string) => {
   const map: Record<string, string> = {
@@ -23,7 +24,8 @@ const extFromMime = (mimeType: string) => {
 
 // Hard cap for inline base64 (no storage configured). Keep small — fits comfortably
 // in a TEXT column and a JSON response. Configurable via INLINE_IMAGE_MAX_KB.
-const INLINE_MAX_BYTES = (Number(envConfigs.inline_image_max_kb) || 2048) * 1024;
+const INLINE_MAX_BYTES =
+  (Number(envConfigs.inline_image_max_kb) || 2048) * 1024;
 
 export async function POST(req: Request) {
   const limited = enforceMinIntervalRateLimit(req, {
@@ -43,7 +45,12 @@ export async function POST(req: Request) {
 
     const useStorage = isStorageConfigured();
     const storage = useStorage ? getStorage() : null;
-    const uploadResults: Array<{ url: string; key: string; filename: string; deduped: boolean }> = [];
+    const uploadResults: Array<{
+      url: string;
+      key: string;
+      filename: string;
+      deduped: boolean;
+    }> = [];
 
     for (const file of files) {
       if (!file.type.startsWith('image/')) {
@@ -58,7 +65,7 @@ export async function POST(req: Request) {
         if (body.length > INLINE_MAX_BYTES) {
           const limitKb = Math.round(INLINE_MAX_BYTES / 1024);
           return respErr(
-            `Image too large for inline storage (${(body.length / 1024).toFixed(0)}KB > ${limitKb}KB). Configure STORAGE_* env vars or use a smaller image.`,
+            `Image too large for inline storage (${(body.length / 1024).toFixed(0)}KB > ${limitKb}KB). Configure STORAGE_* env vars or use a smaller image.`
           );
         }
         const base64 = Buffer.from(body).toString('base64');
@@ -80,7 +87,12 @@ export async function POST(req: Request) {
       if (exists) {
         const publicUrl = storage.getPublicUrl({ key });
         if (publicUrl) {
-          uploadResults.push({ url: publicUrl, key, filename: file.name, deduped: true });
+          uploadResults.push({
+            url: publicUrl,
+            key,
+            filename: file.name,
+            deduped: true,
+          });
           continue;
         }
       }

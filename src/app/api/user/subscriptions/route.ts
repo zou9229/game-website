@@ -1,9 +1,10 @@
 import { headers } from 'next/headers';
 import { and, count, desc, eq, like, or, type SQL } from 'drizzle-orm';
-import { respPage, respErr } from '@/lib/resp';
+
 import { getAuth } from '@/core/auth';
 import { db } from '@/core/db';
 import { subscription } from '@/config/db/schema';
+import { respErr, respPage } from '@/lib/resp';
 
 export async function GET(req: Request) {
   try {
@@ -15,7 +16,7 @@ export async function GET(req: Request) {
     const page = Math.max(1, parseInt(searchParams.get('page') || '1'));
     const pageSize = Math.min(
       100,
-      Math.max(1, parseInt(searchParams.get('pageSize') || '20')),
+      Math.max(1, parseInt(searchParams.get('pageSize') || '20'))
     );
     const offset = (page - 1) * pageSize;
 
@@ -31,8 +32,8 @@ export async function GET(req: Request) {
         or(
           like(subscription.subscriptionNo, `%${search}%`),
           like(subscription.planName, `%${search}%`),
-          like(subscription.productName, `%${search}%`),
-        )!,
+          like(subscription.productName, `%${search}%`)
+        )!
       );
     }
 

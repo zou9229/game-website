@@ -1,7 +1,8 @@
-import { eq, and, desc, count, like, or, type SQL } from 'drizzle-orm';
-import { getUuid } from '@/lib/hash';
+import { and, count, desc, eq, like, or, type SQL } from 'drizzle-orm';
+
 import { db } from '@/core/db';
 import { post } from '@/config/db/schema';
+import { getUuid } from '@/lib/hash';
 
 export enum PostType {
   ARTICLE = 'article',
@@ -32,11 +33,16 @@ export async function list(params: {
   if (type) conditions.push(eq(post.type, type));
   if (status) conditions.push(eq(post.status, status));
   if (search) {
-    conditions.push(or(like(post.title, `%${search}%`), like(post.slug, `%${search}%`))!);
+    conditions.push(
+      or(like(post.title, `%${search}%`), like(post.slug, `%${search}%`))!
+    );
   }
   const where = conditions.length > 0 ? and(...conditions) : undefined;
 
-  const [totalResult] = await db().select({ count: count() }).from(post).where(where);
+  const [totalResult] = await db()
+    .select({ count: count() })
+    .from(post)
+    .where(where);
   const total = totalResult.count;
 
   const items = await db()
@@ -63,7 +69,11 @@ export async function list(params: {
 }
 
 export async function getById(id: string) {
-  const [result] = await db().select().from(post).where(eq(post.id, id)).limit(1);
+  const [result] = await db()
+    .select()
+    .from(post)
+    .where(eq(post.id, id))
+    .limit(1);
   return result;
 }
 
@@ -95,22 +105,32 @@ export async function create(data: {
   return result;
 }
 
-export async function update(id: string, data: {
-  slug?: string;
-  title?: string;
-  description?: string;
-  image?: string;
-  content?: string;
-  categories?: string;
-  authorName?: string;
-  status?: string;
-}) {
+export async function update(
+  id: string,
+  data: {
+    slug?: string;
+    title?: string;
+    description?: string;
+    image?: string;
+    content?: string;
+    categories?: string;
+    authorName?: string;
+    status?: string;
+  }
+) {
   const updateData: any = { ...data };
   if (updateData.slug) updateData.slug = updateData.slug.toLowerCase();
-  const [result] = await db().update(post).set(updateData).where(eq(post.id, id)).returning();
+  const [result] = await db()
+    .update(post)
+    .set(updateData)
+    .where(eq(post.id, id))
+    .returning();
   return result;
 }
 
 export async function remove(id: string) {
-  await db().update(post).set({ status: PostStatus.ARCHIVED }).where(eq(post.id, id));
+  await db()
+    .update(post)
+    .set({ status: PostStatus.ARCHIVED })
+    .where(eq(post.id, id));
 }

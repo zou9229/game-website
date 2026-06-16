@@ -1,7 +1,8 @@
-"use client";
+'use client';
 
-import { useEffect, useRef, useState } from "react";
-import { getAuthClient, useSession } from "@/core/auth/client";
+import { useEffect, useRef, useState } from 'react';
+
+import { getAuthClient, useSession } from '@/core/auth/client';
 
 // Mounts the Google One Tap prompt for signed-out visitors when the
 // admin has enabled it. Self-contained: pulls config from
@@ -14,7 +15,7 @@ export function GoogleOneTap() {
 
   useEffect(() => {
     let cancelled = false;
-    fetch("/api/config/public")
+    fetch('/api/config/public')
       .then((r) => r.json())
       .then((res) => {
         if (cancelled) return;
@@ -35,7 +36,7 @@ export function GoogleOneTap() {
     if (isPending) return;
     if (session?.user) return;
     if (
-      configs.google_one_tap_enabled !== "true" ||
+      configs.google_one_tap_enabled !== 'true' ||
       !configs.google_client_id
     ) {
       return;
@@ -43,16 +44,18 @@ export function GoogleOneTap() {
 
     triggered.current = true;
     const client = getAuthClient(configs);
-    (client as any).oneTap?.({
-      callbackURL: "/",
-      onPromptNotification: () => {
-        // Silently ignore dismissals / FedCM hiccups — the user can still
-        // sign in via the normal /sign-in page.
-      },
-    }).catch(() => {
-      // Same — One Tap cancellations throw NetworkError/AbortError that
-      // aren't actionable.
-    });
+    (client as any)
+      .oneTap?.({
+        callbackURL: '/',
+        onPromptNotification: () => {
+          // Silently ignore dismissals / FedCM hiccups — the user can still
+          // sign in via the normal /sign-in page.
+        },
+      })
+      .catch(() => {
+        // Same — One Tap cancellations throw NetworkError/AbortError that
+        // aren't actionable.
+      });
   }, [configs, session, isPending]);
 
   return null;

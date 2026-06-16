@@ -1,15 +1,16 @@
 import { headers } from 'next/headers';
-import { desc, count, sql, or, like, and, gte, type SQL } from 'drizzle-orm';
-import { respData, respPage, respOk, respErr } from '@/lib/resp';
+import { and, count, desc, gte, like, or, sql, type SQL } from 'drizzle-orm';
+
 import { getAuth } from '@/core/auth';
-import { hasPermission } from '@/modules/rbac/service';
+import { db } from '@/core/db';
+import { inviteCode } from '@/config/db/schema';
 import {
   createInviteCode,
   createInviteCodesBatch,
   deleteInviteCode,
 } from '@/modules/invite-codes/service';
-import { db } from '@/core/db';
-import { inviteCode } from '@/config/db/schema';
+import { hasPermission } from '@/modules/rbac/service';
+import { respData, respErr, respOk, respPage } from '@/lib/resp';
 
 async function checkAdmin() {
   const auth = getAuth();
@@ -26,7 +27,10 @@ export async function GET(req: Request) {
 
     const { searchParams } = new URL(req.url);
     const page = Math.max(1, parseInt(searchParams.get('page') || '1'));
-    const pageSize = Math.min(100, Math.max(1, parseInt(searchParams.get('pageSize') || '20')));
+    const pageSize = Math.min(
+      100,
+      Math.max(1, parseInt(searchParams.get('pageSize') || '20'))
+    );
     const offset = (page - 1) * pageSize;
     const search = searchParams.get('search');
     const status = searchParams.get('status'); // 'available' | 'used'
@@ -53,7 +57,10 @@ export async function GET(req: Request) {
     }
     const where = conditions.length > 0 ? and(...conditions) : undefined;
 
-    const [totalResult] = await db().select({ count: count() }).from(inviteCode).where(where);
+    const [totalResult] = await db()
+      .select({ count: count() })
+      .from(inviteCode)
+      .where(where);
     const total = totalResult.count;
 
     const rows = await db()

@@ -1,10 +1,18 @@
 import { headers } from 'next/headers';
-import { respData, respPage, respOk, respErr } from '@/lib/resp';
+import { and, count, desc, eq, like, or, type SQL } from 'drizzle-orm';
+
 import { getAuth } from '@/core/auth';
-import { hasPermission, getRoles, getUserRoles, createRole, updateRole, deleteRole } from '@/modules/rbac/service';
 import { db } from '@/core/db';
 import { role } from '@/config/db/schema';
-import { eq, desc, count, and, like, or, type SQL } from 'drizzle-orm';
+import {
+  createRole,
+  deleteRole,
+  getRoles,
+  getUserRoles,
+  hasPermission,
+  updateRole,
+} from '@/modules/rbac/service';
+import { respData, respErr, respOk, respPage } from '@/lib/resp';
 
 async function checkAdmin() {
   const auth = getAuth();
@@ -28,17 +36,25 @@ export async function GET(req: Request) {
     }
 
     const page = Math.max(1, parseInt(searchParams.get('page') || '1'));
-    const pageSize = Math.min(100, Math.max(1, parseInt(searchParams.get('pageSize') || '10')));
+    const pageSize = Math.min(
+      100,
+      Math.max(1, parseInt(searchParams.get('pageSize') || '10'))
+    );
     const offset = (page - 1) * pageSize;
     const search = searchParams.get('search');
 
     const conditions: SQL[] = [eq(role.status, 'active')];
     if (search) {
-      conditions.push(or(like(role.name, `%${search}%`), like(role.title, `%${search}%`))!);
+      conditions.push(
+        or(like(role.name, `%${search}%`), like(role.title, `%${search}%`))!
+      );
     }
     const where = and(...conditions);
 
-    const [totalResult] = await db().select({ count: count() }).from(role).where(where);
+    const [totalResult] = await db()
+      .select({ count: count() })
+      .from(role)
+      .where(where);
     const total = totalResult.count;
 
     const roles = await db()

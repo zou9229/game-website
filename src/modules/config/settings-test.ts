@@ -8,22 +8,22 @@
  * import it without pulling provider SDKs.
  */
 
+import { FalProvider } from '@/core/ai/fal';
+import { ReplicateProvider } from '@/core/ai/replicate';
+import { AIMediaType } from '@/core/ai/types';
+import { ResendProvider } from '@/core/email/resend';
 import {
-  StripeProvider,
+  AlipayProvider,
   CreemProvider,
   PayPalProvider,
-  AlipayProvider,
+  StripeProvider,
   WechatPayProvider,
 } from '@/core/payment';
-import type { PaymentOrder } from '@/core/payment/types';
-import { PaymentType } from '@/core/payment/types';
-import { ResendProvider } from '@/core/email/resend';
+import { PaymentType, type PaymentOrder } from '@/core/payment/types';
 import { S3Provider } from '@/core/storage/s3';
-import { ReplicateProvider } from '@/core/ai/replicate';
-import { FalProvider } from '@/core/ai/fal';
-import { AIMediaType } from '@/core/ai/types';
-import { getUniSeq } from '@/lib/hash';
 import { envConfigs } from '@/config';
+import { getUniSeq } from '@/lib/hash';
+
 import type { TestResult } from './settings-test-specs';
 
 export { getTestSpec, getTestableGroups } from './settings-test-specs';
@@ -32,7 +32,7 @@ export type { TestField, TestSpec, TestResult } from './settings-test-specs';
 export async function runTest(
   group: string,
   inputs: Record<string, string>,
-  configs: Record<string, string>,
+  configs: Record<string, string>
 ): Promise<TestResult> {
   try {
     switch (group) {
@@ -62,7 +62,10 @@ export async function runTest(
         return { success: false, message: `No test available for "${group}"` };
     }
   } catch (error: any) {
-    return { success: false, message: error?.message || 'Test failed with unknown error' };
+    return {
+      success: false,
+      message: error?.message || 'Test failed with unknown error',
+    };
   }
 }
 
@@ -77,7 +80,10 @@ function successUrl(group: string) {
 
 // --- Resend ---------------------------------------------------------------
 
-async function testResend(inputs: Record<string, string>, configs: Record<string, string>): Promise<TestResult> {
+async function testResend(
+  inputs: Record<string, string>,
+  configs: Record<string, string>
+): Promise<TestResult> {
   const missing = need(configs, ['resend_api_key', 'resend_email_from']);
   if (missing) return { success: false, message: missing };
 
@@ -105,21 +111,31 @@ async function testResend(inputs: Record<string, string>, configs: Record<string
 
 // --- Stripe ---------------------------------------------------------------
 
-async function testStripe(inputs: Record<string, string>, configs: Record<string, string>): Promise<TestResult> {
+async function testStripe(
+  inputs: Record<string, string>,
+  configs: Record<string, string>
+): Promise<TestResult> {
   const key = configs.stripe_api_key || configs.stripe_secret_key;
-  if (!key) return { success: false, message: 'Missing config: stripe_api_key' };
+  if (!key)
+    return { success: false, message: 'Missing config: stripe_api_key' };
 
   const provider = new StripeProvider({
     secretKey: key,
     publishableKey: configs.stripe_publishable_key || '',
-    signingSecret: configs.stripe_webhook_secret || configs.stripe_signing_secret || undefined,
+    signingSecret:
+      configs.stripe_webhook_secret ||
+      configs.stripe_signing_secret ||
+      undefined,
     allowedPaymentMethods: ['card'],
   });
 
   const order: PaymentOrder = {
     type: PaymentType.ONE_TIME,
     orderNo: getUniSeq('TEST'),
-    price: { amount: Number(inputs.amount) || 100, currency: (inputs.currency || 'usd').toLowerCase() },
+    price: {
+      amount: Number(inputs.amount) || 100,
+      currency: (inputs.currency || 'usd').toLowerCase(),
+    },
     description: inputs.description || 'Test checkout',
     successUrl: successUrl('stripe'),
     cancelUrl: successUrl('stripe'),
@@ -138,14 +154,18 @@ async function testStripe(inputs: Record<string, string>, configs: Record<string
 
 // --- Creem ----------------------------------------------------------------
 
-async function testCreem(inputs: Record<string, string>, configs: Record<string, string>): Promise<TestResult> {
+async function testCreem(
+  inputs: Record<string, string>,
+  configs: Record<string, string>
+): Promise<TestResult> {
   const missing = need(configs, ['creem_api_key']);
   if (missing) return { success: false, message: missing };
 
   const provider = new CreemProvider({
     apiKey: configs.creem_api_key,
     signingSecret: configs.creem_signing_secret || undefined,
-    environment: configs.creem_environment === 'production' ? 'production' : 'sandbox',
+    environment:
+      configs.creem_environment === 'production' ? 'production' : 'sandbox',
   });
 
   const order: PaymentOrder = {
@@ -170,21 +190,28 @@ async function testCreem(inputs: Record<string, string>, configs: Record<string,
 
 // --- PayPal ---------------------------------------------------------------
 
-async function testPaypal(inputs: Record<string, string>, configs: Record<string, string>): Promise<TestResult> {
+async function testPaypal(
+  inputs: Record<string, string>,
+  configs: Record<string, string>
+): Promise<TestResult> {
   const missing = need(configs, ['paypal_client_id', 'paypal_client_secret']);
   if (missing) return { success: false, message: missing };
 
   const provider = new PayPalProvider({
     clientId: configs.paypal_client_id,
     clientSecret: configs.paypal_client_secret,
-    environment: configs.paypal_environment === 'live' ? 'production' : 'sandbox',
+    environment:
+      configs.paypal_environment === 'live' ? 'production' : 'sandbox',
     webhookId: configs.paypal_webhook_id || undefined,
   });
 
   const order: PaymentOrder = {
     type: PaymentType.ONE_TIME,
     orderNo: getUniSeq('TEST'),
-    price: { amount: Number(inputs.amount) || 100, currency: (inputs.currency || 'USD').toUpperCase() },
+    price: {
+      amount: Number(inputs.amount) || 100,
+      currency: (inputs.currency || 'USD').toUpperCase(),
+    },
     description: inputs.description || 'Test checkout',
     successUrl: successUrl('paypal'),
     cancelUrl: successUrl('paypal'),
@@ -203,8 +230,15 @@ async function testPaypal(inputs: Record<string, string>, configs: Record<string
 
 // --- Alipay ---------------------------------------------------------------
 
-async function testAlipay(inputs: Record<string, string>, configs: Record<string, string>): Promise<TestResult> {
-  const missing = need(configs, ['alipay_app_id', 'alipay_private_key', 'alipay_public_key']);
+async function testAlipay(
+  inputs: Record<string, string>,
+  configs: Record<string, string>
+): Promise<TestResult> {
+  const missing = need(configs, [
+    'alipay_app_id',
+    'alipay_private_key',
+    'alipay_public_key',
+  ]);
   if (missing) return { success: false, message: missing };
 
   const provider = new AlipayProvider({
@@ -235,8 +269,17 @@ async function testAlipay(inputs: Record<string, string>, configs: Record<string
 
 // --- WeChat Pay -----------------------------------------------------------
 
-async function testWechat(inputs: Record<string, string>, configs: Record<string, string>): Promise<TestResult> {
-  const missing = need(configs, ['wechat_app_id', 'wechat_mch_id', 'wechat_private_key', 'wechat_api_v3_key', 'wechat_serial_no']);
+async function testWechat(
+  inputs: Record<string, string>,
+  configs: Record<string, string>
+): Promise<TestResult> {
+  const missing = need(configs, [
+    'wechat_app_id',
+    'wechat_mch_id',
+    'wechat_private_key',
+    'wechat_api_v3_key',
+    'wechat_serial_no',
+  ]);
   if (missing) return { success: false, message: missing };
 
   const provider = new WechatPayProvider({
@@ -268,8 +311,16 @@ async function testWechat(inputs: Record<string, string>, configs: Record<string
 
 // --- Storage --------------------------------------------------------------
 
-async function testR2(inputs: Record<string, string>, configs: Record<string, string>): Promise<TestResult> {
-  const missing = need(configs, ['storage_endpoint', 'storage_access_key', 'storage_secret_key', 'storage_bucket']);
+async function testR2(
+  inputs: Record<string, string>,
+  configs: Record<string, string>
+): Promise<TestResult> {
+  const missing = need(configs, [
+    'storage_endpoint',
+    'storage_access_key',
+    'storage_secret_key',
+    'storage_bucket',
+  ]);
   if (missing) return { success: false, message: missing };
 
   const provider = new S3Provider({
@@ -281,11 +332,14 @@ async function testR2(inputs: Record<string, string>, configs: Record<string, st
     publicDomain: configs.storage_public_domain || undefined,
   });
 
-  const safeName = (inputs.filename || 'shipany-settings-test.txt').replace(/[^a-zA-Z0-9._-]/g, '_');
+  const safeName = (inputs.filename || 'shipany-settings-test.txt').replace(
+    /[^a-zA-Z0-9._-]/g,
+    '_'
+  );
   const key = `settings-test/${Date.now()}-${safeName}`;
   const body = Buffer.from(
     `ShipAny settings test\nTimestamp: ${new Date().toISOString()}\n`,
-    'utf-8',
+    'utf-8'
   );
 
   const result = await provider.uploadFile({
@@ -306,11 +360,16 @@ async function testR2(inputs: Record<string, string>, configs: Record<string, st
 
 // --- AI -------------------------------------------------------------------
 
-async function testOpenAI(inputs: Record<string, string>, configs: Record<string, string>): Promise<TestResult> {
+async function testOpenAI(
+  inputs: Record<string, string>,
+  configs: Record<string, string>
+): Promise<TestResult> {
   const missing = need(configs, ['openai_api_key']);
   if (missing) return { success: false, message: missing };
 
-  const baseUrl = (configs.openai_base_url || 'https://api.openai.com/v1').replace(/\/+$/, '');
+  const baseUrl = (
+    configs.openai_base_url || 'https://api.openai.com/v1'
+  ).replace(/\/+$/, '');
   const resp = await fetch(`${baseUrl}/chat/completions`, {
     method: 'POST',
     headers: {
@@ -326,22 +385,33 @@ async function testOpenAI(inputs: Record<string, string>, configs: Record<string
 
   const data: any = await resp.json().catch(() => ({}));
   if (!resp.ok) {
-    return { success: false, message: data?.error?.message || `Request failed (${resp.status})` };
+    return {
+      success: false,
+      message: data?.error?.message || `Request failed (${resp.status})`,
+    };
   }
 
   const reply = String(data?.choices?.[0]?.message?.content ?? '').trim();
   return {
     success: true,
     message: 'OpenAI accepted the request',
-    details: { Model: data?.model || inputs.model, Reply: reply.slice(0, 200) || '(empty)' },
+    details: {
+      Model: data?.model || inputs.model,
+      Reply: reply.slice(0, 200) || '(empty)',
+    },
   };
 }
 
-async function testAnthropic(inputs: Record<string, string>, configs: Record<string, string>): Promise<TestResult> {
+async function testAnthropic(
+  inputs: Record<string, string>,
+  configs: Record<string, string>
+): Promise<TestResult> {
   const missing = need(configs, ['anthropic_api_key']);
   if (missing) return { success: false, message: missing };
 
-  const baseUrl = (configs.anthropic_base_url || 'https://api.anthropic.com').replace(/\/+$/, '');
+  const baseUrl = (
+    configs.anthropic_base_url || 'https://api.anthropic.com'
+  ).replace(/\/+$/, '');
   const resp = await fetch(`${baseUrl}/v1/messages`, {
     method: 'POST',
     headers: {
@@ -358,24 +428,38 @@ async function testAnthropic(inputs: Record<string, string>, configs: Record<str
 
   const data: any = await resp.json().catch(() => ({}));
   if (!resp.ok) {
-    return { success: false, message: data?.error?.message || `Request failed (${resp.status})` };
+    return {
+      success: false,
+      message: data?.error?.message || `Request failed (${resp.status})`,
+    };
   }
 
   const reply = Array.isArray(data?.content)
-    ? data.content.map((b: any) => b?.text || '').join('').trim()
+    ? data.content
+        .map((b: any) => b?.text || '')
+        .join('')
+        .trim()
     : '';
   return {
     success: true,
     message: 'Anthropic accepted the request',
-    details: { Model: data?.model || inputs.model, Reply: reply.slice(0, 200) || '(empty)' },
+    details: {
+      Model: data?.model || inputs.model,
+      Reply: reply.slice(0, 200) || '(empty)',
+    },
   };
 }
 
-async function testReplicate(inputs: Record<string, string>, configs: Record<string, string>): Promise<TestResult> {
+async function testReplicate(
+  inputs: Record<string, string>,
+  configs: Record<string, string>
+): Promise<TestResult> {
   const missing = need(configs, ['replicate_api_token']);
   if (missing) return { success: false, message: missing };
 
-  const provider = new ReplicateProvider({ apiToken: configs.replicate_api_token });
+  const provider = new ReplicateProvider({
+    apiToken: configs.replicate_api_token,
+  });
   const result = await provider.generate({
     params: {
       mediaType: AIMediaType.IMAGE,
@@ -390,7 +474,10 @@ async function testReplicate(inputs: Record<string, string>, configs: Record<str
   };
 }
 
-async function testFal(inputs: Record<string, string>, configs: Record<string, string>): Promise<TestResult> {
+async function testFal(
+  inputs: Record<string, string>,
+  configs: Record<string, string>
+): Promise<TestResult> {
   const missing = need(configs, ['fal_api_key']);
   if (missing) return { success: false, message: missing };
 

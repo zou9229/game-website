@@ -84,7 +84,6 @@ export class ResendProvider implements EmailProvider {
         resendEmail as CreateEmailOptions
       );
 
-
       if (result.error) {
         return {
           success: false,

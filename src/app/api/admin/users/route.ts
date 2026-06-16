@@ -1,11 +1,12 @@
 import { headers } from 'next/headers';
-import { respPage, respErr } from '@/lib/resp';
+import { and, count, desc, like, or, type SQL } from 'drizzle-orm';
+
 import { getAuth } from '@/core/auth';
-import { hasPermission } from '@/modules/rbac/service';
-import { getBalance } from '@/modules/credits/service';
 import { db } from '@/core/db';
 import { user } from '@/config/db/schema';
-import { desc, count, or, like, and, type SQL } from 'drizzle-orm';
+import { getBalance } from '@/modules/credits/service';
+import { hasPermission } from '@/modules/rbac/service';
+import { respErr, respPage } from '@/lib/resp';
 
 export async function GET(req: Request) {
   try {
@@ -18,22 +19,25 @@ export async function GET(req: Request) {
 
     const { searchParams } = new URL(req.url);
     const page = Math.max(1, parseInt(searchParams.get('page') || '1'));
-    const pageSize = Math.min(100, Math.max(1, parseInt(searchParams.get('pageSize') || '10')));
+    const pageSize = Math.min(
+      100,
+      Math.max(1, parseInt(searchParams.get('pageSize') || '10'))
+    );
     const offset = (page - 1) * pageSize;
     const search = searchParams.get('search');
 
     const conditions: SQL[] = [];
     if (search) {
       conditions.push(
-        or(
-          like(user.email, `%${search}%`),
-          like(user.name, `%${search}%`)
-        )!
+        or(like(user.email, `%${search}%`), like(user.name, `%${search}%`))!
       );
     }
     const where = conditions.length > 0 ? and(...conditions) : undefined;
 
-    const [totalResult] = await db().select({ count: count() }).from(user).where(where);
+    const [totalResult] = await db()
+      .select({ count: count() })
+      .from(user)
+      .where(where);
     const total = totalResult.count;
 
     const users = await db()
@@ -51,7 +55,7 @@ export async function GET(req: Request) {
       .offset(offset);
 
     const withCredits = await Promise.all(
-      users.map(async (u: typeof users[number]) => ({
+      users.map(async (u: (typeof users)[number]) => ({
         ...u,
         credits: await getBalance(u.id),
       }))

@@ -4,8 +4,8 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { ImageIcon, RefreshCw, Upload, X } from 'lucide-react';
 import { toast } from 'sonner';
 
-import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 
 export type UploadStatus = 'idle' | 'uploading' | 'uploaded' | 'error';
 
@@ -156,7 +156,7 @@ export function ImageUploader({
         url,
         status,
         size,
-      })),
+      }))
     );
   }, [items]);
 
@@ -180,7 +180,7 @@ export function ImageUploader({
             status: 'uploading' as UploadStatus,
             uploadKey,
           };
-        }),
+        })
       );
 
       uploadImageFile(file)
@@ -199,18 +199,20 @@ export function ImageUploader({
                 status: 'uploaded' as UploadStatus,
                 file: undefined,
               };
-            }),
+            })
           );
         })
         .catch((error: any) => {
           console.error('Upload failed:', error);
-          toast.error(error?.message ? `Upload failed: ${error.message}` : 'Upload failed');
+          toast.error(
+            error?.message ? `Upload failed: ${error.message}` : 'Upload failed'
+          );
           setItems((prev) =>
             prev.map((item) => {
               if (item.id !== id) return item;
               if (item.uploadKey !== uploadKey) return item;
               return { ...item, status: 'error' as UploadStatus };
-            }),
+            })
           );
         })
         .finally(() => {
@@ -256,7 +258,9 @@ export function ImageUploader({
 
     if (!filesToAdd.length) {
       if (items.length) {
-        const normalized = selectedFiles.filter((file) => file.type?.startsWith('image/'));
+        const normalized = selectedFiles.filter((file) =>
+          file.type?.startsWith('image/')
+        );
         if (!normalized.length) return;
 
         const k = Math.min(normalized.length, items.length);
@@ -277,7 +281,9 @@ export function ImageUploader({
     }
 
     if (availableSlots < selectedFiles.length) {
-      toast.message(`Only the first ${filesToAdd.length} image(s) will be added`);
+      toast.message(
+        `Only the first ${filesToAdd.length} image(s) will be added`
+      );
     }
 
     const newItems = filesToAdd.map((file) => ({
@@ -298,7 +304,11 @@ export function ImageUploader({
           setItems((prev) =>
             prev.map((current) => {
               if (current.id !== item.id) return current;
-              if (current.uploadKey && item.uploadKey && current.uploadKey !== item.uploadKey) {
+              if (
+                current.uploadKey &&
+                item.uploadKey &&
+                current.uploadKey !== item.uploadKey
+              ) {
                 return current;
               }
               if (current.preview.startsWith('blob:')) {
@@ -311,20 +321,23 @@ export function ImageUploader({
                 status: 'uploaded' as UploadStatus,
                 file: undefined,
               };
-            }),
+            })
           );
         } catch (error: any) {
           console.error('Upload failed:', error);
-          toast.error(error?.message ? `Upload failed: ${error.message}` : 'Upload failed');
+          toast.error(
+            error?.message ? `Upload failed: ${error.message}` : 'Upload failed'
+          );
           setItems((prev) =>
             prev.map((current) => {
               if (current.id !== item.id) return current;
-              if (current.uploadKey && current.uploadKey !== item.uploadKey) return current;
+              if (current.uploadKey && current.uploadKey !== item.uploadKey)
+                return current;
               return { ...current, status: 'error' as UploadStatus };
-            }),
+            })
           );
         }
-      }),
+      })
     );
 
     if (inputRef.current) inputRef.current.value = '';
@@ -379,7 +392,7 @@ export function ImageUploader({
     setIsDragActive(false);
 
     const files = Array.from(event.dataTransfer?.files || []).filter((file) =>
-      file.type?.startsWith('image/'),
+      file.type?.startsWith('image/')
     );
     if (!files.length) return;
     handleFiles(files);
@@ -405,14 +418,18 @@ export function ImageUploader({
     openFilePicker();
   };
 
-  const countLabel = useMemo(() => `${items.length}/${maxCount}`, [items.length, maxCount]);
+  const countLabel = useMemo(
+    () => `${items.length}/${maxCount}`,
+    [items.length, maxCount]
+  );
 
   return (
     <div
       className={cn(
         'relative focus:outline-none',
-        isDragActive && 'ring-2 ring-primary/70 ring-offset-2 ring-offset-background',
-        className,
+        isDragActive &&
+          'ring-primary/70 ring-offset-background ring-2 ring-offset-2',
+        className
       )}
       tabIndex={0}
       onPaste={handlePaste}
@@ -423,7 +440,7 @@ export function ImageUploader({
     >
       {isDragActive && (
         <div className="pointer-events-none absolute inset-0 z-30 flex items-center justify-center bg-black/10 backdrop-blur-sm">
-          <div className="rounded-full bg-background/80 px-4 py-2 text-sm font-medium text-foreground shadow-sm">
+          <div className="bg-background/80 text-foreground rounded-full px-4 py-2 text-sm font-medium shadow-sm">
             Drop to upload
           </div>
         </div>
@@ -438,20 +455,25 @@ export function ImageUploader({
       />
 
       {title && (
-        <div className="mb-2 flex items-center justify-between text-sm font-medium text-foreground">
+        <div className="text-foreground mb-2 flex items-center justify-between text-sm font-medium">
           <div className="flex items-center gap-2">
-            <ImageIcon className="h-4 w-4 text-primary" />
+            <ImageIcon className="text-primary h-4 w-4" />
             <span>{title}</span>
-            <span className="text-xs text-primary">({countLabel})</span>
+            <span className="text-primary text-xs">({countLabel})</span>
           </div>
         </div>
       )}
 
-      <div className={cn('flex flex-wrap gap-4', allowMultiple ? 'flex-wrap' : 'flex-nowrap')}>
+      <div
+        className={cn(
+          'flex flex-wrap gap-4',
+          allowMultiple ? 'flex-wrap' : 'flex-nowrap'
+        )}
+      >
         {items.map((item) => (
           <div
             key={item.id}
-            className="group relative overflow-hidden rounded-xl border border-border bg-muted/50 p-1 shadow-sm transition hover:border-border hover:bg-muted"
+            className="group border-border bg-muted/50 hover:border-border hover:bg-muted relative overflow-hidden rounded-xl border p-1 shadow-sm transition"
           >
             <div className="relative overflow-hidden rounded-lg">
               <img
@@ -460,7 +482,7 @@ export function ImageUploader({
                 className="h-32 w-32 rounded-lg object-cover"
               />
               {item.size && (
-                <span className="absolute bottom-2 left-2 rounded-md bg-background px-2 py-1 text-[10px] font-medium text-muted-foreground">
+                <span className="bg-background text-muted-foreground absolute bottom-2 left-2 rounded-md px-2 py-1 text-[10px] font-medium">
                   {formatBytes(item.size)}
                 </span>
               )}
@@ -470,7 +492,7 @@ export function ImageUploader({
                     type="button"
                     size="icon"
                     variant="secondary"
-                    className="h-10 w-10 rounded-full bg-background/50 text-foreground shadow-sm backdrop-blur hover:bg-background/50 focus-visible:ring-2 focus-visible:ring-white/70"
+                    className="bg-background/50 text-foreground hover:bg-background/50 h-10 w-10 rounded-full shadow-sm backdrop-blur focus-visible:ring-2 focus-visible:ring-white/70"
                     onClick={() => openReplacePicker(item.id)}
                     aria-label="Replace image"
                   >
@@ -492,7 +514,7 @@ export function ImageUploader({
                 type="button"
                 size="icon"
                 variant="destructive"
-                className="absolute right-2 top-2 z-20 h-7 w-7"
+                className="absolute top-2 right-2 z-20 h-7 w-7"
                 onClick={() => handleRemove(item.id)}
                 aria-label="Remove image"
               >
@@ -503,18 +525,18 @@ export function ImageUploader({
         ))}
 
         {items.length < maxCount && (
-          <div className="group relative overflow-hidden rounded-xl border border-dashed border-border bg-muted/50 p-1 shadow-sm transition hover:border-border hover:bg-muted">
+          <div className="group border-border bg-muted/50 hover:border-border hover:bg-muted relative overflow-hidden rounded-xl border border-dashed p-1 shadow-sm transition">
             <div className="relative overflow-hidden rounded-lg">
               <button
                 type="button"
                 className="flex h-32 w-32 flex-col items-center justify-center gap-2"
                 onClick={openFilePicker}
               >
-                <div className="flex h-10 w-10 items-center justify-center rounded-full border border-dashed border-border">
+                <div className="border-border flex h-10 w-10 items-center justify-center rounded-full border border-dashed">
                   <Upload className="h-5 w-5" />
                 </div>
                 <span className="text-xs font-medium">Upload</span>
-                <span className="text-xs text-primary">Max {maxSizeMB}MB</span>
+                <span className="text-primary text-xs">Max {maxSizeMB}MB</span>
               </button>
             </div>
           </div>
@@ -522,7 +544,7 @@ export function ImageUploader({
       </div>
 
       {!title && emptyHint && (
-        <div className="mt-2 text-xs text-muted-foreground">{emptyHint}</div>
+        <div className="text-muted-foreground mt-2 text-xs">{emptyHint}</div>
       )}
     </div>
   );

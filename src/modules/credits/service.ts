@@ -1,7 +1,8 @@
-import { eq, and, gt, asc, isNull, or, sum, desc, sql } from 'drizzle-orm';
-import { getUuid, getSnowId } from '@/lib/hash';
+import { and, asc, desc, eq, gt, isNull, or, sql, sum } from 'drizzle-orm';
+
 import { db } from '@/core/db';
 import { credit } from '@/config/db/schema';
+import { getSnowId, getUuid } from '@/lib/hash';
 
 // --- Enums ---
 
@@ -112,7 +113,15 @@ export async function consume(params: {
   metadata?: string;
   tx?: any;
 }): Promise<{ success: boolean; consumedCredit?: any }> {
-  const { userId, userEmail, credits: amount, scene, description, metadata, tx } = params;
+  const {
+    userId,
+    userEmail,
+    credits: amount,
+    scene,
+    description,
+    metadata,
+    tx,
+  } = params;
   const now = new Date();
 
   const execute = async (tx: any) => {
@@ -262,7 +271,9 @@ export async function grantForNewUser(params: {
   const validDays = parseInt(configs.initial_credits_valid_days) || 0;
   const description = configs.initial_credits_description || 'Initial credits';
 
-  const expiresAt = calculateCreditExpirationTime({ creditsValidDays: validDays });
+  const expiresAt = calculateCreditExpirationTime({
+    creditsValidDays: validDays,
+  });
 
   return grant({
     userId,

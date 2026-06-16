@@ -1,6 +1,7 @@
-import { getAllConfigs } from "@/modules/config/service";
-import { GoogleAnalytics } from "./google-analytics";
-import { Plausible } from "./plausible";
+import { getAllConfigs } from '@/modules/config/service';
+
+import { GoogleAnalytics } from './google-analytics';
+import { Plausible } from './plausible';
 
 // Server component — reads the merged env+DB config (1h-cached in the
 // config service, so no per-request DB hit) and renders whichever
@@ -19,10 +20,7 @@ export async function Analytics() {
     <>
       {gaId ? <GoogleAnalytics measurementId={gaId} /> : null}
       {plausibleDomain ? (
-        <Plausible
-          domain={plausibleDomain}
-          src={plausibleSrc || undefined}
-        />
+        <Plausible domain={plausibleDomain} src={plausibleSrc || undefined} />
       ) : null}
     </>
   );

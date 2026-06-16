@@ -16,7 +16,14 @@
     "db:migrate": "tsx scripts/with-env.ts drizzle-kit migrate --config=drizzle.config.ts",
     "db:studio": "tsx scripts/with-env.ts drizzle-kit studio --config=drizzle.config.ts",
     "rbac:init": "tsx scripts/with-env.ts tsx scripts/init-rbac.ts",
-    "rbac:assign": "tsx scripts/with-env.ts tsx scripts/assign-role.ts"
+    "rbac:assign": "tsx scripts/with-env.ts tsx scripts/assign-role.ts",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx,mjs,cjs}": "prettier --write",
+    "*.{json,css,md,mdx,yaml,yml}": "prettier --write"
   },
   "dependencies": {
     "@base-ui/react": "^1.3.0",
@@ -60,6 +67,7 @@
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "^1.37.3",
+    "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
     "@mdx-js/rollup": "^3.1.1",
     "@tailwindcss/postcss": "^4.1.0",
     "@types/node": "^22.0.0",
@@ -68,6 +76,10 @@
     "@vitejs/plugin-react": "^6.0.2",
     "@vitejs/plugin-rsc": "^0.5.26",
     "drizzle-kit": "^0.31.4",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.0.7",
+    "prettier": "^3.8.4",
+    "prettier-plugin-tailwindcss": "^0.8.0",
     "react-server-dom-webpack": "^19.2.6",
     "tailwindcss": "^4.1.0",
     "tsx": "^4.21.0",

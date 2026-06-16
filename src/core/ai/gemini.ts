@@ -36,7 +36,11 @@ export class GeminiProvider implements AIProvider {
     return (this.configs.uuid || defaultUuid)();
   }
 
-  async generate({ params }: { params: AIGenerateParams }): Promise<AITaskResult> {
+  async generate({
+    params,
+  }: {
+    params: AIGenerateParams;
+  }): Promise<AITaskResult> {
     const { mediaType, model, prompt, options } = params;
 
     if (mediaType !== AIMediaType.IMAGE) {
@@ -63,7 +67,8 @@ export class GeminiProvider implements AIProvider {
             const arrayBuffer = await imageResp.arrayBuffer();
             const buffer = Buffer.from(arrayBuffer);
             const base64Image = buffer.toString('base64');
-            const mimeType = imageResp.headers.get('content-type') || 'image/jpeg';
+            const mimeType =
+              imageResp.headers.get('content-type') || 'image/jpeg';
 
             requestParts.push({
               inlineData: {
@@ -99,7 +104,9 @@ export class GeminiProvider implements AIProvider {
 
     if (!resp.ok) {
       const errorText = await resp.text();
-      throw new Error(`request failed with status: ${resp.status}, body: ${errorText}`);
+      throw new Error(
+        `request failed with status: ${resp.status}, body: ${errorText}`
+      );
     }
 
     const data = await resp.json();
@@ -147,7 +154,8 @@ export class GeminiProvider implements AIProvider {
       imagePart.inlineData.data = uploadResult.url;
       const partIndex = parts.findIndex((p: any) => p === imagePart);
       if (partIndex !== -1 && data.candidates?.[0]?.content?.parts) {
-        data.candidates[0].content.parts[partIndex].inlineData.data = uploadResult.url;
+        data.candidates[0].content.parts[partIndex].inlineData.data =
+          uploadResult.url;
         data.candidates[0].content.parts[partIndex].thoughtSignature = '';
       }
     }

@@ -1,10 +1,16 @@
 import { headers } from 'next/headers';
-import { respData, respPage, respOk, respErr } from '@/lib/resp';
+import { and, count, like, or, type SQL } from 'drizzle-orm';
+
 import { getAuth } from '@/core/auth';
-import { hasPermission, createPermission, updatePermission, deletePermission } from '@/modules/rbac/service';
 import { db } from '@/core/db';
 import { permission } from '@/config/db/schema';
-import { count, and, like, or, type SQL } from 'drizzle-orm';
+import {
+  createPermission,
+  deletePermission,
+  hasPermission,
+  updatePermission,
+} from '@/modules/rbac/service';
+import { respData, respErr, respOk, respPage } from '@/lib/resp';
 
 async function checkAdmin() {
   const auth = getAuth();
@@ -20,17 +26,28 @@ export async function GET(req: Request) {
     await checkAdmin();
     const { searchParams } = new URL(req.url);
     const page = Math.max(1, parseInt(searchParams.get('page') || '1'));
-    const pageSize = Math.min(100, Math.max(1, parseInt(searchParams.get('pageSize') || '10')));
+    const pageSize = Math.min(
+      100,
+      Math.max(1, parseInt(searchParams.get('pageSize') || '10'))
+    );
     const offset = (page - 1) * pageSize;
     const search = searchParams.get('search');
 
     const conditions: SQL[] = [];
     if (search) {
-      conditions.push(or(like(permission.code, `%${search}%`), like(permission.title, `%${search}%`))!);
+      conditions.push(
+        or(
+          like(permission.code, `%${search}%`),
+          like(permission.title, `%${search}%`)
+        )!
+      );
     }
     const where = conditions.length > 0 ? and(...conditions) : undefined;
 
-    const [totalResult] = await db().select({ count: count() }).from(permission).where(where);
+    const [totalResult] = await db()
+      .select({ count: count() })
+      .from(permission)
+      .where(where);
     const total = totalResult.count;
 
     const permissions = await db()
@@ -65,7 +82,13 @@ export async function PUT(req: Request) {
     await checkAdmin();
     const { id, code, resource, action, title, description } = await req.json();
     if (!id) return respErr('ID is required');
-    const result = await updatePermission(id, { code, resource, action, title, description });
+    const result = await updatePermission(id, {
+      code,
+      resource,
+      action,
+      title,
+      description,
+    });
     return respData(result);
   } catch (error: any) {
     return respErr(error.message || 'Internal error');

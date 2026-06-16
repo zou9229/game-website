@@ -19,7 +19,7 @@ export function md5(input: string | ArrayBuffer | Uint8Array): string {
   }
 
   const bitLen = data.length * 8;
-  words[bitLen >> 5] = (words[bitLen >> 5] || 0) | (0x80 << bitLen % 32);
+  words[bitLen >> 5] = (words[bitLen >> 5] || 0) | (0x80 << (bitLen % 32));
   words[(((bitLen + 64) >>> 9) << 4) + 14] = bitLen;
 
   let a = 0x67452301;
@@ -32,17 +32,48 @@ export function md5(input: string | ArrayBuffer | Uint8Array): string {
 
   const cmn = (q: number, x: number, y: number, s: number, t: number) =>
     add(rotl(add(add(x, q), add(y, t)), s), y);
-  const ff = (a0: number, b0: number, c0: number, d0: number, x: number, s: number, t: number) =>
-    cmn((b0 & c0) | (~b0 & d0), a0, b0, s, t + x);
-  const gg = (a0: number, b0: number, c0: number, d0: number, x: number, s: number, t: number) =>
-    cmn((b0 & d0) | (c0 & ~d0), a0, b0, s, t + x);
-  const hh = (a0: number, b0: number, c0: number, d0: number, x: number, s: number, t: number) =>
-    cmn(b0 ^ c0 ^ d0, a0, b0, s, t + x);
-  const ii = (a0: number, b0: number, c0: number, d0: number, x: number, s: number, t: number) =>
-    cmn(c0 ^ (b0 | ~d0), a0, b0, s, t + x);
+  const ff = (
+    a0: number,
+    b0: number,
+    c0: number,
+    d0: number,
+    x: number,
+    s: number,
+    t: number
+  ) => cmn((b0 & c0) | (~b0 & d0), a0, b0, s, t + x);
+  const gg = (
+    a0: number,
+    b0: number,
+    c0: number,
+    d0: number,
+    x: number,
+    s: number,
+    t: number
+  ) => cmn((b0 & d0) | (c0 & ~d0), a0, b0, s, t + x);
+  const hh = (
+    a0: number,
+    b0: number,
+    c0: number,
+    d0: number,
+    x: number,
+    s: number,
+    t: number
+  ) => cmn(b0 ^ c0 ^ d0, a0, b0, s, t + x);
+  const ii = (
+    a0: number,
+    b0: number,
+    c0: number,
+    d0: number,
+    x: number,
+    s: number,
+    t: number
+  ) => cmn(c0 ^ (b0 | ~d0), a0, b0, s, t + x);
 
   for (let i = 0; i < words.length; i += 16) {
-    const oa = a, ob = b, oc = c, od = d;
+    const oa = a,
+      ob = b,
+      oc = c,
+      od = d;
 
     a = ff(a, b, c, d, words[i + 0] || 0, 7, 0xd76aa478);
     d = ff(d, a, b, c, words[i + 1] || 0, 12, 0xe8c7b756);
@@ -112,7 +143,10 @@ export function md5(input: string | ArrayBuffer | Uint8Array): string {
     c = ii(c, d, a, b, words[i + 2] || 0, 15, 0x2ad7d2bb);
     b = ii(b, c, d, a, words[i + 9] || 0, 21, 0xeb86d391);
 
-    a = add(a, oa); b = add(b, ob); c = add(c, oc); d = add(d, od);
+    a = add(a, oa);
+    b = add(b, ob);
+    c = add(c, oc);
+    d = add(d, od);
   }
 
   const toHex = (n: number) => {
@@ -130,7 +164,8 @@ export function getUniSeq(prefix: string = ''): string {
 }
 
 export function getNonceStr(length: number): string {
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const characters =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let result = '';
   for (let i = 0; i < length; i++) {
     result += characters[Math.floor(Math.random() * characters.length)];
@@ -142,6 +177,8 @@ export function getSnowId(): string {
   const workerId = Math.floor(Math.random() * 1024);
   const gen = new SnowflakeIdv1({ workerId });
   const snowId = gen.NextId();
-  const suffix = Math.floor(Math.random() * 100).toString().padStart(2, '0');
+  const suffix = Math.floor(Math.random() * 100)
+    .toString()
+    .padStart(2, '0');
   return `${snowId}${suffix}`;
 }

@@ -58,8 +58,19 @@ export class ReplicateProvider implements AIProvider {
     }
   }
 
-  async generate({ params }: { params: AIGenerateParams }): Promise<AITaskResult> {
-    const { mediaType, model, prompt, options, async: isAsync, callbackUrl } = params;
+  async generate({
+    params,
+  }: {
+    params: AIGenerateParams;
+  }): Promise<AITaskResult> {
+    const {
+      mediaType,
+      model,
+      prompt,
+      options,
+      async: isAsync,
+      callbackUrl,
+    } = params;
 
     if (!mediaType) {
       throw new Error('mediaType is required');

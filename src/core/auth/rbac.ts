@@ -11,7 +11,10 @@ export enum RoleStatus {
   DELETED = 'deleted',
 }
 
-export function matchPermission(permissionCode: string, permissionCodes: string[]): boolean {
+export function matchPermission(
+  permissionCode: string,
+  permissionCodes: string[]
+): boolean {
   if (permissionCodes.includes(permissionCode)) return true;
   const parts = permissionCode.split('.');
   for (let i = parts.length - 1; i > 0; i--) {
@@ -22,14 +25,20 @@ export function matchPermission(permissionCode: string, permissionCodes: string[
   return false;
 }
 
-export function matchAnyPermission(permissionCodes: string[], userPermissionCodes: string[]): boolean {
+export function matchAnyPermission(
+  permissionCodes: string[],
+  userPermissionCodes: string[]
+): boolean {
   for (const code of permissionCodes) {
     if (matchPermission(code, userPermissionCodes)) return true;
   }
   return false;
 }
 
-export function matchAllPermissions(permissionCodes: string[], userPermissionCodes: string[]): boolean {
+export function matchAllPermissions(
+  permissionCodes: string[],
+  userPermissionCodes: string[]
+): boolean {
   for (const code of permissionCodes) {
     if (!matchPermission(code, userPermissionCodes)) return false;
   }

@@ -24,10 +24,13 @@ export const drizzle = throwDisabled;
 
 // Default-export covers `import mysql from 'mysql2'` and `import postgres from 'postgres'`.
 // Wrap in a Proxy so any property access (e.g. mysql.createConnection) returns a throwing fn.
-const stubDefault = new Proxy(throwDisabled as unknown as Record<string, unknown>, {
-  get(_target, _prop) {
-    return throwDisabled;
-  },
-});
+const stubDefault = new Proxy(
+  throwDisabled as unknown as Record<string, unknown>,
+  {
+    get(_target, _prop) {
+      return throwDisabled;
+    },
+  }
+);
 
 export default stubDefault;

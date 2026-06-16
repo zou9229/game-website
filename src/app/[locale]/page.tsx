@@ -1,10 +1,10 @@
-import { Header } from "@/blocks/header";
-import { Hero } from "@/blocks/hero";
-import { Features } from "@/blocks/features";
-import { Pricing } from "@/blocks/pricing";
-import { FAQ } from "@/blocks/faq";
-import { CTA } from "@/blocks/cta";
-import { Footer } from "@/blocks/footer";
+import { CTA } from '@/blocks/cta';
+import { FAQ } from '@/blocks/faq';
+import { Features } from '@/blocks/features';
+import { Footer } from '@/blocks/footer';
+import { Header } from '@/blocks/header';
+import { Hero } from '@/blocks/hero';
+import { Pricing } from '@/blocks/pricing';
 
 /**
  * Default landing page — demo content. Rewrite this file (and the blocks in
@@ -13,7 +13,7 @@ import { Footer } from "@/blocks/footer";
  */
 export default function HomePage() {
   return (
-    <div className="min-h-screen flex flex-col bg-background text-foreground">
+    <div className="bg-background text-foreground flex min-h-screen flex-col">
       <Header />
       <Hero />
       <Features />

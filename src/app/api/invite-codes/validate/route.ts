@@ -1,6 +1,6 @@
-import { respData, respErr } from '@/lib/resp';
 import { validateInviteCode } from '@/modules/invite-codes/service';
 import { enforceMinIntervalRateLimit } from '@/lib/rate-limit';
+import { respData, respErr } from '@/lib/resp';
 
 export async function POST(req: Request) {
   const limited = enforceMinIntervalRateLimit(req, {

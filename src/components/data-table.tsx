@@ -1,10 +1,12 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useTranslations } from "next-intl";
-import { ChevronLeft, ChevronRight, RefreshCw, Search } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { useState } from 'react';
+import { ChevronLeft, ChevronRight, RefreshCw, Search } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   Table,
   TableBody,
@@ -12,8 +14,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { cn } from "@/lib/utils";
+} from '@/components/ui/table';
 
 export interface Column<T> {
   header: string;
@@ -52,7 +53,7 @@ export function DataTable<T>({
   rowKey,
   onRefresh,
 }: DataTableProps<T>) {
-  const t = useTranslations("common");
+  const t = useTranslations('common');
   const [refreshing, setRefreshing] = useState(false);
 
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
@@ -75,12 +76,12 @@ export function DataTable<T>({
         <div className="flex items-center gap-2">
           {onSearchChange && (
             <div className="relative max-w-sm">
-              <Search className="absolute left-2.5 top-2.5 size-4 text-muted-foreground" />
+              <Search className="text-muted-foreground absolute top-2.5 left-2.5 size-4" />
               <Input
-                value={search || ""}
+                value={search || ''}
                 onChange={(e) => onSearchChange(e.target.value)}
-                placeholder={searchPlaceholder || t("search.placeholder")}
-                className="pl-8 h-9"
+                placeholder={searchPlaceholder || t('search.placeholder')}
+                className="h-9 pl-8"
               />
             </div>
           )}
@@ -92,10 +93,10 @@ export function DataTable<T>({
               className="ml-auto size-9"
               onClick={handleRefresh}
               disabled={refreshing}
-              aria-label={t("table.refresh")}
+              aria-label={t('table.refresh')}
             >
               <RefreshCw
-                className={cn("size-4", refreshing && "animate-spin")}
+                className={cn('size-4', refreshing && 'animate-spin')}
               />
             </Button>
           )}
@@ -118,9 +119,9 @@ export function DataTable<T>({
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="text-center text-muted-foreground py-8"
+                  className="text-muted-foreground py-8 text-center"
                 >
-                  {emptyText || t("table.no_data")}
+                  {emptyText || t('table.no_data')}
                 </TableCell>
               </TableRow>
             ) : (
@@ -139,8 +140,8 @@ export function DataTable<T>({
       </div>
 
       <div className="flex items-center justify-between px-2">
-        <p className="text-sm text-muted-foreground">
-          {t("table.total", { count: total })}
+        <p className="text-muted-foreground text-sm">
+          {t('table.total', { count: total })}
         </p>
         {total > pageSize && (
           <div className="flex items-center gap-2">
@@ -151,7 +152,7 @@ export function DataTable<T>({
               disabled={page <= 1}
             >
               <ChevronLeft className="size-4" />
-              {t("table.previous")}
+              {t('table.previous')}
             </Button>
             <Button
               variant="outline"
@@ -159,7 +160,7 @@ export function DataTable<T>({
               onClick={() => onPageChange(page + 1)}
               disabled={page >= totalPages}
             >
-              {t("table.next")}
+              {t('table.next')}
               <ChevronRight className="size-4" />
             </Button>
           </div>

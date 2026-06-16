@@ -1,10 +1,11 @@
 import { headers } from 'next/headers';
-import { respPage, respErr } from '@/lib/resp';
+import { and, count, desc, eq, like, type SQL } from 'drizzle-orm';
+
 import { getAuth } from '@/core/auth';
-import { hasPermission } from '@/modules/rbac/service';
 import { db } from '@/core/db';
 import { order } from '@/config/db/schema';
-import { desc, count, eq, and, like, type SQL } from 'drizzle-orm';
+import { hasPermission } from '@/modules/rbac/service';
+import { respErr, respPage } from '@/lib/resp';
 
 export async function GET(req: Request) {
   try {
@@ -17,7 +18,10 @@ export async function GET(req: Request) {
 
     const { searchParams } = new URL(req.url);
     const page = Math.max(1, parseInt(searchParams.get('page') || '1'));
-    const pageSize = Math.min(100, Math.max(1, parseInt(searchParams.get('pageSize') || '10')));
+    const pageSize = Math.min(
+      100,
+      Math.max(1, parseInt(searchParams.get('pageSize') || '10'))
+    );
     const offset = (page - 1) * pageSize;
 
     const status = searchParams.get('status');
@@ -31,7 +35,10 @@ export async function GET(req: Request) {
 
     const where = conditions.length > 0 ? and(...conditions) : undefined;
 
-    const [totalResult] = await db().select({ count: count() }).from(order).where(where);
+    const [totalResult] = await db()
+      .select({ count: count() })
+      .from(order)
+      .where(where);
     const total = totalResult.count;
 
     const orders = await db()

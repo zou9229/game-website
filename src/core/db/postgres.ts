@@ -1,10 +1,10 @@
-import { drizzle } from 'drizzle-orm/postgres-js';
-import postgres from 'postgres';
 // `cloudflare:workers` resolves natively inside workerd. In local dev (Node),
 // vite.config.ts aliases it to ./cloudflare-workers-stub.ts so this static
 // import doesn't blow up at module-load time — the stub is never read because
 // every access below is gated on isCloudflareWorker.
 import { env as workersEnv } from 'cloudflare:workers';
+import { drizzle } from 'drizzle-orm/postgres-js';
+import postgres from 'postgres';
 
 import type { DbConfig } from './types';
 

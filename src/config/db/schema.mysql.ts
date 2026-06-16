@@ -97,9 +97,7 @@ export const verification = table(
     createdAt: timestamp('created_at').defaultNow().notNull(),
     updatedAt: timestamp('updated_at').defaultNow().onUpdateNow().notNull(),
   },
-  (table) => [
-    index('idx_verification_identifier').on(table.identifier),
-  ]
+  (table) => [index('idx_verification_identifier').on(table.identifier)]
 );
 
 // ─── Content ─────────────────────────────────────────────────────────────────
@@ -129,9 +127,7 @@ export const taxonomy = table(
     deletedAt: timestamp('deleted_at'),
     sort: int('sort').default(0).notNull(),
   },
-  (table) => [
-    index('idx_taxonomy_type_status').on(table.type, table.status),
-  ]
+  (table) => [index('idx_taxonomy_type_status').on(table.type, table.status)]
 );
 
 export const post = table(
@@ -158,9 +154,7 @@ export const post = table(
     deletedAt: timestamp('deleted_at'),
     sort: int('sort').default(0).notNull(),
   },
-  (table) => [
-    index('idx_post_type_status').on(table.type, table.status),
-  ]
+  (table) => [index('idx_post_type_status').on(table.type, table.status)]
 );
 
 // ─── Business ────────────────────────────────────────────────────────────────
@@ -349,9 +343,7 @@ export const role = table(
     updatedAt: timestamp('updated_at').defaultNow().onUpdateNow().notNull(),
     sort: int('sort').default(0).notNull(),
   },
-  (table) => [
-    index('idx_role_status').on(table.status),
-  ]
+  (table) => [index('idx_role_status').on(table.status)]
 );
 
 export const permission = table(

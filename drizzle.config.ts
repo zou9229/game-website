@@ -1,17 +1,19 @@
 import { defineConfig } from 'drizzle-kit';
+
 import { loadEnvFiles } from './src/lib/env';
 
 loadEnvFiles();
 
 const provider = process.env.DATABASE_PROVIDER || 'sqlite';
 
-const dialectMap: Record<string, 'sqlite' | 'postgresql' | 'mysql' | 'turso'> = {
-  sqlite: 'sqlite',
-  postgres: 'postgresql',
-  postgresql: 'postgresql',
-  mysql: 'mysql',
-  turso: 'turso',
-};
+const dialectMap: Record<string, 'sqlite' | 'postgresql' | 'mysql' | 'turso'> =
+  {
+    sqlite: 'sqlite',
+    postgres: 'postgresql',
+    postgresql: 'postgresql',
+    mysql: 'mysql',
+    turso: 'turso',
+  };
 
 const dialect = dialectMap[provider] || 'sqlite';
 

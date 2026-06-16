@@ -1,11 +1,12 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { useTranslations } from "next-intl";
-import { SettingsIcon, LogOutIcon, ShieldIcon } from "lucide-react";
-import { Link, useRouter } from "@/core/i18n/navigation";
-import { signOut } from "@/core/auth/client";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useEffect, useState } from 'react';
+import { LogOutIcon, SettingsIcon, ShieldIcon } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+
+import { signOut } from '@/core/auth/client';
+import { Link, useRouter } from '@/core/i18n/navigation';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,7 +15,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/dropdown-menu';
 
 export function SiteUserMenu({
   name,
@@ -25,12 +26,12 @@ export function SiteUserMenu({
   email: string;
   image?: string | null;
 }) {
-  const t = useTranslations("common");
+  const t = useTranslations('common');
   const router = useRouter();
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    fetch("/api/user/permissions")
+    fetch('/api/user/permissions')
       .then((r) => r.json())
       .then((res) => {
         if (res.code === 0) setIsAdmin(res.data?.isAdmin === true);
@@ -40,12 +41,12 @@ export function SiteUserMenu({
 
   async function handleSignOut() {
     await signOut();
-    router.push("/");
+    router.push('/');
   }
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring">
+      <DropdownMenuTrigger className="focus-visible:ring-ring rounded-full outline-none focus-visible:ring-2">
         <Avatar className="size-9">
           <AvatarImage src={image || undefined} alt={name} />
           <AvatarFallback className="text-xs">
@@ -65,7 +66,9 @@ export function SiteUserMenu({
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">{name}</span>
-                <span className="truncate text-xs text-muted-foreground">{email}</span>
+                <span className="text-muted-foreground truncate text-xs">
+                  {email}
+                </span>
               </div>
             </div>
           </DropdownMenuLabel>
@@ -73,18 +76,18 @@ export function SiteUserMenu({
         <DropdownMenuSeparator />
         <DropdownMenuItem render={<Link href="/settings" />}>
           <SettingsIcon className="size-4" />
-          {t("nav.settings")}
+          {t('nav.settings')}
         </DropdownMenuItem>
         {isAdmin && (
           <DropdownMenuItem render={<Link href="/admin" />}>
             <ShieldIcon className="size-4" />
-            {t("systems.admin")}
+            {t('systems.admin')}
           </DropdownMenuItem>
         )}
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleSignOut}>
           <LogOutIcon className="size-4" />
-          {t("sign.sign_out_title")}
+          {t('sign.sign_out_title')}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

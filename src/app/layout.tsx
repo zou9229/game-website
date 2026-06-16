@@ -1,25 +1,27 @@
-import type { Metadata } from "next";
-import { Inter, Libre_Baskerville, Noto_Serif_SC } from "next/font/google";
-import { getLocale } from "next-intl/server";
-import { ThemeProvider } from "next-themes";
-import { Toaster } from "@/components/ui/sonner";
-import { Analytics } from "@/components/analytics";
-import { GoogleOneTap } from "@/components/google-one-tap";
-import { envConfigs } from "@/config";
-import { locales } from "@/config/locale";
-import "./globals.css";
+import type { Metadata } from 'next';
+import { Inter, Libre_Baskerville, Noto_Serif_SC } from 'next/font/google';
+import { getLocale } from 'next-intl/server';
+import { ThemeProvider } from 'next-themes';
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
+import { envConfigs } from '@/config';
+import { locales } from '@/config/locale';
+import { Analytics } from '@/components/analytics';
+import { GoogleOneTap } from '@/components/google-one-tap';
+import { Toaster } from '@/components/ui/sonner';
+
+import './globals.css';
+
+const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 const libreBaskerville = Libre_Baskerville({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-  style: ["normal", "italic"],
-  variable: "--font-serif-display",
+  subsets: ['latin'],
+  weight: ['400', '700'],
+  style: ['normal', 'italic'],
+  variable: '--font-serif-display',
 });
 const notoSerifSC = Noto_Serif_SC({
-  subsets: ["latin"],
-  weight: ["400", "500", "700"],
-  variable: "--font-serif-sc",
+  subsets: ['latin'],
+  weight: ['400', '500', '700'],
+  variable: '--font-serif-sc',
   preload: false,
 });
 
@@ -27,9 +29,9 @@ export const metadata: Metadata = {
   title: envConfigs.app_name,
   description: envConfigs.app_description,
   icons: {
-    icon: "/favicon.svg",
-    shortcut: "/favicon.svg",
-    apple: "/favicon.svg",
+    icon: '/favicon.svg',
+    shortcut: '/favicon.svg',
+    apple: '/favicon.svg',
   },
 };
 

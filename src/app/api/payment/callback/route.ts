@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+
 import { envConfigs } from '@/config';
 import { handlePaymentCallback } from '@/modules/payment/service';
 
@@ -10,7 +11,10 @@ import { handlePaymentCallback } from '@/modules/payment/service';
  * 2. Updates the order in DB if paid
  * 3. Redirects to the final destination (same-origin only)
  */
-function resolveSameOriginRedirect(input: string | null, fallbackUrl: string): string {
+function resolveSameOriginRedirect(
+  input: string | null,
+  fallbackUrl: string
+): string {
   if (!input) return fallbackUrl;
   try {
     const appUrl = new URL(envConfigs.app_url || 'http://localhost:3000');

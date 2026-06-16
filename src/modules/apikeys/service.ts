@@ -1,8 +1,9 @@
-import { eq, and, isNull, count, like, type SQL } from 'drizzle-orm';
 import * as crypto from 'crypto';
-import { getUuid } from '@/lib/hash';
+import { and, count, eq, isNull, like, type SQL } from 'drizzle-orm';
+
 import { db } from '@/core/db';
 import { apikey } from '@/config/db/schema';
+import { getUuid } from '@/lib/hash';
 
 const KEY_PREFIX = 'sk_';
 const KEY_PREVIEW_LEN = 8; // chars of randomness shown in the prefix
@@ -100,12 +101,7 @@ export async function remove(params: { userId: string; keyId: string }) {
   await db()
     .update(apikey)
     .set({ status: 'deleted', deletedAt: new Date() })
-    .where(
-      and(
-        eq(apikey.id, keyId),
-        eq(apikey.userId, userId)
-      )
-    );
+    .where(and(eq(apikey.id, keyId), eq(apikey.userId, userId)));
 }
 
 /**

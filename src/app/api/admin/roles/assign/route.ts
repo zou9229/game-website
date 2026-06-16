@@ -1,7 +1,12 @@
 import { headers } from 'next/headers';
-import { respOk, respErr } from '@/lib/resp';
+
 import { getAuth } from '@/core/auth';
-import { hasPermission, assignRoleToUser, removeRoleFromUser } from '@/modules/rbac/service';
+import {
+  assignRoleToUser,
+  hasPermission,
+  removeRoleFromUser,
+} from '@/modules/rbac/service';
+import { respErr, respOk } from '@/lib/resp';
 
 export async function POST(req: Request) {
   try {

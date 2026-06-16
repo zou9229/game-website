@@ -77,8 +77,12 @@ export const account = table(
     accessToken: text('access_token'),
     refreshToken: text('refresh_token'),
     idToken: text('id_token'),
-    accessTokenExpiresAt: integer('access_token_expires_at', { mode: 'timestamp_ms' }),
-    refreshTokenExpiresAt: integer('refresh_token_expires_at', { mode: 'timestamp_ms' }),
+    accessTokenExpiresAt: integer('access_token_expires_at', {
+      mode: 'timestamp_ms',
+    }),
+    refreshTokenExpiresAt: integer('refresh_token_expires_at', {
+      mode: 'timestamp_ms',
+    }),
     scope: text('scope'),
     password: text('password'),
     createdAt: integer('created_at', { mode: 'timestamp_ms' })
@@ -110,9 +114,7 @@ export const verification = table(
       .$onUpdate(() => new Date())
       .notNull(),
   },
-  (table) => [
-    index('idx_verification_identifier').on(table.identifier),
-  ]
+  (table) => [index('idx_verification_identifier').on(table.identifier)]
 );
 
 // ─── Content ─────────────────────────────────────────────────────────────────
@@ -147,9 +149,7 @@ export const taxonomy = table(
     deletedAt: integer('deleted_at', { mode: 'timestamp_ms' }),
     sort: integer('sort').default(0).notNull(),
   },
-  (table) => [
-    index('idx_taxonomy_type_status').on(table.type, table.status),
-  ]
+  (table) => [index('idx_taxonomy_type_status').on(table.type, table.status)]
 );
 
 export const post = table(
@@ -181,9 +181,7 @@ export const post = table(
     deletedAt: integer('deleted_at', { mode: 'timestamp_ms' }),
     sort: integer('sort').default(0).notNull(),
   },
-  (table) => [
-    index('idx_post_type_status').on(table.type, table.status),
-  ]
+  (table) => [index('idx_post_type_status').on(table.type, table.status)]
 );
 
 // ─── Business ────────────────────────────────────────────────────────────────
@@ -274,7 +272,9 @@ export const subscription = table(
     interval: text('interval'),
     intervalCount: integer('interval_count'),
     trialPeriodDays: integer('trial_period_days'),
-    currentPeriodStart: integer('current_period_start', { mode: 'timestamp_ms' }),
+    currentPeriodStart: integer('current_period_start', {
+      mode: 'timestamp_ms',
+    }),
     currentPeriodEnd: integer('current_period_end', { mode: 'timestamp_ms' }),
     createdAt: integer('created_at', { mode: 'timestamp_ms' })
       .default(sqliteNowMs)
@@ -397,9 +397,7 @@ export const role = table(
       .notNull(),
     sort: integer('sort').default(0).notNull(),
   },
-  (table) => [
-    index('idx_role_status').on(table.status),
-  ]
+  (table) => [index('idx_role_status').on(table.status)]
 );
 
 export const permission = table(

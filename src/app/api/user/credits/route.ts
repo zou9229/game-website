@@ -1,9 +1,10 @@
 import { headers } from 'next/headers';
-import { desc, count, eq, and, like, or, isNull, type SQL } from 'drizzle-orm';
-import { respPage, respErr } from '@/lib/resp';
+import { and, count, desc, eq, isNull, like, or, type SQL } from 'drizzle-orm';
+
 import { getAuth } from '@/core/auth';
 import { db } from '@/core/db';
 import { credit } from '@/config/db/schema';
+import { respErr, respPage } from '@/lib/resp';
 
 export async function GET(req: Request) {
   try {
@@ -13,7 +14,10 @@ export async function GET(req: Request) {
 
     const { searchParams } = new URL(req.url);
     const page = Math.max(1, parseInt(searchParams.get('page') || '1'));
-    const pageSize = Math.min(100, Math.max(1, parseInt(searchParams.get('pageSize') || '20')));
+    const pageSize = Math.min(
+      100,
+      Math.max(1, parseInt(searchParams.get('pageSize') || '20'))
+    );
     const offset = (page - 1) * pageSize;
 
     const transactionType = searchParams.get('transactionType');
@@ -23,19 +27,23 @@ export async function GET(req: Request) {
       eq(credit.userId, session.user.id),
       isNull(credit.deletedAt) as unknown as SQL,
     ];
-    if (transactionType) conditions.push(eq(credit.transactionType, transactionType));
+    if (transactionType)
+      conditions.push(eq(credit.transactionType, transactionType));
     if (search) {
       conditions.push(
         or(
           like(credit.transactionNo, `%${search}%`),
-          like(credit.description, `%${search}%`),
-        )!,
+          like(credit.description, `%${search}%`)
+        )!
       );
     }
 
     const where = and(...conditions);
 
-    const [totalResult] = await db().select({ count: count() }).from(credit).where(where);
+    const [totalResult] = await db()
+      .select({ count: count() })
+      .from(credit)
+      .where(where);
 
     const rows = await db()
       .select({

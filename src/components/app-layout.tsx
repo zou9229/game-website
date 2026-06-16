@@ -1,30 +1,31 @@
-"use client";
+'use client';
 
-import { useEffect, useRef, useState } from "react";
-import { useLocale } from "next-intl";
-import { useSession } from "@/core/auth/client";
-import { useRouter } from "@/core/i18n/navigation";
-import { defaultLocale } from "@/config/locale";
-import { AppSidebar, type NavItem } from "@/components/app-sidebar";
-import { UserMenu } from "@/components/user-menu";
+import { useEffect, useRef, useState } from 'react';
+import { useLocale } from 'next-intl';
+
+import { useSession } from '@/core/auth/client';
+import { useRouter } from '@/core/i18n/navigation';
+import { defaultLocale } from '@/config/locale';
+import { AppSidebar, type NavItem } from '@/components/app-sidebar';
+import { Separator } from '@/components/ui/separator';
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
-} from "@/components/ui/sidebar";
-import { Separator } from "@/components/ui/separator";
+} from '@/components/ui/sidebar';
+import { UserMenu } from '@/components/user-menu';
 
 export function AppLayout({
   children,
   navItems,
   footerNavItems,
   brand,
-  brandHref = "/",
+  brandHref = '/',
   mobileBrand,
   headerExtra,
   profileHref,
   requirePermission,
-  unauthorizedRedirect = "/settings",
+  unauthorizedRedirect = '/settings',
 }: {
   children: React.ReactNode;
   navItems: NavItem[];
@@ -56,11 +57,11 @@ export function AppLayout({
       // Strip the locale prefix so the locale-aware router re-applies it.
       let callbackUrl = window.location.pathname + window.location.search;
       if (locale !== defaultLocale) {
-        if (callbackUrl === `/${locale}`) callbackUrl = "/";
+        if (callbackUrl === `/${locale}`) callbackUrl = '/';
         else if (callbackUrl.startsWith(`/${locale}/`))
           callbackUrl = callbackUrl.slice(locale.length + 1);
       }
-      if (!callbackUrl.startsWith("/")) callbackUrl = "/";
+      if (!callbackUrl.startsWith('/')) callbackUrl = '/';
       router.push(`/sign-in?callbackUrl=${encodeURIComponent(callbackUrl)}`);
       return;
     }
@@ -72,12 +73,12 @@ export function AppLayout({
       // invite must redeem one before entering the app. Admins are exempt
       // (computed server-side in /api/user/info).
       try {
-        const info = await fetch("/api/user/info").then((r) => r.json());
+        const info = await fetch('/api/user/info').then((r) => r.json());
         if (cancelled) return;
         if (info.code === 0 && info.data?.needsInvite) {
           if (!redirectingRef.current) {
             redirectingRef.current = true;
-            router.push("/redeem-invite");
+            router.push('/redeem-invite');
           }
           return;
         }
@@ -90,7 +91,7 @@ export function AppLayout({
       }
 
       try {
-        const res = await fetch("/api/user/permissions").then((r) => r.json());
+        const res = await fetch('/api/user/permissions').then((r) => r.json());
         if (cancelled) return;
         if (res.code === 0 && res.data?.isAdmin === true) setAuthorized(true);
         else router.push(unauthorizedRedirect);
@@ -101,14 +102,21 @@ export function AppLayout({
     return () => {
       cancelled = true;
     };
-  }, [isPending, session, router, locale, requirePermission, unauthorizedRedirect]);
+  }, [
+    isPending,
+    session,
+    router,
+    locale,
+    requirePermission,
+    unauthorizedRedirect,
+  ]);
 
   if (isPending || !authorized || !session?.user) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
+      <div className="bg-background flex min-h-screen items-center justify-center">
         <div className="flex flex-col items-center gap-3">
-          <div className="size-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-          <span className="text-sm text-muted-foreground">Loading...</span>
+          <div className="border-primary size-6 animate-spin rounded-full border-2 border-t-transparent" />
+          <span className="text-muted-foreground text-sm">Loading...</span>
         </div>
       </div>
     );
@@ -123,7 +131,7 @@ export function AppLayout({
         footerNavItems={footerNavItems}
         footer={
           <UserMenu
-            name={session.user.name || "User"}
+            name={session.user.name || 'User'}
             email={session.user.email}
             image={session.user.image}
             profileHref={profileHref}
@@ -140,9 +148,7 @@ export function AppLayout({
             <div className="flex items-center gap-1 px-4">{headerExtra}</div>
           )}
         </header>
-        <main className="flex-1 overflow-auto">
-          {children}
-        </main>
+        <main className="flex-1 overflow-auto">{children}</main>
       </SidebarInset>
     </SidebarProvider>
   );

@@ -119,7 +119,9 @@ export interface AIProvider {
 /**
  * Save files function type - can be injected by consumer
  */
-export type SaveFilesFunction = (files: AIFile[]) => Promise<AIFile[] | undefined>;
+export type SaveFilesFunction = (
+  files: AIFile[]
+) => Promise<AIFile[] | undefined>;
 
 /**
  * Upload file function type - can be injected by consumer
@@ -134,7 +136,9 @@ export interface UploadFileResult {
   url: string;
 }
 
-export type UploadFileFunction = (options: UploadFileOptions) => Promise<UploadFileResult>;
+export type UploadFileFunction = (
+  options: UploadFileOptions
+) => Promise<UploadFileResult>;
 
 /**
  * UUID generator function type

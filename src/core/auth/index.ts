@@ -1,14 +1,14 @@
 import { betterAuth, type BetterAuthOptions } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { oneTap } from 'better-auth/plugins';
-import { getUuid } from '@/lib/hash';
 
 import { db } from '@/core/db';
-import { envConfigs, AUTH_SECRET_PLACEHOLDER } from '@/config';
-import { getAllConfigs } from '@/modules/config/service';
 import { ResendProvider } from '@/core/email/resend';
 import { VerifyEmail } from '@/core/email/templates/verify-email';
+import { AUTH_SECRET_PLACEHOLDER, envConfigs } from '@/config';
 import * as schema from '@/config/db/schema';
+import { getAllConfigs } from '@/modules/config/service';
+import { getUuid } from '@/lib/hash';
 
 function assertProductionAuthSecret() {
   // Only enforce at runtime, not during `next build` static analysis where
@@ -141,7 +141,9 @@ export function getAuth(configs?: Record<string, string>) {
   if (authInstance) return authInstance;
 
   const socialProviders = configs ? getSocialProviders(configs) : {};
-  const emailAndPasswordEnabled = configs ? configs.email_auth_enabled !== 'false' : true;
+  const emailAndPasswordEnabled = configs
+    ? configs.email_auth_enabled !== 'false'
+    : true;
   const emailVerificationEnabled = configs
     ? configs.email_verification_enabled === 'true' &&
       !!configs.resend_api_key &&
@@ -157,7 +159,8 @@ export function getAuth(configs?: Record<string, string>) {
       if (envConfigs.app_url) origins.push(envConfigs.app_url);
       try {
         const origin = request?.headers?.get?.('origin');
-        if (origin && new URL(origin).hostname === 'localhost') origins.push(origin);
+        if (origin && new URL(origin).hostname === 'localhost')
+          origins.push(origin);
       } catch {}
       return origins;
     },
@@ -169,9 +172,19 @@ export function getAuth(configs?: Record<string, string>) {
     plugins: getAuthPlugins(configs),
     user: {
       additionalFields: {
-        utmSource: { type: 'string', input: false, required: false, defaultValue: '' },
+        utmSource: {
+          type: 'string',
+          input: false,
+          required: false,
+          defaultValue: '',
+        },
         ip: { type: 'string', input: false, required: false, defaultValue: '' },
-        locale: { type: 'string', input: false, required: false, defaultValue: '' },
+        locale: {
+          type: 'string',
+          input: false,
+          required: false,
+          defaultValue: '',
+        },
       },
     },
     advanced: {
@@ -186,7 +199,9 @@ export function getAuth(configs?: Record<string, string>) {
         const apiKey = all.resend_api_key;
         const from = all.resend_email_from;
         if (!apiKey || !from) {
-          console.error('[auth] sendResetPassword: Resend is not configured (resend_api_key / resend_email_from)');
+          console.error(
+            '[auth] sendResetPassword: Resend is not configured (resend_api_key / resend_email_from)'
+          );
           return;
         }
         const appName = all.app_name || envConfigs.app_name;
@@ -213,7 +228,14 @@ export function getAuth(configs?: Record<string, string>) {
             sendOnSignIn: false,
             autoSignInAfterVerification: true,
             expiresIn: 60 * 60 * 24,
-            sendVerificationEmail: async ({ user, url }: { user: any; url: string; token: string }) => {
+            sendVerificationEmail: async ({
+              user,
+              url,
+            }: {
+              user: any;
+              url: string;
+              token: string;
+            }) => {
               try {
                 const key = String(user?.email || '').toLowerCase();
                 const now = Date.now();
@@ -229,7 +251,9 @@ export function getAuth(configs?: Record<string, string>) {
                 const apiKey = all.resend_api_key;
                 const from = all.resend_email_from;
                 if (!apiKey || !from) {
-                  console.error('[auth] sendVerificationEmail: Resend is not configured (resend_api_key / resend_email_from)');
+                  console.error(
+                    '[auth] sendVerificationEmail: Resend is not configured (resend_api_key / resend_email_from)'
+                  );
                   return;
                 }
                 const appName = all.app_name || envConfigs.app_name;
@@ -240,16 +264,22 @@ export function getAuth(configs?: Record<string, string>) {
                 const logoUrl = logo.startsWith('http')
                   ? logo
                   : logo
-                  ? `${envConfigs.app_url || ''}${logo.startsWith('/') ? '' : '/'}${logo}`
-                  : undefined;
-                const provider = new ResendProvider({ apiKey, defaultFrom: from });
+                    ? `${envConfigs.app_url || ''}${logo.startsWith('/') ? '' : '/'}${logo}`
+                    : undefined;
+                const provider = new ResendProvider({
+                  apiKey,
+                  defaultFrom: from,
+                });
                 const result = await provider.sendEmail({
                   to: user.email,
                   subject: `Verify your email - ${appName}`,
                   react: VerifyEmail({ appName, logoUrl, url }),
                 });
                 if (!result.success) {
-                  console.error('[auth] sendVerificationEmail failed:', result.error);
+                  console.error(
+                    '[auth] sendVerificationEmail failed:',
+                    result.error
+                  );
                 }
               } catch (e) {
                 console.error('[auth] sendVerificationEmail error:', e);

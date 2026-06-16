@@ -78,43 +78,44 @@ src/
 
 The admin panel (`/admin`) provides a complete back-office interface:
 
-| Section | Pages | Features |
-|---------|-------|----------|
-| Overview | Dashboard | Stats overview |
-| RBAC | Users, Roles, Permissions | Full CRUD, role assignment, permission management |
-| Content | Categories, Posts | Full CRUD, status tabs, category selector |
-| Billing | Payments, Subscriptions, Credits | Server-side pagination, type/status tabs, search |
-| Settings | System config | Collapsible groups, tabbed sections, all i18n |
+| Section  | Pages                            | Features                                          |
+| -------- | -------------------------------- | ------------------------------------------------- |
+| Overview | Dashboard                        | Stats overview                                    |
+| RBAC     | Users, Roles, Permissions        | Full CRUD, role assignment, permission management |
+| Content  | Categories, Posts                | Full CRUD, status tabs, category selector         |
+| Billing  | Payments, Subscriptions, Credits | Server-side pagination, type/status tabs, search  |
+| Settings | System config                    | Collapsible groups, tabbed sections, all i18n     |
 
 All admin pages include:
+
 - Server-side paginated data tables with search
 - Dialog-based create/edit/delete forms
 - Complete English and Chinese translations
 
 ## Commands
 
-| Command | Description |
-|---------|-------------|
-| `pnpm dev` | Start dev server |
-| `pnpm build` | Production build |
-| `pnpm db:setup` | Copy schema template for chosen database |
-| `pnpm db:push` | Push schema to database (dev) |
-| `pnpm db:generate` | Generate migration SQL (production) |
-| `pnpm db:migrate` | Run migrations (production) |
-| `pnpm db:studio` | Drizzle Studio GUI |
-| `pnpm rbac:init` | Create roles + permissions + optional admin user |
-| `pnpm rbac:assign` | Assign role to user |
+| Command            | Description                                      |
+| ------------------ | ------------------------------------------------ |
+| `pnpm dev`         | Start dev server                                 |
+| `pnpm build`       | Production build                                 |
+| `pnpm db:setup`    | Copy schema template for chosen database         |
+| `pnpm db:push`     | Push schema to database (dev)                    |
+| `pnpm db:generate` | Generate migration SQL (production)              |
+| `pnpm db:migrate`  | Run migrations (production)                      |
+| `pnpm db:studio`   | Drizzle Studio GUI                               |
+| `pnpm rbac:init`   | Create roles + permissions + optional admin user |
+| `pnpm rbac:assign` | Assign role to user                              |
 
 ## Claude Code Skills
 
-| Skill | What it does |
-|-------|-------------|
-| `/quick-start` | Build a complete SaaS from a brief or reference URL |
-| `/new-module` | Create a backend module (service + API) |
-| `/new-page` | Create a dashboard page (client component + nav) |
-| `/new-static-page` | Create an MDX content page (legal, about, FAQ) |
+| Skill                | What it does                                             |
+| -------------------- | -------------------------------------------------------- |
+| `/quick-start`       | Build a complete SaaS from a brief or reference URL      |
+| `/new-module`        | Create a backend module (service + API)                  |
+| `/new-page`          | Create a dashboard page (client component + nav)         |
+| `/new-static-page`   | Create an MDX content page (legal, about, FAQ)           |
 | `/deploy-cloudflare` | Deploy to Cloudflare Workers (D1 or Postgres+Hyperdrive) |
-| `/sync-upstream` | Pull the latest features from shipany-next |
+| `/sync-upstream`     | Pull the latest features from shipany-next               |
 
 ## Environment Variables
 

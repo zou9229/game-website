@@ -1,11 +1,15 @@
-"use client";
+'use client';
 
-import { useEffect, useState, useCallback } from "react";
-import { useTranslations } from "next-intl";
-import { toast } from "sonner";
-import { Plus, Pencil, Trash2, KeyRound } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { useCallback, useEffect, useState } from 'react';
+import { KeyRound, Pencil, Plus, Trash2 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { toast } from 'sonner';
+
+import { DataTable, type Column } from '@/components/data-table';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Dialog,
   DialogContent,
@@ -14,12 +18,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Badge } from "@/components/ui/badge";
-import { DataTable, type Column } from "@/components/data-table";
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 interface Role {
   id: string;
@@ -38,21 +39,25 @@ interface Permission {
 const PAGE_SIZE = 10;
 
 export default function RolesPage() {
-  const t = useTranslations("admin");
+  const t = useTranslations('admin');
   const [roles, setRoles] = useState<Role[]>([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
-  const [search, setSearch] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [search, setSearch] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
 
   // Create dialog
   const [createOpen, setCreateOpen] = useState(false);
-  const [form, setForm] = useState({ name: "", title: "", description: "" });
+  const [form, setForm] = useState({ name: '', title: '', description: '' });
   const [saving, setSaving] = useState(false);
 
   // Edit dialog
   const [editingRole, setEditingRole] = useState<Role | null>(null);
-  const [editForm, setEditForm] = useState({ name: "", title: "", description: "" });
+  const [editForm, setEditForm] = useState({
+    name: '',
+    title: '',
+    description: '',
+  });
 
   // Delete dialog
   const [deletingRole, setDeletingRole] = useState<Role | null>(null);
@@ -60,7 +65,9 @@ export default function RolesPage() {
   // Permissions dialog
   const [permRole, setPermRole] = useState<Role | null>(null);
   const [allPermissions, setAllPermissions] = useState<Permission[]>([]);
-  const [assignedPermIds, setAssignedPermIds] = useState<Set<string>>(new Set());
+  const [assignedPermIds, setAssignedPermIds] = useState<Set<string>>(
+    new Set()
+  );
   const [permSaving, setPermSaving] = useState(false);
 
   useEffect(() => {
@@ -72,18 +79,24 @@ export default function RolesPage() {
     setPage(1);
   }, [debouncedSearch]);
 
-  const fetchRoles = useCallback((p: number) => {
-    const params = new URLSearchParams({ page: String(p), pageSize: String(PAGE_SIZE) });
-    if (debouncedSearch) params.set("search", debouncedSearch);
-    fetch(`/api/admin/roles?${params}`)
-      .then((r) => r.json())
-      .then((res) => {
-        if (res.code === 0) {
-          setRoles(res.data.items);
-          setTotal(res.data.total);
-        }
+  const fetchRoles = useCallback(
+    (p: number) => {
+      const params = new URLSearchParams({
+        page: String(p),
+        pageSize: String(PAGE_SIZE),
       });
-  }, [debouncedSearch]);
+      if (debouncedSearch) params.set('search', debouncedSearch);
+      fetch(`/api/admin/roles?${params}`)
+        .then((r) => r.json())
+        .then((res) => {
+          if (res.code === 0) {
+            setRoles(res.data.items);
+            setTotal(res.data.total);
+          }
+        });
+    },
+    [debouncedSearch]
+  );
 
   useEffect(() => {
     fetchRoles(page);
@@ -94,22 +107,22 @@ export default function RolesPage() {
     if (!form.name.trim() || !form.title.trim()) return;
     setSaving(true);
     try {
-      const res = await fetch("/api/admin/roles", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const res = await fetch('/api/admin/roles', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
       });
       const data = await res.json();
       if (data.code === 0) {
-        toast.success(t("roles.created"));
+        toast.success(t('roles.created'));
         setCreateOpen(false);
-        setForm({ name: "", title: "", description: "" });
+        setForm({ name: '', title: '', description: '' });
         fetchRoles(page);
       } else {
         toast.error(data.message);
       }
     } catch {
-      toast.error("Failed");
+      toast.error('Failed');
     } finally {
       setSaving(false);
     }
@@ -117,7 +130,11 @@ export default function RolesPage() {
 
   // Edit
   function openEdit(r: Role) {
-    setEditForm({ name: r.name, title: r.title, description: r.description || "" });
+    setEditForm({
+      name: r.name,
+      title: r.title,
+      description: r.description || '',
+    });
     setEditingRole(r);
   }
 
@@ -125,21 +142,21 @@ export default function RolesPage() {
     if (!editingRole || !editForm.name.trim() || !editForm.title.trim()) return;
     setSaving(true);
     try {
-      const res = await fetch("/api/admin/roles", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
+      const res = await fetch('/api/admin/roles', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id: editingRole.id, ...editForm }),
       });
       const data = await res.json();
       if (data.code === 0) {
-        toast.success(t("roles.updated"));
+        toast.success(t('roles.updated'));
         setEditingRole(null);
         fetchRoles(page);
       } else {
         toast.error(data.message);
       }
     } catch {
-      toast.error("Failed");
+      toast.error('Failed');
     } finally {
       setSaving(false);
     }
@@ -149,17 +166,19 @@ export default function RolesPage() {
   async function handleDelete() {
     if (!deletingRole) return;
     try {
-      const res = await fetch(`/api/admin/roles?id=${deletingRole.id}`, { method: "DELETE" });
+      const res = await fetch(`/api/admin/roles?id=${deletingRole.id}`, {
+        method: 'DELETE',
+      });
       const data = await res.json();
       if (data.code === 0) {
-        toast.success(t("roles.deleted"));
+        toast.success(t('roles.deleted'));
         setDeletingRole(null);
         fetchRoles(page);
       } else {
         toast.error(data.message);
       }
     } catch {
-      toast.error("Failed");
+      toast.error('Failed');
     }
   }
 
@@ -167,12 +186,16 @@ export default function RolesPage() {
   async function openPermissions(r: Role) {
     setPermRole(r);
     const [permsRes, assignedRes] = await Promise.all([
-      fetch("/api/admin/permissions?page=1&pageSize=999").then((r) => r.json()),
-      fetch(`/api/admin/roles/permissions?roleId=${r.id}`).then((r) => r.json()),
+      fetch('/api/admin/permissions?page=1&pageSize=999').then((r) => r.json()),
+      fetch(`/api/admin/roles/permissions?roleId=${r.id}`).then((r) =>
+        r.json()
+      ),
     ]);
     if (permsRes.code === 0) setAllPermissions(permsRes.data.items);
     if (assignedRes.code === 0) {
-      setAssignedPermIds(new Set(assignedRes.data.map((p: any) => p.permissionId)));
+      setAssignedPermIds(
+        new Set(assignedRes.data.map((p: any) => p.permissionId))
+      );
     }
   }
 
@@ -189,20 +212,23 @@ export default function RolesPage() {
     if (!permRole) return;
     setPermSaving(true);
     try {
-      const res = await fetch("/api/admin/roles/permissions", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ roleId: permRole.id, permissionIds: [...assignedPermIds] }),
+      const res = await fetch('/api/admin/roles/permissions', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          roleId: permRole.id,
+          permissionIds: [...assignedPermIds],
+        }),
       });
       const data = await res.json();
       if (data.code === 0) {
-        toast.success(t("roles.permissions_saved"));
+        toast.success(t('roles.permissions_saved'));
         setPermRole(null);
       } else {
         toast.error(data.message);
       }
     } catch {
-      toast.error("Failed");
+      toast.error('Failed');
     } finally {
       setPermSaving(false);
     }
@@ -210,31 +236,46 @@ export default function RolesPage() {
 
   const columns: Column<Role>[] = [
     {
-      header: t("roles.name_col"),
+      header: t('roles.name_col'),
       cell: (r) => <span className="font-mono text-sm">{r.name}</span>,
     },
     {
-      header: t("roles.title_col"),
+      header: t('roles.title_col'),
       cell: (r) => <span className="font-medium">{r.title}</span>,
     },
     {
-      header: t("roles.description_col"),
+      header: t('roles.description_col'),
       cell: (r) => (
-        <span className="text-muted-foreground">{r.description || "—"}</span>
+        <span className="text-muted-foreground">{r.description || '—'}</span>
       ),
     },
     {
-      header: t("roles.actions_col"),
-      className: "w-[120px]",
+      header: t('roles.actions_col'),
+      className: 'w-[120px]',
       cell: (r) => (
         <div className="flex gap-1">
-          <Button variant="ghost" size="icon" className="size-7" onClick={() => openPermissions(r)}>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="size-7"
+            onClick={() => openPermissions(r)}
+          >
             <KeyRound className="size-3" />
           </Button>
-          <Button variant="ghost" size="icon" className="size-7" onClick={() => openEdit(r)}>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="size-7"
+            onClick={() => openEdit(r)}
+          >
             <Pencil className="size-3" />
           </Button>
-          <Button variant="ghost" size="icon" className="size-7" onClick={() => setDeletingRole(r)}>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="size-7"
+            onClick={() => setDeletingRole(r)}
+          >
             <Trash2 className="size-3" />
           </Button>
         </div>
@@ -243,39 +284,59 @@ export default function RolesPage() {
   ];
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-6 p-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">{t("roles.title")}</h1>
-          <p className="text-muted-foreground">{t("roles.description")}</p>
+          <h1 className="text-2xl font-bold">{t('roles.title')}</h1>
+          <p className="text-muted-foreground">{t('roles.description')}</p>
         </div>
         <Dialog open={createOpen} onOpenChange={setCreateOpen}>
-          <DialogTrigger className="inline-flex items-center justify-center rounded-lg bg-primary text-primary-foreground text-sm font-medium h-8 gap-1.5 px-2.5 hover:bg-primary/80 transition-colors">
+          <DialogTrigger className="bg-primary text-primary-foreground hover:bg-primary/80 inline-flex h-8 items-center justify-center gap-1.5 rounded-lg px-2.5 text-sm font-medium transition-colors">
             <Plus className="size-4" />
-            {t("roles.create_role")}
+            {t('roles.create_role')}
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>{t("roles.create_title")}</DialogTitle>
-              <DialogDescription>{t("roles.create_description")}</DialogDescription>
+              <DialogTitle>{t('roles.create_title')}</DialogTitle>
+              <DialogDescription>
+                {t('roles.create_description')}
+              </DialogDescription>
             </DialogHeader>
             <div className="space-y-4 py-4">
               <div className="space-y-2">
-                <Label>{t("roles.name_field")}</Label>
-                <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder={t("roles.name_placeholder")} />
+                <Label>{t('roles.name_field')}</Label>
+                <Input
+                  value={form.name}
+                  onChange={(e) => setForm({ ...form, name: e.target.value })}
+                  placeholder={t('roles.name_placeholder')}
+                />
               </div>
               <div className="space-y-2">
-                <Label>{t("roles.title_field")}</Label>
-                <Input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder={t("roles.title_placeholder")} />
+                <Label>{t('roles.title_field')}</Label>
+                <Input
+                  value={form.title}
+                  onChange={(e) => setForm({ ...form, title: e.target.value })}
+                  placeholder={t('roles.title_placeholder')}
+                />
               </div>
               <div className="space-y-2">
-                <Label>{t("roles.description_field")}</Label>
-                <Input value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder={t("roles.description_placeholder")} />
+                <Label>{t('roles.description_field')}</Label>
+                <Input
+                  value={form.description}
+                  onChange={(e) =>
+                    setForm({ ...form, description: e.target.value })
+                  }
+                  placeholder={t('roles.description_placeholder')}
+                />
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setCreateOpen(false)}>{t("roles.cancel")}</Button>
-              <Button onClick={handleCreate} disabled={saving}>{t("roles.save")}</Button>
+              <Button variant="outline" onClick={() => setCreateOpen(false)}>
+                {t('roles.cancel')}
+              </Button>
+              <Button onClick={handleCreate} disabled={saving}>
+                {t('roles.save')}
+              </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
@@ -291,7 +352,7 @@ export default function RolesPage() {
             pageSize={PAGE_SIZE}
             onPageChange={setPage}
             rowKey={(r) => r.id}
-            emptyText={t("roles.no_roles")}
+            emptyText={t('roles.no_roles')}
             search={search}
             onSearchChange={setSearch}
             onRefresh={() => fetchRoles(page)}
@@ -300,43 +361,75 @@ export default function RolesPage() {
       </Card>
 
       {/* Edit Dialog */}
-      <Dialog open={!!editingRole} onOpenChange={(v) => !v && setEditingRole(null)}>
+      <Dialog
+        open={!!editingRole}
+        onOpenChange={(v) => !v && setEditingRole(null)}
+      >
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{t("roles.edit_title")}</DialogTitle>
-            <DialogDescription>{t("roles.edit_description")}</DialogDescription>
+            <DialogTitle>{t('roles.edit_title')}</DialogTitle>
+            <DialogDescription>{t('roles.edit_description')}</DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label>{t("roles.name_field")}</Label>
-              <Input value={editForm.name} onChange={(e) => setEditForm({ ...editForm, name: e.target.value })} placeholder={t("roles.name_placeholder")} />
+              <Label>{t('roles.name_field')}</Label>
+              <Input
+                value={editForm.name}
+                onChange={(e) =>
+                  setEditForm({ ...editForm, name: e.target.value })
+                }
+                placeholder={t('roles.name_placeholder')}
+              />
             </div>
             <div className="space-y-2">
-              <Label>{t("roles.title_field")}</Label>
-              <Input value={editForm.title} onChange={(e) => setEditForm({ ...editForm, title: e.target.value })} placeholder={t("roles.title_placeholder")} />
+              <Label>{t('roles.title_field')}</Label>
+              <Input
+                value={editForm.title}
+                onChange={(e) =>
+                  setEditForm({ ...editForm, title: e.target.value })
+                }
+                placeholder={t('roles.title_placeholder')}
+              />
             </div>
             <div className="space-y-2">
-              <Label>{t("roles.description_field")}</Label>
-              <Input value={editForm.description} onChange={(e) => setEditForm({ ...editForm, description: e.target.value })} placeholder={t("roles.description_placeholder")} />
+              <Label>{t('roles.description_field')}</Label>
+              <Input
+                value={editForm.description}
+                onChange={(e) =>
+                  setEditForm({ ...editForm, description: e.target.value })
+                }
+                placeholder={t('roles.description_placeholder')}
+              />
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setEditingRole(null)}>{t("roles.cancel")}</Button>
-            <Button onClick={handleEdit} disabled={saving}>{t("roles.save")}</Button>
+            <Button variant="outline" onClick={() => setEditingRole(null)}>
+              {t('roles.cancel')}
+            </Button>
+            <Button onClick={handleEdit} disabled={saving}>
+              {t('roles.save')}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
       {/* Delete Dialog */}
-      <Dialog open={!!deletingRole} onOpenChange={(v) => !v && setDeletingRole(null)}>
+      <Dialog
+        open={!!deletingRole}
+        onOpenChange={(v) => !v && setDeletingRole(null)}
+      >
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{t("roles.delete_title")}</DialogTitle>
-            <DialogDescription>{t("roles.delete_confirm")}</DialogDescription>
+            <DialogTitle>{t('roles.delete_title')}</DialogTitle>
+            <DialogDescription>{t('roles.delete_confirm')}</DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDeletingRole(null)}>{t("roles.cancel")}</Button>
-            <Button variant="destructive" onClick={handleDelete}>{t("roles.confirm_delete")}</Button>
+            <Button variant="outline" onClick={() => setDeletingRole(null)}>
+              {t('roles.cancel')}
+            </Button>
+            <Button variant="destructive" onClick={handleDelete}>
+              {t('roles.confirm_delete')}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -345,29 +438,42 @@ export default function RolesPage() {
       <Dialog open={!!permRole} onOpenChange={(v) => !v && setPermRole(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{t("roles.manage_permissions_title")}</DialogTitle>
-            <DialogDescription>{t("roles.manage_permissions_description")}</DialogDescription>
+            <DialogTitle>{t('roles.manage_permissions_title')}</DialogTitle>
+            <DialogDescription>
+              {t('roles.manage_permissions_description')}
+            </DialogDescription>
           </DialogHeader>
-          <div className="max-h-64 overflow-y-auto space-y-3 py-4">
+          <div className="max-h-64 space-y-3 overflow-y-auto py-4">
             {allPermissions.map((perm) => (
-              <label key={perm.id} className="flex items-center gap-3 cursor-pointer">
+              <label
+                key={perm.id}
+                className="flex cursor-pointer items-center gap-3"
+              >
                 <Checkbox
                   checked={assignedPermIds.has(perm.id)}
                   onCheckedChange={() => togglePermission(perm.id)}
                 />
                 <div>
                   <div className="text-sm font-medium">{perm.title}</div>
-                  <div className="text-xs text-muted-foreground font-mono">{perm.code}</div>
+                  <div className="text-muted-foreground font-mono text-xs">
+                    {perm.code}
+                  </div>
                 </div>
               </label>
             ))}
             {allPermissions.length === 0 && (
-              <p className="text-sm text-muted-foreground text-center py-4">{t("permissions.no_permissions")}</p>
+              <p className="text-muted-foreground py-4 text-center text-sm">
+                {t('permissions.no_permissions')}
+              </p>
             )}
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setPermRole(null)}>{t("roles.cancel")}</Button>
-            <Button onClick={handleSavePermissions} disabled={permSaving}>{t("roles.save")}</Button>
+            <Button variant="outline" onClick={() => setPermRole(null)}>
+              {t('roles.cancel')}
+            </Button>
+            <Button onClick={handleSavePermissions} disabled={permSaving}>
+              {t('roles.save')}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

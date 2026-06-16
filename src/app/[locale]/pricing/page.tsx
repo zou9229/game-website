@@ -1,7 +1,8 @@
-import { getTranslations, setRequestLocale } from "next-intl/server";
-import { Header } from "@/blocks/header";
-import { Footer } from "@/blocks/footer";
-import { Pricing } from "@/blocks/pricing";
+import { getTranslations, setRequestLocale } from 'next-intl/server';
+
+import { Footer } from '@/blocks/footer';
+import { Header } from '@/blocks/header';
+import { Pricing } from '@/blocks/pricing';
 
 export async function generateMetadata({
   params,
@@ -9,10 +10,10 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: "landing.pricing" });
+  const t = await getTranslations({ locale, namespace: 'landing.pricing' });
   return {
-    title: t("title"),
-    description: t("description"),
+    title: t('title'),
+    description: t('description'),
   };
 }
 
@@ -25,7 +26,7 @@ export default async function PricingPage({
   setRequestLocale(locale);
 
   return (
-    <div className="min-h-screen flex flex-col bg-background text-foreground">
+    <div className="bg-background text-foreground flex min-h-screen flex-col">
       <Header />
       <main className="flex-1">
         <Pricing />

@@ -103,9 +103,7 @@ export const verification = table(
       .$onUpdate(() => new Date())
       .notNull(),
   },
-  (table) => [
-    index('idx_verification_identifier').on(table.identifier),
-  ]
+  (table) => [index('idx_verification_identifier').on(table.identifier)]
 );
 
 // ─── Content ─────────────────────────────────────────────────────────────────
@@ -137,9 +135,7 @@ export const taxonomy = table(
     deletedAt: timestamp('deleted_at'),
     sort: integer('sort').default(0).notNull(),
   },
-  (table) => [
-    index('idx_taxonomy_type_status').on(table.type, table.status),
-  ]
+  (table) => [index('idx_taxonomy_type_status').on(table.type, table.status)]
 );
 
 export const post = table(
@@ -168,9 +164,7 @@ export const post = table(
     deletedAt: timestamp('deleted_at'),
     sort: integer('sort').default(0).notNull(),
   },
-  (table) => [
-    index('idx_post_type_status').on(table.type, table.status),
-  ]
+  (table) => [index('idx_post_type_status').on(table.type, table.status)]
 );
 
 // ─── Business ────────────────────────────────────────────────────────────────
@@ -369,9 +363,7 @@ export const role = table(
       .notNull(),
     sort: integer('sort').default(0).notNull(),
   },
-  (table) => [
-    index('idx_role_status').on(table.status),
-  ]
+  (table) => [index('idx_role_status').on(table.status)]
 );
 
 export const permission = table(

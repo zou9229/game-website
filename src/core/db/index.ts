@@ -1,5 +1,6 @@
-import { createDb } from './create-db';
 import { envConfigs } from '@/config';
+
+import { createDb } from './create-db';
 
 // workerd forbids reusing TCP sockets across requests ("Cannot perform I/O on
 // behalf of a different request"), so TCP-backed drivers (postgres/mysql) must

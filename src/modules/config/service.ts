@@ -1,7 +1,9 @@
 import { eq } from 'drizzle-orm';
+
 import { db } from '@/core/db';
-import { config } from '@/config/db/schema';
 import { envConfigs } from '@/config';
+import { config } from '@/config/db/schema';
+
 import { getSettings } from './settings';
 
 type ConfigMap = Record<string, string>;
@@ -150,7 +152,9 @@ export async function getCustomConfigs(): Promise<CustomConfig[]> {
  * delete any previously-stored custom key that's no longer present. Reserved
  * keys are rejected so the custom tab can't shadow a predefined setting.
  */
-export async function replaceCustomConfigs(pairs: CustomConfig[]): Promise<void> {
+export async function replaceCustomConfigs(
+  pairs: CustomConfig[]
+): Promise<void> {
   const reserved = reservedConfigKeys();
   const seen = new Set<string>();
   const clean: Array<[string, string]> = [];
@@ -196,7 +200,10 @@ export async function replaceCustomConfigs(pairs: CustomConfig[]): Promise<void>
 /**
  * Filter configs to only include public-safe keys.
  */
-export function filterPublicConfigs(configs: ConfigMap, publicKeys: string[]): ConfigMap {
+export function filterPublicConfigs(
+  configs: ConfigMap,
+  publicKeys: string[]
+): ConfigMap {
   const result: ConfigMap = {};
   for (const key of publicKeys) {
     if (configs[key]) {

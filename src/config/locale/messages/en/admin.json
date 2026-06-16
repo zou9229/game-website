@@ -318,26 +318,68 @@
       "custom": "Custom"
     },
     "groups": {
-      "appinfo": { "title": "App Info", "description": "Basic application settings" },
-      "user_role": { "title": "User Roles", "description": "Default role for new users" },
-      "credit": { "title": "Credits", "description": "Initial credits for new users" },
-      "email_auth": { "title": "Email Auth", "description": "Email/password authentication" },
-      "google_auth": { "title": "Google Auth", "description": "Google OAuth login" },
-      "github_auth": { "title": "GitHub Auth", "description": "GitHub OAuth login" },
-      "basic_payment": { "title": "Basic", "description": "Payment general settings" },
+      "appinfo": {
+        "title": "App Info",
+        "description": "Basic application settings"
+      },
+      "user_role": {
+        "title": "User Roles",
+        "description": "Default role for new users"
+      },
+      "credit": {
+        "title": "Credits",
+        "description": "Initial credits for new users"
+      },
+      "email_auth": {
+        "title": "Email Auth",
+        "description": "Email/password authentication"
+      },
+      "google_auth": {
+        "title": "Google Auth",
+        "description": "Google OAuth login"
+      },
+      "github_auth": {
+        "title": "GitHub Auth",
+        "description": "GitHub OAuth login"
+      },
+      "basic_payment": {
+        "title": "Basic",
+        "description": "Payment general settings"
+      },
       "stripe": { "title": "Stripe", "description": "Stripe payment gateway" },
       "creem": { "title": "Creem", "description": "Creem payment gateway" },
       "paypal": { "title": "PayPal", "description": "PayPal payment gateway" },
-      "alipay": { "title": "Alipay", "description": "Alipay payment gateway (native)" },
-      "wechat": { "title": "WeChat Pay", "description": "WeChat Pay gateway (native)" },
+      "alipay": {
+        "title": "Alipay",
+        "description": "Alipay payment gateway (native)"
+      },
+      "wechat": {
+        "title": "WeChat Pay",
+        "description": "WeChat Pay gateway (native)"
+      },
       "resend": { "title": "Resend", "description": "Resend email service" },
-      "r2": { "title": "Cloudflare R2 / S3", "description": "Object storage settings" },
-      "openai": { "title": "OpenAI", "description": "OpenAI (or compatible) API" },
-      "anthropic": { "title": "Anthropic", "description": "Anthropic Claude API" },
+      "r2": {
+        "title": "Cloudflare R2 / S3",
+        "description": "Object storage settings"
+      },
+      "openai": {
+        "title": "OpenAI",
+        "description": "OpenAI (or compatible) API"
+      },
+      "anthropic": {
+        "title": "Anthropic",
+        "description": "Anthropic Claude API"
+      },
       "replicate": { "title": "Replicate", "description": "Replicate AI API" },
       "fal": { "title": "Fal", "description": "Fal AI API" },
-      "google_analytics": { "title": "Google Analytics", "description": "Inject gtag.js with the configured Measurement ID" },
-      "plausible": { "title": "Plausible", "description": "Inject plausible.js for self-hosted or cloud Plausible" }
+      "google_analytics": {
+        "title": "Google Analytics",
+        "description": "Inject gtag.js with the configured Measurement ID"
+      },
+      "plausible": {
+        "title": "Plausible",
+        "description": "Inject plausible.js for self-hosted or cloud Plausible"
+      }
     },
     "fields": {
       "app_name": "App Name",
@@ -369,6 +411,7 @@
       "creem_environment": "Environment",
       "creem_api_key": "API Key",
       "creem_signing_secret": "Signing Secret",
+      "creem_product_ids_mapping": "Product IDs Mapping",
       "creem_test_amount": "Test amount (cents)",
       "paypal_enabled": "Enable PayPal",
       "paypal_client_id": "Client ID",
@@ -409,6 +452,7 @@
       "plausible_src": "Script Src"
     },
     "placeholders": {
+      "creem_product_ids_mapping": "{\"starter_monthly\": \"prod_xxx\"}",
       "creem_test_amount": "Leave empty to use real amount, 1 = $0.01",
       "paypal_test_amount": "Leave empty to use real amount, 1 = $0.01",
       "alipay_test_amount": "Leave empty to use real amount, 1 = ¥0.01",

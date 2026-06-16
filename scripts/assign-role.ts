@@ -27,7 +27,10 @@ async function createScriptDb() {
     const { drizzle } = await import('drizzle-orm/mysql2');
     const mysql = await import('mysql2/promise');
     const connection = await mysql.createConnection(url);
-    return { db: drizzle({ client: connection }) as any, close: () => connection.end() };
+    return {
+      db: drizzle({ client: connection }) as any,
+      close: () => connection.end(),
+    };
   }
 
   // Default: SQLite / Turso via libsql
@@ -46,7 +49,9 @@ async function assignRole() {
   if (!emailArg || !roleArg) {
     console.error('Usage:');
     console.log('  pnpm rbac:assign --email=user@example.com --role=admin');
-    console.log('  pnpm rbac:assign --email=user@example.com --role=viewer --expires-days=30');
+    console.log(
+      '  pnpm rbac:assign --email=user@example.com --role=viewer --expires-days=30'
+    );
     console.log('\nAvailable roles: super_admin, admin, editor, viewer');
     process.exit(1);
   }
@@ -58,7 +63,11 @@ async function assignRole() {
 
   try {
     // Find user
-    const [foundUser] = await db.select().from(schema.user).where(eq(schema.user.email, email)).limit(1);
+    const [foundUser] = await db
+      .select()
+      .from(schema.user)
+      .where(eq(schema.user.email, email))
+      .limit(1);
     if (!foundUser) {
       console.error(`User not found: ${email}`);
       process.exit(1);
@@ -66,7 +75,11 @@ async function assignRole() {
     console.log(`User: ${foundUser.name} (${foundUser.email})`);
 
     // Find role
-    const [foundRole] = await db.select().from(schema.role).where(eq(schema.role.name, roleName)).limit(1);
+    const [foundRole] = await db
+      .select()
+      .from(schema.role)
+      .where(eq(schema.role.name, roleName))
+      .limit(1);
     if (!foundRole) {
       console.error(`Role not found: ${roleName}`);
       console.log('Run "pnpm rbac:init" first to create default roles.');
@@ -75,8 +88,15 @@ async function assignRole() {
     console.log(`Role: ${foundRole.title} (${foundRole.name})`);
 
     // Check if already assigned
-    const [existing] = await db.select().from(schema.userRole)
-      .where(and(eq(schema.userRole.userId, foundUser.id), eq(schema.userRole.roleId, foundRole.id)))
+    const [existing] = await db
+      .select()
+      .from(schema.userRole)
+      .where(
+        and(
+          eq(schema.userRole.userId, foundUser.id),
+          eq(schema.userRole.roleId, foundRole.id)
+        )
+      )
       .limit(1);
 
     if (existing) {
@@ -107,4 +127,6 @@ async function assignRole() {
   }
 }
 
-assignRole().catch(console.error).finally(() => process.exit(0));
+assignRole()
+  .catch(console.error)
+  .finally(() => process.exit(0));

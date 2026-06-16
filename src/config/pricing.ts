@@ -43,7 +43,11 @@ export const pricingCatalog: Record<string, PricingProduct> = {
     priceInCents: 900,
     currency: 'usd',
     credits: 5000,
-    plan: { name: 'Starter', interval: PaymentInterval.MONTH, intervalCount: 1 },
+    plan: {
+      name: 'Starter',
+      interval: PaymentInterval.MONTH,
+      intervalCount: 1,
+    },
   },
   pro_monthly: {
     productId: 'pro_monthly',
@@ -65,7 +69,11 @@ export const pricingCatalog: Record<string, PricingProduct> = {
     priceInCents: 9900,
     currency: 'usd',
     credits: 500000,
-    plan: { name: 'Enterprise', interval: PaymentInterval.MONTH, intervalCount: 1 },
+    plan: {
+      name: 'Enterprise',
+      interval: PaymentInterval.MONTH,
+      intervalCount: 1,
+    },
   },
   starter_yearly: {
     productId: 'starter_yearly',
@@ -98,7 +106,11 @@ export const pricingCatalog: Record<string, PricingProduct> = {
     priceInCents: 95000,
     currency: 'usd',
     credits: 6000000,
-    plan: { name: 'Enterprise', interval: PaymentInterval.YEAR, intervalCount: 1 },
+    plan: {
+      name: 'Enterprise',
+      interval: PaymentInterval.YEAR,
+      intervalCount: 1,
+    },
   },
   starter_lifetime: {
     productId: 'starter_lifetime',

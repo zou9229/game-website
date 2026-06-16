@@ -1,14 +1,14 @@
+import { S3Provider, storageManager } from '@/core/storage';
 import { envConfigs } from '@/config';
-import { storageManager, S3Provider } from '@/core/storage';
 
 let initialized = false;
 
 export function isStorageConfigured() {
   return Boolean(
     envConfigs.storage_endpoint &&
-      envConfigs.storage_access_key &&
-      envConfigs.storage_secret_key &&
-      envConfigs.storage_bucket,
+    envConfigs.storage_access_key &&
+    envConfigs.storage_secret_key &&
+    envConfigs.storage_bucket
   );
 }
 
@@ -24,7 +24,7 @@ export function getStorage() {
           bucket: envConfigs.storage_bucket,
           publicDomain: envConfigs.storage_public_domain,
         }),
-        true,
+        true
       );
     }
     initialized = true;

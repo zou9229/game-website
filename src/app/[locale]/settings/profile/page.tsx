@@ -1,8 +1,9 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { useTranslations } from "next-intl";
-import { SettingsForm } from "./settings-form";
+import { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
+
+import { SettingsForm } from './settings-form';
 
 export default function SettingsPage() {
   const t = useTranslations();
@@ -13,14 +14,14 @@ export default function SettingsPage() {
   } | null>(null);
 
   useEffect(() => {
-    fetch("/api/user/info")
+    fetch('/api/user/info')
       .then((r) => r.json())
       .then((res) => {
         if (res.code === 0) {
           setUser({
-            name: res.data.name || "",
-            email: res.data.email || "",
-            image: res.data.image || "",
+            name: res.data.name || '',
+            email: res.data.email || '',
+            image: res.data.image || '',
           });
         }
       })
@@ -29,9 +30,13 @@ export default function SettingsPage() {
 
   if (!user) {
     return (
-      <div className="p-6 text-muted-foreground">{t("settings.profile.loading")}</div>
+      <div className="text-muted-foreground p-6">
+        {t('settings.profile.loading')}
+      </div>
     );
   }
 
-  return <SettingsForm name={user.name} email={user.email} image={user.image} />;
+  return (
+    <SettingsForm name={user.name} email={user.email} image={user.image} />
+  );
 }

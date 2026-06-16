@@ -15,7 +15,11 @@ declare global {
 function getClientIpFromRequest(request: Request): string {
   const xff = request.headers.get('x-forwarded-for');
   if (xff) return xff.split(',')[0]?.trim() || '';
-  return request.headers.get('cf-connecting-ip') || request.headers.get('x-real-ip') || '';
+  return (
+    request.headers.get('cf-connecting-ip') ||
+    request.headers.get('x-real-ip') ||
+    ''
+  );
 }
 
 function getStore(): Store {
@@ -35,7 +39,10 @@ function buildKey(request: Request, opts: MinIntervalOptions): string {
   return `${prefix}|${request.method}|${url.pathname}|${ip}|${cookieHash}${extra}`;
 }
 
-export function enforceMinIntervalRateLimit(request: Request, opts: MinIntervalOptions): Response | null {
+export function enforceMinIntervalRateLimit(
+  request: Request,
+  opts: MinIntervalOptions
+): Response | null {
   const intervalMs = Math.max(0, Number(opts.intervalMs) || 0);
   if (!intervalMs) return null;
   const now = Date.now();
@@ -45,10 +52,22 @@ export function enforceMinIntervalRateLimit(request: Request, opts: MinIntervalO
   if (typeof last === 'number') {
     const delta = now - last;
     if (delta >= 0 && delta < intervalMs) {
-      const retryAfterSeconds = Math.max(1, Math.ceil((intervalMs - delta) / 1000));
+      const retryAfterSeconds = Math.max(
+        1,
+        Math.ceil((intervalMs - delta) / 1000)
+      );
       return Response.json(
-        { error: 'too_many_requests', message: `Please retry after ${retryAfterSeconds}s.` },
-        { status: 429, headers: { 'cache-control': 'no-store', 'retry-after': String(retryAfterSeconds) } }
+        {
+          error: 'too_many_requests',
+          message: `Please retry after ${retryAfterSeconds}s.`,
+        },
+        {
+          status: 429,
+          headers: {
+            'cache-control': 'no-store',
+            'retry-after': String(retryAfterSeconds),
+          },
+        }
       );
     }
   }

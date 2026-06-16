@@ -1,7 +1,7 @@
-import { cookies } from 'next/headers';
-import { headers } from 'next/headers';
-import { respData, respErr } from '@/lib/resp';
+import { cookies, headers } from 'next/headers';
+
 import { getAuth } from '@/core/auth';
+import { respData, respErr } from '@/lib/resp';
 
 /**
  * GET /api/auth/token
