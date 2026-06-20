@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { ninetyNineNightsMedia } from '@/data/99-nights-media';
 import { getRobloxGame } from '@/data/roblox-games';
 import { seoKeywords } from '@/data/seo-keywords';
 import { ExternalLink } from 'lucide-react';
@@ -11,6 +12,7 @@ import {
   currentMonthYear,
   getBaseUrl,
 } from '@/lib/seo';
+import { GuideMediaPanel } from '@/components/roblox/guide-media-panel';
 import { Badge } from '@/components/ui/badge';
 import {
   Card,
@@ -149,6 +151,15 @@ export default async function GameHubPage({
             </CardHeader>
           </Card>
         ))}
+      </section>
+
+      <section className="mx-auto max-w-6xl px-4 pb-12 sm:px-6 lg:px-8">
+        <GuideMediaPanel
+          title="Gameplay media and video research"
+          description="Real 99 Nights thumbnails and current YouTube searches used for visual context and demand discovery."
+          images={ninetyNineNightsMedia.images}
+          videoSearches={ninetyNineNightsMedia.videoSearches}
+        />
       </section>
 
       <section className="mx-auto max-w-6xl px-4 pb-16 sm:px-6 lg:px-8">

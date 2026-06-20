@@ -1,5 +1,10 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import {
+  getFreshnessAgeDays,
+  getFreshnessStatus,
+  ninetyNineNightsFreshnessEntries,
+} from '@/data/99-nights-freshness';
 import { ninetyNineNightsUpdates } from '@/data/99-nights-updates';
 import { getRobloxGame } from '@/data/roblox-games';
 import { seoKeywords } from '@/data/seo-keywords';
@@ -58,6 +63,12 @@ const typeLabels = {
   'guide-data-pass': 'Guide data pass',
   'roblox-page-update': 'Roblox metadata',
 };
+
+const freshnessTone = {
+  fresh: 'default',
+  'due-soon': 'secondary',
+  stale: 'destructive',
+} as const;
 
 export async function generateMetadata({
   params,
@@ -207,6 +218,60 @@ export default async function UpdatesPage({
       </section>
 
       <section className="mx-auto max-w-6xl px-4 pb-16 sm:px-6 lg:px-8">
+        <section className="mb-8 space-y-4">
+          <div>
+            <h2 className="text-2xl font-semibold tracking-tight">
+              Data freshness dashboard
+            </h2>
+            <p className="text-muted-foreground mt-2 max-w-3xl">
+              The site is mostly static for speed and Cloudflare cost control,
+              but every major 99 Nights page has a checked date and review
+              cadence. This table is the bridge to scheduled checks.
+            </p>
+          </div>
+
+          <div className="grid gap-3 md:grid-cols-2">
+            {ninetyNineNightsFreshnessEntries.map((entry) => {
+              const status = getFreshnessStatus(entry);
+              const ageDays = getFreshnessAgeDays(entry.checkedAt);
+
+              return (
+                <Card key={entry.href}>
+                  <CardHeader>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <Badge variant={freshnessTone[status]}>{status}</Badge>
+                      <Badge variant="outline">{entry.kind}</Badge>
+                      <Badge variant="outline">{entry.owner}</Badge>
+                    </div>
+                    <CardTitle>{entry.title}</CardTitle>
+                    <CardDescription>{entry.note}</CardDescription>
+                  </CardHeader>
+                  <CardContent className="grid gap-3 text-sm sm:grid-cols-3">
+                    <div>
+                      <span className="text-muted-foreground block">
+                        Checked
+                      </span>
+                      <span className="font-medium">{entry.checkedAt}</span>
+                    </div>
+                    <div>
+                      <span className="text-muted-foreground block">Age</span>
+                      <span className="font-medium">{ageDays} days</span>
+                    </div>
+                    <div>
+                      <span className="text-muted-foreground block">
+                        Cadence
+                      </span>
+                      <span className="font-medium">
+                        {entry.cadenceDays} days
+                      </span>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+        </section>
+
         <div className="space-y-4">
           {ninetyNineNightsUpdates.entries.map((entry) => (
             <Card id={`${entry.date}-${entry.type}`} key={entry.title}>

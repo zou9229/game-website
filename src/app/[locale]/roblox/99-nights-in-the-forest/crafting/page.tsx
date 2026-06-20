@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { ninetyNineNightsCrafting } from '@/data/99-nights-crafting';
+import { ninetyNineNightsMedia } from '@/data/99-nights-media';
 import { getRobloxGame } from '@/data/roblox-games';
 import { seoKeywords } from '@/data/seo-keywords';
 import {
@@ -22,6 +23,7 @@ import {
   canonicalUrl,
   currentMonthYear,
 } from '@/lib/seo';
+import { GuideMediaPanel } from '@/components/roblox/guide-media-panel';
 import { Badge } from '@/components/ui/badge';
 import {
   Card,
@@ -319,6 +321,13 @@ export default async function CraftingPage({
       </section>
 
       <section className="mx-auto max-w-6xl px-4 pb-16 sm:px-6 lg:px-8">
+        <GuideMediaPanel
+          title="Crafting media and video research"
+          description="Real game thumbnails for route context plus video-search links for spotting current player questions."
+          images={ninetyNineNightsMedia.images.slice(0, 2)}
+          videoSearches={ninetyNineNightsMedia.videoSearches.slice(0, 2)}
+        />
+
         <div className="grid gap-4 md:grid-cols-4">
           <Card>
             <CardHeader>

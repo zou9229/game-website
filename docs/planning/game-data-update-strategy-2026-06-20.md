@@ -118,6 +118,14 @@ Do not edit the existing Docker workflow for this unless we decide it is not
 part of any hosting path. The current Cloudflare path should use vinext and
 wrangler.
 
+Current implementation step:
+
+- `src/data/99-nights-freshness.ts` is the page-level freshness registry.
+- `pnpm game-data:audit` prints a source-review report ordered by stale risk.
+- The public updates page shows the same freshness dashboard for transparency.
+- No scheduled GitHub Action has been added yet. The next safe automation step
+  is a read-only scheduled audit that opens a report, not an auto-publish bot.
+
 ### Phase 3 - Data Pipeline
 
 After traffic proves the model:
