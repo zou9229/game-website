@@ -29,7 +29,13 @@ export function SiteHeader({ navLinks }: { navLinks?: NavLink[] }) {
     <header className="bg-background/80 sticky top-0 z-50 w-full backdrop-blur-sm">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
         {/* Brand */}
-        <Link href="/" className="flex items-center">
+        <Link href="/" className="flex items-center gap-2">
+          <img
+            src="/favicon.svg"
+            alt=""
+            className="size-8 rounded-md"
+            aria-hidden="true"
+          />
           <span className="font-serif text-lg italic">
             {envConfigs.app_name}
           </span>

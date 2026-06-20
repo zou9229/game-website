@@ -21,7 +21,7 @@ import {
 } from '@/components/ui/card';
 
 const game = getRobloxGame('99-nights-in-the-forest');
-const heroImageUrl = '/imgs/generated/questcodes-forest-hero-1781934073676.png';
+const heroImageUrl = '/imgs/roblox/99-nights-thumbnail-1.jpg';
 
 export async function generateMetadata({
   params,
@@ -121,13 +121,14 @@ export default async function GameHubPage({
           <CardContent className="pt-4">
             <img
               src={heroImageUrl}
-              alt="Original forest survival guide artwork for Quest Codes"
+              alt="Official Roblox thumbnail for 99 Nights in the Forest showing players defending a camp from the forest creature"
               className="aspect-[16/9] w-full rounded-md object-cover"
               loading="eager"
               fetchPriority="high"
             />
             <p className="text-muted-foreground mt-3 text-sm">
-              Original guide artwork. Game facts and code status are kept in the
+              Official Roblox thumbnail used for identification and guide
+              commentary. Game facts and code status are kept in the
               source-checked data tables below.
             </p>
           </CardContent>

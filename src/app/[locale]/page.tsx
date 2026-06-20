@@ -15,7 +15,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 
-const heroImageUrl = '/imgs/generated/questcodes-forest-hero-1781934073676.png';
+const heroImageUrl = '/imgs/roblox/99-nights-thumbnail-1.jpg';
 
 export async function generateMetadata({
   params,
@@ -58,7 +58,16 @@ export default function HomePage() {
     <main className="bg-background text-foreground min-h-screen">
       <header className="border-border/80 bg-background/90 sticky top-0 z-50 border-b backdrop-blur">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <Link className="font-semibold tracking-tight" href="/">
+          <Link
+            className="flex items-center gap-2 font-semibold tracking-tight"
+            href="/"
+          >
+            <img
+              src="/favicon.svg"
+              alt=""
+              className="size-8 rounded-md"
+              aria-hidden="true"
+            />
             {envConfigs.app_name}
           </Link>
           <nav className="hidden items-center gap-5 text-sm md:flex">
@@ -133,13 +142,17 @@ export default function HomePage() {
         <Card className="overflow-hidden">
           <CardContent className="p-0">
             <img
-              alt="Original Quest Codes forest campfire guide artwork"
+              alt="Official Roblox thumbnail for 99 Nights in the Forest showing players defending a camp from the forest creature"
               className="aspect-[16/9] w-full object-cover"
               fetchPriority="high"
               loading="eager"
               src={heroImageUrl}
             />
             <div className="space-y-4 p-5">
+              <p className="text-muted-foreground text-xs">
+                Official Roblox thumbnail used for identification and guide
+                commentary.
+              </p>
               <div>
                 <Badge>{featuredGame.genre}</Badge>
                 <h2 className="mt-3 text-2xl font-semibold">

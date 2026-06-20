@@ -56,7 +56,7 @@ export const robloxGames: RobloxGame[] = [
     robloxUrl:
       'https://www.roblox.com/games/79546208627805/99-Nights-in-the-Forest',
     imageUrl:
-      'https://tr.rbxcdn.com/180DAY-d9018aca68e7f7fca046cdd403a3afa2/500/280/Image/Jpeg/noFilter',
+      'https://tr.rbxcdn.com/180DAY-d9018aca68e7f7fca046cdd403a3afa2/768/432/Image/Jpeg/noFilter',
     developer: "Grandma's Favourite Games",
     genre: 'Survival',
     maxPlayers: 25,

@@ -26,6 +26,7 @@ const notoSerifSC = Noto_Serif_SC({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(envConfigs.app_url || 'https://questcodes.com'),
   title: envConfigs.app_name,
   description: envConfigs.app_description,
   keywords: [
@@ -39,6 +40,27 @@ export const metadata: Metadata = {
     icon: '/favicon.svg',
     shortcut: '/favicon.svg',
     apple: '/favicon.svg',
+  },
+  openGraph: {
+    title: envConfigs.app_name,
+    description: envConfigs.app_description,
+    url: envConfigs.app_url,
+    siteName: envConfigs.app_name,
+    images: [
+      {
+        url: '/imgs/roblox/99-nights-thumbnail-1.jpg',
+        width: 768,
+        height: 432,
+        alt: 'Official Roblox thumbnail for 99 Nights in the Forest',
+      },
+    ],
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: envConfigs.app_name,
+    description: envConfigs.app_description,
+    images: ['/imgs/roblox/99-nights-thumbnail-1.jpg'],
   },
 };
 
