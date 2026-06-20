@@ -99,6 +99,10 @@ const relatedPages = [
     title: 'Gem of the Forest route',
   },
   {
+    href: '/roblox/99-nights-in-the-forest/forest-gem-fragments',
+    title: 'Forest Gem fragments',
+  },
+  {
     href: '/roblox/99-nights-in-the-forest/classes',
     title: 'Class reference',
   },

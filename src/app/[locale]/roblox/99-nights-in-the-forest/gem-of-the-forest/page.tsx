@@ -93,6 +93,10 @@ const confidenceTone = {
 
 const relatedPages = [
   {
+    href: '/roblox/99-nights-in-the-forest/forest-gem-fragments',
+    title: 'Forest Gem fragments',
+  },
+  {
     href: '/roblox/99-nights-in-the-forest/crafting-bench-5',
     title: 'Crafting Bench 5',
   },

@@ -91,6 +91,13 @@ export const robloxGames: RobloxGame[] = [
         status: 'live',
       },
       {
+        title: 'Forest Gem Fragments',
+        href: '/roblox/99-nights-in-the-forest/forest-gem-fragments',
+        description:
+          'Day 100+ nighttime raid fragment route, 4-fragment combine rule, no-drop-rate caveats, and first Forest Gem spend planning.',
+        status: 'live',
+      },
+      {
         title: 'Stronghold',
         href: '/roblox/99-nights-in-the-forest/stronghold',
         description:
