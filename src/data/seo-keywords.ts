@@ -102,6 +102,11 @@ export const seoKeywords: Record<string, string[]> = {
     'how to upgrade taming flute',
     '99 nights animal taming flute',
   ],
+  ninetyNineNightsZookeeperBeastmaster: [
+    'zookeeper vs beastmaster 99 nights',
+    '99 nights beastmaster',
+    '99 nights zookeeper',
+  ],
   ninetyNineNightsSurvivalGuide: [
     '99 nights in the forest survival guide',
     '99 nights beginner guide',

@@ -336,6 +336,12 @@ export default async function AnimalsPage({
             </Link>
             <Link
               className="hover:bg-accent block rounded-md border p-3"
+              href="/roblox/99-nights-in-the-forest/zookeeper-vs-beastmaster"
+            >
+              Zookeeper vs Beastmaster
+            </Link>
+            <Link
+              className="hover:bg-accent block rounded-md border p-3"
               href="/roblox/99-nights-in-the-forest/survival-guide"
             >
               Survival guide

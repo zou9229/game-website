@@ -77,7 +77,7 @@ export function buildLlmsText({ full = false }: { full?: boolean } = {}) {
     '',
     '- Find working Roblox game codes with visible source checks',
     '- Check expired or conflicting code history before retesting old rewards',
-    '- Compare Roblox class tier lists, class references, animal taming data, Taming Flute upgrade routes, crafting priorities, Forest Gem routes, Forest Gem fragment planning, Crafting Bench 5 decisions, bandage routes, Stronghold routes, and survival guides',
+    '- Compare Roblox class tier lists, class references, Zookeeper vs Beastmaster class choices, animal taming data, Taming Flute upgrade routes, crafting priorities, Forest Gem routes, Forest Gem fragment planning, Crafting Bench 5 decisions, bandage routes, Stronghold routes, and survival guides',
     '- Track source-checked update notes without invented patch details',
     '- Use related internal pages to move from codes to the next practical game decision',
     '',
@@ -99,7 +99,7 @@ export function buildLlmsText({ full = false }: { full?: boolean } = {}) {
     '## Current Keyword Clusters',
     '',
     '- Primary cluster: 99 nights in the forest codes, codes for 99 nights in the forest, codes in 99 nights in the forest, 99 nights in the forest codes for gems',
-    '- Supporting cluster: 99 nights in the forest gems, diamonds, gem of the forest, forest gem fragments, day 100 raid, crafting bench, crafting recipes, crafting bench 5, how to craft bandages in 99 nights in the forest, 99 nights in the forest bandages, cultist stronghold, stronghold diamonds, level 4 stronghold, badges, Humiliation Badge, map, locations, missing kids, missing children, class tier list, classes, animals, animal taming, taming flute, how to upgrade taming flute, survival guide, updates',
+    '- Supporting cluster: 99 nights in the forest gems, diamonds, gem of the forest, forest gem fragments, day 100 raid, crafting bench, crafting recipes, crafting bench 5, how to craft bandages in 99 nights in the forest, 99 nights in the forest bandages, cultist stronghold, stronghold diamonds, level 4 stronghold, badges, Humiliation Badge, map, locations, missing kids, missing children, class tier list, classes, zookeeper vs beastmaster, beastmaster, zookeeper, animals, animal taming, taming flute, how to upgrade taming flute, survival guide, updates',
     '- Site-level cluster: Roblox codes, working Roblox codes, Roblox game guides, Roblox tier lists',
     '- Not a primary target: the broad navigational keyword Roblox',
   ];

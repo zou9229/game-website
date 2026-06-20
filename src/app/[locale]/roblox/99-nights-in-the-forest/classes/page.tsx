@@ -315,6 +315,12 @@ export default async function ClassesPage({
             >
               Taming Flute upgrade route
             </Link>
+            <Link
+              className="hover:bg-accent block rounded-md border p-3"
+              href="/roblox/99-nights-in-the-forest/zookeeper-vs-beastmaster"
+            >
+              Zookeeper vs Beastmaster
+            </Link>
           </CardContent>
         </Card>
       </section>

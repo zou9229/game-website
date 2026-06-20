@@ -175,6 +175,13 @@ export const robloxGames: RobloxGame[] = [
         status: 'live',
       },
       {
+        title: 'Zookeeper vs Beastmaster',
+        href: '/roblox/99-nights-in-the-forest/zookeeper-vs-beastmaster',
+        description:
+          'Source-checked taming class comparison covering Zookeeper, Beastmaster, flute starts, pet-limit notes, diamond costs, and tier-list disagreements.',
+        status: 'live',
+      },
+      {
         title: 'Survival Guide',
         href: '/roblox/99-nights-in-the-forest/survival-guide',
         description:

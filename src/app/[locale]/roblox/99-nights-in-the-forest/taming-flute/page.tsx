@@ -86,6 +86,10 @@ const relatedPages = [
     title: 'Class tier list',
   },
   {
+    href: '/roblox/99-nights-in-the-forest/zookeeper-vs-beastmaster',
+    title: 'Zookeeper vs Beastmaster',
+  },
+  {
     href: '/roblox/99-nights-in-the-forest/survival-guide',
     title: 'Survival guide',
   },
