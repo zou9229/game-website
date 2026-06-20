@@ -4,7 +4,6 @@ import { getLocale } from 'next-intl/server';
 import { ThemeProvider } from 'next-themes';
 
 import { envConfigs } from '@/config';
-import { locales } from '@/config/locale';
 import { Analytics } from '@/components/analytics';
 import { CustomerService } from '@/components/customer-service';
 import { GoogleOneTap } from '@/components/google-one-tap';
@@ -49,20 +48,9 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const locale = await getLocale();
-  const appUrl = envConfigs.app_url || '';
 
   return (
     <html lang={locale} suppressHydrationWarning>
-      <head>
-        {locales.map((loc) => (
-          <link
-            key={loc}
-            rel="alternate"
-            hrefLang={loc}
-            href={`${appUrl}${loc === 'en' ? '' : `/${loc}`}`}
-          />
-        ))}
-      </head>
       <body
         className={`${inter.variable} ${libreBaskerville.variable} ${notoSerifSC.variable} font-sans antialiased`}
       >

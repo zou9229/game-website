@@ -340,6 +340,10 @@ export default async function GemsPage({
                   title: 'Badge rewards and diamond notes',
                 },
                 {
+                  href: '/roblox/99-nights-in-the-forest/stronghold',
+                  title: 'Stronghold diamond route',
+                },
+                {
                   href: '/roblox/99-nights-in-the-forest/class-tier-list',
                   title: 'Class tier list',
                 },

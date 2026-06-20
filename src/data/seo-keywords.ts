@@ -45,6 +45,14 @@ export const seoKeywords: Record<string, string[]> = {
     'how to get gems in 99 nights in the forest',
     '99 nights in the forest free diamonds',
   ],
+  ninetyNineNightsStronghold: [
+    '99 nights in the forest cultist stronghold',
+    '99 nights in the forest stronghold',
+    '99 nights in the forest stronghold guide',
+    '99 nights in the forest stronghold diamonds',
+    '99 nights in the forest level 4 stronghold',
+    'how to beat stronghold in 99 nights in the forest',
+  ],
   ninetyNineNightsBadges: [
     '99 nights in the forest badges',
     '99 nights in the forest all badges',

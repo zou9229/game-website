@@ -84,6 +84,13 @@ export const robloxGames: RobloxGame[] = [
         status: 'live',
       },
       {
+        title: 'Stronghold',
+        href: '/roblox/99-nights-in-the-forest/stronghold',
+        description:
+          'Cultist Stronghold route planning, diamond farming notes, level scaling, class prep, and source-checked risk guidance.',
+        status: 'live',
+      },
+      {
         title: 'Badges',
         href: '/roblox/99-nights-in-the-forest/badges',
         description:

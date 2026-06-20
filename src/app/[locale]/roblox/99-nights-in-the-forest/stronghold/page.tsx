@@ -1,15 +1,16 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { ninetyNineNightsMapGuide } from '@/data/99-nights-map';
+import { ninetyNineNightsStronghold } from '@/data/99-nights-stronghold';
 import { getRobloxGame } from '@/data/roblox-games';
 import { seoKeywords } from '@/data/seo-keywords';
 import {
-  Compass,
+  Castle,
   ExternalLink,
-  Landmark,
-  Map,
-  Route,
+  Gem,
+  MapPin,
   ShieldAlert,
+  Swords,
+  Users,
 } from 'lucide-react';
 
 import { Link } from '@/core/i18n/navigation';
@@ -35,50 +36,85 @@ const game = getRobloxGame('99-nights-in-the-forest');
 
 const faqs = [
   {
-    question: 'How do I expand the map in 99 Nights in the Forest?',
+    question: 'What is the Cultist Stronghold in 99 Nights in the Forest?',
     answer:
-      'Craft and place the map, then explore unrevealed areas during safe daytime routes. Recheck the map after each trip so new locations and route decisions are visible.',
+      'It is a high-risk structure with cultist waves, multiple floors, scaling difficulty, and reward chests. Quest Codes treats it as a prepared raid route, not a beginner objective.',
   },
   {
-    question: 'Is the 99 Nights in the Forest map the same every run?',
+    question: 'Is Stronghold good for diamonds?',
     answer:
-      'Do not rely on fixed-coordinate routes. Quest Codes treats the map as route-planning guidance because layouts and discovery order can vary.',
+      'Yes, source data links the Stronghold to Diamond Chest rewards. For pure diamond farming, the checked Wiki guidance favors clearing level 1 instead of forcing harder levels for the same diamond value.',
   },
   {
-    question: 'What should I look for on the map first?',
+    question: 'When should I raid the Stronghold?',
     answer:
-      'Look for nearby structures, safe resource loops, missing child icons, and danger zones that need better gear before you commit.',
+      'Raid after you have ranged damage, food, ammo, a safe return route, and a class setup that fits combat. If the map route or supplies are weak, delay the raid.',
   },
   {
-    question: 'Should I rescue missing kids immediately when I find them?',
+    question: 'Why is level 4 Stronghold hard?',
     answer:
-      'Not always. If the guards or travel route are too risky, mark the location and return after improving gear, food, class setup, or code rewards.',
+      'The Stronghold has four levels, becomes harder after completed raids, and stays at level 4 after level 4 is beaten. Higher levels add more pressure and can include stronger cultists.',
   },
   {
-    question: 'Does Quest Codes provide an official map?',
+    question: 'Which classes help with Stronghold raids?',
     answer:
-      'No. This is a fan-made route guide based on checked public sources, not an official Roblox or game developer map.',
+      'Source notes mention combat-focused options such as Cyborg, Alien, Fire Bandit, Witch, Assassin, Brawler, or Vampire. Check the class tier list before spending diamonds.',
+  },
+  {
+    question: 'Is this an official 99 Nights in the Forest guide?',
+    answer:
+      'No. Quest Codes is a fan-made source-checked guide site and is not affiliated with Roblox or the game developer.',
   },
 ];
 
 const intentLabels = {
-  'map-item': 'Map item',
-  locations: 'Locations',
-  'missing-kids': 'Missing kids',
-  danger: 'Danger zones',
+  entry: 'Entry route',
+  diamonds: 'Diamonds',
+  levels: 'Level scaling',
+  classes: 'Class prep',
+  'community-signal': 'Community signal',
 } as const;
 
 const intentStyles = {
-  'map-item': 'border-emerald-500/40 bg-emerald-500/10',
-  locations: 'border-blue-500/40 bg-blue-500/10',
-  'missing-kids': 'border-purple-500/40 bg-purple-500/10',
-  danger: 'border-red-500/40 bg-red-500/10',
+  entry: 'border-blue-500/40 bg-blue-500/10',
+  diamonds: 'border-emerald-500/40 bg-emerald-500/10',
+  levels: 'border-amber-500/40 bg-amber-500/10',
+  classes: 'border-purple-500/40 bg-purple-500/10',
+  'community-signal': 'border-slate-500/40 bg-slate-500/10',
 } as const;
 
 const confidenceTone = {
   high: 'default',
   medium: 'secondary',
+  low: 'outline',
 } as const;
+
+const relatedPages = [
+  {
+    href: '/roblox/99-nights-in-the-forest/gems',
+    title: 'Gems and diamonds',
+  },
+  {
+    href: '/roblox/99-nights-in-the-forest/classes',
+    title: 'Class reference',
+  },
+  {
+    href: '/roblox/99-nights-in-the-forest/class-tier-list',
+    title: 'Class tier list',
+  },
+  {
+    href: '/roblox/99-nights-in-the-forest/map',
+    title: 'Map and locations',
+  },
+  {
+    href: '/roblox/99-nights-in-the-forest/survival-guide',
+    title: 'Survival guide',
+  },
+  {
+    href: '/roblox/99-nights-in-the-forest/codes',
+    title: 'Working codes',
+  },
+];
 
 export async function generateMetadata({
   params,
@@ -88,20 +124,20 @@ export async function generateMetadata({
   const { locale } = await params;
   const monthYear = currentMonthYear();
   const canonical = canonicalUrl(
-    '/roblox/99-nights-in-the-forest/map/',
+    '/roblox/99-nights-in-the-forest/stronghold/',
     locale
   );
 
   return {
-    title: `99 Nights in the Forest Map and Locations (${monthYear})`,
+    title: `99 Nights in the Forest Stronghold Guide (${monthYear})`,
     description:
-      'A source-checked 99 Nights in the Forest map guide for crafting the map, expanding revealed areas, planning locations, and finding missing kids safely.',
-    keywords: seoKeywords.ninetyNineNightsMap,
+      'Cultist Stronghold guide for 99 Nights in the Forest with diamond farming notes, level 4 risk, class prep, and checked source links.',
+    keywords: seoKeywords.ninetyNineNightsStronghold,
     alternates: { canonical },
     openGraph: {
-      title: `99 Nights in the Forest Map and Locations (${monthYear})`,
+      title: `99 Nights in the Forest Stronghold Guide (${monthYear})`,
       description:
-        'Use the 99 Nights in the Forest map as a route planner for locations, missing kids, and danger zones.',
+        'Plan Cultist Stronghold raids with source-checked diamond, level, class, and risk notes.',
       url: canonical,
       type: 'article',
       images: game ? [game.imageUrl] : undefined,
@@ -109,7 +145,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function MapGuidePage({
+export default async function StrongholdPage({
   params,
 }: {
   params: Promise<{ locale: string }>;
@@ -117,43 +153,50 @@ export default async function MapGuidePage({
   const { locale } = await params;
   if (!game) notFound();
 
-  const pageUrl = canonicalUrl('/roblox/99-nights-in-the-forest/map/', locale);
+  const pageUrl = canonicalUrl(
+    '/roblox/99-nights-in-the-forest/stronghold/',
+    locale
+  );
   const gameUrl = canonicalUrl('/roblox/99-nights-in-the-forest/', locale);
   const breadcrumbSchema = buildBreadcrumbSchema([
     { name: 'Home', item: canonicalUrl('/', locale) },
     { name: 'Roblox', item: canonicalUrl('/roblox/', locale) },
     { name: game.name, item: gameUrl },
-    { name: 'Map', item: pageUrl },
+    { name: 'Stronghold', item: pageUrl },
   ]);
   const faqSchema = buildFAQSchema(faqs);
   const howToSchema = buildHowToSchema({
-    name: 'How to expand the 99 Nights in the Forest map',
+    name: 'How to prepare for Cultist Stronghold in 99 Nights in the Forest',
     description:
-      'Craft the map, explore safe routes, mark important locations, and return before night pressure breaks the run.',
+      'Prepare map routes, ranged weapons, supplies, and class choices before treating Stronghold as a diamond route.',
     steps: [
       {
-        name: 'Craft and place the map',
-        text: 'Use the map as your planning board before committing to long exploration loops.',
+        name: 'Find the Stronghold route',
+        text: 'Use the map to locate the Stronghold and plan a safe return path before night pressure or food risk builds up.',
       },
       {
-        name: 'Explore unrevealed areas',
-        text: 'Reveal nearby locations during daytime routes and return before your campfire or food route becomes unsafe.',
+        name: 'Prepare ranged damage',
+        text: 'Bring ranged weapons and enough supplies before entering because cultist waves can punish close-range fights.',
       },
       {
-        name: 'Mark important discoveries',
-        text: 'Use discoveries such as missing kids, structures, and danger zones to plan the next trip instead of forcing a risky rescue immediately.',
+        name: 'Clear level 1 first',
+        text: 'If diamonds are the goal, test level 1 value before pushing harder levels that increase risk without a confirmed better diamond reward.',
       },
       {
-        name: 'Connect the route to progression',
-        text: 'Use codes, classes, badges, and survival planning before attempting harder map objectives.',
+        name: 'Decide whether level 4 is worth it',
+        text: 'Avoid level 4 attempts unless your class, ammo, food, and team setup can handle stronger wave pressure.',
+      },
+      {
+        name: 'Update your plan after each source check',
+        text: 'Recheck codes, class notes, and update pages after major patches because Roblox reward routes can change quickly.',
       },
     ],
   });
   const itemListSchema = buildItemListSchema({
-    name: '99 Nights in the Forest map planning sections',
+    name: '99 Nights in the Forest Stronghold planning sections',
     description:
-      'Map item, locations, missing children, and danger-zone route guidance.',
-    items: ninetyNineNightsMapGuide.sections.map((section) => ({
+      'Entry route, diamond farming, level scaling, class prep, and community tactic signals.',
+    items: ninetyNineNightsStronghold.sections.map((section) => ({
       name: section.title,
       url: `${pageUrl}#${section.intent}`,
       description: section.summary,
@@ -199,53 +242,53 @@ export default async function MapGuidePage({
               {game.name}
             </Link>
             <span>/</span>
-            <span className="text-foreground">Map</span>
+            <span className="text-foreground">Stronghold</span>
           </nav>
 
           <Badge variant="outline" className="mb-4 gap-1.5">
-            <Map className="size-3.5" />
-            Checked {ninetyNineNightsMapGuide.checkedAt}
+            <Castle className="size-3.5" />
+            Checked {ninetyNineNightsStronghold.checkedAt}
           </Badge>
           <h1 className="text-foreground text-4xl font-semibold tracking-tight md:text-5xl">
-            99 Nights in the Forest map and locations guide
+            99 Nights in the Forest Cultist Stronghold guide
           </h1>
           <p className="text-muted-foreground mt-4 text-lg leading-8">
-            {ninetyNineNightsMapGuide.summary} Use this page to decide when to
-            expand the map, which locations are worth a trip, and when to delay
-            missing child or stronghold objectives.
+            {ninetyNineNightsStronghold.summary} This guide focuses on the
+            practical decision: when the Stronghold is worth entering, when
+            level 4 is too risky, and how to connect the route to diamonds,
+            classes, and map planning.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
-              href="/roblox/99-nights-in-the-forest/survival-guide"
+              href="/roblox/99-nights-in-the-forest/gems"
               className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex h-10 items-center justify-center rounded-md px-4 text-sm font-medium"
             >
-              Open survival route
+              Check diamond routes
             </Link>
             <Link
-              href="/roblox/99-nights-in-the-forest/badges"
+              href="/roblox/99-nights-in-the-forest/class-tier-list"
               className="border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex h-10 items-center justify-center rounded-md border px-4 text-sm font-medium"
             >
-              Check badges
+              Compare classes
             </Link>
           </div>
         </div>
 
         <Card>
           <CardHeader>
-            <CardTitle>No fixed-coordinate promise</CardTitle>
+            <CardTitle>Stronghold decision rule</CardTitle>
             <CardDescription>
-              Map pages are easy to make misleading.
+              Do not raid just because the icon appears.
             </CardDescription>
           </CardHeader>
           <CardContent className="text-muted-foreground space-y-3 text-sm leading-6">
             <p>
-              Quest Codes does not present a fake universal coordinate map. This
-              guide focuses on decisions: when to craft the map, what to reveal,
-              and which route is safe enough for your current supplies.
+              Treat Cultist Stronghold as a prepared objective: map route,
+              ranged weapon, supplies, class fit, and exit plan first.
             </p>
             <p>
-              For exact item and structure names, source links remain visible so
-              future update checks can refresh the route.
+              If you only want diamonds, source notes point toward testing level
+              1 value before pushing harder levels.
             </p>
           </CardContent>
         </Card>
@@ -255,37 +298,37 @@ export default async function MapGuidePage({
         <div className="grid gap-4 md:grid-cols-4">
           <Card>
             <CardHeader>
-              <Map className="text-primary size-5" />
-              <CardTitle>Craft map</CardTitle>
+              <MapPin className="text-primary size-5" />
+              <CardTitle>Find route</CardTitle>
               <CardDescription>
-                Build the planning tool before long exploration.
+                Use the map before committing to the raid.
               </CardDescription>
             </CardHeader>
           </Card>
           <Card>
             <CardHeader>
-              <Landmark className="text-primary size-5" />
-              <CardTitle>Find locations</CardTitle>
+              <Gem className="text-primary size-5" />
+              <CardTitle>Farm carefully</CardTitle>
               <CardDescription>
-                Use structures as resource decisions.
+                Diamond value depends on risk, not only reward.
               </CardDescription>
             </CardHeader>
           </Card>
           <Card>
             <CardHeader>
-              <Compass className="text-primary size-5" />
-              <CardTitle>Track kids</CardTitle>
+              <Swords className="text-primary size-5" />
+              <CardTitle>Respect level 4</CardTitle>
               <CardDescription>
-                Mark missing child routes before forcing rescues.
+                Stronghold difficulty does not stay flat.
               </CardDescription>
             </CardHeader>
           </Card>
           <Card>
             <CardHeader>
-              <ShieldAlert className="text-primary size-5" />
-              <CardTitle>Avoid traps</CardTitle>
+              <Users className="text-primary size-5" />
+              <CardTitle>Pick class</CardTitle>
               <CardDescription>
-                Strongholds and subareas need preparation.
+                Match class spending to your normal route.
               </CardDescription>
             </CardHeader>
           </Card>
@@ -294,16 +337,17 @@ export default async function MapGuidePage({
         <section className="mt-8 space-y-4">
           <div>
             <h2 className="text-2xl font-semibold tracking-tight">
-              Map route plan
+              Stronghold route plan
             </h2>
             <p className="text-muted-foreground mt-2 max-w-3xl">
-              Follow the map in decision order: reveal nearby areas, classify
-              locations, mark missing kids, then prepare before danger zones.
+              Read this in order: entry route, diamond value, level scaling,
+              class prep, then community tactics. The page labels confidence so
+              you can separate checked data from player signals.
             </p>
           </div>
 
           <div className="grid gap-4">
-            {ninetyNineNightsMapGuide.sections.map((section) => (
+            {ninetyNineNightsStronghold.sections.map((section) => (
               <Card
                 id={section.intent}
                 key={section.title}
@@ -321,14 +365,14 @@ export default async function MapGuidePage({
                 </CardHeader>
                 <CardContent className="space-y-5">
                   <div className="grid gap-3 md:grid-cols-3">
-                    {section.actions.map((action) => (
+                    {section.do.map((item) => (
                       <div
-                        key={action}
+                        key={item}
                         className="bg-background/80 rounded-md border p-4"
                       >
                         <h3 className="text-sm font-semibold">Do this</h3>
                         <p className="text-muted-foreground mt-2 text-sm leading-6">
-                          {action}
+                          {item}
                         </p>
                       </div>
                     ))}
@@ -337,7 +381,10 @@ export default async function MapGuidePage({
                   <div className="grid gap-3 md:grid-cols-2">
                     {section.avoid.map((item) => (
                       <div key={item} className="bg-background rounded-md p-4">
-                        <h3 className="text-sm font-semibold">Avoid</h3>
+                        <h3 className="flex items-center gap-2 text-sm font-semibold">
+                          <ShieldAlert className="size-4" />
+                          Avoid
+                        </h3>
                         <p className="text-muted-foreground mt-2 text-sm leading-6">
                           {item}
                         </p>
@@ -371,38 +418,14 @@ export default async function MapGuidePage({
         <div className="mt-8 grid gap-4 lg:grid-cols-[1fr_1fr]">
           <Card>
             <CardHeader>
-              <CardTitle>Related route pages</CardTitle>
+              <CardTitle>Related 99 Nights pages</CardTitle>
               <CardDescription>
-                Continue from map planning into action pages.
+                Stronghold decisions connect to diamonds, classes, and map
+                routes.
               </CardDescription>
             </CardHeader>
             <CardContent className="grid gap-3 text-sm">
-              {[
-                {
-                  href: '/roblox/99-nights-in-the-forest/survival-guide',
-                  title: 'Survival guide',
-                },
-                {
-                  href: '/roblox/99-nights-in-the-forest/missing-kids',
-                  title: 'Missing kids locations',
-                },
-                {
-                  href: '/roblox/99-nights-in-the-forest/stronghold',
-                  title: 'Cultist Stronghold route',
-                },
-                {
-                  href: '/roblox/99-nights-in-the-forest/badges',
-                  title: 'Badges guide',
-                },
-                {
-                  href: '/roblox/99-nights-in-the-forest/classes',
-                  title: 'Class reference',
-                },
-                {
-                  href: '/roblox/99-nights-in-the-forest/codes',
-                  title: 'Working codes',
-                },
-              ].map((item) => (
+              {relatedPages.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
@@ -418,7 +441,7 @@ export default async function MapGuidePage({
             <CardHeader>
               <CardTitle>FAQ</CardTitle>
               <CardDescription>
-                Short answers for map and locations searches.
+                Short answers for Stronghold and level 4 searches.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
