@@ -1,0 +1,53 @@
+import type { MetadataRoute } from 'next';
+import { robloxGames } from '@/data/roblox-games';
+
+import { defaultLocale, locales } from '@/config/locale';
+import { getBaseUrl } from '@/lib/seo';
+
+function localizedUrl(path: string, locale: string) {
+  const cleanPath = path === '/' ? '' : path.replace(/\/$/, '');
+  const localePrefix = locale === defaultLocale ? '' : `/${locale}`;
+  return `${getBaseUrl()}${localePrefix}${cleanPath || '/'}`;
+}
+
+export default function sitemap(): MetadataRoute.Sitemap {
+  const baseRoutes = [
+    { path: '/', priority: 1, changeFrequency: 'weekly' as const },
+    { path: '/pricing', priority: 0.7, changeFrequency: 'monthly' as const },
+    {
+      path: '/privacy-policy',
+      priority: 0.3,
+      changeFrequency: 'yearly' as const,
+    },
+    {
+      path: '/terms-of-service',
+      priority: 0.3,
+      changeFrequency: 'yearly' as const,
+    },
+    { path: '/roblox', priority: 0.9, changeFrequency: 'daily' as const },
+  ];
+
+  const gameRoutes = robloxGames.flatMap((game) => [
+    {
+      path: `/roblox/${game.slug}`,
+      priority: 0.9,
+      changeFrequency: 'daily' as const,
+    },
+    ...game.pages
+      .filter((page) => page.status === 'live')
+      .map((page) => ({
+        path: page.href,
+        priority: 0.9,
+        changeFrequency: 'daily' as const,
+      })),
+  ]);
+
+  return locales.flatMap((locale) =>
+    [...baseRoutes, ...gameRoutes].map((route) => ({
+      url: localizedUrl(route.path, locale),
+      lastModified: new Date(),
+      changeFrequency: route.changeFrequency,
+      priority: route.priority,
+    }))
+  );
+}
