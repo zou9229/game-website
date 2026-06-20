@@ -4,7 +4,6 @@ export const seoKeywords: Record<string, string[]> = {
     'Roblox codes',
     'working Roblox codes',
     'Roblox game guides',
-    'Roblox tier lists',
     '99 Nights in the Forest codes',
   ],
   codesIndex: [
@@ -54,12 +53,13 @@ export const seoKeywords: Record<string, string[]> = {
     'how to beat stronghold in 99 nights in the forest',
   ],
   ninetyNineNightsCrafting: [
-    '99 nights in the forest crafting guide',
-    '99 nights in the forest crafting recipes',
-    '99 nights in the forest crafting',
     '99 nights in the forest crafting bench',
-    '99 nights in the forest how to craft bandages',
-    '99 nights in the forest best things to craft',
+    '99 nights in the forest crafting recipes',
+    'crafting bench 5 99 nights in the forest',
+  ],
+  ninetyNineNightsBandages: [
+    'how to craft bandages in 99 nights in the forest',
+    '99 nights in the forest bandages',
   ],
   ninetyNineNightsBadges: [
     '99 nights in the forest badges',

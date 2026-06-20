@@ -111,6 +111,10 @@ const relatedPages = [
     title: 'Crafting and bench upgrades',
   },
   {
+    href: '/roblox/99-nights-in-the-forest/bandages',
+    title: 'Bandage crafting route',
+  },
+  {
     href: '/roblox/99-nights-in-the-forest/survival-guide',
     title: 'Survival guide',
   },

@@ -98,6 +98,13 @@ export const robloxGames: RobloxGame[] = [
         status: 'live',
       },
       {
+        title: 'Bandages',
+        href: '/roblox/99-nights-in-the-forest/bandages',
+        description:
+          'Bandage crafting route, Anvil requirements, Rabbit Foot and Wolf Pelt materials, revive use, cooldown notes, and source checks.',
+        status: 'live',
+      },
+      {
         title: 'Badges',
         href: '/roblox/99-nights-in-the-forest/badges',
         description:
