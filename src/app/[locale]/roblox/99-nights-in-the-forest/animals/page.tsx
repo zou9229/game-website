@@ -330,6 +330,12 @@ export default async function AnimalsPage({
           <CardContent className="space-y-3 text-sm">
             <Link
               className="hover:bg-accent block rounded-md border p-3"
+              href="/roblox/99-nights-in-the-forest/taming-flute"
+            >
+              Taming Flute upgrade guide
+            </Link>
+            <Link
+              className="hover:bg-accent block rounded-md border p-3"
               href="/roblox/99-nights-in-the-forest/survival-guide"
             >
               Survival guide

@@ -168,6 +168,13 @@ export const robloxGames: RobloxGame[] = [
         status: 'live',
       },
       {
+        title: 'Taming Flute',
+        href: '/roblox/99-nights-in-the-forest/taming-flute',
+        description:
+          'Taming Flute obtainment, XP upgrade route, Old/Good/Strong Flute tiers, Skills Building notes, and animal planning cautions.',
+        status: 'live',
+      },
+      {
         title: 'Survival Guide',
         href: '/roblox/99-nights-in-the-forest/survival-guide',
         description:

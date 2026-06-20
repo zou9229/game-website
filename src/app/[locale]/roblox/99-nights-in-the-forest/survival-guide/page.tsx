@@ -353,6 +353,12 @@ export default async function SurvivalGuidePage({
             </Link>
             <Link
               className="hover:bg-accent block rounded-md border p-3"
+              href="/roblox/99-nights-in-the-forest/taming-flute"
+            >
+              Taming Flute upgrades
+            </Link>
+            <Link
+              className="hover:bg-accent block rounded-md border p-3"
               href="/roblox/99-nights-in-the-forest/class-tier-list"
             >
               Class tier list
