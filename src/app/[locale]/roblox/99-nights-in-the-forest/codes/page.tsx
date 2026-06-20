@@ -1,11 +1,13 @@
 import type { Metadata } from 'next';
 import { getRobloxGame, type GameCodeStatus } from '@/data/roblox-games';
+import { seoKeywords } from '@/data/seo-keywords';
 import { AlertTriangle, ExternalLink } from 'lucide-react';
 
 import { Link } from '@/core/i18n/navigation';
 import {
   buildBreadcrumbSchema,
   buildFAQSchema,
+  buildHowToSchema,
   buildVideoGameSchema,
   canonicalUrl,
   currentMonthYear,
@@ -17,7 +19,6 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle,
 } from '@/components/ui/card';
 import {
   Table,
@@ -29,6 +30,105 @@ import {
 } from '@/components/ui/table';
 
 const game = getRobloxGame('99-nights-in-the-forest');
+const codesPath = '/roblox/99-nights-in-the-forest/codes/';
+
+const getPageTitle = (monthYear: string) =>
+  `99 Nights in the Forest Codes (${monthYear}) - Rewards`;
+
+const getPageDescription = (monthYear: string) =>
+  `Find working 99 Nights in the Forest codes for ${monthYear}, rewards, redemption steps, expired codes, and source checks updated for Roblox players.`;
+
+const redeemSteps = [
+  {
+    name: 'Open the Roblox experience',
+    text: 'Launch 99 Nights in the Forest from the official Roblox game page.',
+  },
+  {
+    name: 'Stay in the lobby',
+    text: 'Redeem codes before starting a survival round so you can reach the code menu safely.',
+  },
+  {
+    name: 'Open the diamond or codes menu',
+    text: 'Use the lobby menu that contains the code box, then paste the code exactly as shown.',
+  },
+  {
+    name: 'Claim the reward',
+    text: 'Submit the code and check the reward message before leaving the lobby.',
+  },
+  {
+    name: 'Use chat for special codes',
+    text: 'For yay fishing, try the in-game chat path because checked sources disagree on its normal code-box status.',
+  },
+];
+
+const verificationNotes = [
+  {
+    title: 'Source cross-checks',
+    text: 'We compare public guide sources and the Roblox game page instead of copying a single code list without context.',
+  },
+  {
+    title: 'Conflict labels',
+    text: 'When sources disagree, the code is marked as special or conflicting so you can decide whether it is worth testing.',
+  },
+  {
+    title: 'Update cadence',
+    text: 'Codes get reviewed after major updates, apology rewards, event drops, and visible changes in trusted source pages.',
+  },
+];
+
+const troubleshootingNotes = [
+  {
+    title: 'The code was entered in the wrong place',
+    text: 'Most codes use the lobby code menu. Special chat redemptions should be tried in chat, not the normal code box.',
+  },
+  {
+    title: 'The code expired after an event',
+    text: 'Seasonal and update apology codes can disappear quickly. Expired entries stay on this page so repeat testing is easier to avoid.',
+  },
+  {
+    title: 'Spacing or capitalization changed',
+    text: 'Copy the code exactly. A code such as yay fishing includes a space, while forestwakesup26 does not.',
+  },
+];
+
+const relatedGuides = [
+  {
+    title: '99 Nights game hub',
+    href: '/roblox/99-nights-in-the-forest',
+    description:
+      'Start here for the full 99 Nights in the Forest guide cluster.',
+  },
+  {
+    title: 'Gems and diamonds',
+    href: '/roblox/99-nights-in-the-forest/gems',
+    description:
+      'See which codes give gems, which badge route is source-checked, and what to save diamonds for.',
+  },
+  {
+    title: 'Class tier list',
+    href: '/roblox/99-nights-in-the-forest/class-tier-list',
+    description:
+      'Compare the best classes before spending diamonds on a new unlock.',
+  },
+  {
+    title: 'All classes reference',
+    href: '/roblox/99-nights-in-the-forest/classes',
+    description:
+      'Review class names, roles, and source-backed class notes in one place.',
+  },
+  {
+    title: 'Survival guide',
+    href: '/roblox/99-nights-in-the-forest/survival-guide',
+    description:
+      'Keep the campfire alive, loot safely, and avoid early-run mistakes.',
+  },
+  {
+    title: 'Animals and taming',
+    href: '/roblox/99-nights-in-the-forest/animals',
+    description:
+      'Check tameable animals, food requirements, flute requirements, and biome notes.',
+  },
+];
 
 const faqs = [
   {
@@ -71,23 +171,37 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const monthYear = currentMonthYear();
-  const canonical = canonicalUrl(
-    '/roblox/99-nights-in-the-forest/codes/',
-    locale
-  );
+  const title = getPageTitle(monthYear);
+  const description = getPageDescription(monthYear);
+  const canonical = canonicalUrl(codesPath, locale);
 
   return {
-    title: `99 Nights in the Forest Codes (${monthYear})`,
-    description:
-      'Current 99 Nights in the Forest codes with source checks, rewards, special redemption notes, and expired code history.',
+    title,
+    description,
+    keywords: seoKeywords.ninetyNineNightsCodes,
     alternates: { canonical },
     openGraph: {
-      title: `99 Nights in the Forest Codes (${monthYear})`,
-      description:
-        'Current 99 Nights in the Forest codes with source checks, rewards, special redemption notes, and expired code history.',
+      title,
+      description,
       url: canonical,
-      images: game ? [{ url: game.imageUrl, width: 500, height: 280 }] : [],
+      siteName: 'Quest Codes',
+      images: game
+        ? [
+            {
+              url: game.imageUrl,
+              width: 500,
+              height: 280,
+              alt: `${game.name} Roblox thumbnail`,
+            },
+          ]
+        : [],
       type: 'article',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: game ? [game.imageUrl] : [],
     },
   };
 }
@@ -101,13 +215,17 @@ export default async function CodesPage({
 
   if (!game) return null;
 
-  const canonical = canonicalUrl(
-    '/roblox/99-nights-in-the-forest/codes/',
-    locale
-  );
+  const monthYear = currentMonthYear();
+  const canonical = canonicalUrl(codesPath, locale);
   const activeCodes = game.codes.filter((code) => code.status === 'active');
   const specialCodes = game.codes.filter((code) => code.status === 'special');
   const expiredCodes = game.codes.filter((code) => code.status === 'expired');
+  const activeCodeNames = activeCodes.map((code) => code.code).join(', ');
+  const gemRewardCodes = game.codes.filter(
+    (code) =>
+      (code.status === 'active' || code.status === 'special') &&
+      code.reward.toLowerCase().includes('gem')
+  );
   const breadcrumbSchema = buildBreadcrumbSchema([
     { name: 'Home', item: canonicalUrl('/', locale) },
     { name: 'Roblox', item: canonicalUrl('/roblox/', locale) },
@@ -118,6 +236,12 @@ export default async function CodesPage({
     { name: 'Codes', item: canonical },
   ]);
   const faqSchema = buildFAQSchema(faqs);
+  const howToSchema = buildHowToSchema({
+    name: 'How to redeem 99 Nights in the Forest codes',
+    description:
+      'Use the lobby code menu or special chat path before starting another 99 Nights in the Forest survival run.',
+    steps: redeemSteps,
+  });
   const videoGameSchema = buildVideoGameSchema({
     name: game.name,
     description: game.description,
@@ -130,13 +254,15 @@ export default async function CodesPage({
 
   return (
     <main className="bg-background min-h-screen">
-      {[breadcrumbSchema, faqSchema, videoGameSchema].map((schema, index) => (
-        <script
-          key={index}
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-        />
-      ))}
+      {[breadcrumbSchema, faqSchema, howToSchema, videoGameSchema].map(
+        (schema, index) => (
+          <script
+            key={index}
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+          />
+        )
+      )}
 
       <section className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:px-8">
         <div>
@@ -159,12 +285,12 @@ export default async function CodesPage({
             Checked {game.stats.checkedAt}
           </Badge>
           <h1 className="text-foreground text-4xl font-semibold tracking-tight md:text-5xl">
-            99 Nights in the Forest codes ({currentMonthYear()})
+            99 Nights in the Forest codes ({monthYear})
           </h1>
           <p className="text-muted-foreground mt-4 text-lg leading-8">
-            Current 99 Nights in the Forest codes, reward notes, source checks,
-            and expired-code history. We mark conflicting source data instead of
-            hiding it.
+            Working 99 Nights in the Forest codes, reward notes, source checks,
+            expired-code history, and redemption troubleshooting for Roblox
+            players. We mark conflicting source data instead of hiding it.
           </p>
           <div className="mt-6 flex flex-wrap gap-3 text-sm">
             <a
@@ -190,6 +316,7 @@ export default async function CodesPage({
             <img
               src={game.imageUrl}
               alt={`${game.name} Roblox thumbnail`}
+              title={`${game.name} Roblox thumbnail`}
               className="aspect-[16/9] w-full rounded-md object-cover"
               loading="eager"
               fetchPriority="high"
@@ -205,7 +332,90 @@ export default async function CodesPage({
       <section className="mx-auto max-w-6xl px-4 pb-16 sm:px-6 lg:px-8">
         <Card className="rounded-lg">
           <CardHeader>
-            <CardTitle>Active codes</CardTitle>
+            <h2 className="text-2xl font-semibold tracking-tight">
+              Quick answer: working codes today
+            </h2>
+            <CardDescription>
+              Last checked {game.stats.checkedAt}. Use this summary before
+              starting another run.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="grid gap-5 lg:grid-cols-[1fr_280px]">
+            <div className="text-muted-foreground space-y-3 text-sm leading-6">
+              <p>
+                For {monthYear}, the active 99 Nights in the Forest codes we
+                currently treat as working are{' '}
+                <span className="text-foreground font-mono font-medium">
+                  {activeCodeNames || 'no active codes'}
+                </span>
+                . The code <span className="font-mono">yay fishing</span> stays
+                in the special section because sources disagree on whether it
+                should be redeemed through chat or treated as expired.
+              </p>
+              <p>
+                The table below keeps rewards, copy buttons, source links, and
+                expired entries together so you can check a code quickly without
+                retesting old event rewards.
+              </p>
+            </div>
+            <div className="rounded-md border p-4 text-sm">
+              <h3 className="font-medium">Current status</h3>
+              <dl className="mt-3 space-y-2">
+                <div className="flex justify-between gap-3">
+                  <dt className="text-muted-foreground">Active</dt>
+                  <dd className="font-medium">{activeCodes.length}</dd>
+                </div>
+                <div className="flex justify-between gap-3">
+                  <dt className="text-muted-foreground">Special</dt>
+                  <dd className="font-medium">{specialCodes.length}</dd>
+                </div>
+                <div className="flex justify-between gap-3">
+                  <dt className="text-muted-foreground">Expired</dt>
+                  <dd className="font-medium">{expiredCodes.length}</dd>
+                </div>
+              </dl>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="mt-6 rounded-lg">
+          <CardHeader>
+            <h2 className="text-2xl font-semibold tracking-tight">
+              99 Nights in the Forest codes for gems
+            </h2>
+            <CardDescription>
+              Gem reward codes from the checked code table. Special entries
+              still need the redemption note shown below.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="grid gap-3 md:grid-cols-3">
+            {gemRewardCodes.map((code) => (
+              <div key={code.code} className="rounded-md border p-4">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <h3 className="font-mono font-semibold">{code.code}</h3>
+                    <p className="text-muted-foreground mt-1 text-sm">
+                      {code.reward}
+                    </p>
+                  </div>
+                  {statusBadge(code.status)}
+                </div>
+                <p className="text-muted-foreground mt-3 text-sm leading-6">
+                  {code.note}
+                </p>
+                <div className="mt-3">
+                  <CopyCodeButton code={code.code} />
+                </div>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+
+        <Card className="mt-6 rounded-lg">
+          <CardHeader>
+            <h2 className="text-2xl font-semibold tracking-tight">
+              Active 99 Nights in the Forest codes
+            </h2>
             <CardDescription>
               These codes are listed as active by checked sources.
             </CardDescription>
@@ -257,10 +467,10 @@ export default async function CodesPage({
         {specialCodes.length > 0 && (
           <Card className="mt-6 rounded-lg">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+              <h2 className="flex items-center gap-2 text-2xl font-semibold tracking-tight">
                 <AlertTriangle className="size-5" />
                 Special / conflicting code
-              </CardTitle>
+              </h2>
               <CardDescription>
                 These are not treated as normal active codes because source data
                 conflicts or the redemption path differs.
@@ -271,9 +481,9 @@ export default async function CodesPage({
                 <div key={code.code} className="rounded-md border p-4">
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <div>
-                      <div className="font-mono text-lg font-semibold">
+                      <h3 className="font-mono text-lg font-semibold">
                         {code.code}
-                      </div>
+                      </h3>
                       <p className="text-muted-foreground mt-1 text-sm">
                         {code.reward}
                       </p>
@@ -303,28 +513,37 @@ export default async function CodesPage({
         <div className="mt-6 grid gap-6 lg:grid-cols-2">
           <Card className="rounded-lg">
             <CardHeader>
-              <CardTitle>How to redeem codes</CardTitle>
+              <h2 className="text-2xl font-semibold tracking-tight">
+                How to redeem 99 Nights codes
+              </h2>
               <CardDescription>
                 Use the lobby menu before starting another run.
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <ol className="text-muted-foreground list-decimal space-y-3 pl-5 text-sm leading-6">
-                <li>Open 99 Nights in the Forest on Roblox.</li>
-                <li>Stay in the lobby before beginning a survival round.</li>
-                <li>Open the diamond or codes menu.</li>
-                <li>Paste a working code and claim the reward.</li>
-                <li>
-                  For <span className="font-mono">yay fishing</span>, try the
-                  in-game chat path noted above instead of the normal code box.
-                </li>
+              <ol className="space-y-4">
+                {redeemSteps.map((step, index) => (
+                  <li className="flex gap-3" key={step.name}>
+                    <span className="bg-primary text-primary-foreground flex size-7 shrink-0 items-center justify-center rounded-full text-sm font-medium">
+                      {index + 1}
+                    </span>
+                    <div>
+                      <h3 className="font-medium">{step.name}</h3>
+                      <p className="text-muted-foreground mt-1 text-sm leading-6">
+                        {step.text}
+                      </p>
+                    </div>
+                  </li>
+                ))}
               </ol>
             </CardContent>
           </Card>
 
           <Card className="rounded-lg">
             <CardHeader>
-              <CardTitle>Expired codes</CardTitle>
+              <h2 className="text-2xl font-semibold tracking-tight">
+                Expired codes
+              </h2>
               <CardDescription>
                 Old codes are kept here to reduce repeat testing.
               </CardDescription>
@@ -337,7 +556,7 @@ export default async function CodesPage({
                     className="flex items-center justify-between gap-3 rounded-md border p-3"
                   >
                     <div>
-                      <div className="font-mono font-medium">{code.code}</div>
+                      <h3 className="font-mono font-medium">{code.code}</h3>
                       <p className="text-muted-foreground text-sm">
                         {code.note}
                       </p>
@@ -350,9 +569,81 @@ export default async function CodesPage({
           </Card>
         </div>
 
+        <div className="mt-6 grid gap-6 lg:grid-cols-2">
+          <Card className="rounded-lg">
+            <CardHeader>
+              <h2 className="text-2xl font-semibold tracking-tight">
+                How we verify codes
+              </h2>
+              <CardDescription>
+                Quest Codes favors a visible source trail over blind copy-paste
+                lists.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {verificationNotes.map((note) => (
+                <div key={note.title} className="rounded-md border p-4">
+                  <h3 className="font-medium">{note.title}</h3>
+                  <p className="text-muted-foreground mt-2 text-sm leading-6">
+                    {note.text}
+                  </p>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+
+          <Card className="rounded-lg">
+            <CardHeader>
+              <h2 className="text-2xl font-semibold tracking-tight">
+                Why a code may not work
+              </h2>
+              <CardDescription>
+                Check these issues before assuming the whole code list is
+                outdated.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {troubleshootingNotes.map((note) => (
+                <div key={note.title} className="rounded-md border p-4">
+                  <h3 className="font-medium">{note.title}</h3>
+                  <p className="text-muted-foreground mt-2 text-sm leading-6">
+                    {note.text}
+                  </p>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        </div>
+
         <Card className="mt-6 rounded-lg">
           <CardHeader>
-            <CardTitle>FAQ</CardTitle>
+            <h2 className="text-2xl font-semibold tracking-tight">
+              Related 99 Nights guides
+            </h2>
+            <CardDescription>
+              Internal links help players move from codes to the next decision
+              point in the game.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="grid gap-3 md:grid-cols-2">
+            {relatedGuides.map((guide) => (
+              <Link
+                key={guide.href}
+                href={guide.href}
+                className="hover:bg-accent block rounded-md border p-4"
+              >
+                <h3 className="font-medium">{guide.title}</h3>
+                <p className="text-muted-foreground mt-2 text-sm leading-6">
+                  {guide.description}
+                </p>
+              </Link>
+            ))}
+          </CardContent>
+        </Card>
+
+        <Card className="mt-6 rounded-lg">
+          <CardHeader>
+            <h2 className="text-2xl font-semibold tracking-tight">FAQ</h2>
             <CardDescription>
               Short answers for common 99 Nights code questions.
             </CardDescription>
@@ -360,7 +651,7 @@ export default async function CodesPage({
           <CardContent className="grid gap-4 md:grid-cols-2">
             {faqs.map((faq) => (
               <div key={faq.question} className="rounded-md border p-4">
-                <h2 className="font-medium">{faq.question}</h2>
+                <h3 className="font-medium">{faq.question}</h3>
                 <p className="text-muted-foreground mt-2 text-sm leading-6">
                   {faq.answer}
                 </p>

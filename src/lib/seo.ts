@@ -11,6 +11,17 @@ type FAQ = {
   answer: string;
 };
 
+type HowToStep = {
+  name: string;
+  text: string;
+};
+
+type ItemListItem = {
+  name: string;
+  url: string;
+  description?: string;
+};
+
 export function getBaseUrl() {
   return (envConfigs.app_url || 'http://localhost:3000').replace(/\/$/, '');
 }
@@ -59,6 +70,53 @@ export function buildFAQSchema(faqs: FAQ[]) {
         '@type': 'Answer',
         text: faq.answer,
       },
+    })),
+  };
+}
+
+export function buildHowToSchema({
+  name,
+  description,
+  steps,
+}: {
+  name: string;
+  description: string;
+  steps: HowToStep[];
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name,
+    description,
+    step: steps.map((step, index) => ({
+      '@type': 'HowToStep',
+      position: index + 1,
+      name: step.name,
+      text: step.text,
+    })),
+  };
+}
+
+export function buildItemListSchema({
+  name,
+  description,
+  items,
+}: {
+  name: string;
+  description: string;
+  items: ItemListItem[];
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name,
+    description,
+    itemListElement: items.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      url: item.url,
+      description: item.description,
     })),
   };
 }

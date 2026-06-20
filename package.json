@@ -1,5 +1,5 @@
 {
-  "name": "shipany-vinext",
+  "name": "questcodes",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -7,7 +7,7 @@
     "prebuild": "node scripts/db-setup.mjs",
     "build": "vinext build",
     "start": "vinext start",
-    "deploy": "sh -c 'set -a && [ -f .env.production ] && . ./.env.production; set +a && exec npx vinext deploy'",
+    "deploy": "node scripts/deploy.mjs",
     "lint": "vinext lint",
     "postinstall": "node scripts/postinstall.mjs",
     "db:setup": "node scripts/db-setup.mjs",

@@ -13,7 +13,7 @@ function localizedUrl(path: string, locale: string) {
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseRoutes = [
     { path: '/', priority: 1, changeFrequency: 'weekly' as const },
-    { path: '/pricing', priority: 0.7, changeFrequency: 'monthly' as const },
+    { path: '/codes', priority: 0.9, changeFrequency: 'daily' as const },
     {
       path: '/privacy-policy',
       priority: 0.3,

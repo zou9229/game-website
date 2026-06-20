@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { robloxGames } from '@/data/roblox-games';
+import { seoKeywords } from '@/data/seo-keywords';
 import { Gamepad2 } from 'lucide-react';
 
 import { Link } from '@/core/i18n/navigation';
@@ -30,6 +31,7 @@ export async function generateMetadata({
     title: `Roblox Codes and Game Tools (${monthYear})`,
     description:
       'Fresh Roblox codes, game guides, tier lists, and tool pages for high-demand Roblox games.',
+    keywords: seoKeywords.robloxHub,
     alternates: { canonical },
     openGraph: {
       title: `Roblox Codes and Game Tools (${monthYear})`,

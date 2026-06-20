@@ -1,4 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Favicon">
-  <rect width="512" height="512" rx="96" fill="#0a0a0a"/>
-  <text x="50%" y="50%" dy="0.04em" text-anchor="middle" dominant-baseline="central" font-family="Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif" font-size="360" font-weight="700" fill="#ffffff">S</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Quest Codes">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1f2937"/>
+      <stop offset="100%" stop-color="#020617"/>
+    </linearGradient>
+    <linearGradient id="mark" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#facc15"/>
+      <stop offset="100%" stop-color="#22c55e"/>
+    </linearGradient>
+  </defs>
+  <rect width="32" height="32" rx="7" fill="url(#bg)"/>
+  <path d="M9 9.5h8.5a5.5 5.5 0 0 1 0 11H16l3.4 3.4-2.5 1.6-5-5h-2.9V9.5Zm4 3v5h4.3a2.5 2.5 0 0 0 0-5H13Z" fill="url(#mark)"/>
+  <path d="M22.5 8 25 10.5 22.5 13 20 10.5 22.5 8Z" fill="#f8fafc"/>
 </svg>

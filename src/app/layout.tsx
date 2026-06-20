@@ -29,6 +29,13 @@ const notoSerifSC = Noto_Serif_SC({
 export const metadata: Metadata = {
   title: envConfigs.app_name,
   description: envConfigs.app_description,
+  keywords: [
+    'Quest Codes',
+    'Roblox codes',
+    'working Roblox codes',
+    'Roblox game guides',
+    '99 Nights in the Forest codes',
+  ],
   icons: {
     icon: '/favicon.svg',
     shortcut: '/favicon.svg',

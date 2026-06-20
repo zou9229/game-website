@@ -77,25 +77,60 @@ export const robloxGames: RobloxGame[] = [
         status: 'live',
       },
       {
+        title: 'Gems',
+        href: '/roblox/99-nights-in-the-forest/gems',
+        description:
+          'Gem and diamond rewards, code routes, badge rewards, class spending, and low-confidence community signals.',
+        status: 'live',
+      },
+      {
+        title: 'Badges',
+        href: '/roblox/99-nights-in-the-forest/badges',
+        description:
+          'Badge goals, diamond reward notes, starter badges, challenge badges, and the Humiliation Badge route.',
+        status: 'live',
+      },
+      {
+        title: 'Map',
+        href: '/roblox/99-nights-in-the-forest/map',
+        description:
+          'Map crafting, location planning, missing child route notes, and danger-zone guidance.',
+        status: 'live',
+      },
+      {
         title: 'Classes',
         href: '/roblox/99-nights-in-the-forest/classes',
         description:
           'Class unlocks, perks, and best use cases after the class data pass.',
-        status: 'planned',
+        status: 'live',
       },
       {
         title: 'Class Tier List',
         href: '/roblox/99-nights-in-the-forest/class-tier-list',
         description:
-          'Ranked classes for survival, team play, and solo runs once current class data is verified.',
-        status: 'planned',
+          'Ranked classes for survival, team play, and solo runs based on the checked class data pass.',
+        status: 'live',
+      },
+      {
+        title: 'Animals',
+        href: '/roblox/99-nights-in-the-forest/animals',
+        description:
+          'Tameable animals, food requirements, Flute requirements, and biome notes from the checked animal data pass.',
+        status: 'live',
       },
       {
         title: 'Survival Guide',
         href: '/roblox/99-nights-in-the-forest/survival-guide',
         description:
-          'Beginner route, camp priorities, night survival, and common mistakes.',
-        status: 'planned',
+          'Beginner route, campfire priorities, night survival, and common mistakes from the checked guide pass.',
+        status: 'live',
+      },
+      {
+        title: 'Updates',
+        href: '/roblox/99-nights-in-the-forest/updates',
+        description:
+          'Source-checked update notes, code checks, guide refreshes, and Roblox metadata changes.',
+        status: 'live',
       },
     ],
     codes: [

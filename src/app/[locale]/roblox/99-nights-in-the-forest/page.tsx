@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { getRobloxGame } from '@/data/roblox-games';
+import { seoKeywords } from '@/data/seo-keywords';
 import { ExternalLink } from 'lucide-react';
 
 import { Link } from '@/core/i18n/navigation';
@@ -8,6 +9,7 @@ import {
   buildVideoGameSchema,
   canonicalUrl,
   currentMonthYear,
+  getBaseUrl,
 } from '@/lib/seo';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -19,6 +21,7 @@ import {
 } from '@/components/ui/card';
 
 const game = getRobloxGame('99-nights-in-the-forest');
+const heroImageUrl = '/imgs/generated/questcodes-forest-hero-1781934073676.png';
 
 export async function generateMetadata({
   params,
@@ -32,14 +35,17 @@ export async function generateMetadata({
   return {
     title: `99 Nights in the Forest Guide and Tools (${monthYear})`,
     description:
-      '99 Nights in the Forest Roblox hub with codes, game facts, and planned class, tier list, and survival guide pages.',
+      '99 Nights in the Forest Roblox hub with codes, class references, tier list, animals, survival guide, and checked game facts.',
+    keywords: seoKeywords.ninetyNineNightsHub,
     alternates: { canonical },
     openGraph: {
       title: `99 Nights in the Forest Guide and Tools (${monthYear})`,
       description:
-        '99 Nights in the Forest Roblox hub with codes, game facts, and planned class, tier list, and survival guide pages.',
+        '99 Nights in the Forest Roblox hub with codes, class references, tier list, animals, survival guide, and checked game facts.',
       url: canonical,
-      images: game ? [{ url: game.imageUrl, width: 500, height: 280 }] : [],
+      images: [
+        { url: `${getBaseUrl()}${heroImageUrl}`, width: 1280, height: 720 },
+      ],
       type: 'website',
     },
   };
@@ -89,8 +95,8 @@ export default async function GameHubPage({
             {game.name} guide and tools
           </h1>
           <p className="text-muted-foreground mt-4 text-lg leading-8">
-            Verified facts, codes, and planned helper pages for one of the
-            current high-demand Roblox survival games.
+            Verified facts, codes, classes, animals, tier list, and survival
+            guidance for one of the current high-demand Roblox survival games.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
@@ -114,12 +120,16 @@ export default async function GameHubPage({
         <Card className="rounded-lg">
           <CardContent className="pt-4">
             <img
-              src={game.imageUrl}
-              alt={`${game.name} Roblox thumbnail`}
+              src={heroImageUrl}
+              alt="Original forest survival guide artwork for Quest Codes"
               className="aspect-[16/9] w-full rounded-md object-cover"
               loading="eager"
               fetchPriority="high"
             />
+            <p className="text-muted-foreground mt-3 text-sm">
+              Original guide artwork. Game facts and code status are kept in the
+              source-checked data tables below.
+            </p>
           </CardContent>
         </Card>
       </section>

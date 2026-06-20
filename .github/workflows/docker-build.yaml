@@ -1,10 +1,9 @@
 name: Build and Push Docker Image
 
+# This project is deployed to Cloudflare Workers through vinext/wrangler.
+# Keep the Docker image workflow available for manual use only so normal
+# pushes do not fail on an unused deployment path.
 on:
-  push:
-    branches: ['main', 'dev']
-  pull_request:
-    branches: ['main', 'dev']
   workflow_dispatch:
 
 env:
