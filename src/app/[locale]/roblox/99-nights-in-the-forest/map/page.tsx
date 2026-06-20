@@ -391,6 +391,10 @@ export default async function MapGuidePage({
                   title: 'Cultist Stronghold route',
                 },
                 {
+                  href: '/roblox/99-nights-in-the-forest/crafting',
+                  title: 'Crafting guide',
+                },
+                {
                   href: '/roblox/99-nights-in-the-forest/badges',
                   title: 'Badges guide',
                 },

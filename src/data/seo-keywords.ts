@@ -53,6 +53,14 @@ export const seoKeywords: Record<string, string[]> = {
     '99 nights in the forest level 4 stronghold',
     'how to beat stronghold in 99 nights in the forest',
   ],
+  ninetyNineNightsCrafting: [
+    '99 nights in the forest crafting guide',
+    '99 nights in the forest crafting recipes',
+    '99 nights in the forest crafting',
+    '99 nights in the forest crafting bench',
+    '99 nights in the forest how to craft bandages',
+    '99 nights in the forest best things to craft',
+  ],
   ninetyNineNightsBadges: [
     '99 nights in the forest badges',
     '99 nights in the forest all badges',

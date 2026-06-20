@@ -107,6 +107,10 @@ const relatedPages = [
     title: 'Map and locations',
   },
   {
+    href: '/roblox/99-nights-in-the-forest/crafting',
+    title: 'Crafting and bench upgrades',
+  },
+  {
     href: '/roblox/99-nights-in-the-forest/survival-guide',
     title: 'Survival guide',
   },

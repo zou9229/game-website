@@ -91,6 +91,13 @@ export const robloxGames: RobloxGame[] = [
         status: 'live',
       },
       {
+        title: 'Crafting',
+        href: '/roblox/99-nights-in-the-forest/crafting',
+        description:
+          'Crafting guide for map, compass, bench upgrades, Crock Pot, bandages, Biofuel Processor, Lightning Rod, and late-game gem crafts.',
+        status: 'live',
+      },
+      {
         title: 'Badges',
         href: '/roblox/99-nights-in-the-forest/badges',
         description:

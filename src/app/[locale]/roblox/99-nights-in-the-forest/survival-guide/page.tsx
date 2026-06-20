@@ -329,6 +329,12 @@ export default async function SurvivalGuidePage({
             </Link>
             <Link
               className="hover:bg-accent block rounded-md border p-3"
+              href="/roblox/99-nights-in-the-forest/crafting"
+            >
+              Crafting guide and bench upgrades
+            </Link>
+            <Link
+              className="hover:bg-accent block rounded-md border p-3"
               href="/roblox/99-nights-in-the-forest/classes"
             >
               All classes reference
