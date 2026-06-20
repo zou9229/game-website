@@ -336,12 +336,20 @@ export default async function GemsPage({
                   title: 'Working codes and expired history',
                 },
                 {
+                  href: '/roblox/99-nights-in-the-forest/gem-of-the-forest',
+                  title: 'Gem of the Forest route',
+                },
+                {
                   href: '/roblox/99-nights-in-the-forest/badges',
                   title: 'Badge rewards and diamond notes',
                 },
                 {
                   href: '/roblox/99-nights-in-the-forest/stronghold',
                   title: 'Stronghold diamond route',
+                },
+                {
+                  href: '/roblox/99-nights-in-the-forest/crafting-bench-5',
+                  title: 'Crafting Bench 5',
                 },
                 {
                   href: '/roblox/99-nights-in-the-forest/class-tier-list',

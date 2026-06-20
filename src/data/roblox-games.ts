@@ -84,6 +84,13 @@ export const robloxGames: RobloxGame[] = [
         status: 'live',
       },
       {
+        title: 'Gem of the Forest',
+        href: '/roblox/99-nights-in-the-forest/gem-of-the-forest',
+        description:
+          'Forest Gem sources, fragment combining, Stronghold route notes, chest caveats, and Tier 5 spending decisions.',
+        status: 'live',
+      },
+      {
         title: 'Stronghold',
         href: '/roblox/99-nights-in-the-forest/stronghold',
         description:

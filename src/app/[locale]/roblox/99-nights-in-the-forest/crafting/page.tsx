@@ -123,6 +123,10 @@ const relatedPages = [
     title: 'Crafting Bench 5',
   },
   {
+    href: '/roblox/99-nights-in-the-forest/gem-of-the-forest',
+    title: 'Gem of the Forest route',
+  },
+  {
     href: '/roblox/99-nights-in-the-forest/bandages',
     title: 'How to craft bandages',
   },

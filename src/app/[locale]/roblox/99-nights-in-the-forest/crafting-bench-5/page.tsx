@@ -9,6 +9,7 @@ import {
   ExternalLink,
   Gem,
   Hammer,
+  RefreshCw,
   RotateCcw,
 } from 'lucide-react';
 
@@ -42,7 +43,7 @@ const faqs = [
   {
     question: 'What does Crafting Bench 5 unlock?',
     answer:
-      'The source-checked Tier 5 crafts on this page are Respawn Capsule, Temporal Accelerometer, and Weather Machine.',
+      'The source-checked Tier 5 crafts on this page are Respawn Capsule, Temporal Accelerometer, Weather Machine, and Recycler.',
   },
   {
     question: 'Where do I get Gem of the Forest?',
@@ -52,7 +53,7 @@ const faqs = [
   {
     question: 'What should I craft first at Crafting Bench 5?',
     answer:
-      'Respawn Capsule is the safest first pick for solo and small teams. Temporal Accelerometer is stronger for speedrun pacing, while Weather Machine is situational for storm-heavy routes.',
+      'Respawn Capsule is the safest first pick for solo and small teams. Temporal Accelerometer is stronger for speedrun pacing, Weather Machine is situational for storm-heavy routes, and Recycler is a conversion pick.',
   },
   {
     question: 'Are Logs and Wood or Bolts and Scrap the same here?',
@@ -84,6 +85,7 @@ const bestForLabels = {
   solo: 'Solo safety',
   speedrun: 'Speedrun',
   weather: 'Weather control',
+  conversion: 'Conversion',
   'long-run': 'Long run',
 } as const;
 
@@ -91,6 +93,7 @@ const bestForIcons = {
   solo: RotateCcw,
   speedrun: Clock,
   weather: CloudRain,
+  conversion: RefreshCw,
   'long-run': Hammer,
 } as const;
 
@@ -103,6 +106,10 @@ const relatedPages = [
   {
     href: '/roblox/99-nights-in-the-forest/crafting',
     title: 'Crafting bench and recipes',
+  },
+  {
+    href: '/roblox/99-nights-in-the-forest/gem-of-the-forest',
+    title: 'Gem of the Forest route',
   },
   {
     href: '/roblox/99-nights-in-the-forest/gems',
@@ -141,7 +148,7 @@ export async function generateMetadata({
   return {
     title: `99 Nights in the Forest Crafting Bench 5 (${monthYear})`,
     description:
-      'Crafting Bench 5 requirements, Forest Gem route, Tier 5 recipes, and whether Respawn Capsule, Temporal Accelerometer, or Weather Machine is best.',
+      'Crafting Bench 5 requirements, Forest Gem route, Tier 5 recipes, and whether Respawn Capsule, Temporal Accelerometer, Weather Machine, or Recycler is best.',
     keywords: seoKeywords.ninetyNineNightsCraftingBench5,
     alternates: { canonical },
     openGraph: {
@@ -194,7 +201,7 @@ export default async function CraftingBench5Page({
       },
       {
         name: 'Pick the first Tier 5 craft by risk',
-        text: 'Choose Respawn Capsule for death risk, Temporal Accelerometer for night skipping, or Weather Machine for storm control.',
+        text: 'Choose Respawn Capsule for death risk, Temporal Accelerometer for night skipping, Weather Machine for storm control, or Recycler for conversion value.',
       },
     ],
   });
@@ -261,14 +268,15 @@ export default async function CraftingBench5Page({
           <p className="text-muted-foreground mt-4 text-lg leading-8">
             {ninetyNineNightsCraftingBench5.summary} This page focuses on the
             real decision: whether the first Forest Gem should go into Bench 5,
-            Respawn Capsule, Temporal Accelerometer, or Weather Machine.
+            Respawn Capsule, Temporal Accelerometer, Weather Machine, or
+            Recycler.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
-              href="/roblox/99-nights-in-the-forest/gems"
+              href="/roblox/99-nights-in-the-forest/gem-of-the-forest"
               className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex h-10 items-center justify-center rounded-md px-4 text-sm font-medium"
             >
-              Check gem routes
+              Plan Forest Gem route
             </Link>
             <Link
               href="/roblox/99-nights-in-the-forest/crafting"

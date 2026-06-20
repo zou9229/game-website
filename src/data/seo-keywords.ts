@@ -44,6 +44,10 @@ export const seoKeywords: Record<string, string[]> = {
     'how to get gems in 99 nights in the forest',
     '99 nights in the forest free diamonds',
   ],
+  ninetyNineNightsForestGem: [
+    '99 nights in the forest gem of the forest',
+    'how to get gem of the forest 99 nights in the forest',
+  ],
   ninetyNineNightsStronghold: [
     '99 nights in the forest cultist stronghold',
     '99 nights in the forest stronghold',

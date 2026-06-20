@@ -95,6 +95,10 @@ const relatedPages = [
     title: 'Gems and diamonds',
   },
   {
+    href: '/roblox/99-nights-in-the-forest/gem-of-the-forest',
+    title: 'Gem of the Forest route',
+  },
+  {
     href: '/roblox/99-nights-in-the-forest/classes',
     title: 'Class reference',
   },

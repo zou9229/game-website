@@ -12,7 +12,7 @@ export type CraftingBench5Requirement = {
 
 export type CraftingBench5Recipe = {
   name: string;
-  bestFor: 'solo' | 'speedrun' | 'weather' | 'long-run';
+  bestFor: 'solo' | 'speedrun' | 'weather' | 'conversion' | 'long-run';
   materials: string[];
   effect: string;
   recommendation: string;
@@ -56,9 +56,9 @@ const redditDecisionSource: CraftingBench5Source = {
 export const ninetyNineNightsCraftingBench5 = {
   checkedAt: '2026-06-21',
   summary:
-    'Crafting Bench 5 is the late-game 99 Nights in the Forest workbench upgrade that costs heavy Wood, Scrap, and a Gem of the Forest. It unlocks high-impact crafts such as Respawn Capsule, Temporal Accelerometer, and Weather Machine.',
+    'Crafting Bench 5 is the late-game 99 Nights in the Forest workbench upgrade that costs heavy Wood, Scrap, and a Gem of the Forest. It unlocks high-impact crafts such as Respawn Capsule, Temporal Accelerometer, Weather Machine, and Recycler.',
   sourceNote:
-    'Fandom and GamesRadar agree on the Crafting Bench 5 upgrade cost. Fandom is used for exact Tier 5 recipe effects and materials. Reddit is used only as a player-priority signal, not as a factual source.',
+    'Fandom and GamesRadar agree on the Crafting Bench 5 upgrade cost. Fandom is used for exact Tier 5 recipe effects and materials, including Recycler. Reddit is used only as a player-priority signal, not as a factual source.',
   requirements: [
     {
       label: '50 Wood',
@@ -121,6 +121,20 @@ export const ninetyNineNightsCraftingBench5 = {
       ],
       sources: [fandomCraftingSource, fandomGemSource, redditDecisionSource],
     },
+    {
+      name: 'Recycler',
+      bestFor: 'conversion',
+      materials: ['40 Wood', '40 Scrap', '1 Gem of the Forest'],
+      effect:
+        'Fandom currently lists it as a Tier 5 craft that can convert Gem of the Forest into Cultist Gems and Cultist Gems into Scrap.',
+      recommendation:
+        'Best only when conversion value matters more than recovery, night skipping, or weather control.',
+      cautions: [
+        'It competes with the same Forest Gem cost as the other Tier 5 decisions.',
+        'Do not craft it first unless conversion is the actual route blocker.',
+      ],
+      sources: [fandomCraftingSource, fandomGemSource],
+    },
   ] satisfies CraftingBench5Recipe[],
   sections: [
     {
@@ -159,6 +173,7 @@ export const ninetyNineNightsCraftingBench5 = {
         'Pick Respawn Capsule when death or solo recovery is the main risk.',
         'Pick Temporal Accelerometer for speedrun pacing or night skipping.',
         'Pick Weather Machine when rain and thunderstorms are blocking longer objectives.',
+        'Delay Recycler unless material conversion is worth more than direct run safety.',
       ],
       sources: [fandomCraftingSource, redditDecisionSource],
     },
