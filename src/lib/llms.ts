@@ -99,7 +99,7 @@ export function buildLlmsText({ full = false }: { full?: boolean } = {}) {
     '## Current Keyword Clusters',
     '',
     '- Primary cluster: 99 nights in the forest codes, codes for 99 nights in the forest, codes in 99 nights in the forest, 99 nights in the forest codes for gems',
-    '- Supporting cluster: 99 nights in the forest gems, diamonds, badges, Humiliation Badge, map, locations, missing kids, class tier list, classes, animals, animal taming, survival guide, updates',
+    '- Supporting cluster: 99 nights in the forest gems, diamonds, badges, Humiliation Badge, map, locations, missing kids, missing children, class tier list, classes, animals, animal taming, survival guide, updates',
     '- Site-level cluster: Roblox codes, working Roblox codes, Roblox game guides, Roblox tier lists',
     '- Not a primary target: the broad navigational keyword Roblox',
   ];

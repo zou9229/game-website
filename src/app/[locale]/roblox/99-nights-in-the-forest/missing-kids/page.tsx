@@ -1,15 +1,15 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { ninetyNineNightsMapGuide } from '@/data/99-nights-map';
+import { ninetyNineNightsMissingKids } from '@/data/99-nights-missing-kids';
 import { getRobloxGame } from '@/data/roblox-games';
 import { seoKeywords } from '@/data/seo-keywords';
 import {
   Compass,
   ExternalLink,
-  Landmark,
   Map,
   Route,
   ShieldAlert,
+  UserCheck,
 } from 'lucide-react';
 
 import { Link } from '@/core/i18n/navigation';
@@ -35,49 +35,37 @@ const game = getRobloxGame('99-nights-in-the-forest');
 
 const faqs = [
   {
-    question: 'How do I expand the map in 99 Nights in the Forest?',
+    question: 'Where are the missing kids in 99 Nights in the Forest?',
     answer:
-      'Craft and place the map, then explore unrevealed areas during safe daytime routes. Recheck the map after each trip so new locations and route decisions are visible.',
+      'The missing kids are found through exploration routes that become easier to track with a crafted map and compass. The checked standard set covers Dino Kid, Kraken Kid, Squid Kid, and Koala Kid.',
   },
   {
-    question: 'Is the 99 Nights in the Forest map the same every run?',
+    question: 'Which missing kid should I rescue first?',
     answer:
-      'Do not rely on fixed-coordinate routes. Quest Codes treats the map as route-planning guidance because layouts and discovery order can vary.',
+      'Dino Kid is the safest first target in the checked source set. The other routes should wait until your campfire, gear, and supplies are stronger.',
   },
   {
-    question: 'What should I look for on the map first?',
+    question: 'Do I need the map and compass?',
     answer:
-      'Look for nearby structures, safe resource loops, missing child icons, and danger zones that need better gear before you commit.',
+      'They are strongly recommended. PC Gamer suggests building a map and compass before heading out because discovered child locations can be marked and revisited.',
   },
   {
-    question: 'Should I rescue missing kids immediately when I find them?',
+    question: 'Should I rescue a child as soon as I find one?',
     answer:
-      'Not always. If the guards or travel route are too risky, mark the location and return after improving gear, food, class setup, or code rewards.',
+      'No. If the guard enemies are too hard or night pressure is bad, mark the location and return after restabilizing camp.',
   },
   {
-    question: 'Does Quest Codes provide an official map?',
+    question: 'Is this an official 99 Nights in the Forest missing kids map?',
     answer:
-      'No. This is a fan-made route guide based on checked public sources, not an official Roblox or game developer map.',
+      "No. Quest Codes is fan-made and uses checked public sources. It does not provide an official Roblox or Grandma's Favourite Games map.",
   },
 ];
 
-const intentLabels = {
-  'map-item': 'Map item',
-  locations: 'Locations',
-  'missing-kids': 'Missing kids',
-  danger: 'Danger zones',
-} as const;
-
-const intentStyles = {
-  'map-item': 'border-emerald-500/40 bg-emerald-500/10',
-  locations: 'border-blue-500/40 bg-blue-500/10',
-  'missing-kids': 'border-purple-500/40 bg-purple-500/10',
-  danger: 'border-red-500/40 bg-red-500/10',
-} as const;
-
-const confidenceTone = {
-  high: 'default',
+const riskTone = {
+  low: 'default',
   medium: 'secondary',
+  high: 'outline',
+  'very-high': 'destructive',
 } as const;
 
 export async function generateMetadata({
@@ -88,20 +76,20 @@ export async function generateMetadata({
   const { locale } = await params;
   const monthYear = currentMonthYear();
   const canonical = canonicalUrl(
-    '/roblox/99-nights-in-the-forest/map/',
+    '/roblox/99-nights-in-the-forest/missing-kids/',
     locale
   );
 
   return {
-    title: `99 Nights in the Forest Map and Locations (${monthYear})`,
+    title: `99 Nights in the Forest Missing Kids Locations (${monthYear})`,
     description:
-      'A source-checked 99 Nights in the Forest map guide for crafting the map, expanding revealed areas, planning locations, and finding missing kids safely.',
-    keywords: seoKeywords.ninetyNineNightsMap,
+      'Source-checked 99 Nights in the Forest missing kids route guide for Dino Kid, Kraken Kid, Squid Kid, Koala Kid, map planning, and rescue prep.',
+    keywords: seoKeywords.ninetyNineNightsMissingKids,
     alternates: { canonical },
     openGraph: {
-      title: `99 Nights in the Forest Map and Locations (${monthYear})`,
+      title: `99 Nights in the Forest Missing Kids Locations (${monthYear})`,
       description:
-        'Use the 99 Nights in the Forest map as a route planner for locations, missing kids, and danger zones.',
+        'Plan the missing kids route with map, compass, campfire, gear, and rescue risk notes.',
       url: canonical,
       type: 'article',
       images: game ? [game.imageUrl] : undefined,
@@ -109,7 +97,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function MapGuidePage({
+export default async function MissingKidsPage({
   params,
 }: {
   params: Promise<{ locale: string }>;
@@ -117,46 +105,49 @@ export default async function MapGuidePage({
   const { locale } = await params;
   if (!game) notFound();
 
-  const pageUrl = canonicalUrl('/roblox/99-nights-in-the-forest/map/', locale);
+  const pageUrl = canonicalUrl(
+    '/roblox/99-nights-in-the-forest/missing-kids/',
+    locale
+  );
   const gameUrl = canonicalUrl('/roblox/99-nights-in-the-forest/', locale);
   const breadcrumbSchema = buildBreadcrumbSchema([
     { name: 'Home', item: canonicalUrl('/', locale) },
     { name: 'Roblox', item: canonicalUrl('/roblox/', locale) },
     { name: game.name, item: gameUrl },
-    { name: 'Map', item: pageUrl },
+    { name: 'Missing Kids', item: pageUrl },
   ]);
   const faqSchema = buildFAQSchema(faqs);
   const howToSchema = buildHowToSchema({
-    name: 'How to expand the 99 Nights in the Forest map',
+    name: 'How to find missing kids in 99 Nights in the Forest',
     description:
-      'Craft the map, explore safe routes, mark important locations, and return before night pressure breaks the run.',
+      'Build map and compass, reveal routes safely, mark child locations, and rescue when the guard risk matches your gear.',
     steps: [
       {
-        name: 'Craft and place the map',
-        text: 'Use the map as your planning board before committing to long exploration loops.',
+        name: 'Build map and compass',
+        text: 'Craft navigation tools before long rescue trips so discovered locations can be tracked.',
       },
       {
-        name: 'Explore unrevealed areas',
-        text: 'Reveal nearby locations during daytime routes and return before your campfire or food route becomes unsafe.',
+        name: 'Reveal the route during safe daytime loops',
+        text: 'Explore while food, fuel, and return timing are stable enough to avoid losing the run.',
       },
       {
-        name: 'Mark important discoveries',
-        text: 'Use discoveries such as missing kids, structures, and danger zones to plan the next trip instead of forcing a risky rescue immediately.',
+        name: 'Mark the child location',
+        text: 'If the guards are too strong, leave the child marked and come back with better gear.',
       },
       {
-        name: 'Connect the route to progression',
-        text: 'Use codes, classes, badges, and survival planning before attempting harder map objectives.',
+        name: 'Rescue and restabilize camp',
+        text: 'After each rescue, return to camp, refill supplies, and prepare for the next harder route.',
       },
     ],
   });
   const itemListSchema = buildItemListSchema({
-    name: '99 Nights in the Forest map planning sections',
+    name: '99 Nights in the Forest missing kids rescue order',
     description:
-      'Map item, locations, missing children, and danger-zone route guidance.',
-    items: ninetyNineNightsMapGuide.sections.map((section) => ({
-      name: section.title,
-      url: `${pageUrl}#${section.intent}`,
-      description: section.summary,
+      'Dino Kid, Kraken Kid, Squid Kid, and Koala Kid route planning notes.',
+    items: ninetyNineNightsMissingKids.kids.map((kid) => ({
+      name: kid.name,
+      url: `${pageUrl}#${kid.name.toLowerCase().replaceAll(' ', '-')}`,
+      description: kid.summary,
     })),
   });
   const videoGameSchema = buildVideoGameSchema({
@@ -199,54 +190,48 @@ export default async function MapGuidePage({
               {game.name}
             </Link>
             <span>/</span>
-            <span className="text-foreground">Map</span>
+            <span className="text-foreground">Missing Kids</span>
           </nav>
 
           <Badge variant="outline" className="mb-4 gap-1.5">
-            <Map className="size-3.5" />
-            Checked {ninetyNineNightsMapGuide.checkedAt}
+            <UserCheck className="size-3.5" />
+            Checked {ninetyNineNightsMissingKids.checkedAt}
           </Badge>
           <h1 className="text-foreground text-4xl font-semibold tracking-tight md:text-5xl">
-            99 Nights in the Forest map and locations guide
+            99 Nights in the Forest missing kids locations
           </h1>
           <p className="text-muted-foreground mt-4 text-lg leading-8">
-            {ninetyNineNightsMapGuide.summary} Use this page to decide when to
-            expand the map, which locations are worth a trip, and when to delay
-            missing child or stronghold objectives.
+            {ninetyNineNightsMissingKids.summary} This page focuses on rescue
+            order, guard risk, preparation, and when to delay a child route
+            instead of losing the run.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
-              href="/roblox/99-nights-in-the-forest/survival-guide"
+              href="/roblox/99-nights-in-the-forest/map"
               className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex h-10 items-center justify-center rounded-md px-4 text-sm font-medium"
             >
-              Open survival route
+              Open map guide
             </Link>
             <Link
-              href="/roblox/99-nights-in-the-forest/badges"
+              href="/roblox/99-nights-in-the-forest/survival-guide"
               className="border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex h-10 items-center justify-center rounded-md border px-4 text-sm font-medium"
             >
-              Check badges
+              Survival route
             </Link>
           </div>
         </div>
 
         <Card>
           <CardHeader>
-            <CardTitle>No fixed-coordinate promise</CardTitle>
+            <CardTitle>Rescue rule</CardTitle>
             <CardDescription>
-              Map pages are easy to make misleading.
+              Finding a child is not the same as safely rescuing one.
             </CardDescription>
           </CardHeader>
           <CardContent className="text-muted-foreground space-y-3 text-sm leading-6">
-            <p>
-              Quest Codes does not present a fake universal coordinate map. This
-              guide focuses on decisions: when to craft the map, what to reveal,
-              and which route is safe enough for your current supplies.
-            </p>
-            <p>
-              For exact item and structure names, source links remain visible so
-              future update checks can refresh the route.
-            </p>
+            {ninetyNineNightsMissingKids.routeNotes.map((note) => (
+              <p key={note}>{note}</p>
+            ))}
           </CardContent>
         </Card>
       </section>
@@ -256,36 +241,36 @@ export default async function MapGuidePage({
           <Card>
             <CardHeader>
               <Map className="text-primary size-5" />
-              <CardTitle>Craft map</CardTitle>
+              <CardTitle>Build map</CardTitle>
               <CardDescription>
-                Build the planning tool before long exploration.
-              </CardDescription>
-            </CardHeader>
-          </Card>
-          <Card>
-            <CardHeader>
-              <Landmark className="text-primary size-5" />
-              <CardTitle>Find locations</CardTitle>
-              <CardDescription>
-                Use structures as resource decisions.
+                Reveal routes and mark child locations.
               </CardDescription>
             </CardHeader>
           </Card>
           <Card>
             <CardHeader>
               <Compass className="text-primary size-5" />
-              <CardTitle>Track kids</CardTitle>
+              <CardTitle>Use compass</CardTitle>
               <CardDescription>
-                Mark missing child routes before forcing rescues.
+                Keep a return path before night pressure rises.
               </CardDescription>
             </CardHeader>
           </Card>
           <Card>
             <CardHeader>
               <ShieldAlert className="text-primary size-5" />
-              <CardTitle>Avoid traps</CardTitle>
+              <CardTitle>Check guards</CardTitle>
               <CardDescription>
-                Strongholds and subareas need preparation.
+                Delay the rescue if the enemy risk is too high.
+              </CardDescription>
+            </CardHeader>
+          </Card>
+          <Card>
+            <CardHeader>
+              <Route className="text-primary size-5" />
+              <CardTitle>Restabilize</CardTitle>
+              <CardDescription>
+                Return to camp before starting the next route.
               </CardDescription>
             </CardHeader>
           </Card>
@@ -294,50 +279,43 @@ export default async function MapGuidePage({
         <section className="mt-8 space-y-4">
           <div>
             <h2 className="text-2xl font-semibold tracking-tight">
-              Map route plan
+              Rescue order and route notes
             </h2>
             <p className="text-muted-foreground mt-2 max-w-3xl">
-              Follow the map in decision order: reveal nearby areas, classify
-              locations, mark missing kids, then prepare before danger zones.
+              Use this as a planning order, not a fixed-coordinate map. The
+              value is knowing when each rescue becomes too risky.
             </p>
           </div>
 
           <div className="grid gap-4">
-            {ninetyNineNightsMapGuide.sections.map((section) => (
+            {ninetyNineNightsMissingKids.kids.map((kid) => (
               <Card
-                id={section.intent}
-                key={section.title}
-                className={intentStyles[section.intent]}
+                id={kid.name.toLowerCase().replaceAll(' ', '-')}
+                key={kid.name}
               >
                 <CardHeader>
                   <div className="flex flex-wrap items-center gap-2">
-                    <Badge>{intentLabels[section.intent]}</Badge>
-                    <Badge variant={confidenceTone[section.confidence]}>
-                      {section.confidence} confidence
+                    <Badge>Route {kid.order}</Badge>
+                    <Badge variant={riskTone[kid.guardRisk]}>
+                      {kid.guardRisk} guard risk
                     </Badge>
+                    <Badge variant="outline">{kid.tentColor} tent</Badge>
                   </div>
-                  <CardTitle>{section.title}</CardTitle>
-                  <CardDescription>{section.summary}</CardDescription>
+                  <CardTitle>{kid.name}</CardTitle>
+                  <CardDescription>{kid.summary}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-5">
-                  <div className="grid gap-3 md:grid-cols-3">
-                    {section.actions.map((action) => (
-                      <div
-                        key={action}
-                        className="bg-background/80 rounded-md border p-4"
-                      >
-                        <h3 className="text-sm font-semibold">Do this</h3>
-                        <p className="text-muted-foreground mt-2 text-sm leading-6">
-                          {action}
-                        </p>
-                      </div>
-                    ))}
+                  <div className="rounded-md border p-4">
+                    <h3 className="text-sm font-semibold">Route signal</h3>
+                    <p className="text-muted-foreground mt-2 text-sm leading-6">
+                      {kid.routeSignal}
+                    </p>
                   </div>
 
-                  <div className="grid gap-3 md:grid-cols-2">
-                    {section.avoid.map((item) => (
-                      <div key={item} className="bg-background rounded-md p-4">
-                        <h3 className="text-sm font-semibold">Avoid</h3>
+                  <div className="grid gap-3 md:grid-cols-3">
+                    {kid.preparation.map((item) => (
+                      <div key={item} className="rounded-md border p-4">
+                        <h3 className="text-sm font-semibold">Prepare</h3>
                         <p className="text-muted-foreground mt-2 text-sm leading-6">
                           {item}
                         </p>
@@ -348,7 +326,7 @@ export default async function MapGuidePage({
                   <div>
                     <h3 className="text-sm font-semibold">Sources</h3>
                     <div className="mt-3 flex flex-wrap gap-2">
-                      {section.sources.map((source) => (
+                      {kid.sources.map((source) => (
                         <a
                           key={source.url}
                           href={source.url}
@@ -371,24 +349,20 @@ export default async function MapGuidePage({
         <div className="mt-8 grid gap-4 lg:grid-cols-[1fr_1fr]">
           <Card>
             <CardHeader>
-              <CardTitle>Related route pages</CardTitle>
+              <CardTitle>Related planning pages</CardTitle>
               <CardDescription>
-                Continue from map planning into action pages.
+                Use these before attempting harder child routes.
               </CardDescription>
             </CardHeader>
             <CardContent className="grid gap-3 text-sm">
               {[
                 {
+                  href: '/roblox/99-nights-in-the-forest/map',
+                  title: 'Map and locations guide',
+                },
+                {
                   href: '/roblox/99-nights-in-the-forest/survival-guide',
                   title: 'Survival guide',
-                },
-                {
-                  href: '/roblox/99-nights-in-the-forest/missing-kids',
-                  title: 'Missing kids locations',
-                },
-                {
-                  href: '/roblox/99-nights-in-the-forest/badges',
-                  title: 'Badges guide',
                 },
                 {
                   href: '/roblox/99-nights-in-the-forest/classes',
@@ -414,7 +388,7 @@ export default async function MapGuidePage({
             <CardHeader>
               <CardTitle>FAQ</CardTitle>
               <CardDescription>
-                Short answers for map and locations searches.
+                Short answers for missing kids location searches.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">

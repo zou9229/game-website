@@ -98,6 +98,13 @@ export const robloxGames: RobloxGame[] = [
         status: 'live',
       },
       {
+        title: 'Missing Kids',
+        href: '/roblox/99-nights-in-the-forest/missing-kids',
+        description:
+          'Missing children route planning for Dino Kid, Kraken Kid, Squid Kid, and Koala Kid.',
+        status: 'live',
+      },
+      {
         title: 'Classes',
         href: '/roblox/99-nights-in-the-forest/classes',
         description:

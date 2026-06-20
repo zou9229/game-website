@@ -59,6 +59,13 @@ export const seoKeywords: Record<string, string[]> = {
     '99 nights in the forest how to expand map',
     '99 nights in the forest missing kids locations',
   ],
+  ninetyNineNightsMissingKids: [
+    '99 nights in the forest missing kids',
+    '99 nights in the forest missing kids locations',
+    '99 nights in the forest missing children',
+    '99 nights in the forest all missing kids',
+    '99 nights in the forest dino kid kraken kid squid kid koala kid',
+  ],
   ninetyNineNightsUpdates: [
     '99 nights in the forest updates',
     '99 nights in the forest code checks',
