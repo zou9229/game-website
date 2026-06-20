@@ -31,9 +31,9 @@ export function SiteHeader({ navLinks }: { navLinks?: NavLink[] }) {
         {/* Brand */}
         <Link href="/" className="flex items-center gap-2">
           <img
-            src="/favicon.svg"
+            src="/logo.png"
             alt=""
-            className="size-8 rounded-md"
+            className="h-9 w-8 object-contain"
             aria-hidden="true"
           />
           <span className="font-serif text-lg italic">

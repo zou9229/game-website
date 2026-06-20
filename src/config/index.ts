@@ -7,7 +7,7 @@ export const envConfigs: Record<string, string> = {
   app_name: process.env.NEXT_PUBLIC_APP_NAME ?? 'ShipAny Next',
   app_description:
     process.env.NEXT_PUBLIC_APP_DESCRIPTION ?? 'Ship your SaaS faster',
-  app_logo: process.env.NEXT_PUBLIC_APP_LOGO ?? '/logo.svg',
+  app_logo: process.env.NEXT_PUBLIC_APP_LOGO ?? '/logo.png',
 
   // Database
   database_url: process.env.DATABASE_URL ?? '',

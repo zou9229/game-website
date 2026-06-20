@@ -63,9 +63,9 @@ export default function HomePage() {
             href="/"
           >
             <img
-              src="/favicon.svg"
+              src="/logo.png"
               alt=""
-              className="size-8 rounded-md"
+              className="h-9 w-8 object-contain"
               aria-hidden="true"
             />
             {envConfigs.app_name}
