@@ -98,6 +98,13 @@ export const robloxGames: RobloxGame[] = [
         status: 'live',
       },
       {
+        title: 'Crafting Bench 5',
+        href: '/roblox/99-nights-in-the-forest/crafting-bench-5',
+        description:
+          'Crafting Bench 5 requirements, Forest Gem route, Tier 5 recipes, and first-craft recommendations.',
+        status: 'live',
+      },
+      {
         title: 'Bandages',
         href: '/roblox/99-nights-in-the-forest/bandages',
         description:

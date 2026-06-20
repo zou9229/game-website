@@ -57,6 +57,10 @@ export const seoKeywords: Record<string, string[]> = {
     '99 nights in the forest crafting recipes',
     'crafting bench 5 99 nights in the forest',
   ],
+  ninetyNineNightsCraftingBench5: [
+    '99 nights in the forest crafting bench 5',
+    'crafting bench 5 99 nights in the forest',
+  ],
   ninetyNineNightsBandages: [
     'how to craft bandages in 99 nights in the forest',
     '99 nights in the forest bandages',

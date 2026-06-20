@@ -107,6 +107,10 @@ const relatedPages = [
     title: 'Stronghold route',
   },
   {
+    href: '/roblox/99-nights-in-the-forest/crafting-bench-5',
+    title: 'Crafting Bench 5',
+  },
+  {
     href: '/roblox/99-nights-in-the-forest/map',
     title: 'Map and locations',
   },

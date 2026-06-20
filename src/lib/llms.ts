@@ -77,7 +77,7 @@ export function buildLlmsText({ full = false }: { full?: boolean } = {}) {
     '',
     '- Find working Roblox game codes with visible source checks',
     '- Check expired or conflicting code history before retesting old rewards',
-    '- Compare Roblox class tier lists, class references, animal taming data, crafting priorities, bandage routes, Stronghold routes, and survival guides',
+    '- Compare Roblox class tier lists, class references, animal taming data, crafting priorities, Crafting Bench 5 decisions, bandage routes, Stronghold routes, and survival guides',
     '- Track source-checked update notes without invented patch details',
     '- Use related internal pages to move from codes to the next practical game decision',
     '',
