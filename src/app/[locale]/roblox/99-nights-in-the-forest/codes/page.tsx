@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { getRobloxGame, type GameCodeStatus } from '@/data/roblox-games';
 import { seoKeywords } from '@/data/seo-keywords';
-import { AlertTriangle, ExternalLink } from 'lucide-react';
+import { AlertTriangle, CheckCircle2, ExternalLink } from 'lucide-react';
 
 import { Link } from '@/core/i18n/navigation';
 import {
@@ -359,6 +359,39 @@ export default async function CodesPage({
               Official Roblox thumbnail. Game data checked from the Roblox games
               API and public Roblox game page.
             </p>
+            <div className="border-border mt-4 border-t pt-4">
+              <div className="mb-3 flex items-center gap-2 text-sm font-medium">
+                <CheckCircle2 className="text-primary size-4" />
+                Today&apos;s copy queue
+              </div>
+              <div className="space-y-3">
+                {[...activeCodes, ...specialCodes].map((code) => (
+                  <div
+                    className="bg-muted/30 rounded-md border p-3"
+                    key={code.code}
+                  >
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <div>
+                        <div className="font-mono text-sm font-semibold">
+                          {code.code}
+                        </div>
+                        <div className="text-muted-foreground mt-1 text-xs">
+                          {code.reward}
+                        </div>
+                      </div>
+                      {statusBadge(code.status)}
+                    </div>
+                    <div className="mt-3">
+                      <CopyCodeButton code={code.code} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <p className="text-muted-foreground mt-3 text-xs leading-5">
+                Special codes may need a different redemption path. Check the
+                notes before assuming the code is expired.
+              </p>
+            </div>
           </CardContent>
         </Card>
       </section>
