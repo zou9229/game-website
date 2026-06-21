@@ -20,6 +20,7 @@ import {
   currentMonthYear,
   getBaseUrl,
 } from '@/lib/seo';
+import { CopyCodeButton } from '@/components/roblox/copy-code-button';
 import { GuideMediaPanel } from '@/components/roblox/guide-media-panel';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -166,100 +167,148 @@ export default async function GameHubPage({
         />
       ))}
 
-      <section className="mx-auto grid max-w-6xl gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:px-8 lg:py-12">
-        <div className="space-y-6">
-          <div className="flex flex-wrap items-center gap-2">
-            <Badge variant="secondary">Roblox {game.genre}</Badge>
-            <Badge variant="outline">{livePages.length} live guides</Badge>
-            <Badge variant="outline">Checked {game.stats.checkedAt}</Badge>
-          </div>
-          <div className="space-y-4">
-            <h1 className="text-foreground max-w-4xl text-4xl font-semibold tracking-tight md:text-5xl">
-              {game.name} guide desk
-            </h1>
-            <p className="text-muted-foreground max-w-3xl text-lg leading-8">
-              A source-checked route map for codes, crafting, classes, animals,
-              map planning, and survival decisions in 99 Nights in the Forest.
-            </p>
-          </div>
-          <div className="grid gap-3 sm:grid-cols-3">
-            {[
-              ['Active or special codes', activeCodeCount.toString()],
-              ['Live guide pages', livePages.length.toString()],
-              [
-                'Roblox visits',
-                `${(game.stats.visits / 1000000000).toFixed(1)}B`,
-              ],
-            ].map(([label, value]) => (
-              <div
-                className="bg-card rounded-lg border p-4 shadow-xs"
-                key={label}
-              >
-                <div className="text-2xl font-semibold">{value}</div>
-                <div className="text-muted-foreground mt-1 text-xs">
-                  {label}
+      <section className="relative isolate overflow-hidden px-4 py-12 text-white sm:px-6 lg:px-8 lg:py-16">
+        <img
+          src={heroImageUrl}
+          alt="99 Nights in the Forest Roblox thumbnail used as the guide hub background"
+          className="absolute inset-0 h-full w-full object-cover"
+          loading="eager"
+          fetchPriority="high"
+        />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(3,10,8,0.96)_0%,rgba(3,10,8,0.84)_45%,rgba(3,10,8,0.54)_76%,rgba(3,10,8,0.8)_100%)]" />
+        <div className="from-background via-background/72 absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t to-transparent" />
+
+        <div className="relative mx-auto grid max-w-6xl gap-8 lg:grid-cols-[1fr_390px] lg:items-center">
+          <div className="space-y-6">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="inline-flex items-center gap-2 rounded-full border border-lime-200/20 bg-lime-200/10 px-4 py-2 text-xs font-semibold tracking-[0.18em] text-lime-100 uppercase">
+                Roblox {game.genre}
+              </span>
+              <span className="rounded-full border border-white/12 bg-white/8 px-4 py-2 font-mono text-xs tracking-[0.14em] text-white/68 uppercase">
+                {livePages.length} live guides
+              </span>
+              <span className="rounded-full border border-white/12 bg-white/8 px-4 py-2 font-mono text-xs tracking-[0.14em] text-white/68 uppercase">
+                Checked {game.stats.checkedAt}
+              </span>
+            </div>
+            <div className="space-y-4">
+              <h1 className="max-w-4xl text-4xl leading-[1.02] font-black tracking-tight text-white md:text-6xl">
+                {game.name} guide desk
+              </h1>
+              <p className="max-w-3xl text-lg leading-8 text-white/72">
+                A source-checked route map for codes, crafting, classes,
+                animals, map planning, and survival decisions in 99 Nights in
+                the Forest.
+              </p>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-3">
+              {[
+                ['Active or special codes', activeCodeCount.toString()],
+                ['Live guide pages', livePages.length.toString()],
+                [
+                  'Roblox visits',
+                  `${(game.stats.visits / 1000000000).toFixed(1)}B`,
+                ],
+              ].map(([label, value]) => (
+                <div
+                  className="rounded-lg border border-white/12 bg-black/20 p-4 shadow-xs backdrop-blur"
+                  key={label}
+                >
+                  <div className="text-2xl font-semibold text-white">
+                    {value}
+                  </div>
+                  <div className="mt-1 text-xs text-white/54">{label}</div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <Link
+                href="/roblox/99-nights-in-the-forest/codes"
+                className="inline-flex h-11 items-center justify-center gap-2 rounded-full bg-lime-300 px-5 text-sm font-bold text-emerald-950 shadow-xs transition-colors hover:bg-lime-200"
+              >
+                View codes
+                <ArrowRight className="size-4" />
+              </Link>
+              <a
+                href={game.robloxUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex h-11 items-center justify-center gap-1.5 rounded-full border border-white/25 bg-white/8 px-5 text-sm font-semibold text-white transition-colors hover:bg-white/16"
+              >
+                Roblox page
+                <ExternalLink className="size-3.5" />
+              </a>
+            </div>
           </div>
-          <div className="flex flex-wrap gap-3">
-            <Link
-              href="/roblox/99-nights-in-the-forest/codes"
-              className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex h-10 items-center justify-center gap-2 rounded-lg px-4 text-sm font-medium shadow-xs"
-            >
-              View codes
-              <ArrowRight className="size-4" />
-            </Link>
-            <a
-              href={game.robloxUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="border-border bg-card hover:bg-accent inline-flex h-10 items-center justify-center gap-1.5 rounded-lg border px-4 text-sm font-medium transition-colors"
-            >
-              Roblox page
-              <ExternalLink className="size-3.5" />
-            </a>
+
+          <div className="rounded-lg border border-lime-200/20 bg-[#062016]/88 p-4 shadow-2xl shadow-black/35 backdrop-blur-md sm:p-5">
+            <div className="mb-4 flex items-center justify-between gap-3">
+              <span className="inline-flex items-center gap-2 rounded-full bg-lime-200/12 px-3 py-1.5 text-xs font-semibold tracking-[0.16em] text-lime-100 uppercase">
+                <Sparkles className="size-3.5" />
+                Current guide actions
+              </span>
+              <span className="rounded-full bg-white/10 px-3 py-1.5 text-xs font-semibold tracking-[0.14em] text-white/60 uppercase">
+                {game.shortName}
+              </span>
+            </div>
+
+            <div className="space-y-3 rounded-lg border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02))] p-4">
+              {game.codes
+                .filter(
+                  (code) =>
+                    code.status === 'active' || code.status === 'special'
+                )
+                .map((code) => (
+                  <div
+                    key={code.code}
+                    className="rounded-md border border-white/10 bg-white/[0.04] p-3"
+                  >
+                    <div className="flex flex-wrap items-start justify-between gap-3">
+                      <div>
+                        <div className="font-mono text-sm font-black text-white">
+                          {code.code}
+                        </div>
+                        <div className="mt-1 text-xs leading-5 text-white/62">
+                          {code.reward}
+                        </div>
+                      </div>
+                      <span className="rounded-full bg-lime-300/16 px-2.5 py-1 text-xs font-semibold tracking-wide text-lime-100 uppercase">
+                        {code.status}
+                      </span>
+                    </div>
+                    <div className="mt-3">
+                      <CopyCodeButton
+                        code={code.code}
+                        className="border-white/15 bg-white/10 text-white hover:bg-white/16 hover:text-white"
+                      />
+                    </div>
+                  </div>
+                ))}
+            </div>
+
+            <div className="mt-3 grid gap-2 sm:grid-cols-2">
+              {actionCards.map((card) => {
+                const Icon = card.icon;
+
+                return (
+                  <Link
+                    className="rounded-md border border-white/10 bg-white/[0.04] p-3 text-sm text-white transition-colors hover:bg-white/10"
+                    href={card.href}
+                    key={card.href}
+                  >
+                    <div className="flex items-center gap-2 font-medium">
+                      <Icon className="size-4 text-lime-200" />
+                      {card.title}
+                    </div>
+                    <p className="mt-1 line-clamp-2 text-xs leading-5 text-white/60">
+                      {card.description}
+                    </p>
+                  </Link>
+                );
+              })}
+            </div>
           </div>
         </div>
-
-        <Card className="overflow-hidden rounded-lg shadow-sm">
-          <CardContent className="p-0">
-            <img
-              src={heroImageUrl}
-              alt="Official Roblox thumbnail for 99 Nights in the Forest showing players defending a camp from the forest creature"
-              className="aspect-[16/9] w-full object-cover"
-              loading="eager"
-              fetchPriority="high"
-            />
-            <div className="space-y-4 p-5">
-              <div className="flex items-center gap-2 text-sm font-medium">
-                <Sparkles className="text-primary size-4" />
-                Start from your current problem
-              </div>
-              <div className="grid gap-2 sm:grid-cols-2">
-                {actionCards.map((card) => {
-                  const Icon = card.icon;
-
-                  return (
-                    <Link
-                      className="hover:bg-accent rounded-md border p-3 text-sm transition-colors"
-                      href={card.href}
-                      key={card.href}
-                    >
-                      <div className="flex items-center gap-2 font-medium">
-                        <Icon className="text-primary size-4" />
-                        {card.title}
-                      </div>
-                      <p className="text-muted-foreground mt-1 leading-5">
-                        {card.description}
-                      </p>
-                    </Link>
-                  );
-                })}
-              </div>
-            </div>
-          </CardContent>
-        </Card>
       </section>
 
       <section className="border-border/80 bg-card border-y">

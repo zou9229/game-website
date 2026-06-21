@@ -3,9 +3,16 @@
 import { useState } from 'react';
 import { Check, Copy } from 'lucide-react';
 
+import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 
-export function CopyCodeButton({ code }: { code: string }) {
+export function CopyCodeButton({
+  code,
+  className,
+}: {
+  code: string;
+  className?: string;
+}) {
   const [copied, setCopied] = useState(false);
 
   async function handleCopy() {
@@ -21,7 +28,7 @@ export function CopyCodeButton({ code }: { code: string }) {
       size="sm"
       onClick={handleCopy}
       aria-label={`Copy code ${code}`}
-      className="gap-1.5"
+      className={cn('gap-1.5', className)}
     >
       {copied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
       {copied ? 'Copied' : 'Copy'}
