@@ -42,6 +42,7 @@ export default function AdminLayout({
       icon: FolderOpen,
       group,
       items: [
+        { href: '/admin/game-data', label: 'Game Data' },
         { href: '/admin/categories', label: t('nav.categories') },
         { href: '/admin/posts', label: t('nav.posts') },
       ],
