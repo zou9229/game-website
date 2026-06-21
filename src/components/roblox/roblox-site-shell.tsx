@@ -1,4 +1,7 @@
-import { getFeaturedRobloxGame } from '@/data/roblox-games';
+import {
+  getFeaturedRobloxGame,
+  getLatestCodeCheckedAt,
+} from '@/data/roblox-games';
 import { ExternalLink } from 'lucide-react';
 
 import { Link } from '@/core/i18n/navigation';
@@ -6,6 +9,7 @@ import { envConfigs } from '@/config';
 
 export function RobloxSiteShell({ children }: { children: React.ReactNode }) {
   const featuredGame = getFeaturedRobloxGame();
+  const latestCodeCheckedAt = getLatestCodeCheckedAt(featuredGame);
 
   return (
     <div className="bg-background text-foreground min-h-screen">
@@ -16,7 +20,9 @@ export function RobloxSiteShell({ children }: { children: React.ReactNode }) {
               Source-checked Roblox guides, code history, and update notes.
             </span>
             <span>
-              {featuredGame.shortName} checked {featuredGame.stats.checkedAt}
+              Codes checked {latestCodeCheckedAt}
+              <span className="text-muted-foreground/60 mx-1">/</span>
+              Game data {featuredGame.stats.checkedAt}
             </span>
           </div>
         </div>

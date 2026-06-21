@@ -118,10 +118,10 @@ export function buildGameDataFreshnessAudit(now = new Date()) {
   return {
     generatedAt: now.toISOString(),
     roadmap: {
-      launchMvpPercent: 86,
-      operatingSystemPercent: 49,
+      launchMvpPercent: 90,
+      operatingSystemPercent: 58,
       currentStage:
-        'Public SEO MVP is live, submitted to GSC, deployed on Cloudflare, and now has guide-site navigation, media, AdSense readiness, and a clearer 99 Nights route map. The next work is deeper keyword coverage, source-checked updates, honest language expansion, and safer automation.',
+        'Public SEO MVP is live, submitted to GSC and Bing, deployed on Cloudflare, and now has guide-site navigation, media, AdSense readiness, source-check controls, and a clearer 99 Nights route map. The next work is deeper keyword coverage, safer source-to-data publishing, and honest language expansion.',
     },
     summary: {
       total: items.length,
@@ -136,7 +136,7 @@ export function buildGameDataFreshnessAudit(now = new Date()) {
     },
     sourcePolicy: {
       automationCandidate:
-        'Codes, update checks, and Roblox metadata can be checked automatically first, but publishing still needs a source trail.',
+        'Codes, update checks, and Roblox metadata can be source-checked automatically first, but publishing still needs a source trail and review.',
       manualReview:
         'Guide, tier-list, animal, class, crafting, and route pages stay manual-review because wrong game data damages trust.',
       futureAiReview:
@@ -145,17 +145,17 @@ export function buildGameDataFreshnessAudit(now = new Date()) {
     syncPlan: {
       title: 'Safe game-data update workflow',
       summary:
-        'Use the admin audit as the control panel: detect stale pages first, source-check automation candidates, then publish only verified changes.',
+        'Use the admin audit and source-check controls as the control panel: detect stale pages first, check trusted sources, then publish only verified changes.',
       steps: [
         {
           label: 'Detect',
           detail:
-            'Run the freshness audit and watch GSC queries, Semrush long tails, Roblox metadata, and trusted source pages.',
+            'Run the freshness audit and watch GSC queries, Semrush long tails, Roblox metadata, and page-level checked dates.',
         },
         {
           label: 'Check',
           detail:
-            'Verify codes, update notes, and Roblox metadata against trusted sources before touching the data files.',
+            'Run source check for code pages and Roblox metadata before touching the data files.',
         },
         {
           label: 'Review',
@@ -178,6 +178,6 @@ export function buildGameDataFreshnessAudit(now = new Date()) {
     items,
     nextStep:
       actions[0]?.action ??
-      'No urgent data action. Continue keyword expansion, source monitoring, and validated language-market testing.',
+      'No urgent data action. Run source check after code/update changes, then continue keyword expansion and validated language-market testing.',
   };
 }

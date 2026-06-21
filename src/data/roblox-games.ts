@@ -201,19 +201,19 @@ export const robloxGames: RobloxGame[] = [
         code: 'forestwakesup26',
         reward: '15 gems and 3 random flames',
         status: 'active',
-        note: 'Listed as active by PC Gamer, GamesRadar, and the community wiki on the June 21 source check.',
+        note: 'Matched by PC Gamer and GamesRadar in the June 22 source check; the community wiki remains in the June 21 manual trail.',
         sources: [
           {
             name: 'PC Gamer',
             url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-codes/',
             status: 'listed-active',
-            checkedAt: '2026-06-21',
+            checkedAt: '2026-06-22',
           },
           {
             name: 'GamesRadar',
             url: 'https://www.gamesradar.com/games/survival/99-nights-in-the-forest-codes/',
             status: 'listed-active',
-            checkedAt: '2026-06-21',
+            checkedAt: '2026-06-22',
           },
           {
             name: 'Fandom Codes',
@@ -227,13 +227,13 @@ export const robloxGames: RobloxGame[] = [
         code: 'afterparty',
         reward: '15 gems',
         status: 'active',
-        note: 'Confirmed active by PC Gamer, PCGamesN, GamesRadar, and the community wiki on the June 21 source check.',
+        note: 'Matched by PC Gamer and GamesRadar in the June 22 source check; PCGamesN and the community wiki remain in the June 21 manual trail.',
         sources: [
           {
             name: 'PC Gamer',
             url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-codes/',
             status: 'listed-active',
-            checkedAt: '2026-06-21',
+            checkedAt: '2026-06-22',
           },
           {
             name: 'PCGamesN',
@@ -245,7 +245,7 @@ export const robloxGames: RobloxGame[] = [
             name: 'GamesRadar',
             url: 'https://www.gamesradar.com/games/survival/99-nights-in-the-forest-codes/',
             status: 'listed-active',
-            checkedAt: '2026-06-21',
+            checkedAt: '2026-06-22',
           },
           {
             name: 'Fandom Codes',
@@ -259,13 +259,13 @@ export const robloxGames: RobloxGame[] = [
         code: 'yay fishing',
         reward: '2 gems',
         status: 'special',
-        note: 'PC Gamer, GamesRadar, and the community wiki list this as a special in-game activation, while PCGamesN lists it as expired. Try it through the fishing/chat path rather than the normal code box.',
+        note: 'PC Gamer and GamesRadar still mention this term in the June 22 source check. PCGamesN lists it as expired, so keep it as a special in-game activation rather than a normal code-box claim.',
         sources: [
           {
             name: 'PC Gamer',
             url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-codes/',
             status: 'listed-active',
-            checkedAt: '2026-06-21',
+            checkedAt: '2026-06-22',
           },
           {
             name: 'PCGamesN',
@@ -277,7 +277,7 @@ export const robloxGames: RobloxGame[] = [
             name: 'GamesRadar',
             url: 'https://www.gamesradar.com/games/survival/99-nights-in-the-forest-codes/',
             status: 'listed-active',
-            checkedAt: '2026-06-21',
+            checkedAt: '2026-06-22',
           },
           {
             name: 'Fandom Codes',
@@ -323,4 +323,12 @@ export function getRobloxGame(slug: string) {
 
 export function getFeaturedRobloxGame() {
   return robloxGames[0];
+}
+
+export function getLatestCodeCheckedAt(game: RobloxGame = getFeaturedRobloxGame()) {
+  const checkedDates = game.codes.flatMap((code) =>
+    code.sources.map((source) => source.checkedAt)
+  );
+
+  return checkedDates.sort().at(-1) ?? game.stats.checkedAt;
 }

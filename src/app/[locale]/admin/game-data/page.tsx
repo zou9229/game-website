@@ -1,7 +1,15 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { Database, ExternalLink, RefreshCw } from 'lucide-react';
+import {
+  AlertTriangle,
+  CheckCircle2,
+  Clipboard,
+  Database,
+  ExternalLink,
+  RefreshCw,
+  Search,
+} from 'lucide-react';
 import { toast } from 'sonner';
 
 import { Link } from '@/core/i18n/navigation';
@@ -75,6 +83,36 @@ type FreshnessResponse = {
   nextStep: string;
 };
 
+type SourceCheckResult = {
+  id: string;
+  title: string;
+  kind: string;
+  sourceName: string;
+  url: string;
+  checkedAt: string;
+  ok: boolean;
+  httpStatus?: number;
+  contentType?: string;
+  matchedTerms: string[];
+  missingTerms: string[];
+  highRiskMatches: string[];
+  signals: {
+    label: string;
+    value: string;
+  }[];
+  action: string;
+  error?: string;
+};
+
+type SourceCheckSnapshot = {
+  generatedAt: string;
+  reason: string;
+  sourceCount: number;
+  healthySources: number;
+  attentionCount: number;
+  results: SourceCheckResult[];
+};
+
 const statusTone = {
   fresh: 'default',
   'due-soon': 'secondary',
@@ -89,8 +127,12 @@ const priorityTone = {
 
 export default function AdminGameDataPage() {
   const [data, setData] = useState<FreshnessResponse | null>(null);
+  const [sourceCheck, setSourceCheck] = useState<SourceCheckSnapshot | null>(
+    null
+  );
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [checkingSources, setCheckingSources] = useState(false);
 
   async function loadFreshness({ showToast = false } = {}) {
     setRefreshing(true);
@@ -110,8 +152,63 @@ export default function AdminGameDataPage() {
     }
   }
 
+  async function loadSourceCheck() {
+    try {
+      const res = await fetch('/api/admin/game-data/source-check', {
+        cache: 'no-store',
+      });
+      const json = await res.json();
+      if (json.code !== 0)
+        throw new Error(json.message || 'Source check failed');
+      setSourceCheck(json.data ?? null);
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to load source check');
+    }
+  }
+
+  async function runSourceCheck() {
+    setCheckingSources(true);
+    try {
+      const res = await fetch('/api/admin/game-data/source-check', {
+        cache: 'no-store',
+        method: 'POST',
+      });
+      const json = await res.json();
+      if (json.code !== 0)
+        throw new Error(json.message || 'Source check failed');
+      setSourceCheck(json.data);
+      toast.success('Source check completed');
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to run source check');
+    } finally {
+      setCheckingSources(false);
+    }
+  }
+
+  async function copyMaintenancePrompt() {
+    const prompt = [
+      'Quest Codes maintenance request',
+      '',
+      'Use the questcodes-99nights-keyword-to-page skill.',
+      'Goal: review the current game-data audit and source-check results, then update only source-confirmed Roblox code/update data. Do not publish invented guide facts, drop rates, or tier claims.',
+      '',
+      data
+        ? `Audit: ${data.summary.fresh} fresh, ${data.summary.dueSoon} due soon, ${data.summary.stale} stale. Next step: ${data.nextStep}`
+        : 'Audit: not loaded.',
+      sourceCheck
+        ? `Source check: ${sourceCheck.healthySources}/${sourceCheck.sourceCount} sources healthy, ${sourceCheck.attentionCount} need review.`
+        : 'Source check: not run yet.',
+      '',
+      'If sources disagree, keep the current page conservative and show the disagreement instead of forcing an automatic update.',
+    ].join('\n');
+
+    await navigator.clipboard.writeText(prompt);
+    toast.success('Maintenance prompt copied');
+  }
+
   useEffect(() => {
     loadFreshness();
+    loadSourceCheck();
   }, []);
 
   const sortedItems = useMemo(() => {
@@ -122,6 +219,8 @@ export default function AdminGameDataPage() {
       return b.ageDays - a.ageDays;
     });
   }, [data]);
+  const attentionResults =
+    sourceCheck?.results.filter((item) => !item.ok) ?? [];
 
   return (
     <div className="space-y-6 p-6">
@@ -137,15 +236,27 @@ export default function AdminGameDataPage() {
             scheduled data job changes live content.
           </p>
         </div>
-        <Button
-          onClick={() => loadFreshness({ showToast: true })}
-          disabled={refreshing}
-        >
-          <RefreshCw
-            className={`mr-2 size-4 ${refreshing ? 'animate-spin' : ''}`}
-          />
-          Run audit
-        </Button>
+        <div className="flex flex-wrap gap-2">
+          <Button
+            onClick={() => loadFreshness({ showToast: true })}
+            disabled={refreshing}
+          >
+            <RefreshCw
+              className={`mr-2 size-4 ${refreshing ? 'animate-spin' : ''}`}
+            />
+            Run audit
+          </Button>
+          <Button
+            onClick={runSourceCheck}
+            disabled={checkingSources}
+            variant="secondary"
+          >
+            <Search
+              className={`mr-2 size-4 ${checkingSources ? 'animate-pulse' : ''}`}
+            />
+            Run source check
+          </Button>
+        </div>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
@@ -164,6 +275,180 @@ export default function AdminGameDataPage() {
           </Card>
         ))}
       </div>
+
+      <Card>
+        <CardHeader>
+          <div className="flex flex-col justify-between gap-3 md:flex-row md:items-start">
+            <div>
+              <CardTitle>Operations control</CardTitle>
+              <CardDescription>
+                Run a read-only freshness audit first, then source-check trusted
+                external pages before changing live content.
+              </CardDescription>
+            </div>
+            <Button
+              onClick={copyMaintenancePrompt}
+              disabled={!data}
+              variant="outline"
+            >
+              <Clipboard className="mr-2 size-4" />
+              Copy Codex prompt
+            </Button>
+          </div>
+        </CardHeader>
+        <CardContent className="space-y-5">
+          <div className="grid gap-3 md:grid-cols-3">
+            <div className="rounded-md border p-4">
+              <div className="flex items-center gap-2">
+                <RefreshCw className="text-primary size-4" />
+                <h3 className="text-sm font-semibold">Audit state</h3>
+              </div>
+              <p className="text-muted-foreground mt-2 text-sm leading-6">
+                Calculates fresh, due-soon, and stale status from the tracked
+                checked dates. It does not call external sites.
+              </p>
+            </div>
+            <div className="rounded-md border p-4">
+              <div className="flex items-center gap-2">
+                <Search className="text-primary size-4" />
+                <h3 className="text-sm font-semibold">Source check</h3>
+              </div>
+              <p className="text-muted-foreground mt-2 text-sm leading-6">
+                Fetches trusted code and metadata sources, records matched or
+                missing terms, and stores the snapshot in D1.
+              </p>
+            </div>
+            <div className="rounded-md border p-4">
+              <div className="flex items-center gap-2">
+                <AlertTriangle className="text-primary size-4" />
+                <h3 className="text-sm font-semibold">Publish rule</h3>
+              </div>
+              <p className="text-muted-foreground mt-2 text-sm leading-6">
+                Source checks create review signals only. They never rewrite
+                guide pages, commit code, or deploy automatically.
+              </p>
+            </div>
+          </div>
+
+          <div className="rounded-md border p-4">
+            <div className="flex flex-col justify-between gap-3 md:flex-row md:items-start">
+              <div>
+                <h3 className="text-sm font-semibold">Latest source check</h3>
+                <p className="text-muted-foreground mt-1 text-sm">
+                  {sourceCheck
+                    ? `${sourceCheck.healthySources}/${sourceCheck.sourceCount} sources healthy, ${sourceCheck.attentionCount} need review.`
+                    : 'No source check snapshot yet. Run source check to create one.'}
+                </p>
+                {sourceCheck ? (
+                  <p className="text-muted-foreground mt-1 text-xs">
+                    Last run:{' '}
+                    {new Date(sourceCheck.generatedAt).toLocaleString()}
+                  </p>
+                ) : null}
+              </div>
+              <Badge
+                variant={
+                  sourceCheck?.attentionCount ? 'destructive' : 'default'
+                }
+              >
+                {sourceCheck
+                  ? sourceCheck.attentionCount
+                    ? 'review needed'
+                    : 'healthy'
+                  : 'not run'}
+              </Badge>
+            </div>
+
+            {sourceCheck ? (
+              <div className="mt-4 grid gap-3 lg:grid-cols-2">
+                {sourceCheck.results.map((result) => (
+                  <div key={result.id} className="rounded-md border p-4">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <Badge variant={result.ok ? 'default' : 'destructive'}>
+                        {result.ok ? 'ok' : 'review'}
+                      </Badge>
+                      <Badge variant="outline">{result.kind}</Badge>
+                      {result.httpStatus ? (
+                        <Badge variant="outline">
+                          HTTP {result.httpStatus}
+                        </Badge>
+                      ) : null}
+                      <span className="text-sm font-medium">
+                        {result.sourceName}
+                      </span>
+                    </div>
+                    <div className="mt-3 space-y-2 text-sm">
+                      <p className="text-muted-foreground leading-6">
+                        {result.action}
+                      </p>
+                      {result.matchedTerms.length ? (
+                        <p>
+                          <span className="text-muted-foreground">
+                            Matched:{' '}
+                          </span>
+                          {result.matchedTerms.join(', ')}
+                        </p>
+                      ) : null}
+                      {result.missingTerms.length ? (
+                        <p>
+                          <span className="text-muted-foreground">
+                            Missing:{' '}
+                          </span>
+                          {result.missingTerms.join(', ')}
+                        </p>
+                      ) : null}
+                      {result.highRiskMatches.length ? (
+                        <p>
+                          <span className="text-muted-foreground">
+                            Needs label review:{' '}
+                          </span>
+                          {result.highRiskMatches.join(', ')}
+                        </p>
+                      ) : null}
+                      {result.signals.slice(0, 3).map((signal) => (
+                        <p key={signal.label} className="text-xs">
+                          <span className="text-muted-foreground">
+                            {signal.label}:{' '}
+                          </span>
+                          {signal.value}
+                        </p>
+                      ))}
+                      {result.error ? (
+                        <p className="text-destructive text-xs">
+                          {result.error}
+                        </p>
+                      ) : null}
+                    </div>
+                    <a
+                      className="text-primary mt-3 inline-flex items-center gap-1 text-xs"
+                      href={result.url}
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      Open source
+                      <ExternalLink className="size-3" />
+                    </a>
+                  </div>
+                ))}
+              </div>
+            ) : null}
+
+            {attentionResults.length ? (
+              <div className="bg-destructive/10 text-destructive border-destructive/20 mt-4 rounded-md border p-3 text-sm">
+                {attentionResults.length} source result
+                {attentionResults.length === 1 ? '' : 's'} need manual review
+                before any public data change.
+              </div>
+            ) : sourceCheck ? (
+              <div className="mt-4 flex items-center gap-2 rounded-md border p-3 text-sm">
+                <CheckCircle2 className="text-primary size-4" />
+                Source terms look healthy. Keep monitoring GSC queries before
+                expanding more pages.
+              </div>
+            ) : null}
+          </div>
+        </CardContent>
+      </Card>
 
       <Card>
         <CardHeader>
@@ -335,10 +620,11 @@ export default function AdminGameDataPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Audit policy</CardTitle>
+          <CardTitle>Maintenance policy</CardTitle>
           <CardDescription>
-            This button refreshes audit state only. It does not scrape external
-            sites, edit data files, create commits, or deploy.
+            Run audit is read-only. Run source check records external source
+            signals, but still does not edit data files, create commits, or
+            deploy.
           </CardDescription>
         </CardHeader>
         <CardContent className="text-muted-foreground space-y-2 text-sm">

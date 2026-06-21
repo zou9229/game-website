@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { ninetyNineNightsMedia } from '@/data/99-nights-media';
-import { getRobloxGame } from '@/data/roblox-games';
+import { getLatestCodeCheckedAt, getRobloxGame } from '@/data/roblox-games';
 import { seoKeywords } from '@/data/seo-keywords';
 import {
   ArrowRight,
@@ -137,6 +137,7 @@ export default async function GameHubPage({
 
   if (!game) return null;
 
+  const latestCodeCheckedAt = getLatestCodeCheckedAt(game);
   const livePages = game.pages.filter((page) => page.status === 'live');
   const activeCodeCount = game.codes.filter(
     (code) => code.status === 'active' || code.status === 'special'
@@ -188,7 +189,7 @@ export default async function GameHubPage({
                 {livePages.length} live guides
               </span>
               <span className="rounded-full border border-white/12 bg-white/8 px-4 py-2 font-mono text-xs tracking-[0.14em] text-white/68 uppercase">
-                Checked {game.stats.checkedAt}
+                Codes checked {latestCodeCheckedAt}
               </span>
             </div>
             <div className="space-y-4">

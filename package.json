@@ -18,6 +18,7 @@
     "rbac:init": "tsx scripts/with-env.ts tsx scripts/init-rbac.ts",
     "rbac:assign": "tsx scripts/with-env.ts tsx scripts/assign-role.ts",
     "game-data:audit": "tsx scripts/audit-game-data.ts",
+    "game-data:source-check": "tsx scripts/with-env.ts tsx scripts/game-data-source-check.ts",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "prepare": "husky"

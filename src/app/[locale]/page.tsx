@@ -1,6 +1,10 @@
 import type { Metadata } from 'next';
 import { ninetyNineNightsMedia } from '@/data/99-nights-media';
-import { getFeaturedRobloxGame, robloxGames } from '@/data/roblox-games';
+import {
+  getFeaturedRobloxGame,
+  getLatestCodeCheckedAt,
+  robloxGames,
+} from '@/data/roblox-games';
 import { seoKeywords } from '@/data/seo-keywords';
 import {
   ArrowRight,
@@ -126,6 +130,7 @@ export async function generateMetadata({
 
 export default function HomePage() {
   const featuredGame = getFeaturedRobloxGame();
+  const latestCodeCheckedAt = getLatestCodeCheckedAt(featuredGame);
   const livePages = featuredGame.pages.filter((page) => page.status === 'live');
   const activeCodes = featuredGame.codes.filter(
     (code) => code.status === 'active' || code.status === 'special'
@@ -234,7 +239,7 @@ export default function HomePage() {
                 label="Game visits"
                 value={`${(featuredGame.stats.visits / 1000000000).toFixed(1)}B`}
               />
-              <HeroStat label="Checked" value={featuredGame.stats.checkedAt} />
+              <HeroStat label="Codes checked" value={latestCodeCheckedAt} />
             </div>
           </div>
 

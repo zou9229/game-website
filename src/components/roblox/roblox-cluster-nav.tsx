@@ -1,6 +1,9 @@
 'use client';
 
-import { getFeaturedRobloxGame } from '@/data/roblox-games';
+import {
+  getFeaturedRobloxGame,
+  getLatestCodeCheckedAt,
+} from '@/data/roblox-games';
 import { ChevronRight, Home } from 'lucide-react';
 
 import { Link, usePathname } from '@/core/i18n/navigation';
@@ -27,6 +30,7 @@ function normalizePath(pathname: string) {
 export function RobloxClusterNav() {
   const pathname = normalizePath(usePathname());
   const game = getFeaturedRobloxGame();
+  const latestCodeCheckedAt = getLatestCodeCheckedAt(game);
   const gameHref = `/roblox/${game.slug}`;
   const isGameHub = pathname === gameHref;
   const livePageCount = game.pages.filter(
@@ -88,7 +92,7 @@ export function RobloxClusterNav() {
               {livePageCount} live guides
             </span>
             <span className="border-border bg-background rounded-full border px-2 py-1">
-              checked {game.stats.checkedAt}
+              codes checked {latestCodeCheckedAt}
             </span>
           </div>
         </div>
