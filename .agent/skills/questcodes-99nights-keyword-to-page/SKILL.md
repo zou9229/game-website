@@ -36,8 +36,8 @@ the Forest` Roblox cluster.
 The current 99 Nights cluster is English-first. The sitemap should expose only
 English game/content pages until a language has real localized content.
 
-Localized static legal pages can remain in the sitemap. Future `pt-br` or `es`
-content must have:
+Non-default locale routes should be `noindex, follow` until they have real
+localized content. Future `pt-br` or `es` content must have:
 
 - localized metadata,
 - localized body copy,

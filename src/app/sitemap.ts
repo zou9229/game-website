@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { robloxGames } from '@/data/roblox-games';
 
-import { defaultLocale, locales } from '@/config/locale';
+import { defaultLocale } from '@/config/locale';
 import { ensureTrailingSlash, getBaseUrl } from '@/lib/seo';
 
 function localizedUrl(path: string, locale: string) {
@@ -20,7 +20,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/roblox', priority: 0.9, changeFrequency: 'daily' as const },
   ];
 
-  const localizedStaticRoutes = [
+  const staticRoutes = [
     {
       path: '/privacy-policy',
       priority: 0.3,
@@ -55,14 +55,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: route.priority,
   }));
 
-  const localizedStaticUrls = locales.flatMap((locale) =>
-    localizedStaticRoutes.map((route) => ({
-      url: localizedUrl(route.path, locale),
-      lastModified: new Date(),
-      changeFrequency: route.changeFrequency,
-      priority: route.priority,
-    }))
-  );
+  const staticUrls = staticRoutes.map((route) => ({
+    url: localizedUrl(route.path, defaultLocale),
+    lastModified: new Date(),
+    changeFrequency: route.changeFrequency,
+    priority: route.priority,
+  }));
 
-  return [...englishUrls, ...localizedStaticUrls];
+  return [...englishUrls, ...staticUrls];
 }

@@ -128,11 +128,11 @@ Implementation gate for any non-English page:
 
 The sitemap should expose:
 
-- English home/content/game pages.
-- localized static legal pages.
+- English/default-locale public pages only.
 
 It should not expose `zh`, `pt-BR`, or `es` game pages until those pages have
-real localized content.
+real localized content. Non-default locale routes should stay `noindex, follow`
+until a language passes the localization gate.
 
 ## Monetization
 

@@ -69,10 +69,11 @@ from keyword checks showed strong interest in the United States and the
 Philippines for `99 Nights in the Forest codes`, but the query language is still
 English.
 
-The sitemap intentionally exposes English game/content pages plus localized
-static legal pages. Additional indexable languages such as `pt-BR` or `es`
-should be added only after Semrush/Trends/GSC show local-language demand and the
-page body is actually localized. Do not publish thin translated duplicates.
+The sitemap intentionally exposes English/default-locale public pages only.
+Non-default locale routes are `noindex, follow` until they have real localized
+content. Additional indexable languages such as `pt-BR` or `es` should be added
+only after Semrush/Trends/GSC show local-language demand and the page body is
+actually localized. Do not publish thin translated duplicates.
 
 ## Upstream Template
 
