@@ -1,3 +1,4 @@
+import { RobloxClusterFooter } from '@/components/roblox/roblox-cluster-footer';
 import { RobloxClusterNav } from '@/components/roblox/roblox-cluster-nav';
 
 export default function NinetyNineNightsLayout({
@@ -9,6 +10,7 @@ export default function NinetyNineNightsLayout({
     <>
       <RobloxClusterNav />
       {children}
+      <RobloxClusterFooter />
     </>
   );
 }

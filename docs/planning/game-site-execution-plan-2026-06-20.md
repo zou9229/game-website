@@ -38,6 +38,8 @@ Live public foundation:
 - `/robots.txt`
 - `/llms.txt`
 - `/llms-full.txt`
+- guide-site shell navigation for Roblox pages
+- 99 Nights breadcrumb, route navigation, and next-guide footer
 
 Operational foundation:
 
@@ -50,12 +52,12 @@ Operational foundation:
 
 There are two different completion baselines:
 
-- Launch MVP: about 83%.
-- Long-term operating system: about 48%.
+- Launch MVP: about 86%.
+- Long-term operating system: about 49%.
 
 The MVP is mostly live because the domain, Cloudflare deployment, first content
-cluster, sitemap, robots, llms, GSC submission, basic guide media, and AdSense
-readiness are in place.
+cluster, sitemap, robots, llms, GSC submission, basic guide media, guide-site
+navigation, and AdSense readiness are in place.
 
 The operating system is not complete because automated source checks, community
 submissions, AI-assisted moderation, review queues, and multi-language content
@@ -97,6 +99,9 @@ The site reduces risk by building a topical cluster instead of depending on one
 keyword.
 
 ## Language Strategy
+
+Detailed operating decision:
+`docs/planning/monetization-i18n-content-decisions-2026-06-21.md`.
 
 Current indexable game content is English only.
 

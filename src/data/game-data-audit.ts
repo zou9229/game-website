@@ -118,10 +118,10 @@ export function buildGameDataFreshnessAudit(now = new Date()) {
   return {
     generatedAt: now.toISOString(),
     roadmap: {
-      launchMvpPercent: 83,
-      operatingSystemPercent: 48,
+      launchMvpPercent: 86,
+      operatingSystemPercent: 49,
       currentStage:
-        'Public SEO MVP is live, submitted to GSC, deployed on Cloudflare, and now has basic media plus AdSense readiness. The next work is deeper keyword coverage, source-checked updates, honest language expansion, and safer automation.',
+        'Public SEO MVP is live, submitted to GSC, deployed on Cloudflare, and now has guide-site navigation, media, AdSense readiness, and a clearer 99 Nights route map. The next work is deeper keyword coverage, source-checked updates, honest language expansion, and safer automation.',
     },
     summary: {
       total: items.length,
