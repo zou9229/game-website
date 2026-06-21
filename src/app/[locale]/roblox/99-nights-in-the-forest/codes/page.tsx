@@ -36,7 +36,7 @@ const getPageTitle = (monthYear: string) =>
   `99 Nights in the Forest Codes (${monthYear}) - Rewards`;
 
 const getPageDescription = (monthYear: string) =>
-  `Find working 99 Nights in the Forest codes for ${monthYear}, rewards, redemption steps, expired codes, and source checks updated for Roblox players.`;
+  `Find working 99 Nights in the Forest codes for ${monthYear}, gem rewards, all active and expired codes, redemption steps, and source checks.`;
 
 const redeemSteps = [
   {
@@ -88,6 +88,25 @@ const troubleshootingNotes = [
   {
     title: 'Spacing or capitalization changed',
     text: 'Copy the code exactly. A code such as yay fishing includes a space, while forestwakesup26 does not.',
+  },
+];
+
+const searchDemandNotes = [
+  {
+    title: 'All codes in 99 Nights in the Forest',
+    text: 'This page keeps active, special/conflicting, and expired entries together so an all-codes search does not send you to separate thin lists.',
+  },
+  {
+    title: '99 Nights in the Forest codes for 700 gems',
+    text: 'We do not list a 700-gem code unless checked sources verify it. Current gem rewards stay in the gem section above with each source note attached.',
+  },
+  {
+    title: 'Codes for diamonds or gems',
+    text: 'Public sources sometimes mix gems and diamonds. Quest Codes keeps the wording attached to the source and links the wider gems and diamonds guide for spending decisions.',
+  },
+  {
+    title: 'Merch codes',
+    text: 'No checked source currently confirms a public merch code for this game. Merch-only, private, or screenshot-only claims stay out of the active table until they have a source trail.',
   },
 ];
 
@@ -150,6 +169,21 @@ const faqs = [
     question: 'How often should I check for new codes?',
     answer:
       'Check after major updates, event drops, and developer apology rewards. This page keeps a source trail so code changes can be audited later.',
+  },
+  {
+    question: 'Are there 99 Nights in the Forest codes for 700 gems?',
+    answer:
+      'Not in the checked active table right now. We only list a 700-gem code if public sources verify the exact reward and redemption path.',
+  },
+  {
+    question: 'Where are all 99 Nights in the Forest codes listed?',
+    answer:
+      'The active, special/conflicting, and expired sections on this page are the all-codes view. Expired entries stay visible so old event rewards are not retested.',
+  },
+  {
+    question: 'Are there merch codes for 99 Nights in the Forest?',
+    answer:
+      'No checked public source currently confirms a merch code. If a merch code appears, it should be treated as unverified until the source and redemption path are clear.',
   },
   {
     question: 'Is this site affiliated with Roblox?',
@@ -375,6 +409,28 @@ export default async function CodesPage({
                 </div>
               </dl>
             </div>
+          </CardContent>
+        </Card>
+
+        <Card className="mt-6 rounded-lg">
+          <CardHeader>
+            <h2 className="text-2xl font-semibold tracking-tight">
+              Common code searches we track
+            </h2>
+            <CardDescription>
+              These notes answer rising search variants without turning each
+              phrase into a duplicate page.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="grid gap-3 md:grid-cols-2">
+            {searchDemandNotes.map((note) => (
+              <div key={note.title} className="rounded-md border p-4">
+                <h3 className="font-medium">{note.title}</h3>
+                <p className="text-muted-foreground mt-2 text-sm leading-6">
+                  {note.text}
+                </p>
+              </div>
+            ))}
           </CardContent>
         </Card>
 

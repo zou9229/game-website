@@ -29,7 +29,14 @@ export const seoKeywords: Record<string, string[]> = {
   ninetyNineNightsCodes: [
     '99 nights in the forest codes',
     'codes for 99 nights in the forest',
+    'codes in 99 nights in the forest',
     'working 99 nights codes',
+    '99 nights in the forest codes 2026',
+    'all codes in 99 nights in the forest',
+    '99 nights in the forest codes for gems',
+    '99 nights in the forest codes for 700 gems',
+    'codes for diamonds in 99 nights in the forest',
+    'merch codes for 99 nights in the forest',
   ],
   ninetyNineNightsGems: [
     '99 nights in the forest gems',
