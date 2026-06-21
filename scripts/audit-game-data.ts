@@ -1,56 +1,34 @@
-import {
-  getFreshnessAgeDays,
-  getFreshnessStatus,
-  ninetyNineNightsFreshnessEntries,
-} from '../src/data/99-nights-freshness';
+import { buildGameDataFreshnessAudit } from '../src/data/game-data-audit';
 
-const statusRank = {
-  stale: 0,
-  'due-soon': 1,
-  fresh: 2,
-} as const;
-
-const rows = ninetyNineNightsFreshnessEntries
-  .map((entry) => {
-    const ageDays = getFreshnessAgeDays(entry.checkedAt);
-    const status = getFreshnessStatus(entry);
-
-    return {
-      status,
-      ageDays,
-      title: entry.title,
-      href: entry.href,
-      kind: entry.kind,
-      checkedAt: entry.checkedAt,
-      cadenceDays: entry.cadenceDays,
-      owner: entry.owner,
-      note: entry.note,
-    };
-  })
-  .sort((a, b) => {
-    const statusDiff = statusRank[a.status] - statusRank[b.status];
-    if (statusDiff !== 0) return statusDiff;
-    return b.ageDays - a.ageDays;
-  });
-
-const stale = rows.filter((row) => row.status === 'stale');
-const dueSoon = rows.filter((row) => row.status === 'due-soon');
-const fresh = rows.filter((row) => row.status === 'fresh');
+const audit = buildGameDataFreshnessAudit();
+const stale = audit.items.filter((row) => row.status === 'stale');
 
 console.log('# Game Data Freshness Audit');
 console.log('');
-console.log(`Generated: ${new Date().toISOString()}`);
-console.log(`Fresh: ${fresh.length}`);
-console.log(`Due soon: ${dueSoon.length}`);
-console.log(`Stale: ${stale.length}`);
+console.log(`Generated: ${audit.generatedAt}`);
+console.log(`Launch MVP progress: ${audit.roadmap.launchMvpPercent}%`);
+console.log(
+  `Operating system progress: ${audit.roadmap.operatingSystemPercent}%`
+);
+console.log(`Fresh: ${audit.summary.fresh}`);
+console.log(`Due soon: ${audit.summary.dueSoon}`);
+console.log(`Stale: ${audit.summary.stale}`);
 console.log('');
-console.log('| Status | Page | Kind | Checked | Cadence | Age | Owner |');
-console.log('| --- | --- | --- | --- | ---: | ---: | --- |');
+console.log(
+  '| Status | Priority | Page | Kind | Checked | Cadence | Age | Owner |'
+);
+console.log('| --- | --- | --- | --- | --- | ---: | ---: | --- |');
 
-for (const row of rows) {
+for (const row of audit.items) {
   console.log(
-    `| ${row.status} | ${row.title} | ${row.kind} | ${row.checkedAt} | ${row.cadenceDays}d | ${row.ageDays}d | ${row.owner} |`
+    `| ${row.status} | ${row.priority} | ${row.title} | ${row.kind} | ${row.checkedAt} | ${row.cadenceDays}d | ${row.ageDays}d | ${row.owner} |`
   );
+}
+
+console.log('');
+console.log('## Next actions');
+for (const action of audit.actions.slice(0, 8)) {
+  console.log(`- [${action.priority}] ${action.title}: ${action.action}`);
 }
 
 if (stale.length > 0) {

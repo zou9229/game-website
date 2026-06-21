@@ -1,9 +1,5 @@
 import { headers } from 'next/headers';
-import {
-  getFreshnessAgeDays,
-  getFreshnessStatus,
-  ninetyNineNightsFreshnessEntries,
-} from '@/data/99-nights-freshness';
+import { buildGameDataFreshnessAudit } from '@/data/game-data-audit';
 
 import { getAuth } from '@/core/auth';
 import { hasPermission } from '@/modules/rbac/service';
@@ -18,28 +14,7 @@ export async function GET() {
     const isAdmin = await hasPermission(session.user.id, 'admin.settings.read');
     if (!isAdmin) return respErr('Forbidden');
 
-    const generatedAt = new Date().toISOString();
-    const items = ninetyNineNightsFreshnessEntries.map((entry) => ({
-      ...entry,
-      ageDays: getFreshnessAgeDays(entry.checkedAt),
-      status: getFreshnessStatus(entry),
-    }));
-
-    return respData({
-      generatedAt,
-      summary: {
-        total: items.length,
-        fresh: items.filter((item) => item.status === 'fresh').length,
-        dueSoon: items.filter((item) => item.status === 'due-soon').length,
-        stale: items.filter((item) => item.status === 'stale').length,
-        automationCandidates: items.filter(
-          (item) => item.owner === 'automation-candidate'
-        ).length,
-      },
-      items,
-      nextStep:
-        'This endpoint performs a safe read-only freshness audit. It does not mutate source data or trigger deployment.',
-    });
+    return respData(buildGameDataFreshnessAudit());
   } catch (error: any) {
     return respErr(error.message || 'Internal error');
   }

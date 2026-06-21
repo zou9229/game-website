@@ -27,17 +27,40 @@ type FreshnessItem = {
   note: string;
   ageDays: number;
   status: FreshnessStatus;
+  priority: 'high' | 'medium' | 'low';
+  recommendedAction: string;
+};
+
+type FreshnessAction = {
+  title: string;
+  href: string;
+  priority: 'high' | 'medium' | 'low';
+  status: FreshnessStatus;
+  owner: string;
+  action: string;
 };
 
 type FreshnessResponse = {
   generatedAt: string;
+  roadmap: {
+    launchMvpPercent: number;
+    operatingSystemPercent: number;
+    currentStage: string;
+  };
   summary: {
     total: number;
     fresh: number;
     dueSoon: number;
     stale: number;
     automationCandidates: number;
+    manualReview: number;
   };
+  sourcePolicy: {
+    automationCandidate: string;
+    manualReview: string;
+    futureAiReview: string;
+  };
+  actions: FreshnessAction[];
   items: FreshnessItem[];
   nextStep: string;
 };
@@ -46,6 +69,12 @@ const statusTone = {
   fresh: 'default',
   'due-soon': 'secondary',
   stale: 'destructive',
+} as const;
+
+const priorityTone = {
+  high: 'destructive',
+  medium: 'secondary',
+  low: 'outline',
 } as const;
 
 export default function AdminGameDataPage() {
@@ -126,6 +155,104 @@ export default function AdminGameDataPage() {
         ))}
       </div>
 
+      <div className="grid gap-4 lg:grid-cols-[320px_1fr]">
+        <Card>
+          <CardHeader>
+            <CardTitle>Progress view</CardTitle>
+            <CardDescription>
+              Two different completion baselines.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4 text-sm">
+            <div>
+              <div className="flex justify-between gap-3">
+                <span className="text-muted-foreground">Launch MVP</span>
+                <span className="font-medium">
+                  {data?.roadmap.launchMvpPercent ?? 75}%
+                </span>
+              </div>
+              <div className="bg-muted mt-2 h-2 rounded-full">
+                <div
+                  className="bg-primary h-2 rounded-full"
+                  style={{
+                    width: `${data?.roadmap.launchMvpPercent ?? 75}%`,
+                  }}
+                />
+              </div>
+            </div>
+            <div>
+              <div className="flex justify-between gap-3">
+                <span className="text-muted-foreground">Operating system</span>
+                <span className="font-medium">
+                  {data?.roadmap.operatingSystemPercent ?? 40}%
+                </span>
+              </div>
+              <div className="bg-muted mt-2 h-2 rounded-full">
+                <div
+                  className="bg-primary h-2 rounded-full"
+                  style={{
+                    width: `${data?.roadmap.operatingSystemPercent ?? 40}%`,
+                  }}
+                />
+              </div>
+            </div>
+            <p className="text-muted-foreground leading-6">
+              {data?.roadmap.currentStage ??
+                'Public SEO MVP is live. The operating system still needs deeper keyword coverage and safer automation.'}
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Next update queue</CardTitle>
+            <CardDescription>
+              Read-only recommendations. They do not mutate data or deploy.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {loading ? (
+              <p className="text-muted-foreground text-sm">Loading queue...</p>
+            ) : data?.actions.length ? (
+              data.actions.slice(0, 6).map((action) => (
+                <div key={action.href} className="rounded-md border p-4">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Badge variant={priorityTone[action.priority]}>
+                      {action.priority}
+                    </Badge>
+                    <Badge variant={statusTone[action.status]}>
+                      {action.status}
+                    </Badge>
+                    <Badge variant="outline">{action.owner}</Badge>
+                  </div>
+                  <div className="mt-3 flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
+                    <div>
+                      <h3 className="font-medium">{action.title}</h3>
+                      <p className="text-muted-foreground mt-1 text-sm leading-6">
+                        {action.action}
+                      </p>
+                    </div>
+                    <Link
+                      href={action.href}
+                      target="_blank"
+                      className="text-primary inline-flex shrink-0 items-center gap-1 text-sm"
+                    >
+                      Open
+                      <ExternalLink className="size-3.5" />
+                    </Link>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p className="text-muted-foreground text-sm">
+                No queued data action. Continue keyword expansion and source
+                monitoring.
+              </p>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+
       <Card>
         <CardHeader>
           <CardTitle>Audit policy</CardTitle>
@@ -136,10 +263,16 @@ export default function AdminGameDataPage() {
         </CardHeader>
         <CardContent className="text-muted-foreground space-y-2 text-sm">
           <p>
-            Current implementation is intentionally conservative: codes and
-            update pages can become automation candidates first, while
-            guide/tier-list pages stay manual-review because wrong game data is
-            worse than stale data.
+            {data?.sourcePolicy.automationCandidate ??
+              'Codes, update checks, and Roblox metadata can become automation candidates first.'}
+          </p>
+          <p>
+            {data?.sourcePolicy.manualReview ??
+              'Guide and tier-list pages stay manual-review because wrong game data is worse than stale data.'}
+          </p>
+          <p>
+            {data?.sourcePolicy.futureAiReview ??
+              'Future community submissions can use AI review first, with uncertain claims routed to human review.'}
           </p>
           {data ? (
             <p>
@@ -169,6 +302,7 @@ export default function AdminGameDataPage() {
                 <thead>
                   <tr className="border-b text-left">
                     <th className="py-3 pr-4 font-medium">Status</th>
+                    <th className="py-3 pr-4 font-medium">Priority</th>
                     <th className="py-3 pr-4 font-medium">Page</th>
                     <th className="py-3 pr-4 font-medium">Kind</th>
                     <th className="py-3 pr-4 font-medium">Checked</th>
@@ -186,9 +320,17 @@ export default function AdminGameDataPage() {
                         </Badge>
                       </td>
                       <td className="py-3 pr-4">
+                        <Badge variant={priorityTone[item.priority]}>
+                          {item.priority}
+                        </Badge>
+                      </td>
+                      <td className="py-3 pr-4">
                         <div className="font-medium">{item.title}</div>
                         <p className="text-muted-foreground mt-1 max-w-md text-xs leading-5">
                           {item.note}
+                        </p>
+                        <p className="text-muted-foreground mt-1 max-w-md text-xs leading-5">
+                          {item.recommendedAction}
                         </p>
                         <Link
                           href={item.href}
