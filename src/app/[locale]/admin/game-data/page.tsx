@@ -60,6 +60,16 @@ type FreshnessResponse = {
     manualReview: string;
     futureAiReview: string;
   };
+  syncPlan: {
+    title: string;
+    summary: string;
+    steps: {
+      label: string;
+      detail: string;
+    }[];
+    automationCandidates: string[];
+    manualReviewCount: number;
+  };
   actions: FreshnessAction[];
   items: FreshnessItem[];
   nextStep: string;
@@ -154,6 +164,76 @@ export default function AdminGameDataPage() {
           </Card>
         ))}
       </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>{data?.syncPlan.title ?? 'Safe sync workflow'}</CardTitle>
+          <CardDescription>
+            {data?.syncPlan.summary ??
+              'Detect stale data first, verify sources, then publish only checked changes.'}
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-5">
+          <div className="grid gap-3 md:grid-cols-4">
+            {(
+              data?.syncPlan.steps ?? [
+                {
+                  label: 'Detect',
+                  detail:
+                    'Run the audit and watch source pages before changing content.',
+                },
+                {
+                  label: 'Check',
+                  detail:
+                    'Confirm code and update data against trusted sources.',
+                },
+                {
+                  label: 'Review',
+                  detail:
+                    'Keep guide and tier-list claims under manual review.',
+                },
+                {
+                  label: 'Publish',
+                  detail:
+                    'Run audit and build before deploying verified changes.',
+                },
+              ]
+            ).map((step) => (
+              <div key={step.label} className="rounded-md border p-4">
+                <Badge variant="outline">{step.label}</Badge>
+                <p className="text-muted-foreground mt-3 text-sm leading-6">
+                  {step.detail}
+                </p>
+              </div>
+            ))}
+          </div>
+          <div className="grid gap-3 md:grid-cols-[1fr_220px]">
+            <div className="rounded-md border p-4">
+              <h3 className="text-sm font-semibold">
+                First automation candidates
+              </h3>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {(
+                  data?.syncPlan.automationCandidates ?? [
+                    'Codes',
+                    'Updates',
+                    'Roblox game metadata',
+                  ]
+                ).map((item) => (
+                  <Badge key={item}>{item}</Badge>
+                ))}
+              </div>
+            </div>
+            <div className="rounded-md border p-4">
+              <h3 className="text-sm font-semibold">Manual-review pages</h3>
+              <p className="text-muted-foreground mt-2 text-sm leading-6">
+                {data?.syncPlan.manualReviewCount ?? 16} pages stay protected
+                from blind auto-publishing.
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       <div className="grid gap-4 lg:grid-cols-[320px_1fr]">
         <Card>

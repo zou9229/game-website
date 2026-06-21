@@ -142,6 +142,38 @@ export function buildGameDataFreshnessAudit(now = new Date()) {
       futureAiReview:
         'Community submissions can later use AI review for spam, toxicity, duplicate claims, and source quality; uncertain claims should route to human review.',
     },
+    syncPlan: {
+      title: 'Safe game-data update workflow',
+      summary:
+        'Use the admin audit as the control panel: detect stale pages first, source-check automation candidates, then publish only verified changes.',
+      steps: [
+        {
+          label: 'Detect',
+          detail:
+            'Run the freshness audit and watch GSC queries, Semrush long tails, Roblox metadata, and trusted source pages.',
+        },
+        {
+          label: 'Check',
+          detail:
+            'Verify codes, update notes, and Roblox metadata against trusted sources before touching the data files.',
+        },
+        {
+          label: 'Review',
+          detail:
+            'Keep guides, tier lists, classes, animals, crafting, and route pages under manual review unless a source-backed change is clear.',
+        },
+        {
+          label: 'Publish',
+          detail:
+            'Update structured data, run pnpm game-data:audit and pnpm build, then deploy only after the checks pass.',
+        },
+      ],
+      automationCandidates: items
+        .filter((item) => item.owner === 'automation-candidate')
+        .map((item) => item.title),
+      manualReviewCount: items.filter((item) => item.owner === 'manual-review')
+        .length,
+    },
     actions,
     items,
     nextStep:
