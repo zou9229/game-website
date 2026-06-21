@@ -168,14 +168,14 @@ export default function AdminGameDataPage() {
               <div className="flex justify-between gap-3">
                 <span className="text-muted-foreground">Launch MVP</span>
                 <span className="font-medium">
-                  {data?.roadmap.launchMvpPercent ?? 75}%
+                  {data?.roadmap.launchMvpPercent ?? 83}%
                 </span>
               </div>
               <div className="bg-muted mt-2 h-2 rounded-full">
                 <div
                   className="bg-primary h-2 rounded-full"
                   style={{
-                    width: `${data?.roadmap.launchMvpPercent ?? 75}%`,
+                    width: `${data?.roadmap.launchMvpPercent ?? 83}%`,
                   }}
                 />
               </div>
@@ -184,21 +184,21 @@ export default function AdminGameDataPage() {
               <div className="flex justify-between gap-3">
                 <span className="text-muted-foreground">Operating system</span>
                 <span className="font-medium">
-                  {data?.roadmap.operatingSystemPercent ?? 40}%
+                  {data?.roadmap.operatingSystemPercent ?? 48}%
                 </span>
               </div>
               <div className="bg-muted mt-2 h-2 rounded-full">
                 <div
                   className="bg-primary h-2 rounded-full"
                   style={{
-                    width: `${data?.roadmap.operatingSystemPercent ?? 40}%`,
+                    width: `${data?.roadmap.operatingSystemPercent ?? 48}%`,
                   }}
                 />
               </div>
             </div>
             <p className="text-muted-foreground leading-6">
               {data?.roadmap.currentStage ??
-                'Public SEO MVP is live. The operating system still needs deeper keyword coverage and safer automation.'}
+                'Public SEO MVP is live. The operating system still needs deeper keyword coverage, source checks, and safer automation.'}
             </p>
           </CardContent>
         </Card>

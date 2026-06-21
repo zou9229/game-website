@@ -50,11 +50,12 @@ Operational foundation:
 
 There are two different completion baselines:
 
-- Launch MVP: about 80%.
-- Long-term operating system: about 45%.
+- Launch MVP: about 83%.
+- Long-term operating system: about 48%.
 
 The MVP is mostly live because the domain, Cloudflare deployment, first content
-cluster, sitemap, robots, llms, and GSC submission are in place.
+cluster, sitemap, robots, llms, GSC submission, basic guide media, and AdSense
+readiness are in place.
 
 The operating system is not complete because automated source checks, community
 submissions, AI-assisted moderation, review queues, and multi-language content
