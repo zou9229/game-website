@@ -118,10 +118,10 @@ export function buildGameDataFreshnessAudit(now = new Date()) {
   return {
     generatedAt: now.toISOString(),
     roadmap: {
-      launchMvpPercent: 75,
-      operatingSystemPercent: 40,
+      launchMvpPercent: 80,
+      operatingSystemPercent: 45,
       currentStage:
-        'Public SEO MVP is live. The next work is deeper keyword coverage, source-checked updates, and safer automation.',
+        'Public SEO MVP is live and submitted to GSC. The next work is deeper keyword coverage, source-checked updates, honest language expansion, and safer automation.',
     },
     summary: {
       total: items.length,
@@ -146,7 +146,6 @@ export function buildGameDataFreshnessAudit(now = new Date()) {
     items,
     nextStep:
       actions[0]?.action ??
-      'No urgent data action. Continue keyword expansion and source monitoring.',
+      'No urgent data action. Continue keyword expansion, source monitoring, and validated language-market testing.',
   };
 }
-

@@ -2,18 +2,25 @@ import type { MetadataRoute } from 'next';
 import { robloxGames } from '@/data/roblox-games';
 
 import { defaultLocale, locales } from '@/config/locale';
-import { getBaseUrl } from '@/lib/seo';
+import { ensureTrailingSlash, getBaseUrl } from '@/lib/seo';
 
 function localizedUrl(path: string, locale: string) {
-  const cleanPath = path === '/' ? '' : path.replace(/\/$/, '');
+  const cleanPath =
+    path === '/'
+      ? '/'
+      : ensureTrailingSlash(path.startsWith('/') ? path : `/${path}`);
   const localePrefix = locale === defaultLocale ? '' : `/${locale}`;
-  return `${getBaseUrl()}${localePrefix}${cleanPath || '/'}`;
+  return `${getBaseUrl()}${localePrefix}${cleanPath}`;
 }
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseRoutes = [
+  const englishContentRoutes = [
     { path: '/', priority: 1, changeFrequency: 'weekly' as const },
     { path: '/codes', priority: 0.9, changeFrequency: 'daily' as const },
+    { path: '/roblox', priority: 0.9, changeFrequency: 'daily' as const },
+  ];
+
+  const localizedStaticRoutes = [
     {
       path: '/privacy-policy',
       priority: 0.3,
@@ -24,7 +31,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.3,
       changeFrequency: 'yearly' as const,
     },
-    { path: '/roblox', priority: 0.9, changeFrequency: 'daily' as const },
   ];
 
   const gameRoutes = robloxGames.flatMap((game) => [
@@ -42,12 +48,21 @@ export default function sitemap(): MetadataRoute.Sitemap {
       })),
   ]);
 
-  return locales.flatMap((locale) =>
-    [...baseRoutes, ...gameRoutes].map((route) => ({
+  const englishUrls = [...englishContentRoutes, ...gameRoutes].map((route) => ({
+    url: localizedUrl(route.path, defaultLocale),
+    lastModified: new Date(),
+    changeFrequency: route.changeFrequency,
+    priority: route.priority,
+  }));
+
+  const localizedStaticUrls = locales.flatMap((locale) =>
+    localizedStaticRoutes.map((route) => ({
       url: localizedUrl(route.path, locale),
       lastModified: new Date(),
       changeFrequency: route.changeFrequency,
       priority: route.priority,
     }))
   );
+
+  return [...englishUrls, ...localizedStaticUrls];
 }

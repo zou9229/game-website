@@ -8,11 +8,13 @@ Live site: https://questcodes.com
 ## Current Scope
 
 - Roblox codes and guides, starting with `99 Nights in the Forest`
-- Public SEO pages for codes, classes, animals, crafting, weather, updates, and
-  common questions
+- Public SEO pages for codes, classes, animals, crafting, route guides,
+  material guides, updates, and common questions
 - Structured metadata, sitemap, robots.txt, and `llms.txt`
 - Cloudflare Workers deployment through ShipAny vinext
 - Admin-only game data freshness audit page at `/admin/game-data`
+- Quest Codes operating skill at
+  `.agent/skills/questcodes-99nights-keyword-to-page/SKILL.md`
 
 ## Tech Stack
 
@@ -65,8 +67,12 @@ does not scrape external sites or publish content automatically.
 The current SEO direction is English-first Roblox guide content. Country demand
 from keyword checks showed strong interest in the United States and the
 Philippines for `99 Nights in the Forest codes`, but the query language is still
-English. Additional languages should be added only after Google Search Console
-shows real impressions by country and query.
+English.
+
+The sitemap intentionally exposes English game/content pages plus localized
+static legal pages. Additional indexable languages such as `pt-BR` or `es`
+should be added only after Semrush/Trends/GSC show local-language demand and the
+page body is actually localized. Do not publish thin translated duplicates.
 
 ## Upstream Template
 

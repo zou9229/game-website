@@ -135,13 +135,19 @@ After traffic proves the model:
 - Add a small admin/review workflow before publishing high-risk changes.
 - Consider alerts for hot games, new codes, and ranking changes.
 
-## Next Implementation Target
+## Current Implementation Target
 
-Before automation, ship the first crawlable content cluster:
+The first crawlable content cluster is live and Search Console has been
+submitted. The next implementation target is a safer operating loop:
 
-1. Cloudflare deploy preflight.
-2. D1 setup.
-3. First production deploy.
-4. Search Console setup and sitemap submission.
-5. Then decide whether broader entities or updates pages are worth adding from
-   real query data.
+1. Keep `pnpm game-data:audit` and `/admin/game-data` as read-only checks.
+2. Add scheduled or manual source-check reports before any auto-publish flow.
+3. Refresh codes and update metadata first, because they are the safest
+   automation candidates.
+4. Keep guide, class, tier-list, animal, crafting, and route pages behind manual
+   review.
+5. Use GSC impressions and Semrush/Trends checks to decide which page to
+   strengthen next.
+
+Do not build an automatic scrape-and-publish bot yet. Wrong game data is more
+damaging than a page that is a few days stale.
