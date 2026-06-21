@@ -13,8 +13,39 @@ export type UpdateEntry = {
 };
 
 export const ninetyNineNightsUpdates = {
-  checkedAt: '2026-06-20',
+  checkedAt: '2026-06-21',
   entries: [
+    {
+      date: '2026-06-21',
+      type: 'code-check',
+      title: 'June 21 code source refresh',
+      summary:
+        'Quest Codes refreshed the 99 Nights in the Forest code source trail and kept yay fishing marked as special because sources still disagree.',
+      details: [
+        'forestwakesup26 is now backed by PC Gamer, GamesRadar, and the community wiki in the source table.',
+        'afterparty remains active across PC Gamer, PCGamesN, GamesRadar, and the community wiki.',
+        'yay fishing remains special: PC Gamer, GamesRadar, and the community wiki list it as an in-game activation, while PCGamesN still lists it as expired.',
+        'happyhalloween remains expired and is kept only for history.',
+      ],
+      sources: [
+        {
+          name: 'PC Gamer codes page',
+          url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-codes/',
+        },
+        {
+          name: 'PCGamesN codes page',
+          url: 'https://www.pcgamesn.com/99-nights-in-the-forest/codes',
+        },
+        {
+          name: 'GamesRadar codes page',
+          url: 'https://www.gamesradar.com/games/survival/99-nights-in-the-forest-codes/',
+        },
+        {
+          name: 'Fandom codes page',
+          url: 'https://99-nights-in-the-forest.fandom.com/wiki/Codes',
+        },
+      ],
+    },
     {
       date: '2026-06-20',
       type: 'code-check',
