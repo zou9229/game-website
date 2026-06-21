@@ -358,6 +358,10 @@
         "title": "Google Analytics",
         "description": "按配置的 Measurement ID 注入 gtag.js"
       },
+      "google_adsense": {
+        "title": "Google AdSense",
+        "description": "审核通过后注入 Auto ads，并根据 Publisher ID 生成 ads.txt"
+      },
       "plausible": {
         "title": "Plausible",
         "description": "注入 plausible.js（云版或自托管）"
@@ -442,6 +446,8 @@
       "replicate_api_token": "API Token",
       "fal_api_key": "API 密钥",
       "google_analytics_id": "Measurement ID",
+      "google_adsense_publisher_id": "Publisher ID",
+      "google_adsense_enabled": "启用 Auto ads",
       "plausible_domain": "域名",
       "plausible_src": "脚本地址",
       "crisp_enabled": "启用 Crisp",

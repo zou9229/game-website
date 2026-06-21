@@ -1,6 +1,10 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { ninetyNineNightsBandages } from '@/data/99-nights-bandages';
+import {
+  ninetyNineNightsMedia,
+  ninetyNineNightsVideoSearches,
+} from '@/data/99-nights-media';
 import { getRobloxGame } from '@/data/roblox-games';
 import { seoKeywords } from '@/data/seo-keywords';
 import {
@@ -21,6 +25,7 @@ import {
   canonicalUrl,
   currentMonthYear,
 } from '@/lib/seo';
+import { GuideMediaPanel } from '@/components/roblox/guide-media-panel';
 import { Badge } from '@/components/ui/badge';
 import {
   Card,
@@ -303,6 +308,16 @@ export default async function BandagesPage({
       </section>
 
       <section className="mx-auto max-w-6xl px-4 pb-16 sm:px-6 lg:px-8">
+        <GuideMediaPanel
+          title="Bandage route media and video research"
+          description="Real game thumbnails for survival pressure plus video-search demand around the Tool Workshop and revive routes."
+          images={[
+            ninetyNineNightsMedia.images[2],
+            ninetyNineNightsMedia.images[1],
+          ]}
+          videoSearches={[ninetyNineNightsVideoSearches.bandages]}
+        />
+
         <div className="grid gap-4 md:grid-cols-4">
           <Card>
             <CardHeader>

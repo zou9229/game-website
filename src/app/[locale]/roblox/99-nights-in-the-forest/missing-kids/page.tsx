@@ -1,5 +1,9 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import {
+  ninetyNineNightsMedia,
+  ninetyNineNightsVideoSearches,
+} from '@/data/99-nights-media';
 import { ninetyNineNightsMissingKids } from '@/data/99-nights-missing-kids';
 import { getRobloxGame } from '@/data/roblox-games';
 import { seoKeywords } from '@/data/seo-keywords';
@@ -22,6 +26,7 @@ import {
   canonicalUrl,
   currentMonthYear,
 } from '@/lib/seo';
+import { GuideMediaPanel } from '@/components/roblox/guide-media-panel';
 import { Badge } from '@/components/ui/badge';
 import {
   Card,
@@ -237,6 +242,16 @@ export default async function MissingKidsPage({
       </section>
 
       <section className="mx-auto max-w-6xl px-4 pb-16 sm:px-6 lg:px-8">
+        <GuideMediaPanel
+          title="Missing kids media and route research"
+          description="Real game thumbnails for night pressure and rescue context plus video-search signals for current route questions."
+          images={[
+            ninetyNineNightsMedia.images[2],
+            ninetyNineNightsMedia.images[0],
+          ]}
+          videoSearches={[ninetyNineNightsVideoSearches.missingKids]}
+        />
+
         <div className="grid gap-4 md:grid-cols-4">
           <Card>
             <CardHeader>

@@ -143,7 +143,9 @@ Phase 1: no aggressive monetization.
 
 Phase 2: lightweight monetization.
 
-- Display ads after meaningful organic traffic.
+- Display ads after meaningful organic traffic. The codebase now has a
+  configurable Google AdSense Publisher ID, optional Auto ads loader, and
+  dynamic `/ads.txt`; keep Auto ads disabled until the site is approved.
 - Affiliate links only where they naturally fit, such as Roblox gift cards or
   gaming accessories.
 

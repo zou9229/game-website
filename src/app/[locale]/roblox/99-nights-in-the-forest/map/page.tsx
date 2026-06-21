@@ -1,6 +1,10 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { ninetyNineNightsMapGuide } from '@/data/99-nights-map';
+import {
+  ninetyNineNightsMedia,
+  ninetyNineNightsVideoSearches,
+} from '@/data/99-nights-media';
 import { getRobloxGame } from '@/data/roblox-games';
 import { seoKeywords } from '@/data/seo-keywords';
 import {
@@ -22,6 +26,7 @@ import {
   canonicalUrl,
   currentMonthYear,
 } from '@/lib/seo';
+import { GuideMediaPanel } from '@/components/roblox/guide-media-panel';
 import { Badge } from '@/components/ui/badge';
 import {
   Card,
@@ -252,6 +257,16 @@ export default async function MapGuidePage({
       </section>
 
       <section className="mx-auto max-w-6xl px-4 pb-16 sm:px-6 lg:px-8">
+        <GuideMediaPanel
+          title="Map media and location research"
+          description="Real game thumbnails for route context plus video-search signals for map, location, and danger-zone questions."
+          images={[
+            ninetyNineNightsMedia.images[0],
+            ninetyNineNightsMedia.images[2],
+          ]}
+          videoSearches={[ninetyNineNightsVideoSearches.map]}
+        />
+
         <div className="grid gap-4 md:grid-cols-4">
           <Card>
             <CardHeader>

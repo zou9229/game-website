@@ -385,6 +385,10 @@
         "title": "Google Analytics",
         "description": "Inject gtag.js with the configured Measurement ID"
       },
+      "google_adsense": {
+        "title": "Google AdSense",
+        "description": "Inject Auto ads after approval and generate ads.txt from the configured publisher ID"
+      },
       "plausible": {
         "title": "Plausible",
         "description": "Inject plausible.js for self-hosted or cloud Plausible"
@@ -469,6 +473,8 @@
       "replicate_api_token": "API Token",
       "fal_api_key": "API Key",
       "google_analytics_id": "Measurement ID",
+      "google_adsense_publisher_id": "Publisher ID",
+      "google_adsense_enabled": "Enable Auto ads",
       "plausible_domain": "Domain",
       "plausible_src": "Script Src",
       "crisp_enabled": "Enable Crisp",

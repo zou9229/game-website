@@ -30,7 +30,7 @@ URL: https://questcodes.com/roblox/99-nights-in-the-forest/codes
 ## Not Changed
 
 - No `meta keywords` tag was added. It is not a ranking requirement and can make the page look mechanically optimized.
-- Google Analytics and AdSense were not added. GA is useful soon; AdSense should wait until there is more indexed content and some traffic.
+- Google Analytics and Google AdSense configuration are now available from the admin settings. AdSense Auto ads should stay disabled until the site has approval and enough indexed content.
 - GitHub Actions workflows were not changed.
 - The `/pricing` route itself was not deleted because billing/payment code may need it later.
 

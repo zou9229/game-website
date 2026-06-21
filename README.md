@@ -62,6 +62,15 @@ The admin panel is available at `/admin` for authorized users. The game data
 freshness tab at `/admin/game-data` currently performs a read-only audit. It
 does not scrape external sites or publish content automatically.
 
+## Monetization And Tracking
+
+Google Analytics and Google AdSense are configured from `/admin/settings` under
+the Analytics tab. Google Analytics uses the GA4 Measurement ID. AdSense uses a
+Publisher ID (`ca-pub-...` or `pub-...`), generates `/ads.txt`, and only injects
+Auto ads when the AdSense switch is enabled. Keep Auto ads disabled until the
+site is approved and has enough indexed content to avoid hurting early SEO
+quality.
+
 ## Content Strategy
 
 The current SEO direction is English-first Roblox guide content. Country demand

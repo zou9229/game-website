@@ -1,5 +1,9 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import {
+  ninetyNineNightsMedia,
+  ninetyNineNightsVideoSearches,
+} from '@/data/99-nights-media';
 import { ninetyNineNightsStronghold } from '@/data/99-nights-stronghold';
 import { getRobloxGame } from '@/data/roblox-games';
 import { seoKeywords } from '@/data/seo-keywords';
@@ -23,6 +27,7 @@ import {
   canonicalUrl,
   currentMonthYear,
 } from '@/lib/seo';
+import { GuideMediaPanel } from '@/components/roblox/guide-media-panel';
 import { Badge } from '@/components/ui/badge';
 import {
   Card,
@@ -315,6 +320,16 @@ export default async function StrongholdPage({
       </section>
 
       <section className="mx-auto max-w-6xl px-4 pb-16 sm:px-6 lg:px-8">
+        <GuideMediaPanel
+          title="Stronghold media and raid research"
+          description="Real game thumbnails for camp-risk context plus current video-search signals around Cultist Stronghold raids."
+          images={[
+            ninetyNineNightsMedia.images[0],
+            ninetyNineNightsMedia.images[1],
+          ]}
+          videoSearches={[ninetyNineNightsVideoSearches.stronghold]}
+        />
+
         <div className="grid gap-4 md:grid-cols-4">
           <Card>
             <CardHeader>

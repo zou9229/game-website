@@ -1,6 +1,10 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { ninetyNineNightsCraftingBench5 } from '@/data/99-nights-crafting-bench-5';
+import {
+  ninetyNineNightsMedia,
+  ninetyNineNightsVideoSearches,
+} from '@/data/99-nights-media';
 import { getRobloxGame } from '@/data/roblox-games';
 import { seoKeywords } from '@/data/seo-keywords';
 import {
@@ -23,6 +27,7 @@ import {
   canonicalUrl,
   currentMonthYear,
 } from '@/lib/seo';
+import { GuideMediaPanel } from '@/components/roblox/guide-media-panel';
 import { Badge } from '@/components/ui/badge';
 import {
   Card,
@@ -308,6 +313,16 @@ export default async function CraftingBench5Page({
       </section>
 
       <section className="mx-auto max-w-6xl px-4 pb-16 sm:px-6 lg:px-8">
+        <GuideMediaPanel
+          title="Bench 5 media and route research"
+          description="Real game thumbnails for late-run camp context plus current video searches for Bench 5 confusion."
+          images={[
+            ninetyNineNightsMedia.images[1],
+            ninetyNineNightsMedia.images[0],
+          ]}
+          videoSearches={[ninetyNineNightsVideoSearches.craftingBench]}
+        />
+
         <div className="grid gap-4 md:grid-cols-3">
           {ninetyNineNightsCraftingBench5.requirements.map((requirement) => (
             <Card

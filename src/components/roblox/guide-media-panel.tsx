@@ -23,7 +23,7 @@ export function GuideMediaPanel({
   videoSearches = [],
 }: GuideMediaPanelProps) {
   return (
-    <Card>
+    <Card className="mb-8">
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>

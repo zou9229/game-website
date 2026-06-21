@@ -180,6 +180,13 @@ export function getSettingGroups(): SettingGroup[] {
       tab: 'analytics',
     },
     {
+      name: 'google_adsense',
+      title: 'Google AdSense',
+      description:
+        'Inject AdSense Auto ads after approval and generate ads.txt from the configured publisher ID',
+      tab: 'analytics',
+    },
+    {
       name: 'plausible',
       title: 'Plausible',
       description: 'Inject plausible.js for self-hosted or cloud Plausible',
@@ -813,6 +820,26 @@ export function getSettings(): Setting[] {
       type: 'text',
       placeholder: 'G-XXXXXXXXXX',
       group: 'google_analytics',
+      tab: 'analytics',
+    },
+
+    // ─── Analytics / Google AdSense ──────────────────────────────────
+    {
+      name: 'google_adsense_publisher_id',
+      title: 'Publisher ID',
+      type: 'text',
+      placeholder: 'ca-pub-0000000000000000',
+      tip: 'Accepts ca-pub-... or pub-.... Used for the AdSense loader and /ads.txt.',
+      group: 'google_adsense',
+      tab: 'analytics',
+    },
+    {
+      name: 'google_adsense_enabled',
+      title: 'Enable Auto ads',
+      type: 'switch',
+      defaultValue: 'false',
+      tip: 'Enable only after AdSense has approved the site. ads.txt is generated whenever Publisher ID is configured.',
+      group: 'google_adsense',
       tab: 'analytics',
     },
 

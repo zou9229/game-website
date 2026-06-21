@@ -11,6 +11,45 @@ export type GuideVideoSearch = {
   description: string;
 };
 
+export const ninetyNineNightsVideoSearches = {
+  craftingBench: {
+    title: 'Crafting bench guide videos',
+    href: 'https://www.youtube.com/results?search_query=99+nights+in+the+forest+crafting+bench+guide',
+    description:
+      'Use current YouTube results to discover player questions around bench upgrades and recipe confusion.',
+  },
+  bandages: {
+    title: 'Bandage crafting videos',
+    href: 'https://www.youtube.com/results?search_query=how+to+craft+bandages+in+99+nights+in+the+forest',
+    description:
+      'Good demand signal for recovery, revive, Tool Workshop, Rabbit Foot, and Wolf Pelt questions.',
+  },
+  updates: {
+    title: '99 Nights update videos',
+    href: 'https://www.youtube.com/results?search_query=99+nights+in+the+forest+update+2026',
+    description:
+      'Useful for spotting fresh update demand before turning confirmed source data into pages.',
+  },
+  missingKids: {
+    title: 'Missing kids route videos',
+    href: 'https://www.youtube.com/results?search_query=99+nights+in+the+forest+missing+kids+locations',
+    description:
+      'Useful for finding current route questions around Dino Kid, Kraken Kid, Squid Kid, and Koala Kid.',
+  },
+  map: {
+    title: 'Map and locations videos',
+    href: 'https://www.youtube.com/results?search_query=99+nights+in+the+forest+map+locations',
+    description:
+      'Good signal for player confusion around route planning, marked locations, and danger zones.',
+  },
+  stronghold: {
+    title: 'Stronghold raid videos',
+    href: 'https://www.youtube.com/results?search_query=99+nights+in+the+forest+cultist+stronghold',
+    description:
+      'Useful for spotting current Stronghold raid questions before changing source-checked written guidance.',
+  },
+} satisfies Record<string, GuideVideoSearch>;
+
 export const ninetyNineNightsMedia = {
   images: [
     {
@@ -36,23 +75,8 @@ export const ninetyNineNightsMedia = {
     },
   ] satisfies GuideImage[],
   videoSearches: [
-    {
-      title: 'Crafting bench guide videos',
-      href: 'https://www.youtube.com/results?search_query=99+nights+in+the+forest+crafting+bench+guide',
-      description:
-        'Use current YouTube results to discover player questions around bench upgrades and recipe confusion.',
-    },
-    {
-      title: 'Bandage crafting videos',
-      href: 'https://www.youtube.com/results?search_query=how+to+craft+bandages+in+99+nights+in+the+forest',
-      description:
-        'Good demand signal for recovery, revive, Tool Workshop, Rabbit Foot, and Wolf Pelt questions.',
-    },
-    {
-      title: '99 Nights update videos',
-      href: 'https://www.youtube.com/results?search_query=99+nights+in+the+forest+update+2026',
-      description:
-        'Useful for spotting fresh update demand before turning confirmed source data into pages.',
-    },
+    ninetyNineNightsVideoSearches.craftingBench,
+    ninetyNineNightsVideoSearches.bandages,
+    ninetyNineNightsVideoSearches.updates,
   ] satisfies GuideVideoSearch[],
 };
