@@ -141,6 +141,57 @@ const reviewStateTone = {
   blocked: 'destructive',
 } as const;
 
+function normalizeSourceCheckResult(
+  result: SourceCheckResult
+): SourceCheckResult {
+  return {
+    ...result,
+    matchedTerms: Array.isArray(result.matchedTerms) ? result.matchedTerms : [],
+    missingTerms: Array.isArray(result.missingTerms) ? result.missingTerms : [],
+    highRiskMatches: Array.isArray(result.highRiskMatches)
+      ? result.highRiskMatches
+      : [],
+    signals: Array.isArray(result.signals) ? result.signals : [],
+  };
+}
+
+function normalizeSourceCheckSnapshot(
+  snapshot: SourceCheckSnapshot | null | undefined
+): SourceCheckSnapshot | null {
+  if (!snapshot) return null;
+
+  const results = Array.isArray(snapshot.results)
+    ? snapshot.results.map(normalizeSourceCheckResult)
+    : [];
+  const healthySources = results.filter((item) => item.ok).length;
+  const attentionCount = results.length - healthySources;
+
+  return {
+    ...snapshot,
+    sourceCount:
+      typeof snapshot.sourceCount === 'number'
+        ? snapshot.sourceCount
+        : results.length,
+    healthySources:
+      typeof snapshot.healthySources === 'number'
+        ? snapshot.healthySources
+        : healthySources,
+    attentionCount:
+      typeof snapshot.attentionCount === 'number'
+        ? snapshot.attentionCount
+        : attentionCount,
+    reviewPlan: snapshot.reviewPlan
+      ? {
+          ...snapshot.reviewPlan,
+          recommendations: Array.isArray(snapshot.reviewPlan.recommendations)
+            ? snapshot.reviewPlan.recommendations
+            : [],
+        }
+      : undefined,
+    results,
+  };
+}
+
 export default function AdminGameDataPage() {
   const [data, setData] = useState<FreshnessResponse | null>(null);
   const [sourceCheck, setSourceCheck] = useState<SourceCheckSnapshot | null>(
@@ -176,7 +227,7 @@ export default function AdminGameDataPage() {
       const json = await res.json();
       if (json.code !== 0)
         throw new Error(json.message || 'Source check failed');
-      setSourceCheck(json.data ?? null);
+      setSourceCheck(normalizeSourceCheckSnapshot(json.data));
     } catch (error: any) {
       toast.error(error.message || 'Failed to load source check');
     }
@@ -192,7 +243,7 @@ export default function AdminGameDataPage() {
       const json = await res.json();
       if (json.code !== 0)
         throw new Error(json.message || 'Source check failed');
-      setSourceCheck(json.data);
+      setSourceCheck(normalizeSourceCheckSnapshot(json.data));
       toast.success('Source check completed');
     } catch (error: any) {
       toast.error(error.message || 'Failed to run source check');
@@ -238,8 +289,9 @@ export default function AdminGameDataPage() {
       return b.ageDays - a.ageDays;
     });
   }, [data]);
-  const attentionResults =
-    sourceCheck?.results.filter((item) => !item.ok) ?? [];
+  const sourceResults = sourceCheck?.results ?? [];
+  const attentionResults = sourceResults.filter((item) => !item.ok);
+  const reviewRecommendations = sourceCheck?.reviewPlan?.recommendations ?? [];
 
   return (
     <div className="space-y-6 p-6">
@@ -402,34 +454,32 @@ export default function AdminGameDataPage() {
                       </div>
                     </div>
                     <div className="mt-4 grid gap-3 md:grid-cols-2">
-                      {sourceCheck.reviewPlan.recommendations.map(
-                        (recommendation) => (
-                          <div
-                            key={`${recommendation.priority}-${recommendation.label}`}
-                            className="bg-background rounded-md border p-3"
-                          >
-                            <div className="flex flex-wrap items-center gap-2">
-                              <Badge
-                                variant={priorityTone[recommendation.priority]}
-                              >
-                                {recommendation.priority}
-                              </Badge>
-                              <h4 className="text-sm font-medium">
-                                {recommendation.label}
-                              </h4>
-                            </div>
-                            <p className="text-muted-foreground mt-2 text-sm leading-6">
-                              {recommendation.detail}
-                            </p>
+                      {reviewRecommendations.map((recommendation) => (
+                        <div
+                          key={`${recommendation.priority}-${recommendation.label}`}
+                          className="bg-background rounded-md border p-3"
+                        >
+                          <div className="flex flex-wrap items-center gap-2">
+                            <Badge
+                              variant={priorityTone[recommendation.priority]}
+                            >
+                              {recommendation.priority}
+                            </Badge>
+                            <h4 className="text-sm font-medium">
+                              {recommendation.label}
+                            </h4>
                           </div>
-                        )
-                      )}
+                          <p className="text-muted-foreground mt-2 text-sm leading-6">
+                            {recommendation.detail}
+                          </p>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 ) : null}
 
                 <div className="mt-4 grid gap-3 lg:grid-cols-2">
-                  {sourceCheck.results.map((result) => (
+                  {sourceResults.map((result) => (
                     <div key={result.id} className="rounded-md border p-4">
                       <div className="flex flex-wrap items-center gap-2">
                         <Badge variant={result.ok ? 'default' : 'destructive'}>

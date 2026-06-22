@@ -60,15 +60,20 @@ export async function getLatestGameDataSourceCheck() {
 
   try {
     const snapshot = JSON.parse(raw) as GameDataSourceCheckSnapshot;
+    const results = Array.isArray(snapshot.results) ? snapshot.results : [];
+    const reviewPlan =
+      snapshot.reviewPlan ?? buildGameDataSourceReviewPlan(results);
 
-    if (!snapshot.reviewPlan) {
-      return {
-        ...snapshot,
-        reviewPlan: buildGameDataSourceReviewPlan(snapshot.results ?? []),
-      };
-    }
-
-    return snapshot;
+    return {
+      ...snapshot,
+      results,
+      reviewPlan: {
+        ...reviewPlan,
+        recommendations: Array.isArray(reviewPlan.recommendations)
+          ? reviewPlan.recommendations
+          : [],
+      },
+    };
   } catch {
     return null;
   }
