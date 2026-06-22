@@ -1,5 +1,9 @@
 import type { Metadata } from 'next';
-import { getRobloxGame, type GameCodeStatus } from '@/data/roblox-games';
+import {
+  getLatestCodeCheckedAt,
+  getRobloxGame,
+  type GameCodeStatus,
+} from '@/data/roblox-games';
 import { seoKeywords } from '@/data/seo-keywords';
 import { AlertTriangle, CheckCircle2, ExternalLink } from 'lucide-react';
 
@@ -153,7 +157,7 @@ const faqs = [
   {
     question: 'What are the active 99 Nights in the Forest codes?',
     answer:
-      'As of June 21, 2026, forestwakesup26 and afterparty are listed as active by checked sources. yay fishing is treated as a special in-game activation because sources disagree on its normal code-box status.',
+      'As of June 22, 2026, forestwakesup26 and afterparty are listed as active by checked sources. yay fishing is treated as a special in-game activation because sources disagree on its normal code-box status.',
   },
   {
     question: 'How do I redeem 99 Nights in the Forest codes?',
@@ -254,6 +258,7 @@ export default async function CodesPage({
   const activeCodes = game.codes.filter((code) => code.status === 'active');
   const specialCodes = game.codes.filter((code) => code.status === 'special');
   const expiredCodes = game.codes.filter((code) => code.status === 'expired');
+  const latestCodeCheckedAt = getLatestCodeCheckedAt(game);
   const activeCodeNames = activeCodes.map((code) => code.code).join(', ');
   const gemRewardCodes = game.codes.filter(
     (code) =>
@@ -316,7 +321,7 @@ export default async function CodesPage({
           </nav>
 
           <Badge variant="outline" className="mb-4">
-            Checked {game.stats.checkedAt}
+            Codes checked {latestCodeCheckedAt}
           </Badge>
           <h1 className="text-foreground text-4xl font-semibold tracking-tight md:text-5xl">
             99 Nights in the Forest codes ({monthYear})
@@ -403,7 +408,7 @@ export default async function CodesPage({
               Quick answer: working codes today
             </h2>
             <CardDescription>
-              Last checked {game.stats.checkedAt}. Use this summary before
+              Codes checked {latestCodeCheckedAt}. Use this summary before
               starting another run.
             </CardDescription>
           </CardHeader>
