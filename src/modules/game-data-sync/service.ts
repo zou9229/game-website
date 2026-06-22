@@ -4,6 +4,7 @@ import { db } from '@/core/db';
 import { config } from '@/config/db/schema';
 import {
   buildGameDataSourceCheckSnapshot,
+  buildGameDataSourceReviewPlan,
   type GameDataSourceCheckSnapshot,
 } from '@/lib/game-data-source-check';
 
@@ -58,7 +59,16 @@ export async function getLatestGameDataSourceCheck() {
   if (!raw) return null;
 
   try {
-    return JSON.parse(raw) as GameDataSourceCheckSnapshot;
+    const snapshot = JSON.parse(raw) as GameDataSourceCheckSnapshot;
+
+    if (!snapshot.reviewPlan) {
+      return {
+        ...snapshot,
+        reviewPlan: buildGameDataSourceReviewPlan(snapshot.results ?? []),
+      };
+    }
+
+    return snapshot;
   } catch {
     return null;
   }

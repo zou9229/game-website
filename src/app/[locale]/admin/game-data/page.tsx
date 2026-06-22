@@ -110,6 +110,16 @@ type SourceCheckSnapshot = {
   sourceCount: number;
   healthySources: number;
   attentionCount: number;
+  reviewPlan?: {
+    state: 'safe-to-monitor' | 'review-before-publish' | 'blocked';
+    title: string;
+    summary: string;
+    recommendations: {
+      priority: 'high' | 'medium' | 'low';
+      label: string;
+      detail: string;
+    }[];
+  };
   results: SourceCheckResult[];
 };
 
@@ -123,6 +133,12 @@ const priorityTone = {
   high: 'destructive',
   medium: 'secondary',
   low: 'outline',
+} as const;
+
+const reviewStateTone = {
+  'safe-to-monitor': 'default',
+  'review-before-publish': 'secondary',
+  blocked: 'destructive',
 } as const;
 
 export default function AdminGameDataPage() {
@@ -198,6 +214,9 @@ export default function AdminGameDataPage() {
       sourceCheck
         ? `Source check: ${sourceCheck.healthySources}/${sourceCheck.sourceCount} sources healthy, ${sourceCheck.attentionCount} need review.`
         : 'Source check: not run yet.',
+      sourceCheck?.reviewPlan
+        ? `Decision: ${sourceCheck.reviewPlan.title}. ${sourceCheck.reviewPlan.summary}`
+        : 'Decision: no source-check decision available yet.',
       '',
       'If sources disagree, keep the current page conservative and show the disagreement instead of forcing an automatic update.',
     ].join('\n');
@@ -360,77 +379,127 @@ export default function AdminGameDataPage() {
             </div>
 
             {sourceCheck ? (
-              <div className="mt-4 grid gap-3 lg:grid-cols-2">
-                {sourceCheck.results.map((result) => (
-                  <div key={result.id} className="rounded-md border p-4">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <Badge variant={result.ok ? 'default' : 'destructive'}>
-                        {result.ok ? 'ok' : 'review'}
-                      </Badge>
-                      <Badge variant="outline">{result.kind}</Badge>
-                      {result.httpStatus ? (
-                        <Badge variant="outline">
-                          HTTP {result.httpStatus}
-                        </Badge>
-                      ) : null}
-                      <span className="text-sm font-medium">
-                        {result.sourceName}
-                      </span>
+              <>
+                {sourceCheck.reviewPlan ? (
+                  <div className="bg-muted/30 mt-4 rounded-md border p-4">
+                    <div className="flex flex-col justify-between gap-3 md:flex-row md:items-start">
+                      <div>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <Badge
+                            variant={
+                              reviewStateTone[sourceCheck.reviewPlan.state]
+                            }
+                          >
+                            {sourceCheck.reviewPlan.state}
+                          </Badge>
+                          <h3 className="text-sm font-semibold">
+                            {sourceCheck.reviewPlan.title}
+                          </h3>
+                        </div>
+                        <p className="text-muted-foreground mt-2 text-sm leading-6">
+                          {sourceCheck.reviewPlan.summary}
+                        </p>
+                      </div>
                     </div>
-                    <div className="mt-3 space-y-2 text-sm">
-                      <p className="text-muted-foreground leading-6">
-                        {result.action}
-                      </p>
-                      {result.matchedTerms.length ? (
-                        <p>
-                          <span className="text-muted-foreground">
-                            Matched:{' '}
-                          </span>
-                          {result.matchedTerms.join(', ')}
-                        </p>
-                      ) : null}
-                      {result.missingTerms.length ? (
-                        <p>
-                          <span className="text-muted-foreground">
-                            Missing:{' '}
-                          </span>
-                          {result.missingTerms.join(', ')}
-                        </p>
-                      ) : null}
-                      {result.highRiskMatches.length ? (
-                        <p>
-                          <span className="text-muted-foreground">
-                            Needs label review:{' '}
-                          </span>
-                          {result.highRiskMatches.join(', ')}
-                        </p>
-                      ) : null}
-                      {result.signals.slice(0, 3).map((signal) => (
-                        <p key={signal.label} className="text-xs">
-                          <span className="text-muted-foreground">
-                            {signal.label}:{' '}
-                          </span>
-                          {signal.value}
-                        </p>
-                      ))}
-                      {result.error ? (
-                        <p className="text-destructive text-xs">
-                          {result.error}
-                        </p>
-                      ) : null}
+                    <div className="mt-4 grid gap-3 md:grid-cols-2">
+                      {sourceCheck.reviewPlan.recommendations.map(
+                        (recommendation) => (
+                          <div
+                            key={`${recommendation.priority}-${recommendation.label}`}
+                            className="bg-background rounded-md border p-3"
+                          >
+                            <div className="flex flex-wrap items-center gap-2">
+                              <Badge
+                                variant={priorityTone[recommendation.priority]}
+                              >
+                                {recommendation.priority}
+                              </Badge>
+                              <h4 className="text-sm font-medium">
+                                {recommendation.label}
+                              </h4>
+                            </div>
+                            <p className="text-muted-foreground mt-2 text-sm leading-6">
+                              {recommendation.detail}
+                            </p>
+                          </div>
+                        )
+                      )}
                     </div>
-                    <a
-                      className="text-primary mt-3 inline-flex items-center gap-1 text-xs"
-                      href={result.url}
-                      rel="noopener noreferrer"
-                      target="_blank"
-                    >
-                      Open source
-                      <ExternalLink className="size-3" />
-                    </a>
                   </div>
-                ))}
-              </div>
+                ) : null}
+
+                <div className="mt-4 grid gap-3 lg:grid-cols-2">
+                  {sourceCheck.results.map((result) => (
+                    <div key={result.id} className="rounded-md border p-4">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <Badge variant={result.ok ? 'default' : 'destructive'}>
+                          {result.ok ? 'ok' : 'review'}
+                        </Badge>
+                        <Badge variant="outline">{result.kind}</Badge>
+                        {result.httpStatus ? (
+                          <Badge variant="outline">
+                            HTTP {result.httpStatus}
+                          </Badge>
+                        ) : null}
+                        <span className="text-sm font-medium">
+                          {result.sourceName}
+                        </span>
+                      </div>
+                      <div className="mt-3 space-y-2 text-sm">
+                        <p className="text-muted-foreground leading-6">
+                          {result.action}
+                        </p>
+                        {result.matchedTerms.length ? (
+                          <p>
+                            <span className="text-muted-foreground">
+                              Matched:{' '}
+                            </span>
+                            {result.matchedTerms.join(', ')}
+                          </p>
+                        ) : null}
+                        {result.missingTerms.length ? (
+                          <p>
+                            <span className="text-muted-foreground">
+                              Missing:{' '}
+                            </span>
+                            {result.missingTerms.join(', ')}
+                          </p>
+                        ) : null}
+                        {result.highRiskMatches.length ? (
+                          <p>
+                            <span className="text-muted-foreground">
+                              Needs label review:{' '}
+                            </span>
+                            {result.highRiskMatches.join(', ')}
+                          </p>
+                        ) : null}
+                        {result.signals.slice(0, 3).map((signal) => (
+                          <p key={signal.label} className="text-xs">
+                            <span className="text-muted-foreground">
+                              {signal.label}:{' '}
+                            </span>
+                            {signal.value}
+                          </p>
+                        ))}
+                        {result.error ? (
+                          <p className="text-destructive text-xs">
+                            {result.error}
+                          </p>
+                        ) : null}
+                      </div>
+                      <a
+                        className="text-primary mt-3 inline-flex items-center gap-1 text-xs"
+                        href={result.url}
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        Open source
+                        <ExternalLink className="size-3" />
+                      </a>
+                    </div>
+                  ))}
+                </div>
+              </>
             ) : null}
 
             {attentionResults.length ? (

@@ -10,6 +10,15 @@ console.log(
 );
 console.log(`Attention: ${snapshot.attentionCount}`);
 console.log('');
+console.log(`Decision: ${snapshot.reviewPlan.title}`);
+console.log(snapshot.reviewPlan.summary);
+console.log('');
+
+for (const item of snapshot.reviewPlan.recommendations) {
+  console.log(`- [${item.priority}] ${item.label}: ${item.detail}`);
+}
+
+console.log('');
 console.log(
   '| Status | HTTP | Source | Kind | Matched | Missing | Error | Action |'
 );

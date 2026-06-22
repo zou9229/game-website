@@ -34,12 +34,24 @@ export type GameDataSourceCheckResult = {
   error?: string;
 };
 
+export type GameDataSourceReviewPlan = {
+  state: 'safe-to-monitor' | 'review-before-publish' | 'blocked';
+  title: string;
+  summary: string;
+  recommendations: {
+    priority: 'high' | 'medium' | 'low';
+    label: string;
+    detail: string;
+  }[];
+};
+
 export type GameDataSourceCheckSnapshot = {
   generatedAt: string;
   reason: string;
   sourceCount: number;
   healthySources: number;
   attentionCount: number;
+  reviewPlan: GameDataSourceReviewPlan;
   results: GameDataSourceCheckResult[];
 };
 
@@ -253,12 +265,130 @@ async function checkTarget(
   }
 }
 
+function unique(values: string[]) {
+  return Array.from(new Set(values.filter(Boolean)));
+}
+
+export function buildGameDataSourceReviewPlan(
+  results: GameDataSourceCheckResult[]
+): GameDataSourceReviewPlan {
+  const codeResults = results.filter((result) => result.kind === 'codes');
+  const metadataResults = results.filter(
+    (result) => result.kind === 'metadata'
+  );
+  const healthyCodeSources = codeResults.filter((result) => result.ok);
+  const blockedSources = results.filter((result) => !result.ok);
+  const highRiskTerms = unique(
+    codeResults.flatMap((result) => result.highRiskMatches)
+  );
+  const matchedCodeTerms = unique(
+    healthyCodeSources.flatMap((result) => result.matchedTerms)
+  );
+  const metadataBlocked = metadataResults.some((result) => !result.ok);
+
+  if (healthyCodeSources.length === 0) {
+    return {
+      state: 'blocked',
+      title: 'No trusted code source confirmed the tracked active terms',
+      summary:
+        'Do not update public code data from this check. Open the sources manually and keep the live page conservative until at least one trusted source confirms the current active terms.',
+      recommendations: [
+        {
+          priority: 'high',
+          label: 'Manual source review required',
+          detail:
+            'Open PC Gamer, GamesRadar, PCGamesN, and Fandom in a browser before changing the active, special, or expired code tables.',
+        },
+        {
+          priority: 'high',
+          label: 'Do not publish automatic changes',
+          detail:
+            'A failed source check is a review signal, not evidence that a code expired or a reward changed.',
+        },
+      ],
+    };
+  }
+
+  const recommendations: GameDataSourceReviewPlan['recommendations'] = [
+    {
+      priority: blockedSources.length ? 'high' : 'medium',
+      label: 'Keep publishing manual',
+      detail:
+        'Source checks can justify a review queue, but they should not rewrite code tables, commit files, or deploy by themselves.',
+    },
+    {
+      priority: 'medium',
+      label: 'Confirmed active terms',
+      detail: matchedCodeTerms.length
+        ? `${matchedCodeTerms.join(', ')} appeared in ${healthyCodeSources
+            .map((result) => result.sourceName)
+            .join(' and ')}.`
+        : 'Tracked active terms appeared in healthy code sources.',
+    },
+  ];
+
+  if (highRiskTerms.length) {
+    recommendations.push({
+      priority: 'high',
+      label: 'Review status labels',
+      detail: `${highRiskTerms.join(', ')} also appeared. Confirm whether each term is active, special, or expired before changing visible labels.`,
+    });
+  }
+
+  if (blockedSources.length) {
+    recommendations.push({
+      priority: 'high',
+      label: 'Open blocked sources manually',
+      detail: `${blockedSources
+        .map((result) => result.sourceName)
+        .join(
+          ', '
+        )} need manual review because the command-line check could not confirm the expected terms.`,
+    });
+  }
+
+  if (metadataBlocked) {
+    recommendations.push({
+      priority: 'medium',
+      label: 'Do not refresh Roblox stats yet',
+      detail:
+        'Roblox metadata was not confirmed by the source check. Keep stored game stats unchanged unless the official page or API can be checked manually.',
+    });
+  }
+
+  if (!blockedSources.length && !highRiskTerms.length) {
+    recommendations.push({
+      priority: 'low',
+      label: 'No content change implied',
+      detail:
+        'All expected terms were found. Continue monitoring GSC and only publish if source wording, rewards, or status labels changed.',
+    });
+  }
+
+  return {
+    state:
+      blockedSources.length || highRiskTerms.length
+        ? 'review-before-publish'
+        : 'safe-to-monitor',
+    title:
+      blockedSources.length || highRiskTerms.length
+        ? 'Partial confirmation: review before publishing'
+        : 'Sources healthy: monitor without publishing',
+    summary:
+      blockedSources.length || highRiskTerms.length
+        ? 'At least one trusted source confirmed the tracked active terms, but blocked sources or high-risk terms mean public data should stay conservative until manual review.'
+        : 'Tracked source terms look healthy. No automatic public content change is needed unless a manual review finds changed rewards, status labels, or source wording.',
+    recommendations,
+  };
+}
+
 export async function buildGameDataSourceCheckSnapshot(reason = 'manual') {
   const checkedAt = new Date().toISOString();
   const results = await Promise.all(
     SOURCE_CHECK_TARGETS.map((target) => checkTarget(target, checkedAt))
   );
   const attentionCount = results.filter((result) => !result.ok).length;
+  const reviewPlan = buildGameDataSourceReviewPlan(results);
 
   return {
     generatedAt: checkedAt,
@@ -266,6 +396,7 @@ export async function buildGameDataSourceCheckSnapshot(reason = 'manual') {
     sourceCount: results.length,
     healthySources: results.length - attentionCount,
     attentionCount,
+    reviewPlan,
     results,
   } satisfies GameDataSourceCheckSnapshot;
 }
