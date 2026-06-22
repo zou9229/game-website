@@ -36,25 +36,36 @@ const ALL_PROVIDERS: PaymentProvider[] = [
   'wechat',
 ];
 
-export function Pricing({ title }: { title?: string } = {}) {
+export function Pricing({
+  title,
+  initialConfigs = {},
+  skipConfigFetch = false,
+}: {
+  title?: string;
+  initialConfigs?: Record<string, string>;
+  skipConfigFetch?: boolean;
+} = {}) {
   const t = useTranslations('landing');
   const router = useRouter();
   const { data: session } = useSession();
 
-  const [configs, setConfigs] = useState<Record<string, string>>({});
+  const [configs, setConfigs] =
+    useState<Record<string, string>>(initialConfigs);
   const [modalOpen, setModalOpen] = useState(false);
   const [pendingPlan, setPendingPlan] = useState<PricingPlan | null>(null);
   const [loadingProvider, setLoadingProvider] =
     useState<PaymentProvider | null>(null);
 
   useEffect(() => {
+    if (skipConfigFetch) return;
+
     fetch('/api/config/public')
       .then((r) => r.json())
       .then((res) => {
         if (res.code === 0) setConfigs(res.data || {});
       })
       .catch(() => {});
-  }, []);
+  }, [skipConfigFetch]);
 
   const enabledProviders = useMemo<PaymentProvider[]>(
     () => ALL_PROVIDERS.filter((p) => configs[`${p}_enabled`] === 'true'),

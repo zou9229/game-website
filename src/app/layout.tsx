@@ -1,29 +1,15 @@
 import type { Metadata } from 'next';
-import { Inter, Libre_Baskerville, Noto_Serif_SC } from 'next/font/google';
 import { getLocale } from 'next-intl/server';
 import { ThemeProvider } from 'next-themes';
 
 import { envConfigs } from '@/config';
+import { getAllConfigs } from '@/modules/config/service';
 import { Analytics } from '@/components/analytics';
 import { CustomerService } from '@/components/customer-service';
 import { GoogleOneTap } from '@/components/google-one-tap';
 import { Toaster } from '@/components/ui/sonner';
 
 import './globals.css';
-
-const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
-const libreBaskerville = Libre_Baskerville({
-  subsets: ['latin'],
-  weight: ['400', '700'],
-  style: ['normal', 'italic'],
-  variable: '--font-serif-display',
-});
-const notoSerifSC = Noto_Serif_SC({
-  subsets: ['latin'],
-  weight: ['400', '500', '700'],
-  variable: '--font-serif-sc',
-  preload: false,
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL(envConfigs.app_url || 'https://questcodes.com'),
@@ -74,12 +60,13 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const locale = await getLocale();
+  const configs = await getAllConfigs();
+  const googleOneTapEnabled =
+    configs.google_one_tap_enabled === 'true' && !!configs.google_client_id;
 
   return (
     <html lang={locale} suppressHydrationWarning>
-      <body
-        className={`${inter.variable} ${libreBaskerville.variable} ${notoSerifSC.variable} font-sans antialiased`}
-      >
+      <body className="font-sans antialiased">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -88,10 +75,17 @@ export default async function RootLayout({
         >
           {children}
           <Toaster position="top-center" richColors />
-          <GoogleOneTap />
+          {googleOneTapEnabled ? (
+            <GoogleOneTap
+              configs={{
+                google_one_tap_enabled: 'true',
+                google_client_id: configs.google_client_id,
+              }}
+            />
+          ) : null}
         </ThemeProvider>
-        <Analytics />
-        <CustomerService />
+        <Analytics configs={configs} />
+        <CustomerService configs={configs} />
       </body>
     </html>
   );

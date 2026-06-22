@@ -3,15 +3,21 @@ import { getAllConfigs } from '@/modules/config/service';
 import { Crisp } from './crisp';
 import { Tawk } from './tawk';
 
-export async function CustomerService() {
-  const configs = await getAllConfigs();
+type ConfigMap = Record<string, string>;
 
-  const crispEnabled = configs.crisp_enabled === 'true';
-  const crispWebsiteId = configs.crisp_website_id?.trim();
+export async function CustomerService({
+  configs,
+}: {
+  configs?: ConfigMap;
+} = {}) {
+  const resolvedConfigs = configs ?? (await getAllConfigs());
 
-  const tawkEnabled = configs.tawk_enabled === 'true';
-  const tawkPropertyId = configs.tawk_property_id?.trim();
-  const tawkWidgetId = configs.tawk_widget_id?.trim();
+  const crispEnabled = resolvedConfigs.crisp_enabled === 'true';
+  const crispWebsiteId = resolvedConfigs.crisp_website_id?.trim();
+
+  const tawkEnabled = resolvedConfigs.tawk_enabled === 'true';
+  const tawkPropertyId = resolvedConfigs.tawk_property_id?.trim();
+  const tawkWidgetId = resolvedConfigs.tawk_widget_id?.trim();
 
   if (!crispEnabled && !tawkEnabled) return null;
 
