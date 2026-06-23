@@ -13,8 +13,31 @@ export type UpdateEntry = {
 };
 
 export const ninetyNineNightsUpdates = {
-  checkedAt: '2026-06-22',
+  checkedAt: '2026-06-23',
   entries: [
+    {
+      date: '2026-06-23',
+      type: 'code-check',
+      title: 'June 23 lightweight source check',
+      summary:
+        'Quest Codes reran the code source-check workflow and confirmed that PC Gamer and GamesRadar still include the tracked active code terms.',
+      details: [
+        'forestwakesup26 and afterparty were found on PC Gamer and GamesRadar during the June 23 source check.',
+        'PCGamesN, Fandom, and the Roblox Games API returned 403 from the command-line check, so they remain manual review flags rather than automatic update signals.',
+        'yay fishing stays marked as special because source status labels still require manual review.',
+        'No new code, reward amount, drop rate, Roblox stat, or patch claim was added from this pass.',
+      ],
+      sources: [
+        {
+          name: 'PC Gamer codes page',
+          url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-codes/',
+        },
+        {
+          name: 'GamesRadar codes page',
+          url: 'https://www.gamesradar.com/games/survival/99-nights-in-the-forest-codes/',
+        },
+      ],
+    },
     {
       date: '2026-06-22',
       type: 'code-check',

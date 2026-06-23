@@ -157,7 +157,7 @@ const faqs = [
   {
     question: 'What are the active 99 Nights in the Forest codes?',
     answer:
-      'As of June 22, 2026, forestwakesup26 and afterparty are listed as active by checked sources. yay fishing is treated as a special in-game activation because sources disagree on its normal code-box status.',
+      'As of June 23, 2026, forestwakesup26 and afterparty are listed as active by checked sources. yay fishing is treated as a special in-game activation because sources disagree on its normal code-box status.',
   },
   {
     question: 'How do I redeem 99 Nights in the Forest codes?',
