@@ -1,119 +1,119 @@
 {
   "nav": {
-    "features": "Features",
-    "pricing": "Pricing"
+    "features": "Guides",
+    "pricing": "Support"
   },
   "hero": {
-    "headline": "The headless engine for your next SaaS.",
-    "subheadline": "Auth, payments, subscriptions, credits, RBAC, CMS, and i18n — all pre-wired. Just build your product on top.",
-    "cta": "Get Started",
-    "secondary": "Dashboard"
+    "headline": "Source-checked Roblox codes and game guides.",
+    "subheadline": "Quest Codes tracks working codes, expired history, class notes, crafting routes, and update checks without inventing game data.",
+    "cta": "Browse codes",
+    "secondary": "99 Nights hub"
   },
   "chips": {
-    "auth": "Authentication",
-    "payment": "Payments",
-    "subscription": "Subscriptions",
-    "credits": "Credits",
-    "rbac": "RBAC",
-    "i18n": "i18n",
-    "cms": "CMS",
-    "apikeys": "API Keys"
+    "auth": "Codes",
+    "payment": "Guides",
+    "subscription": "Updates",
+    "credits": "Gems",
+    "rbac": "Tier lists",
+    "i18n": "Source checks",
+    "cms": "Roblox",
+    "apikeys": "Game data"
   },
   "features": {
-    "title": "Everything you need to ship",
-    "description": "Pre-wired business logic so you can focus on building your product.",
+    "title": "Built for Roblox players who need the answer now",
+    "description": "Short, source-aware pages for codes, routes, rewards, and update checks.",
     "auth": {
-      "title": "Authentication",
-      "description": "Email/password, Google, and GitHub OAuth — ready out of the box with session management and account linking."
+      "title": "Working codes",
+      "description": "Active, special, and expired code tables stay separated so players know what to test first."
     },
     "payment": {
-      "title": "Payments",
-      "description": "Stripe, PayPal, Alipay, WeChat Pay — checkout, subscriptions, webhooks, and order management."
+      "title": "Source trail",
+      "description": "Each code page keeps a visible source trail and flags conflicts instead of hiding them."
     },
     "rbac": {
-      "title": "Roles & Permissions",
-      "description": "Fine-grained RBAC with wildcard matching. Full admin panel for managing users, roles, and permissions."
+      "title": "Guide clusters",
+      "description": "Related pages connect codes, crafting, classes, gems, maps, badges, and survival routes."
     },
     "i18n": {
-      "title": "Internationalization",
-      "description": "English and Chinese built-in with locale-aware routing. Easy to extend with additional languages."
+      "title": "Update checks",
+      "description": "The updates page records source checks and avoids turning rumors into patch notes."
     },
     "cms": {
-      "title": "Content Management",
-      "description": "Categories and posts with full CRUD, status management, and admin panel — build your blog or docs."
+      "title": "Player intent",
+      "description": "Pages are built around real search intent: how to redeem, what to craft, where to go, and what to avoid."
     },
     "credits": {
-      "title": "Credit System",
-      "description": "FIFO consumption, expiration, auto-grant on signup, and revocation — ready for usage-based billing."
+      "title": "Conservative data",
+      "description": "If a reward, drop rate, or status cannot be checked, it stays out of the published facts."
     }
   },
   "pricing": {
-    "title": "Pricing",
-    "description": "Choose the plan that works for you.",
+    "title": "Support Quest Codes",
+    "description": "Quest Codes is currently free to use while the guide library grows.",
     "monthly": "Monthly",
     "yearly": "Yearly",
     "lifetime": "Lifetime",
     "popular": "Popular",
     "best_value": "Best value",
     "buy_lifetime": "Buy once",
-    "starter": "Starter",
-    "starter_desc": "For individuals",
-    "pro": "Pro",
-    "pro_desc": "For growing teams",
-    "enterprise": "Enterprise",
-    "enterprise_desc": "For large organizations",
-    "feature_1_project": "1 project",
-    "feature_5k_credits": "5,000 credits",
-    "feature_email_support": "Email support",
-    "feature_unlimited_projects": "Unlimited projects",
-    "feature_50k_credits": "50,000 credits",
-    "feature_priority_support": "Priority support",
-    "feature_api_access": "API access",
-    "feature_everything_pro": "Everything in Pro",
-    "feature_unlimited_credits": "Unlimited credits",
-    "feature_dedicated_support": "Dedicated support",
-    "feature_custom_integrations": "Custom integrations"
+    "starter": "Reader",
+    "starter_desc": "For Roblox players",
+    "pro": "Power player",
+    "pro_desc": "For frequent guide readers",
+    "enterprise": "Creator",
+    "enterprise_desc": "For future community tools",
+    "feature_1_project": "Code pages",
+    "feature_5k_credits": "Guide clusters",
+    "feature_email_support": "Source notes",
+    "feature_unlimited_projects": "Update tracking",
+    "feature_50k_credits": "Tier lists",
+    "feature_priority_support": "Crafting routes",
+    "feature_api_access": "Roblox references",
+    "feature_everything_pro": "Everything in guides",
+    "feature_unlimited_credits": "Freshness checks",
+    "feature_dedicated_support": "Manual review",
+    "feature_custom_integrations": "Future community submissions"
   },
   "faq": {
     "title": "Frequently asked questions",
-    "description": "Everything you need to know before getting started.",
+    "description": "How Quest Codes handles game data and Roblox guide updates.",
     "stack": {
-      "question": "What's the tech stack?",
-      "answer": "Next.js 16 with the App Router, React 19, TypeScript strict mode, Tailwind CSS 4, shadcn/ui, Drizzle ORM, and better-auth. Every piece of business logic is inlined — no external packages for payment, email, storage, or AI."
+      "question": "Is Quest Codes affiliated with Roblox?",
+      "answer": "No. Quest Codes is a fan-made guide site and is not affiliated with Roblox or individual game developers."
     },
     "payment": {
-      "question": "Which payment providers are supported?",
-      "answer": "Stripe, PayPal, Creem, Alipay, and WeChat Pay out of the box. The PaymentManager abstraction makes it straightforward to add more providers by implementing a single interface."
+      "question": "How are active codes checked?",
+      "answer": "We compare trusted public source pages, keep checked dates visible, and flag conflicts when sources disagree."
     },
     "database": {
-      "question": "Which databases can I use?",
-      "answer": "Drizzle ORM handles PostgreSQL, MySQL, SQLite, Turso, and Cloudflare D1. Switch providers by editing DATABASE_PROVIDER in your .env — the schema templates and drizzle config adapt automatically."
+      "question": "Why not publish every rumored code?",
+      "answer": "Wrong game data wastes player time. Rumors, blocked sources, and unconfirmed reward amounts stay out of the main facts until they can be reviewed."
     },
     "customize": {
-      "question": "How customizable is the landing page?",
-      "answer": "The src/blocks/ directory ships with demo sections — they're designed to be rewritten per project. The durable primitives live in src/components/, so your rebrand touches blocks and translations, not the chassis."
+      "question": "Which game is the first focus?",
+      "answer": "The first content cluster focuses on 99 Nights in the Forest because it has active search demand across codes, crafting, classes, gems, badges, and routes."
     },
     "license": {
-      "question": "Can I use this for commercial projects?",
-      "answer": "Yes. ShipAny Next is built for shipping production SaaS products. You own the code after cloning — no per-seat fees, no runtime dependencies on our infrastructure."
+      "question": "Will more games be added?",
+      "answer": "Yes, but only when keyword demand and reliable source material justify a full guide cluster instead of a thin page."
     }
   },
   "cta": {
-    "headline": "Ready to ship your SaaS?",
-    "subheadline": "Stop wiring auth, payments, and RBAC from scratch. Start with ShipAny Next and build what actually makes your product unique.",
-    "button": "Get started for free"
+    "headline": "Start with the latest checked guides.",
+    "subheadline": "Browse source-aware Roblox code pages and route guides before your next run.",
+    "button": "Open 99 Nights guides"
   },
   "footer": {
-    "tagline": "Ship faster, iterate smarter.",
-    "feature": "Feature",
-    "product": "Product",
+    "tagline": "Source-checked Roblox routes, codes, and update notes.",
+    "feature": "Guides",
+    "product": "Games",
     "resources": "Resources",
     "legal": "Legal",
     "privacy": "Privacy Policy",
     "terms": "Terms of Service",
-    "settings": "Settings",
-    "admin": "Admin Panel",
-    "docs": "Documentation",
-    "github": "GitHub"
+    "settings": "99 Nights hub",
+    "admin": "Codes",
+    "docs": "Updates",
+    "github": "Sitemap"
   }
 }

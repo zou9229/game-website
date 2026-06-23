@@ -3,7 +3,6 @@ import type { ComponentType, SVGProps } from 'react';
 import { Link } from '@/core/i18n/navigation';
 import { envConfigs } from '@/config';
 import { cn } from '@/lib/utils';
-import { BuiltWithShipAny } from '@/components/built-with-shipany';
 import { LocaleSelector } from '@/components/locale-selector';
 
 export interface FooterColumn {
@@ -83,7 +82,6 @@ export function SiteFooter({
           </div>
         )}
 
-        {/* Socials + language row */}
         <div className="mt-8 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
           {socials && socials.length > 0 ? (
             <div className="flex items-center gap-5">
@@ -109,12 +107,13 @@ export function SiteFooter({
           />
         </div>
 
-        {/* Bottom bar */}
         <div className="mt-6 flex flex-col gap-3 border-t border-neutral-800 pt-5 sm:flex-row sm:items-center sm:justify-between">
-          <BuiltWithShipAny />
+          <span className="text-sm text-neutral-500">
+            Source-checked fan guide. Not affiliated with Roblox.
+          </span>
           <span className="text-sm text-neutral-500">
             {copyright ||
-              `© ${year} ${envConfigs.app_name}. All rights reserved.`}
+              `(c) ${year} ${envConfigs.app_name}. All rights reserved.`}
           </span>
         </div>
       </div>
