@@ -292,6 +292,62 @@ export default function AdminGameDataPage() {
   const sourceResults = sourceCheck?.results ?? [];
   const attentionResults = sourceResults.filter((item) => !item.ok);
   const reviewRecommendations = sourceCheck?.reviewPlan?.recommendations ?? [];
+  const nextReviewItem = sortedItems.find(
+    (item) => item.status === 'stale' || item.status === 'due-soon'
+  );
+  const nextOperatorAction = (() => {
+    if (!data) {
+      return {
+        title: 'Load the audit first',
+        detail:
+          'Run audit loads the checked-date ledger. It is the first step before any source check or publish decision.',
+        step: 'Run audit',
+      };
+    }
+
+    if (nextReviewItem && !sourceCheck) {
+      return {
+        title: `${nextReviewItem.title} needs a source check`,
+        detail:
+          'The audit found a page that is due soon or stale. Run source check before asking Codex to change live data.',
+        step: 'Run source check',
+      };
+    }
+
+    if (sourceCheck?.reviewPlan?.state === 'review-before-publish') {
+      return {
+        title: 'Review before publishing',
+        detail:
+          'Trusted sources confirmed some terms, but a blocked source or status-label conflict remains. Use Copy Codex prompt so Codex can update only source-confirmed data and keep conflicts visible.',
+        step: 'Copy Codex prompt',
+      };
+    }
+
+    if (sourceCheck?.reviewPlan?.state === 'blocked') {
+      return {
+        title: 'Manual browser review required',
+        detail:
+          'No trusted source confirmed enough data for publishing. Open the blocked sources manually before changing any codes, rewards, or stats.',
+        step: 'Open source links',
+      };
+    }
+
+    if (nextReviewItem) {
+      return {
+        title: `${nextReviewItem.title} is next in the queue`,
+        detail:
+          'The freshness audit still has a due or stale page. Source-check it, then let Codex publish only verified changes.',
+        step: 'Run source check',
+      };
+    }
+
+    return {
+      title: 'No publish action required',
+      detail:
+        'All tracked pages are fresh. Continue monitoring GSC/Semrush and only build a new page when a distinct keyword intent is validated.',
+      step: 'Monitor keywords',
+    };
+  })();
 
   return (
     <div className="space-y-6 p-6">
@@ -346,6 +402,73 @@ export default function AdminGameDataPage() {
           </Card>
         ))}
       </div>
+
+      <Card className="border-primary/30 bg-primary/5">
+        <CardHeader>
+          <div className="flex flex-col justify-between gap-3 md:flex-row md:items-start">
+            <div>
+              <div className="mb-2 flex flex-wrap items-center gap-2">
+                <Badge>{nextOperatorAction.step}</Badge>
+                <CardTitle>What should I do now?</CardTitle>
+              </div>
+              <CardDescription className="max-w-4xl">
+                {nextOperatorAction.detail}
+              </CardDescription>
+            </div>
+            <Button
+              onClick={copyMaintenancePrompt}
+              disabled={!data}
+              variant="outline"
+            >
+              <Clipboard className="mr-2 size-4" />
+              Copy Codex prompt
+            </Button>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-3 md:grid-cols-4">
+            {[
+              {
+                label: '1. Audit',
+                detail:
+                  'Checks the local freshness ledger only. It tells you what is stale or due, but it never changes pages.',
+              },
+              {
+                label: '2. Source check',
+                detail:
+                  'Fetches trusted code and metadata sources. This creates review signals, not an automatic publish.',
+              },
+              {
+                label: '3. Codex review',
+                detail:
+                  'Use the copied prompt so Codex updates only confirmed source dates, code statuses, or update notes.',
+              },
+              {
+                label: '4. Build and deploy',
+                detail:
+                  'Codex runs audit and build, commits, pushes, then deploys to Cloudflare only after confirmation.',
+              },
+            ].map((item) => (
+              <div
+                key={item.label}
+                className="bg-background rounded-md border p-4"
+              >
+                <h3 className="text-sm font-semibold">{item.label}</h3>
+                <p className="text-muted-foreground mt-2 text-sm leading-6">
+                  {item.detail}
+                </p>
+              </div>
+            ))}
+          </div>
+          <div className="text-muted-foreground bg-background mt-4 rounded-md border p-3 text-sm leading-6">
+            Automation status: review-assisted automation is working. Full
+            auto-publish is intentionally not enabled yet because wrong Roblox
+            codes, rewards, stats, or tier claims would damage trust. The next
+            safe upgrade is a scheduled read-only audit/report, not blind
+            publishing.
+          </div>
+        </CardContent>
+      </Card>
 
       <Card>
         <CardHeader>
