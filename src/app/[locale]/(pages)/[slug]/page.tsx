@@ -7,7 +7,11 @@ import { getTranslations } from 'next-intl/server';
 import { envConfigs } from '@/config';
 import { defaultLocale, locales } from '@/config/locale';
 
-const PAGE_SLUGS = ['privacy-policy', 'terms-of-service'] as const;
+const PAGE_SLUGS = [
+  'privacy-policy',
+  'terms-of-service',
+  'editorial-policy',
+] as const;
 type PageSlug = (typeof PAGE_SLUGS)[number];
 
 type PageMeta = {

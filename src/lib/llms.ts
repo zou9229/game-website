@@ -27,6 +27,12 @@ const corePages: LlmPage[] = [
     description:
       'Index of published Roblox code pages with active rewards, expired history, and source checks.',
   },
+  {
+    title: 'Editorial Policy',
+    path: '/editorial-policy',
+    description:
+      'Quest Codes source standards for Roblox codes, guide claims, update notes, screenshots, media, conflicts, and advertising independence.',
+  },
 ];
 
 function absoluteUrl(path: string) {
@@ -141,7 +147,8 @@ export function buildLlmsText({ full = false }: { full?: boolean } = {}) {
       '## Legal',
       '',
       `- [Privacy Policy](${absoluteUrl('/privacy-policy')})`,
-      `- [Terms of Service](${absoluteUrl('/terms-of-service')})`
+      `- [Terms of Service](${absoluteUrl('/terms-of-service')})`,
+      `- [Editorial Policy](${absoluteUrl('/editorial-policy')})`
     );
   }
 

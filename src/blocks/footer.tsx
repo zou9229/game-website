@@ -42,6 +42,7 @@ export async function Footer() {
       links: [
         { label: t('footer.privacy'), href: '/privacy-policy' },
         { label: t('footer.terms'), href: '/terms-of-service' },
+        { label: 'Editorial Policy', href: '/editorial-policy' },
       ],
     },
   ];
