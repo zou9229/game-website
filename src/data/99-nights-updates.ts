@@ -13,8 +13,27 @@ export type UpdateEntry = {
 };
 
 export const ninetyNineNightsUpdates = {
-  checkedAt: '2026-06-23',
+  checkedAt: '2026-06-24',
   entries: [
+    {
+      date: '2026-06-24',
+      type: 'code-check',
+      title: 'June 24 partial source-check review',
+      summary:
+        'Quest Codes reran the lightweight source-check workflow. PC Gamer still confirmed the tracked active code terms, but the pass was not broad enough to refresh the public code table date.',
+      details: [
+        'forestwakesup26 and afterparty were found on PC Gamer during the June 24 source check.',
+        'GamesRadar failed from the command-line fetch, while PCGamesN, Fandom, and the Roblox Games API returned 403, so those sources stay in the manual review queue.',
+        'happyhalloween also appeared in a source response, so status labels still need manual review before any visible code status changes.',
+        'No code status, reward amount, Roblox stat, drop rate, or patch claim was changed from this pass.',
+      ],
+      sources: [
+        {
+          name: 'PC Gamer codes page',
+          url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-codes/',
+        },
+      ],
+    },
     {
       date: '2026-06-23',
       type: 'code-check',
