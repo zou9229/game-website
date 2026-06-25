@@ -65,6 +65,15 @@ export const envConfigs: Record<string, string> = {
   // OPENAI_API_KEY / ANTHROPIC_API_KEY are common ambient vars, and falling back
   // to them would let the admin "Test" silently pass on the machine's own key.
   replicate_api_token: process.env.REPLICATE_API_TOKEN ?? '',
+  vertex_ai_project_id: process.env.VERTEX_AI_PROJECT_ID ?? '',
+  vertex_ai_location: process.env.VERTEX_AI_LOCATION ?? 'us-central1',
+  vertex_ai_model: process.env.VERTEX_AI_MODEL ?? 'gemini-2.5-flash',
+  vertex_ai_fallback_models:
+    process.env.VERTEX_AI_FALLBACK_MODELS ?? 'gemini-2.5-flash-lite',
+  vertex_ai_service_account_json:
+    process.env.VERTEX_AI_SERVICE_ACCOUNT_JSON ??
+    process.env.GEMINI_VERTEX_SERVICE_ACCOUNT_JSON ??
+    '',
 
   // Locale
   locale: process.env.NEXT_PUBLIC_DEFAULT_LOCALE ?? 'en',

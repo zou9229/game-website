@@ -9,6 +9,7 @@ import {
   ExternalLink,
   RefreshCw,
   Search,
+  Sparkles,
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -123,6 +124,29 @@ type SourceCheckSnapshot = {
   results: SourceCheckResult[];
 };
 
+type AiReviewItem = {
+  label: string;
+  detail: string;
+  risk: 'low' | 'medium' | 'high';
+};
+
+type AiReviewSnapshot = {
+  generatedAt: string;
+  reason: string;
+  provider: 'vertex';
+  model: string;
+  sourceCheckGeneratedAt?: string;
+  decision: 'safe-to-monitor' | 'review-before-publish' | 'blocked';
+  confidence: 'low' | 'medium' | 'high';
+  summary: string;
+  safeUpdates: AiReviewItem[];
+  blockedUpdates: AiReviewItem[];
+  humanReviewNeeded: AiReviewItem[];
+  publishGuardrails: string[];
+  operatorNextStep: string;
+  rawText?: string;
+};
+
 const statusTone = {
   fresh: 'default',
   'due-soon': 'secondary',
@@ -140,6 +164,8 @@ const reviewStateTone = {
   'review-before-publish': 'secondary',
   blocked: 'destructive',
 } as const;
+
+const aiDecisionTone = reviewStateTone;
 
 function normalizeSourceCheckResult(
   result: SourceCheckResult
@@ -192,14 +218,49 @@ function normalizeSourceCheckSnapshot(
   };
 }
 
+function normalizeAiReviewItem(item: AiReviewItem): AiReviewItem {
+  return {
+    label: String(item?.label || ''),
+    detail: String(item?.detail || ''),
+    risk:
+      item?.risk === 'high' || item?.risk === 'medium' || item?.risk === 'low'
+        ? item.risk
+        : 'medium',
+  };
+}
+
+function normalizeAiReviewSnapshot(
+  snapshot: AiReviewSnapshot | null | undefined
+): AiReviewSnapshot | null {
+  if (!snapshot) return null;
+
+  return {
+    ...snapshot,
+    safeUpdates: Array.isArray(snapshot.safeUpdates)
+      ? snapshot.safeUpdates.map(normalizeAiReviewItem)
+      : [],
+    blockedUpdates: Array.isArray(snapshot.blockedUpdates)
+      ? snapshot.blockedUpdates.map(normalizeAiReviewItem)
+      : [],
+    humanReviewNeeded: Array.isArray(snapshot.humanReviewNeeded)
+      ? snapshot.humanReviewNeeded.map(normalizeAiReviewItem)
+      : [],
+    publishGuardrails: Array.isArray(snapshot.publishGuardrails)
+      ? snapshot.publishGuardrails
+      : [],
+  };
+}
+
 export default function AdminGameDataPage() {
   const [data, setData] = useState<FreshnessResponse | null>(null);
   const [sourceCheck, setSourceCheck] = useState<SourceCheckSnapshot | null>(
     null
   );
+  const [aiReview, setAiReview] = useState<AiReviewSnapshot | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [checkingSources, setCheckingSources] = useState(false);
+  const [reviewingWithAi, setReviewingWithAi] = useState(false);
 
   async function loadFreshness({ showToast = false } = {}) {
     setRefreshing(true);
@@ -252,6 +313,39 @@ export default function AdminGameDataPage() {
     }
   }
 
+  async function loadAiReview() {
+    try {
+      const res = await fetch('/api/admin/game-data/ai-review', {
+        cache: 'no-store',
+      });
+      const json = await res.json();
+      if (json.code !== 0)
+        throw new Error(json.message || 'AI review load failed');
+      setAiReview(normalizeAiReviewSnapshot(json.data));
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to load AI review');
+    }
+  }
+
+  async function runAiReview() {
+    setReviewingWithAi(true);
+    try {
+      const res = await fetch('/api/admin/game-data/ai-review', {
+        cache: 'no-store',
+        method: 'POST',
+      });
+      const json = await res.json();
+      if (json.code !== 0)
+        throw new Error(json.message || 'Vertex AI review failed');
+      setAiReview(normalizeAiReviewSnapshot(json.data));
+      toast.success('Vertex AI review completed');
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to run Vertex AI review');
+    } finally {
+      setReviewingWithAi(false);
+    }
+  }
+
   async function copyMaintenancePrompt() {
     const prompt = [
       'Quest Codes maintenance request',
@@ -268,6 +362,9 @@ export default function AdminGameDataPage() {
       sourceCheck?.reviewPlan
         ? `Decision: ${sourceCheck.reviewPlan.title}. ${sourceCheck.reviewPlan.summary}`
         : 'Decision: no source-check decision available yet.',
+      aiReview
+        ? `Vertex AI review: ${aiReview.decision}, confidence ${aiReview.confidence}. ${aiReview.summary}`
+        : 'Vertex AI review: not run yet.',
       '',
       'If sources disagree, keep the current page conservative and show the disagreement instead of forcing an automatic update.',
     ].join('\n');
@@ -279,6 +376,7 @@ export default function AdminGameDataPage() {
   useEffect(() => {
     loadFreshness();
     loadSourceCheck();
+    loadAiReview();
   }, []);
 
   const sortedItems = useMemo(() => {
@@ -382,6 +480,16 @@ export default function AdminGameDataPage() {
               className={`mr-2 size-4 ${checkingSources ? 'animate-pulse' : ''}`}
             />
             Run source check
+          </Button>
+          <Button
+            onClick={runAiReview}
+            disabled={reviewingWithAi || !sourceCheck}
+            variant="outline"
+          >
+            <Sparkles
+              className={`mr-2 size-4 ${reviewingWithAi ? 'animate-pulse' : ''}`}
+            />
+            Run AI review
           </Button>
         </div>
       </div>
@@ -688,6 +796,124 @@ export default function AdminGameDataPage() {
                 expanding more pages.
               </div>
             ) : null}
+
+            <div className="mt-4 rounded-md border p-4">
+              <div className="flex flex-col justify-between gap-3 md:flex-row md:items-start">
+                <div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Sparkles className="text-primary size-4" />
+                    <h3 className="text-sm font-semibold">
+                      Vertex AI review assistant
+                    </h3>
+                    {aiReview ? (
+                      <>
+                        <Badge variant={aiDecisionTone[aiReview.decision]}>
+                          {aiReview.decision}
+                        </Badge>
+                        <Badge variant="outline">
+                          confidence {aiReview.confidence}
+                        </Badge>
+                      </>
+                    ) : null}
+                  </div>
+                  <p className="text-muted-foreground mt-2 text-sm leading-6">
+                    {aiReview
+                      ? aiReview.summary
+                      : 'Run AI review after source check. Vertex AI will summarize safe updates, blocked updates, and manual-review items without publishing anything.'}
+                  </p>
+                  {aiReview ? (
+                    <p className="text-muted-foreground mt-1 text-xs">
+                      Model: {aiReview.model}. Last run:{' '}
+                      {new Date(aiReview.generatedAt).toLocaleString()}
+                    </p>
+                  ) : null}
+                </div>
+                <Button
+                  onClick={runAiReview}
+                  disabled={reviewingWithAi || !sourceCheck}
+                  variant="outline"
+                >
+                  <Sparkles
+                    className={`mr-2 size-4 ${reviewingWithAi ? 'animate-pulse' : ''}`}
+                  />
+                  Run AI review
+                </Button>
+              </div>
+
+              {aiReview ? (
+                <div className="mt-4 space-y-4">
+                  <div className="grid gap-3 md:grid-cols-3">
+                    {[
+                      {
+                        title: 'Safe updates',
+                        items: aiReview.safeUpdates,
+                        empty: 'No safe automatic update suggested.',
+                      },
+                      {
+                        title: 'Blocked updates',
+                        items: aiReview.blockedUpdates,
+                        empty: 'No blocked update listed.',
+                      },
+                      {
+                        title: 'Human review',
+                        items: aiReview.humanReviewNeeded,
+                        empty: 'No manual-review item listed.',
+                      },
+                    ].map((section) => (
+                      <div
+                        key={section.title}
+                        className="bg-background rounded-md border p-3"
+                      >
+                        <h4 className="text-sm font-medium">{section.title}</h4>
+                        <div className="mt-3 space-y-3">
+                          {section.items.length ? (
+                            section.items.map((item) => (
+                              <div key={`${section.title}-${item.label}`}>
+                                <div className="flex flex-wrap items-center gap-2">
+                                  <Badge variant={priorityTone[item.risk]}>
+                                    {item.risk}
+                                  </Badge>
+                                  <span className="text-sm font-medium">
+                                    {item.label}
+                                  </span>
+                                </div>
+                                <p className="text-muted-foreground mt-1 text-sm leading-6">
+                                  {item.detail}
+                                </p>
+                              </div>
+                            ))
+                          ) : (
+                            <p className="text-muted-foreground text-sm leading-6">
+                              {section.empty}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {aiReview.publishGuardrails.length ? (
+                    <div className="bg-muted/30 rounded-md border p-3">
+                      <h4 className="text-sm font-medium">
+                        Publish guardrails
+                      </h4>
+                      <ul className="text-muted-foreground mt-2 list-disc space-y-1 pl-5 text-sm leading-6">
+                        {aiReview.publishGuardrails.map((item) => (
+                          <li key={item}>{item}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null}
+
+                  {aiReview.operatorNextStep ? (
+                    <div className="border-primary/30 bg-primary/5 rounded-md border p-3 text-sm leading-6">
+                      <span className="font-medium">Next step: </span>
+                      {aiReview.operatorNextStep}
+                    </div>
+                  ) : null}
+                </div>
+              ) : null}
+            </div>
           </div>
         </CardContent>
       </Card>

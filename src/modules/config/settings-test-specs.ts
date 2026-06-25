@@ -229,6 +229,26 @@ export const testSpecs: Record<string, TestSpec> = {
       },
     ],
   },
+  vertex_ai: {
+    group: 'vertex_ai',
+    fields: [
+      {
+        name: 'model',
+        label: 'Model',
+        type: 'text',
+        defaultValue: 'gemini-2.5-flash',
+        required: true,
+      },
+      {
+        name: 'prompt',
+        label: 'Prompt',
+        type: 'textarea',
+        defaultValue:
+          'Reply with exactly: Quest Codes Vertex AI review assistant is configured.',
+        required: true,
+      },
+    ],
+  },
 };
 
 export function getTestSpec(group: string): TestSpec | undefined {

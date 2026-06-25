@@ -11,6 +11,7 @@
 import { FalProvider } from '@/core/ai/fal';
 import { ReplicateProvider } from '@/core/ai/replicate';
 import { AIMediaType } from '@/core/ai/types';
+import { generateTextWithVertexGemini } from '@/core/ai/vertex-gemini';
 import { ResendProvider } from '@/core/email/resend';
 import {
   AlipayProvider,
@@ -58,6 +59,8 @@ export async function runTest(
         return await testReplicate(inputs, configs);
       case 'fal':
         return await testFal(inputs, configs);
+      case 'vertex_ai':
+        return await testVertexAi(inputs, configs);
       default:
         return { success: false, message: `No test available for "${group}"` };
     }
@@ -493,5 +496,56 @@ async function testFal(
     success: true,
     message: 'Fal accepted the request',
     details: { 'Task ID': result.taskId, Status: result.taskStatus },
+  };
+}
+
+async function testVertexAi(
+  inputs: Record<string, string>,
+  configs: Record<string, string>
+): Promise<TestResult> {
+  const serviceAccountJson =
+    configs.vertex_ai_service_account_json ||
+    configs.gemini_vertex_service_account_json ||
+    process.env.VERTEX_AI_SERVICE_ACCOUNT_JSON ||
+    process.env.GEMINI_VERTEX_SERVICE_ACCOUNT_JSON ||
+    '';
+
+  if (!serviceAccountJson) {
+    return {
+      success: false,
+      message:
+        'Missing config: vertex_ai_service_account_json or Cloudflare secret VERTEX_AI_SERVICE_ACCOUNT_JSON',
+    };
+  }
+
+  const result = await generateTextWithVertexGemini({
+    projectId:
+      configs.vertex_ai_project_id || configs.gemini_vertex_project_id || '',
+    location:
+      configs.vertex_ai_location ||
+      configs.gemini_vertex_location ||
+      'us-central1',
+    model:
+      inputs.model ||
+      configs.vertex_ai_model ||
+      configs.gemini_vertex_model ||
+      'gemini-2.5-flash',
+    serviceAccountJson,
+    prompt:
+      inputs.prompt ||
+      'Reply with exactly: Quest Codes Vertex AI review assistant is configured.',
+    generationConfig: {
+      temperature: 0,
+      maxOutputTokens: 128,
+    },
+  });
+
+  return {
+    success: true,
+    message: 'Vertex AI accepted the request',
+    details: {
+      Model: result.model,
+      Reply: result.text.slice(0, 240),
+    },
   };
 }

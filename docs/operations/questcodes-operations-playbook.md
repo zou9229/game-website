@@ -1033,6 +1033,38 @@ Tell Codex:
 The admin game-data page is broken online: https://questcodes.com/admin/game-data. Diagnose the client/server runtime issue, do not remove the admin feature, fix, build, deploy, and explain the root cause.
 ```
 
+## 33. Vertex AI Review Assistant
+
+Quest Codes can use Vertex AI for admin-only review assistance, not automatic publishing.
+
+Recommended production configuration:
+
+```powershell
+.\node_modules\.bin\wrangler.CMD secret put VERTEX_AI_SERVICE_ACCOUNT_JSON
+```
+
+Then set these non-secret values in Admin -> Settings -> AI -> Vertex AI, or via Cloudflare vars if preferred:
+
+- `vertex_ai_model`: `gemini-2.5-flash`
+- `vertex_ai_fallback_models`: `gemini-2.5-flash-lite`
+- `vertex_ai_project_id`: your Google Cloud project ID
+- `vertex_ai_location`: `us-central1`
+
+Operational use:
+
+1. Open `/admin/game-data`.
+2. Click `Run source check`.
+3. Click `Run AI review`.
+4. Read `Safe updates`, `Blocked updates`, `Human review`, and `Publish guardrails`.
+5. Use `Copy Codex prompt` and let Codex update only source-confirmed code/update data.
+
+Why this is safe:
+
+- Vertex AI reads the source-check snapshot.
+- It writes only a review snapshot to the config table.
+- It does not rewrite page files, change code status, update rewards, commit, push, or deploy.
+- If sources disagree, the public page stays conservative.
+
 ### GSC Shows Not Indexed
 
 Do not panic.

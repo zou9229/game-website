@@ -381,6 +381,10 @@
       },
       "replicate": { "title": "Replicate", "description": "Replicate AI API" },
       "fal": { "title": "Fal", "description": "Fal AI API" },
+      "vertex_ai": {
+        "title": "Vertex AI",
+        "description": "Vertex AI Gemini review assistant"
+      },
       "google_analytics": {
         "title": "Google Analytics",
         "description": "Inject gtag.js with the configured Measurement ID"
@@ -472,6 +476,11 @@
       "anthropic_api_key": "API Key",
       "replicate_api_token": "API Token",
       "fal_api_key": "API Key",
+      "vertex_ai_model": "Review Model",
+      "vertex_ai_fallback_models": "Fallback Models",
+      "vertex_ai_project_id": "Project ID",
+      "vertex_ai_location": "Location",
+      "vertex_ai_service_account_json": "Service Account JSON",
       "google_analytics_id": "Measurement ID",
       "google_adsense_publisher_id": "Publisher ID",
       "google_adsense_enabled": "Enable Auto ads",

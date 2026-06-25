@@ -171,6 +171,12 @@ export function getSettingGroups(): SettingGroup[] {
       tab: 'ai',
     },
     { name: 'fal', title: 'Fal', description: 'Fal AI API', tab: 'ai' },
+    {
+      name: 'vertex_ai',
+      title: 'Vertex AI',
+      description: 'Vertex AI Gemini review assistant',
+      tab: 'ai',
+    },
 
     // Analytics
     {
@@ -811,6 +817,54 @@ export function getSettings(): Setting[] {
       placeholder: 'xxx',
       group: 'fal',
       tab: 'ai',
+    },
+    {
+      name: 'vertex_ai_model',
+      title: 'Review Model',
+      type: 'text',
+      placeholder: 'gemini-2.5-flash',
+      defaultValue: 'gemini-2.5-flash',
+      group: 'vertex_ai',
+      tab: 'ai',
+      tip: 'Primary Vertex AI Gemini model used only for admin game-data review suggestions.',
+    },
+    {
+      name: 'vertex_ai_fallback_models',
+      title: 'Fallback Models',
+      type: 'textarea',
+      placeholder: 'gemini-2.5-flash-lite\ngemini-2.0-flash-001',
+      defaultValue: 'gemini-2.5-flash-lite',
+      group: 'vertex_ai',
+      tab: 'ai',
+      tip: 'Optional fallback Vertex AI models, one per line or comma-separated.',
+    },
+    {
+      name: 'vertex_ai_project_id',
+      title: 'Project ID',
+      type: 'text',
+      placeholder: 'your-gcp-project-id',
+      group: 'vertex_ai',
+      tab: 'ai',
+      tip: 'Google Cloud project with Vertex AI enabled. Leave empty to use project_id from the service account JSON.',
+    },
+    {
+      name: 'vertex_ai_location',
+      title: 'Location',
+      type: 'text',
+      placeholder: 'us-central1',
+      defaultValue: 'us-central1',
+      group: 'vertex_ai',
+      tab: 'ai',
+      tip: 'Vertex AI region for Gemini models.',
+    },
+    {
+      name: 'vertex_ai_service_account_json',
+      title: 'Service Account JSON',
+      type: 'textarea',
+      placeholder: '{"type":"service_account","project_id":"..."}',
+      group: 'vertex_ai',
+      tab: 'ai',
+      tip: 'Sensitive. Prefer Cloudflare secret VERTEX_AI_SERVICE_ACCOUNT_JSON in production; this field is a convenience fallback.',
     },
 
     // ─── Analytics / Google Analytics ────────────────────────────────

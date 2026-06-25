@@ -506,3 +506,50 @@ AI 生成页面强化建议或草稿，由 Codex 审核、改代码、build。
 4. 如果 GSC 还没有数据，继续保持 Codes/Updates 新鲜。
 5. 轻量开始外链，不做垃圾外链。
 6. Vertex AI 暂不接自动发布，先规划成 review assistant。
+
+## 17. Vertex AI Review Assistant 当前怎么用
+
+结论：现在可以把 Vertex AI 接成后台“只读审核助手”，但仍然不能让它自动发布游戏事实。
+
+推荐生产配置方式：
+
+```powershell
+.\node_modules\.bin\wrangler.CMD secret put VERTEX_AI_SERVICE_ACCOUNT_JSON
+```
+
+然后在后台：
+
+`/admin/settings` -> `AI` -> `Vertex AI`
+
+填写：
+
+- `Review Model`: `gemini-2.5-flash`
+- `Fallback Models`: `gemini-2.5-flash-lite`
+- `Project ID`: Google Cloud 项目 ID
+- `Location`: `us-central1`
+
+`Service Account JSON` 字段可以用，但更推荐用 Cloudflare secret，因为 service account JSON 是敏感凭据。
+
+日常使用步骤：
+
+1. 打开 `/admin/game-data`。
+2. 点击 `Run source check`。
+3. 点击 `Run AI review`。
+4. 看 `Safe updates`、`Blocked updates`、`Human review`、`Publish guardrails`。
+5. 点击 `Copy Codex prompt` 发给 Codex。
+6. Codex 只允许更新 source-confirmed 的 codes/update 数据。
+
+为什么这样做：
+
+- Vertex AI 只读取 source-check snapshot。
+- Vertex AI 只写入一份 review snapshot。
+- 它不会改页面文件。
+- 它不会改 code status、reward、tier、掉率、攻略事实。
+- 它不会 commit、push 或 deploy。
+- 如果来源冲突，页面保持保守展示。
+
+达到的效果：
+
+- 你可以消耗 Vertex AI 额度来提高运营效率。
+- 后台能更清楚地告诉你哪些可以改、哪些不能改。
+- 自动化体系继续推进，但不会牺牲内容可信度。
