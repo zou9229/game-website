@@ -234,10 +234,9 @@ export const testSpecs: Record<string, TestSpec> = {
     fields: [
       {
         name: 'model',
-        label: 'Model',
+        label: 'Model Override',
         type: 'text',
-        defaultValue: 'gemini-2.5-flash',
-        required: true,
+        required: false,
       },
       {
         name: 'prompt',

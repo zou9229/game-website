@@ -523,12 +523,14 @@ AI 生成页面强化建议或草稿，由 Codex 审核、改代码、build。
 
 填写：
 
-- `Review Model`: `gemini-2.5-flash`
-- `Fallback Models`: `gemini-2.5-flash-lite`
-- `Project ID`: Google Cloud 项目 ID
-- `Location`: `us-central1`
+- `Review Model`: 推荐 `gemini-2.5-flash`
+- `Fallback Models`: 推荐 `gemini-2.5-flash-lite`
+- `Project ID`: Google Cloud 项目 ID；如果 service account JSON 内有 `project_id`，也可以留空
+- `Location`: 推荐 `us-central1`
 
 `Service Account JSON` 字段可以用，但更推荐用 Cloudflare secret，因为 service account JSON 是敏感凭据。
+
+注意：运行时优先读取后台保存的 Vertex AI 配置和 Cloudflare Secret。`Review Model`、`Fallback Models`、`Project ID`、`Location` 不再靠代码里的隐藏默认值兜底；如果后台没有保存必要字段，`Run AI review` 会报配置缺失。
 
 日常使用步骤：
 

@@ -1045,10 +1045,12 @@ Recommended production configuration:
 
 Then set these non-secret values in Admin -> Settings -> AI -> Vertex AI, or via Cloudflare vars if preferred:
 
-- `vertex_ai_model`: `gemini-2.5-flash`
-- `vertex_ai_fallback_models`: `gemini-2.5-flash-lite`
-- `vertex_ai_project_id`: your Google Cloud project ID
-- `vertex_ai_location`: `us-central1`
+- `vertex_ai_model`: recommended `gemini-2.5-flash`
+- `vertex_ai_fallback_models`: recommended `gemini-2.5-flash-lite`
+- `vertex_ai_project_id`: your Google Cloud project ID; can be blank if the service account JSON contains `project_id`
+- `vertex_ai_location`: recommended `us-central1`
+
+Runtime reads the saved admin config and Cloudflare secret first. It no longer silently falls back to hidden Vertex model or location defaults in code; missing required values make `Run AI review` fail with a configuration error.
 
 Operational use:
 

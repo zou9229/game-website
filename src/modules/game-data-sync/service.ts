@@ -135,13 +135,13 @@ function getVertexReviewRuntime(configs: VertexReviewConfigs) {
   const model = getConfigValue(
     configs,
     ['vertex_ai_model', 'gemini_vertex_model'],
-    process.env.VERTEX_AI_MODEL || 'gemini-2.5-flash'
+    process.env.VERTEX_AI_MODEL || ''
   );
   const fallbackModels = parseModelList(
     getConfigValue(
       configs,
       ['vertex_ai_fallback_models', 'gemini_vertex_fallback_models'],
-      process.env.VERTEX_AI_FALLBACK_MODELS || 'gemini-2.5-flash-lite'
+      process.env.VERTEX_AI_FALLBACK_MODELS || ''
     )
   );
 
@@ -153,7 +153,7 @@ function getVertexReviewRuntime(configs: VertexReviewConfigs) {
     location: getConfigValue(
       configs,
       ['vertex_ai_location', 'gemini_vertex_location'],
-      process.env.VERTEX_AI_LOCATION || 'us-central1'
+      process.env.VERTEX_AI_LOCATION || ''
     ),
     serviceAccountJson:
       configs.vertex_ai_service_account_json ||
@@ -315,6 +315,16 @@ export async function runGameDataAiReview(
   if (!runtime.serviceAccountJson) {
     throw new Error(
       'Vertex AI service account json is not configured. Set VERTEX_AI_SERVICE_ACCOUNT_JSON as a Cloudflare secret or fill vertex_ai_service_account_json in admin settings.'
+    );
+  }
+  if (!runtime.location) {
+    throw new Error(
+      'Vertex AI location is not configured. Set Location in Admin Settings -> AI -> Vertex AI.'
+    );
+  }
+  if (runtime.models.length === 0) {
+    throw new Error(
+      'Vertex AI model is not configured. Set Review Model in Admin Settings -> AI -> Vertex AI.'
     );
   }
 

@@ -157,7 +157,7 @@ const faqs = [
   {
     question: 'What are the active 99 Nights in the Forest codes?',
     answer:
-      'As of June 24, 2026, forestwakesup26 and afterparty are listed as active by PC Gamer and GamesRadar. yay fishing is treated as a special in-game activation because sources disagree on its normal code-box status.',
+      'As of June 29, 2026, forestwakesup26 and afterparty are listed as active by PC Gamer and GamesRadar, while PCGamesN confirms afterparty only in the latest check. yay fishing is treated as a special in-game activation because sources disagree on its normal code-box status.',
   },
   {
     question: 'How do I redeem 99 Nights in the Forest codes?',

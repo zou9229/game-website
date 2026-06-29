@@ -518,18 +518,38 @@ async function testVertexAi(
     };
   }
 
+  const location =
+    configs.vertex_ai_location ||
+    configs.gemini_vertex_location ||
+    process.env.VERTEX_AI_LOCATION ||
+    '';
+  const model =
+    inputs.model ||
+    configs.vertex_ai_model ||
+    configs.gemini_vertex_model ||
+    process.env.VERTEX_AI_MODEL ||
+    '';
+
+  if (!location) {
+    return {
+      success: false,
+      message:
+        'Missing config: vertex_ai_location. Set Location in Admin Settings -> AI -> Vertex AI.',
+    };
+  }
+  if (!model) {
+    return {
+      success: false,
+      message:
+        'Missing config: vertex_ai_model. Set Review Model in Admin Settings -> AI -> Vertex AI.',
+    };
+  }
+
   const result = await generateTextWithVertexGemini({
     projectId:
       configs.vertex_ai_project_id || configs.gemini_vertex_project_id || '',
-    location:
-      configs.vertex_ai_location ||
-      configs.gemini_vertex_location ||
-      'us-central1',
-    model:
-      inputs.model ||
-      configs.vertex_ai_model ||
-      configs.gemini_vertex_model ||
-      'gemini-2.5-flash',
+    location,
+    model,
     serviceAccountJson,
     prompt:
       inputs.prompt ||

@@ -61,12 +61,12 @@ export const robloxGames: RobloxGame[] = [
     genre: 'Survival',
     maxPlayers: 25,
     createdAt: '2025-03-04',
-    updatedAt: '2026-06-16',
+    updatedAt: '2026-06-27',
     stats: {
-      playing: 342066,
+      playing: 492705,
       visits: 27447262005,
       favorites: 8168762,
-      checkedAt: '2026-06-20',
+      checkedAt: '2026-06-29',
     },
     pages: [
       {
@@ -201,19 +201,19 @@ export const robloxGames: RobloxGame[] = [
         code: 'forestwakesup26',
         reward: '15 gems and 3 random flames',
         status: 'active',
-        note: 'Matched by PC Gamer and GamesRadar in the June 24 source check; the community wiki remains in the June 21 manual trail.',
+        note: 'Matched by PC Gamer and GamesRadar in the June 29 source check; PCGamesN did not confirm this term and the community wiki remains in the manual review queue.',
         sources: [
           {
             name: 'PC Gamer',
             url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-codes/',
             status: 'listed-active',
-            checkedAt: '2026-06-24',
+            checkedAt: '2026-06-29',
           },
           {
             name: 'GamesRadar',
             url: 'https://www.gamesradar.com/games/survival/99-nights-in-the-forest-codes/',
             status: 'listed-active',
-            checkedAt: '2026-06-24',
+            checkedAt: '2026-06-29',
           },
           {
             name: 'Fandom Codes',
@@ -227,25 +227,25 @@ export const robloxGames: RobloxGame[] = [
         code: 'afterparty',
         reward: '15 gems',
         status: 'active',
-        note: 'Matched by PC Gamer and GamesRadar in the June 24 source check; PCGamesN and the community wiki remain in the June 21 manual trail.',
+        note: 'Matched by PC Gamer, PCGamesN, and GamesRadar in the June 29 source check; the community wiki remains in the manual review queue.',
         sources: [
           {
             name: 'PC Gamer',
             url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-codes/',
             status: 'listed-active',
-            checkedAt: '2026-06-24',
+            checkedAt: '2026-06-29',
           },
           {
             name: 'PCGamesN',
             url: 'https://www.pcgamesn.com/99-nights-in-the-forest/codes',
             status: 'listed-active',
-            checkedAt: '2026-06-21',
+            checkedAt: '2026-06-29',
           },
           {
             name: 'GamesRadar',
             url: 'https://www.gamesradar.com/games/survival/99-nights-in-the-forest-codes/',
             status: 'listed-active',
-            checkedAt: '2026-06-24',
+            checkedAt: '2026-06-29',
           },
           {
             name: 'Fandom Codes',

@@ -13,8 +13,41 @@ export type UpdateEntry = {
 };
 
 export const ninetyNineNightsUpdates = {
-  checkedAt: '2026-06-24',
+  checkedAt: '2026-06-29',
   entries: [
+    {
+      date: '2026-06-29',
+      type: 'code-check',
+      title: 'June 29 reviewed source-check pass',
+      summary:
+        'Quest Codes reviewed the latest source-check snapshot. PC Gamer and GamesRadar confirmed the tracked active code terms, PCGamesN confirmed afterparty only, and the Roblox Games API confirmed the public game metadata.',
+      details: [
+        'forestwakesup26 and afterparty were found on PC Gamer and GamesRadar during the June 29 source check.',
+        'PCGamesN returned HTTP 200 and matched afterparty, but did not confirm forestwakesup26 in this pass.',
+        'Fandom Codes Wiki returned HTTP 403, so it remains in the manual review queue.',
+        'happyhalloween and yay fishing still require status-label review before any visible status change.',
+        'Roblox Games API confirmed the game metadata check with an updated timestamp of 2026-06-27 and 492,705 playing at check time.',
+        'No code reward, code status, drop rate, tier claim, crafting fact, or patch-note claim was changed from this pass.',
+      ],
+      sources: [
+        {
+          name: 'PC Gamer codes page',
+          url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-codes/',
+        },
+        {
+          name: 'PCGamesN codes page',
+          url: 'https://www.pcgamesn.com/99-nights-in-the-forest/codes',
+        },
+        {
+          name: 'GamesRadar codes page',
+          url: 'https://www.gamesradar.com/games/survival/99-nights-in-the-forest-codes/',
+        },
+        {
+          name: 'Official Roblox game page',
+          url: 'https://www.roblox.com/games/79546208627805/99-Nights-in-the-Forest',
+        },
+      ],
+    },
     {
       date: '2026-06-24',
       type: 'code-check',
