@@ -8,11 +8,12 @@ export type ClassTierGroup = {
 };
 
 export const ninetyNineNightsClasses = {
-  checkedAt: '2026-06-20',
+  checkedAt: '2026-06-30',
   source: {
     name: 'PC Gamer',
     url: 'https://www.pcgamer.com/roblox/99-nights-in-the-forest-classes/',
     lastUpdated: '2025-12-21',
+    checkedAt: '2026-06-30',
   },
   recommendations: [
     {

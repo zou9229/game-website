@@ -8,11 +8,11 @@ export type SurvivalGuideSection = {
 };
 
 export const ninetyNineNightsSurvivalGuide = {
-  checkedAt: '2026-06-20',
+  checkedAt: '2026-06-30',
   source: {
     name: 'PC Gamer',
     url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-tips/',
-    checkedAt: '2026-06-20',
+    checkedAt: '2026-06-30',
   },
   quickChecklist: [
     'Feed the campfire before long looting trips.',

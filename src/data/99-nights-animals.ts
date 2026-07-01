@@ -9,12 +9,12 @@ export type NinetyNineNightsAnimal = {
 };
 
 export const ninetyNineNightsAnimals = {
-  checkedAt: '2026-06-20',
+  checkedAt: '2026-06-30',
   source: {
     name: 'PC Gamer',
     url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-animal-taming/',
     publishedAt: '2025-11-29',
-    checkedAt: '2026-06-20',
+    checkedAt: '2026-06-30',
   },
   summary: {
     totalAnimals: 11,

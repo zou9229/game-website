@@ -39,6 +39,33 @@ export const ninetyNineNightsUpdates = {
       ],
     },
     {
+      date: '2026-06-30',
+      type: 'guide-data-pass',
+      title: 'June 30 guide source-review pass',
+      summary:
+        'Quest Codes rechecked the existing PC Gamer source trail for the Classes, Animals, and Survival Guide pages without changing guide facts or tier claims.',
+      details: [
+        'Classes and Class Tier List keep the same tier and recommendation data; only the source-reviewed date was refreshed.',
+        'Animals keeps the same food, flute, biome, and class-direction notes after checking the existing taming source trail.',
+        'Survival Guide keeps the same campfire, building, upgrade, navigation, defense, bandage, and flute advice after checking the existing tips source trail.',
+        'No new class tier, animal requirement, hidden formula, crafting cost, drop rate, or patch claim was added from this pass.',
+      ],
+      sources: [
+        {
+          name: 'PC Gamer classes guide',
+          url: 'https://www.pcgamer.com/roblox/99-nights-in-the-forest-classes/',
+        },
+        {
+          name: 'PC Gamer animal taming guide',
+          url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-animal-taming/',
+        },
+        {
+          name: 'PC Gamer tips guide',
+          url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-tips/',
+        },
+      ],
+    },
+    {
       date: '2026-06-29',
       type: 'code-check',
       title: 'June 29 reviewed source-check pass',
