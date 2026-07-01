@@ -157,7 +157,7 @@ const faqs = [
   {
     question: 'What are the active 99 Nights in the Forest codes?',
     answer:
-      'As of June 30, 2026, forestwakesup26 and afterparty are listed as active by PC Gamer and GamesRadar. PCGamesN, Fandom, and Roblox metadata were not confirmed by the latest command-line check, so conflicting labels stay under manual review.',
+      'As of July 1, 2026, forestwakesup26 and afterparty are listed as active by PC Gamer and GamesRadar. PCGamesN, Fandom, and Roblox metadata were not confirmed by the latest command-line check, so conflicting labels stay under manual review.',
   },
   {
     question: 'How do I redeem 99 Nights in the Forest codes?',
