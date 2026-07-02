@@ -669,6 +669,7 @@ What it does:
 - Stores the latest source-check snapshot in the config table.
 - Marks the snapshot reason as `cloudflare-cron` for the native scheduler, or `scheduled-cron-api` for the HTTP endpoint.
 - Lets `/admin/game-data` show the latest automated check result.
+- Feeds the in-admin `Operator alerts` panel so the site owner can see review-before-publish and blocked states without reading raw source data first.
 
 What it does not do:
 
@@ -690,7 +691,7 @@ Suggested schedule:
 
 Next safe upgrade:
 
-- Add a notification channel for `review-before-publish` or `blocked` snapshots.
+- Add an external notification channel for high-priority `Operator alerts`.
 - Keep publish decisions manual.
 
 ## Keyword Expansion Process

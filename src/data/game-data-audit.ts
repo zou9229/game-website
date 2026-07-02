@@ -150,6 +150,7 @@ export function buildGameDataFreshnessAudit(now = new Date()) {
   const protectedCronConfigured = Boolean(process.env.CRON_SECRET);
   const scheduledSourceCheckConfigured =
     nativeCronConfigured || protectedCronConfigured;
+  const operatorAlertSurfaceConfigured = true;
 
   const launchMvpGates = [
     {
@@ -204,7 +205,7 @@ export function buildGameDataFreshnessAudit(now = new Date()) {
       weight: 15,
     },
     {
-      complete: false,
+      complete: operatorAlertSurfaceConfigured,
       weight: 15,
     },
     {
@@ -223,7 +224,7 @@ export function buildGameDataFreshnessAudit(now = new Date()) {
       operatingSystemPercent,
       currentStage:
         launchComplete
-          ? `Public SEO MVP is in observation mode. Codes, updates, Roblox metadata, sitemap, llms.txt, guide navigation, media, AdSense readiness, source-check controls, and the 99 Nights content cluster are in place. ${staleManualItems.length} manual-review guide pages remain in the operating queue, but they are content freshness debt rather than launch blockers. ${
+          ? `Public SEO MVP is in observation mode. Codes, updates, Roblox metadata, sitemap, llms.txt, guide navigation, media, AdSense readiness, source-check controls, operator alerts, and the 99 Nights content cluster are in place. ${staleManualItems.length} manual-review guide pages remain in the operating queue, but they are content freshness debt rather than launch blockers. ${
               nativeCronConfigured
                 ? 'The Cloudflare scheduled source-check trigger is configured.'
                 : protectedCronConfigured

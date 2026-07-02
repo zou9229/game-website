@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import {
   AlertTriangle,
+  BellRing,
   CheckCircle2,
   Clipboard,
   Database,
@@ -145,6 +146,13 @@ type AiReviewSnapshot = {
   publishGuardrails: string[];
   operatorNextStep: string;
   rawText?: string;
+};
+
+type OperatorAlert = {
+  title: string;
+  detail: string;
+  priority: 'high' | 'medium' | 'low';
+  action: string;
 };
 
 const statusTone = {
@@ -365,6 +373,11 @@ export default function AdminGameDataPage() {
       aiReview
         ? `Vertex AI review: ${aiReview.decision}, confidence ${aiReview.confidence}. ${aiReview.summary}`
         : 'Vertex AI review: not run yet.',
+      operatorAlerts.length
+        ? `Operator alerts: ${operatorAlerts
+            .map((alert) => `${alert.priority}: ${alert.title}`)
+            .join(' | ')}`
+        : 'Operator alerts: none.',
       '',
       'If sources disagree, keep the current page conservative and show the disagreement instead of forcing an automatic update.',
     ].join('\n');
@@ -446,6 +459,113 @@ export default function AdminGameDataPage() {
       step: 'Monitor keywords',
     };
   })();
+  const operatorAlerts = useMemo<OperatorAlert[]>(() => {
+    const alerts: OperatorAlert[] = [];
+
+    if (!data) {
+      return [
+        {
+          title: 'Audit not loaded',
+          detail:
+            'Load the freshness audit before making any source-check or publish decision.',
+          priority: 'medium',
+          action: 'Run audit',
+        },
+      ];
+    }
+
+    const staleHighPriority = data.actions.filter(
+      (action) => action.status === 'stale' && action.priority === 'high'
+    );
+    if (staleHighPriority.length) {
+      alerts.push({
+        title: `${staleHighPriority.length} high-priority guide pages are stale`,
+        detail:
+          'These are manual-review pages. Keep them conservative until a source-backed update is confirmed.',
+        priority: 'high',
+        action: 'Review next update queue',
+      });
+    }
+
+    if (!sourceCheck) {
+      alerts.push({
+        title: 'No source-check snapshot loaded',
+        detail:
+          'Run source check, or wait for the daily Cloudflare Cron snapshot, before asking Codex to publish data changes.',
+        priority: 'medium',
+        action: 'Run source check',
+      });
+    } else if (sourceCheck.reviewPlan?.state === 'blocked') {
+      alerts.push({
+        title: 'Source check is blocked',
+        detail:
+          'No trusted source confirmed enough data. Open source links manually and do not publish code, reward, stat, or tier changes.',
+        priority: 'high',
+        action: 'Open blocked sources',
+      });
+    } else if (sourceCheck.reviewPlan?.state === 'review-before-publish') {
+      alerts.push({
+        title: 'Review required before publishing',
+        detail:
+          'At least one source confirmed data, but blocked sources or label conflicts remain. Copy the Codex prompt before editing.',
+        priority: 'high',
+        action: 'Copy Codex prompt',
+      });
+    } else if (sourceCheck.reason === 'cloudflare-cron') {
+      alerts.push({
+        title: 'Daily Cloudflare source check is active',
+        detail:
+          'The latest source-check snapshot came from the scheduled Worker. No public content was changed automatically.',
+        priority: 'low',
+        action: 'Monitor snapshot',
+      });
+    }
+
+    if (sourceCheck && !aiReview) {
+      alerts.push({
+        title: 'AI review has not summarized the latest source check',
+        detail:
+          'Run Vertex AI review when the source check returns review-before-publish or blocked signals.',
+        priority:
+          sourceCheck.reviewPlan?.state === 'safe-to-monitor'
+            ? 'low'
+            : 'medium',
+        action: 'Run AI review',
+      });
+    }
+
+    if (aiReview?.decision === 'blocked') {
+      alerts.push({
+        title: 'Vertex AI marked the update as blocked',
+        detail:
+          aiReview.operatorNextStep ||
+          'Do not publish. Keep data unchanged until a trusted source can be reviewed manually.',
+        priority: 'high',
+        action: 'Follow AI next step',
+      });
+    } else if (aiReview?.decision === 'review-before-publish') {
+      alerts.push({
+        title: 'Vertex AI requires manual review',
+        detail:
+          aiReview.operatorNextStep ||
+          'Use manual review before publishing any source-check-derived change.',
+        priority: 'medium',
+        action: 'Review AI guardrails',
+      });
+    }
+
+    if (!alerts.length) {
+      alerts.push({
+        title: 'No operator alert',
+        detail:
+          'Tracked automation candidates are fresh and current source checks do not imply a publish action.',
+        priority: 'low',
+        action: 'Monitor GSC',
+      });
+    }
+
+    return alerts.slice(0, 5);
+  }, [aiReview, data, sourceCheck]);
 
   return (
     <div className="space-y-6 p-6">
@@ -571,11 +691,50 @@ export default function AdminGameDataPage() {
           </div>
           <div className="text-muted-foreground bg-background mt-4 rounded-md border p-3 text-sm leading-6">
             Automation status: review-assisted automation is working. The
-            Cloudflare scheduled source check is configured. Full auto-publish
-            is intentionally not enabled yet because wrong Roblox codes,
-            rewards, stats, or tier claims would damage trust. The next safe
-            upgrade is notifying the operator when review-before-publish or
-            blocked snapshots appear.
+            Cloudflare scheduled source check is configured and in-admin
+            operator alerts are active. Full auto-publish is intentionally not
+            enabled yet because wrong Roblox codes, rewards, stats, or tier
+            claims would damage trust. The next safe upgrade is an external
+            notification channel for high-priority alerts.
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <div className="flex flex-col justify-between gap-3 md:flex-row md:items-start">
+            <div>
+              <div className="mb-2 flex items-center gap-2">
+                <BellRing className="text-primary size-4" />
+                <CardTitle>Operator alerts</CardTitle>
+              </div>
+              <CardDescription>
+                In-admin notifications generated from audit, scheduled source
+                checks, and Vertex AI review. They do not publish changes.
+              </CardDescription>
+            </div>
+            <Badge variant="outline">{operatorAlerts.length} active</Badge>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-3 lg:grid-cols-2">
+            {operatorAlerts.map((alert) => (
+              <div
+                key={`${alert.priority}-${alert.title}`}
+                className="rounded-md border p-4"
+              >
+                <div className="flex flex-wrap items-center gap-2">
+                  <Badge variant={priorityTone[alert.priority]}>
+                    {alert.priority}
+                  </Badge>
+                  <Badge variant="outline">{alert.action}</Badge>
+                </div>
+                <h3 className="mt-3 text-sm font-semibold">{alert.title}</h3>
+                <p className="text-muted-foreground mt-2 text-sm leading-6">
+                  {alert.detail}
+                </p>
+              </div>
+            ))}
           </div>
         </CardContent>
       </Card>
