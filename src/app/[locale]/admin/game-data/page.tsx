@@ -458,7 +458,8 @@ export default function AdminGameDataPage() {
           <p className="text-muted-foreground max-w-3xl">
             Read-only audit for Quest Codes game data. It shows which Roblox
             pages are fresh, due soon, or stale before a manual source check or
-            scheduled data job changes live content.
+            scheduled data job creates a review snapshot. Scheduled checks do
+            not publish live content.
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -544,7 +545,7 @@ export default function AdminGameDataPage() {
               {
                 label: '2. Source check',
                 detail:
-                  'Fetches trusted code and metadata sources. This creates review signals, not an automatic publish.',
+                  'Fetches trusted code and metadata sources. Manual and scheduled runs both create review signals, not an automatic publish.',
               },
               {
                 label: '3. Codex review',
@@ -572,8 +573,8 @@ export default function AdminGameDataPage() {
             Automation status: review-assisted automation is working. Full
             auto-publish is intentionally not enabled yet because wrong Roblox
             codes, rewards, stats, or tier claims would damage trust. The next
-            safe upgrade is a scheduled read-only audit/report, not blind
-            publishing.
+            safe upgrade is connecting the protected cron endpoint to a
+            scheduler, not blind publishing.
           </div>
         </CardContent>
       </Card>
@@ -644,7 +645,8 @@ export default function AdminGameDataPage() {
                 {sourceCheck ? (
                   <p className="text-muted-foreground mt-1 text-xs">
                     Last run:{' '}
-                    {new Date(sourceCheck.generatedAt).toLocaleString()}
+                    {new Date(sourceCheck.generatedAt).toLocaleString()} via{' '}
+                    {sourceCheck.reason || 'unknown'}
                   </p>
                 ) : null}
               </div>

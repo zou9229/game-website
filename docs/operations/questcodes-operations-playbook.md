@@ -623,6 +623,61 @@ Effect:
 
 - Keeps the workflow safe: audit first, human/Codex review second, publish third.
 
+## Scheduled Source Checks
+
+Quest Codes now has a protected read-only cron endpoint:
+
+`https://questcodes.com/api/cron/game-data/source-check`
+
+It accepts `GET` or `POST` with one of these headers:
+
+```text
+Authorization: Bearer <CRON_SECRET>
+```
+
+or:
+
+```text
+x-cron-secret: <CRON_SECRET>
+```
+
+Production setup:
+
+```powershell
+.\node_modules\.bin\wrangler.CMD secret put CRON_SECRET
+```
+
+What it does:
+
+- Runs the same source-check workflow used by the admin `Run source check` button.
+- Stores the latest source-check snapshot in the config table.
+- Marks the snapshot reason as `scheduled-cron-api`.
+- Lets `/admin/game-data` show the latest automated check result.
+
+What it does not do:
+
+- It does not rewrite source files.
+- It does not change code status, rewards, tier claims, crafting costs, drop rates, or patch notes.
+- It does not commit, push, or deploy.
+- It does not replace manual review.
+
+Why this matters:
+
+- Codes and Roblox metadata can be monitored automatically.
+- Guide facts still need human/Codex review because wrong game data hurts trust.
+- The safe automation boundary is "detect and report" first, "publish" only after verified review.
+
+Suggested schedule:
+
+- Once daily while traffic is low.
+- Twice daily only if GSC shows codes-page impressions or the game has active update/event volatility.
+
+Next safe upgrade:
+
+- Connect this endpoint to a scheduler.
+- Add a notification channel for `review-before-publish` or `blocked` snapshots.
+- Keep publish decisions manual.
+
 ## Keyword Expansion Process
 
 Use this decision tree:

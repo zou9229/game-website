@@ -74,6 +74,9 @@ export const envConfigs: Record<string, string> = {
     process.env.GEMINI_VERTEX_SERVICE_ACCOUNT_JSON ??
     '',
 
+  // Operations
+  cron_secret: process.env.CRON_SECRET ?? '',
+
   // Locale
   locale: process.env.NEXT_PUBLIC_DEFAULT_LOCALE ?? 'en',
 };

@@ -146,6 +146,7 @@ export function buildGameDataFreshnessAudit(now = new Date()) {
   const freshGuideItems = manualReviewItems.filter(
     (item) => item.status === 'fresh'
   );
+  const protectedCronConfigured = Boolean(process.env.CRON_SECRET);
 
   const launchMvpGates = [
     {
@@ -196,7 +197,7 @@ export function buildGameDataFreshnessAudit(now = new Date()) {
       weight: 10,
     },
     {
-      complete: false,
+      complete: protectedCronConfigured,
       weight: 15,
     },
     {
@@ -219,7 +220,11 @@ export function buildGameDataFreshnessAudit(now = new Date()) {
       operatingSystemPercent,
       currentStage:
         launchComplete
-          ? `Public SEO MVP is in observation mode. Codes, updates, Roblox metadata, sitemap, llms.txt, guide navigation, media, AdSense readiness, source-check controls, and the 99 Nights content cluster are in place. ${staleManualItems.length} manual-review guide pages remain in the operating queue, but they are content freshness debt rather than launch blockers.`
+          ? `Public SEO MVP is in observation mode. Codes, updates, Roblox metadata, sitemap, llms.txt, guide navigation, media, AdSense readiness, source-check controls, and the 99 Nights content cluster are in place. ${staleManualItems.length} manual-review guide pages remain in the operating queue, but they are content freshness debt rather than launch blockers. ${
+              protectedCronConfigured
+                ? 'The protected scheduled source-check endpoint is configured.'
+                : 'The protected scheduled source-check endpoint is present, but CRON_SECRET is not configured yet.'
+            }`
           : 'Public SEO MVP is still closing launch gates. Finish the missing critical source checks before treating the site as observation-ready.',
     },
     summary: {
