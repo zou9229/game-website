@@ -570,11 +570,12 @@ export default function AdminGameDataPage() {
             ))}
           </div>
           <div className="text-muted-foreground bg-background mt-4 rounded-md border p-3 text-sm leading-6">
-            Automation status: review-assisted automation is working. Full
-            auto-publish is intentionally not enabled yet because wrong Roblox
-            codes, rewards, stats, or tier claims would damage trust. The next
-            safe upgrade is connecting the protected cron endpoint to a
-            scheduler, not blind publishing.
+            Automation status: review-assisted automation is working. The
+            Cloudflare scheduled source check is configured. Full auto-publish
+            is intentionally not enabled yet because wrong Roblox codes,
+            rewards, stats, or tier claims would damage trust. The next safe
+            upgrade is notifying the operator when review-before-publish or
+            blocked snapshots appear.
           </div>
         </CardContent>
       </Card>

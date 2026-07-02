@@ -7,12 +7,18 @@
   "name": "shipany-vinext",
   "compatibility_date": "2026-02-12",
   "compatibility_flags": ["nodejs_compat"],
-  "main": "vinext/server/app-router-entry",
+  "main": "src/worker.ts",
   "assets": {
     "not_found_handling": "none",
   },
+  "triggers": {
+    // Cloudflare Cron Triggers use UTC. This runs the read-only game-data
+    // source check once per day and stores a review snapshot for the admin UI.
+    "crons": ["0 9 * * *"],
+  },
   "vars": {
     "DATABASE_PROVIDER": "d1",
+    "GAME_DATA_CRON_ENABLED": "true",
   },
   "d1_databases": [
     {

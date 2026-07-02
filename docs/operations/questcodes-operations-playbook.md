@@ -625,7 +625,20 @@ Effect:
 
 ## Scheduled Source Checks
 
-Quest Codes now has a protected read-only cron endpoint:
+Quest Codes runs a Cloudflare-native scheduled source check once per day:
+
+```text
+0 9 * * *  # 09:00 UTC / 17:00 China time
+```
+
+The scheduled Worker handler records snapshots with this reason:
+
+```text
+cloudflare-cron
+```
+
+Quest Codes also has a protected read-only HTTP endpoint for manual or external
+cron callers:
 
 `https://questcodes.com/api/cron/game-data/source-check`
 
@@ -647,11 +660,14 @@ Production setup:
 .\node_modules\.bin\wrangler.CMD secret put CRON_SECRET
 ```
 
+`CRON_SECRET` is required only for HTTP callers. The native Cloudflare Cron
+Trigger runs inside the Worker and does not need to send this header.
+
 What it does:
 
 - Runs the same source-check workflow used by the admin `Run source check` button.
 - Stores the latest source-check snapshot in the config table.
-- Marks the snapshot reason as `scheduled-cron-api`.
+- Marks the snapshot reason as `cloudflare-cron` for the native scheduler, or `scheduled-cron-api` for the HTTP endpoint.
 - Lets `/admin/game-data` show the latest automated check result.
 
 What it does not do:
@@ -669,12 +685,11 @@ Why this matters:
 
 Suggested schedule:
 
-- Once daily while traffic is low.
+- Once daily while traffic is low. This is currently configured in `wrangler.jsonc`.
 - Twice daily only if GSC shows codes-page impressions or the game has active update/event volatility.
 
 Next safe upgrade:
 
-- Connect this endpoint to a scheduler.
 - Add a notification channel for `review-before-publish` or `blocked` snapshots.
 - Keep publish decisions manual.
 

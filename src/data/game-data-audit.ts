@@ -146,7 +146,10 @@ export function buildGameDataFreshnessAudit(now = new Date()) {
   const freshGuideItems = manualReviewItems.filter(
     (item) => item.status === 'fresh'
   );
+  const nativeCronConfigured = process.env.GAME_DATA_CRON_ENABLED === 'true';
   const protectedCronConfigured = Boolean(process.env.CRON_SECRET);
+  const scheduledSourceCheckConfigured =
+    nativeCronConfigured || protectedCronConfigured;
 
   const launchMvpGates = [
     {
@@ -197,7 +200,7 @@ export function buildGameDataFreshnessAudit(now = new Date()) {
       weight: 10,
     },
     {
-      complete: protectedCronConfigured,
+      complete: scheduledSourceCheckConfigured,
       weight: 15,
     },
     {
@@ -221,9 +224,11 @@ export function buildGameDataFreshnessAudit(now = new Date()) {
       currentStage:
         launchComplete
           ? `Public SEO MVP is in observation mode. Codes, updates, Roblox metadata, sitemap, llms.txt, guide navigation, media, AdSense readiness, source-check controls, and the 99 Nights content cluster are in place. ${staleManualItems.length} manual-review guide pages remain in the operating queue, but they are content freshness debt rather than launch blockers. ${
-              protectedCronConfigured
-                ? 'The protected scheduled source-check endpoint is configured.'
-                : 'The protected scheduled source-check endpoint is present, but CRON_SECRET is not configured yet.'
+              nativeCronConfigured
+                ? 'The Cloudflare scheduled source-check trigger is configured.'
+                : protectedCronConfigured
+                  ? 'The protected scheduled source-check endpoint is configured for external callers.'
+                  : 'The protected scheduled source-check endpoint is present, but no scheduler is configured yet.'
             }`
           : 'Public SEO MVP is still closing launch gates. Finish the missing critical source checks before treating the site as observation-ready.',
     },
