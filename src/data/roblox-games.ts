@@ -61,12 +61,12 @@ export const robloxGames: RobloxGame[] = [
     genre: 'Survival',
     maxPlayers: 25,
     createdAt: '2025-03-04',
-    updatedAt: '2026-06-27',
+    updatedAt: '2026-07-01',
     stats: {
-      playing: 492705,
-      visits: 27447262005,
-      favorites: 8168762,
-      checkedAt: '2026-06-29',
+      playing: 393516,
+      visits: 27834841022,
+      favorites: 8438845,
+      checkedAt: '2026-07-02',
     },
     pages: [
       {
@@ -201,19 +201,19 @@ export const robloxGames: RobloxGame[] = [
         code: 'forestwakesup26',
         reward: '15 gems and 3 random flames',
         status: 'active',
-        note: 'Matched by PC Gamer and GamesRadar in the July 1 source check; PCGamesN, Roblox metadata, and the community wiki remain in the manual review queue for this pass.',
+        note: 'Matched by PC Gamer and GamesRadar in the July 2 source check; PCGamesN did not confirm this term in the command-line pass, and the community wiki remains in the manual review queue.',
         sources: [
           {
             name: 'PC Gamer',
             url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-codes/',
             status: 'listed-active',
-            checkedAt: '2026-07-01',
+            checkedAt: '2026-07-02',
           },
           {
             name: 'GamesRadar',
             url: 'https://www.gamesradar.com/games/survival/99-nights-in-the-forest-codes/',
             status: 'listed-active',
-            checkedAt: '2026-07-01',
+            checkedAt: '2026-07-02',
           },
           {
             name: 'Fandom Codes',
@@ -227,25 +227,25 @@ export const robloxGames: RobloxGame[] = [
         code: 'afterparty',
         reward: '15 gems',
         status: 'active',
-        note: 'Matched by PC Gamer and GamesRadar in the July 1 source check; PCGamesN remains in the June 29 trail because it was blocked in the latest run.',
+        note: 'Matched by PC Gamer, PCGamesN, and GamesRadar in the July 2 source check; Fandom remains in the manual review queue because it was blocked in the command-line pass.',
         sources: [
           {
             name: 'PC Gamer',
             url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-codes/',
             status: 'listed-active',
-            checkedAt: '2026-07-01',
+            checkedAt: '2026-07-02',
           },
           {
             name: 'PCGamesN',
             url: 'https://www.pcgamesn.com/99-nights-in-the-forest/codes',
             status: 'listed-active',
-            checkedAt: '2026-06-29',
+            checkedAt: '2026-07-02',
           },
           {
             name: 'GamesRadar',
             url: 'https://www.gamesradar.com/games/survival/99-nights-in-the-forest-codes/',
             status: 'listed-active',
-            checkedAt: '2026-07-01',
+            checkedAt: '2026-07-02',
           },
           {
             name: 'Fandom Codes',

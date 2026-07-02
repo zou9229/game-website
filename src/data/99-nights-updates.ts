@@ -13,8 +13,41 @@ export type UpdateEntry = {
 };
 
 export const ninetyNineNightsUpdates = {
-  checkedAt: '2026-07-01',
+  checkedAt: '2026-07-02',
   entries: [
+    {
+      date: '2026-07-02',
+      type: 'code-check',
+      title: 'July 2 reviewed source-check pass',
+      summary:
+        'Quest Codes reran the daily code source-check workflow. PC Gamer and GamesRadar confirmed both tracked active code terms, PCGamesN confirmed afterparty only, and the Roblox Games API confirmed public game metadata.',
+      details: [
+        'forestwakesup26 and afterparty were found on PC Gamer and GamesRadar during the July 2 source check.',
+        'PCGamesN returned HTTP 200 and matched afterparty, but did not confirm forestwakesup26 in this command-line pass.',
+        'Fandom Codes Wiki returned HTTP 403, so it remains a manual review flag.',
+        'happyhalloween and yay fishing appeared in source text again, so code status labels still need manual review before any visible status change.',
+        'Roblox Games API confirmed the game metadata check with an updated timestamp of 2026-07-01, 393,516 playing, 27,834,841,022 visits, and 8,438,845 favorites at check time.',
+        'No code reward, code status, drop rate, tier claim, crafting fact, or patch-note claim was changed from this pass.',
+      ],
+      sources: [
+        {
+          name: 'PC Gamer codes page',
+          url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-codes/',
+        },
+        {
+          name: 'PCGamesN codes page',
+          url: 'https://www.pcgamesn.com/99-nights-in-the-forest/codes',
+        },
+        {
+          name: 'GamesRadar codes page',
+          url: 'https://www.gamesradar.com/games/survival/99-nights-in-the-forest-codes/',
+        },
+        {
+          name: 'Roblox Games API',
+          url: 'https://games.roblox.com/v1/games?universeIds=7326934954',
+        },
+      ],
+    },
     {
       date: '2026-07-01',
       type: 'code-check',
@@ -35,6 +68,37 @@ export const ninetyNineNightsUpdates = {
         {
           name: 'GamesRadar codes page',
           url: 'https://www.gamesradar.com/games/survival/99-nights-in-the-forest-codes/',
+        },
+      ],
+    },
+    {
+      date: '2026-07-01',
+      type: 'guide-data-pass',
+      title: 'July 1 bandage source-review pass',
+      summary:
+        'Quest Codes rechecked the Bandages page against PC Gamer and Beebom source trails, then kept the page conservative because Fandom was blocked by the command-line check.',
+      details: [
+        'PC Gamer still matched the practical bandage route terms around Bandage, Rabbit, Wolf Pelt, Anvil, revive, Medkit, map, campfire, and bandage context.',
+        'Beebom still matched Bandage, Anvil, and Wolf terminology for the Tool Workshop / crafting context.',
+        'Fandom Bandage and Fandom Crafting returned HTTP 403 in the command-line check, so their material notes remain auxiliary manual-review sources.',
+        'No bandage material amount, cooldown, revive rule, drop rate, class tier, or patch claim was changed from this pass.',
+      ],
+      sources: [
+        {
+          name: 'PC Gamer bandage guide',
+          url: 'https://www.pcgamer.com/games/survival-crafting/roblox-99-nights-in-the-forest-bandages/',
+        },
+        {
+          name: 'PC Gamer revive guide',
+          url: 'https://www.pcgamer.com/games/survival-crafting/roblox-99-nights-in-the-forest-revive/',
+        },
+        {
+          name: 'PC Gamer survival tips',
+          url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-tips/',
+        },
+        {
+          name: 'Beebom crafting recipes',
+          url: 'https://beebom.com/99-nights-in-the-forest-crafting-recipes/',
         },
       ],
     },
