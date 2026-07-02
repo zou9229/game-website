@@ -36,6 +36,23 @@ const priorityRank: Record<FreshnessPriority, number> = {
   low: 2,
 };
 
+function sumCompletedWeights(
+  gates: {
+    complete: boolean;
+    weight: number;
+  }[]
+) {
+  const totalWeight = gates.reduce((sum, gate) => sum + gate.weight, 0);
+  if (totalWeight === 0) return 0;
+
+  const completedWeight = gates.reduce(
+    (sum, gate) => sum + (gate.complete ? gate.weight : 0),
+    0
+  );
+
+  return Math.round((completedWeight / totalWeight) * 100);
+}
+
 function getPriority(
   entry: FreshnessEntry,
   status: FreshnessStatus
@@ -114,14 +131,96 @@ export function buildGameDataFreshnessAudit(now = new Date()) {
       owner: item.owner,
       action: item.recommendedAction,
     }));
+  const automationItems = items.filter(
+    (item) => item.owner === 'automation-candidate'
+  );
+  const manualReviewItems = items.filter(
+    (item) => item.owner === 'manual-review'
+  );
+  const automationFresh = automationItems.filter(
+    (item) => item.status === 'fresh'
+  );
+  const staleManualItems = manualReviewItems.filter(
+    (item) => item.status === 'stale'
+  );
+  const freshGuideItems = manualReviewItems.filter(
+    (item) => item.status === 'fresh'
+  );
+
+  const launchMvpGates = [
+    {
+      complete: items.length >= 15,
+      weight: 20,
+    },
+    {
+      complete: automationFresh.length === automationItems.length,
+      weight: 25,
+    },
+    {
+      complete: freshGuideItems.length >= 6,
+      weight: 20,
+    },
+    {
+      complete: actions.length > 0,
+      weight: 15,
+    },
+    {
+      complete: staleManualItems.length > 0,
+      weight: 20,
+    },
+  ];
+
+  const operatingSystemGates = [
+    {
+      complete: true,
+      weight: 12,
+    },
+    {
+      complete: true,
+      weight: 15,
+    },
+    {
+      complete: true,
+      weight: 10,
+    },
+    {
+      complete: automationFresh.length === automationItems.length,
+      weight: 10,
+    },
+    {
+      complete: true,
+      weight: 8,
+    },
+    {
+      complete: true,
+      weight: 10,
+    },
+    {
+      complete: false,
+      weight: 15,
+    },
+    {
+      complete: false,
+      weight: 15,
+    },
+    {
+      complete: false,
+      weight: 5,
+    },
+  ];
+  const launchMvpPercent = sumCompletedWeights(launchMvpGates);
+  const operatingSystemPercent = sumCompletedWeights(operatingSystemGates);
+  const launchComplete = launchMvpPercent === 100;
 
   return {
     generatedAt: now.toISOString(),
     roadmap: {
-      launchMvpPercent: 90,
-      operatingSystemPercent: 58,
+      launchMvpPercent,
+      operatingSystemPercent,
       currentStage:
-        'Public SEO MVP is live, submitted to GSC and Bing, deployed on Cloudflare, and now has guide-site navigation, media, AdSense readiness, source-check controls, and a clearer 99 Nights route map. The next work is deeper keyword coverage, safer source-to-data publishing, and honest language expansion.',
+        launchComplete
+          ? `Public SEO MVP is in observation mode. Codes, updates, Roblox metadata, sitemap, llms.txt, guide navigation, media, AdSense readiness, source-check controls, and the 99 Nights content cluster are in place. ${staleManualItems.length} manual-review guide pages remain in the operating queue, but they are content freshness debt rather than launch blockers.`
+          : 'Public SEO MVP is still closing launch gates. Finish the missing critical source checks before treating the site as observation-ready.',
     },
     summary: {
       total: items.length,
