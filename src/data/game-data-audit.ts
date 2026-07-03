@@ -140,11 +140,14 @@ export function buildGameDataFreshnessAudit(now = new Date()) {
   const automationFresh = automationItems.filter(
     (item) => item.status === 'fresh'
   );
+  const automationNotStale = automationItems.filter(
+    (item) => item.status !== 'stale'
+  );
   const staleManualItems = manualReviewItems.filter(
     (item) => item.status === 'stale'
   );
-  const freshGuideItems = manualReviewItems.filter(
-    (item) => item.status === 'fresh'
+  const currentGuideItems = manualReviewItems.filter(
+    (item) => item.status !== 'stale'
   );
   const nativeCronConfigured = process.env.GAME_DATA_CRON_ENABLED === 'true';
   const protectedCronConfigured = Boolean(process.env.CRON_SECRET);
@@ -158,11 +161,11 @@ export function buildGameDataFreshnessAudit(now = new Date()) {
       weight: 20,
     },
     {
-      complete: automationFresh.length === automationItems.length,
+      complete: automationNotStale.length === automationItems.length,
       weight: 25,
     },
     {
-      complete: freshGuideItems.length >= 6,
+      complete: currentGuideItems.length >= 6,
       weight: 20,
     },
     {

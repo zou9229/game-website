@@ -19,7 +19,9 @@ type ExecutionContext = {
 };
 
 async function runScheduledGameDataSourceCheck(event: ScheduledEvent) {
-  const snapshot = await runGameDataSourceCheck('cloudflare-cron');
+  const snapshot = await runGameDataSourceCheck('cloudflare-cron', {
+    notifyOperator: true,
+  });
 
   console.log(
     [
@@ -27,6 +29,9 @@ async function runScheduledGameDataSourceCheck(event: ScheduledEvent) {
       `cron=${event.cron}`,
       `healthy=${snapshot.healthySources}/${snapshot.sourceCount}`,
       `attention=${snapshot.attentionCount}`,
+      snapshot.notification
+        ? `notification=${snapshot.notification.sent ? 'sent' : snapshot.notification.skippedReason || snapshot.notification.error || 'not-sent'}`
+        : 'notification=not-configured',
     ].join(' ')
   );
 }

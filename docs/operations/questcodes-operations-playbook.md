@@ -670,6 +670,7 @@ What it does:
 - Marks the snapshot reason as `cloudflare-cron` for the native scheduler, or `scheduled-cron-api` for the HTTP endpoint.
 - Lets `/admin/game-data` show the latest automated check result.
 - Feeds the in-admin `Operator alerts` panel so the site owner can see review-before-publish and blocked states without reading raw source data first.
+- Can send optional high-priority operator alerts to an external webhook when `GAME_DATA_ALERT_WEBHOOK_URL` is configured.
 
 What it does not do:
 
@@ -691,8 +692,33 @@ Suggested schedule:
 
 Next safe upgrade:
 
-- Add an external notification channel for high-priority `Operator alerts`.
+- Configure an external notification channel for high-priority `Operator alerts` if you want daily push reminders outside the admin panel.
 - Keep publish decisions manual.
+
+### Optional Operator Webhook
+
+The scheduled source-check can push a compact operator alert to an external
+webhook. This is useful when you do not want to open the admin page every day.
+
+Production setup:
+
+```powershell
+.\node_modules\.bin\wrangler.CMD secret put GAME_DATA_ALERT_WEBHOOK_URL
+```
+
+Optional settings:
+
+```text
+GAME_DATA_ALERT_WEBHOOK_FORMAT=generic   # generic, slack, discord, feishu, lark
+GAME_DATA_ALERT_MIN_PRIORITY=high        # high, medium, low
+```
+
+Default behavior:
+
+- If no webhook URL is configured, cron still runs and stores the snapshot.
+- If a webhook URL is configured, only alerts at or above the priority threshold are sent.
+- The default threshold is `high`, so routine healthy checks do not spam the channel.
+- Alerts are read-only. They do not update game data, commit code, push Git, or deploy.
 
 ## Keyword Expansion Process
 

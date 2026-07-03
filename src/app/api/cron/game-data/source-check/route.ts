@@ -42,7 +42,9 @@ async function runScheduledSourceCheck() {
     return respErr(error, error.includes('configured') ? 503 : 401);
   }
 
-  const snapshot = await runGameDataSourceCheck('scheduled-cron-api');
+  const snapshot = await runGameDataSourceCheck('scheduled-cron-api', {
+    notifyOperator: true,
+  });
   return respData({
     ...snapshot,
     publishMode: 'read-only-review-snapshot',

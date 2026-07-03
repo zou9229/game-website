@@ -201,19 +201,19 @@ export const robloxGames: RobloxGame[] = [
         code: 'forestwakesup26',
         reward: '15 gems and 3 random flames',
         status: 'active',
-        note: 'Matched by PC Gamer and GamesRadar in the July 2 source check; PCGamesN did not confirm this term in the command-line pass, and the community wiki remains in the manual review queue.',
+        note: 'Matched by PC Gamer and GamesRadar in the July 3 source check; PCGamesN and the community wiki remain in the manual review queue because the command-line pass could not confirm them.',
         sources: [
           {
             name: 'PC Gamer',
             url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-codes/',
             status: 'listed-active',
-            checkedAt: '2026-07-02',
+            checkedAt: '2026-07-03',
           },
           {
             name: 'GamesRadar',
             url: 'https://www.gamesradar.com/games/survival/99-nights-in-the-forest-codes/',
             status: 'listed-active',
-            checkedAt: '2026-07-02',
+            checkedAt: '2026-07-03',
           },
           {
             name: 'Fandom Codes',
@@ -227,13 +227,13 @@ export const robloxGames: RobloxGame[] = [
         code: 'afterparty',
         reward: '15 gems',
         status: 'active',
-        note: 'Matched by PC Gamer, PCGamesN, and GamesRadar in the July 2 source check; Fandom remains in the manual review queue because it was blocked in the command-line pass.',
+        note: 'Matched by PC Gamer and GamesRadar in the July 3 source check; PCGamesN last confirmed this term in the July 2 pass and remains in manual review after a July 3 command-line block.',
         sources: [
           {
             name: 'PC Gamer',
             url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-codes/',
             status: 'listed-active',
-            checkedAt: '2026-07-02',
+            checkedAt: '2026-07-03',
           },
           {
             name: 'PCGamesN',
@@ -245,7 +245,7 @@ export const robloxGames: RobloxGame[] = [
             name: 'GamesRadar',
             url: 'https://www.gamesradar.com/games/survival/99-nights-in-the-forest-codes/',
             status: 'listed-active',
-            checkedAt: '2026-07-02',
+            checkedAt: '2026-07-03',
           },
           {
             name: 'Fandom Codes',

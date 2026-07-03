@@ -9,6 +9,11 @@ import {
   type GameDataSourceCheckSnapshot,
 } from '@/lib/game-data-source-check';
 
+import {
+  sendGameDataOperatorAlert,
+  type GameDataOperatorAlertNotification,
+} from './operator-alerts';
+
 const SNAPSHOT_KEY = 'questcodes.gameData.sourceCheck.snapshot';
 const STATUS_KEY = 'questcodes.gameData.sourceCheck.status';
 const AI_REVIEW_KEY = 'questcodes.gameData.aiReview.snapshot';
@@ -43,6 +48,14 @@ export type GameDataAiReviewSnapshot = {
 
 type VertexReviewConfigs = Record<string, string>;
 
+type RunGameDataSourceCheckOptions = {
+  notifyOperator?: boolean;
+};
+
+export type GameDataSourceCheckRunResult = GameDataSourceCheckSnapshot & {
+  notification?: GameDataOperatorAlertNotification;
+};
+
 async function readConfigValue(name: string) {
   const [row] = await db()
     .select()
@@ -68,7 +81,10 @@ async function writeConfigValue(name: string, value: string) {
   });
 }
 
-export async function runGameDataSourceCheck(reason = 'manual') {
+export async function runGameDataSourceCheck(
+  reason = 'manual',
+  options: RunGameDataSourceCheckOptions = {}
+): Promise<GameDataSourceCheckRunResult> {
   const snapshot = await buildGameDataSourceCheckSnapshot(reason);
 
   await writeConfigValue(SNAPSHOT_KEY, JSON.stringify(snapshot));
@@ -83,7 +99,13 @@ export async function runGameDataSourceCheck(reason = 'manual') {
     })
   );
 
-  return snapshot;
+  if (!options.notifyOperator) return snapshot;
+
+  const notification = await sendGameDataOperatorAlert(snapshot);
+  return {
+    ...snapshot,
+    notification,
+  };
 }
 
 export async function getLatestGameDataSourceCheck() {
