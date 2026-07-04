@@ -103,6 +103,13 @@ const SOURCE_CHECK_TARGETS: GameDataSourceCheckTarget[] = [
   },
 ];
 
+function getSourceCheckTimeoutMs() {
+  const value = Number(process.env.GAME_DATA_SOURCE_CHECK_TIMEOUT_MS);
+  if (Number.isFinite(value) && value >= 3000) return value;
+
+  return 15_000;
+}
+
 function lowerIncludes(source: string, term: string) {
   return source.toLowerCase().includes(term.toLowerCase());
 }
@@ -228,8 +235,13 @@ async function checkTarget(
   target: GameDataSourceCheckTarget,
   checkedAt: string
 ): Promise<GameDataSourceCheckResult> {
+  const controller = new AbortController();
+  const timeoutMs = getSourceCheckTimeoutMs();
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+
   try {
     const response = await fetch(target.url, {
+      signal: controller.signal,
       headers: {
         accept:
           target.parser === 'roblox-game-api'
@@ -246,6 +258,9 @@ async function checkTarget(
 
     return checkHtmlSource(target, response, checkedAt);
   } catch (error: any) {
+    const timedOut =
+      error?.name === 'AbortError' ||
+      error?.message === 'This operation was aborted';
     const base = {
       id: target.id,
       title: target.title,
@@ -258,10 +273,14 @@ async function checkTarget(
       missingTerms: target.expectedTerms,
       highRiskMatches: [],
       signals: [],
-      error: error?.message || 'Source check failed.',
+      error: timedOut
+        ? `Source check timed out after ${timeoutMs}ms.`
+        : error?.message || 'Source check failed.',
     };
 
     return { ...base, action: buildAction(base) };
+  } finally {
+    clearTimeout(timeout);
   }
 }
 

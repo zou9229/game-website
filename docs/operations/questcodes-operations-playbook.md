@@ -711,6 +711,7 @@ Optional settings:
 ```text
 GAME_DATA_ALERT_WEBHOOK_FORMAT=generic   # generic, slack, discord, feishu, lark
 GAME_DATA_ALERT_MIN_PRIORITY=high        # high, medium, low
+GAME_DATA_SOURCE_CHECK_TIMEOUT_MS=15000  # per-source timeout, default 15 seconds
 ```
 
 Default behavior:
@@ -719,6 +720,7 @@ Default behavior:
 - If a webhook URL is configured, only alerts at or above the priority threshold are sent.
 - The default threshold is `high`, so routine healthy checks do not spam the channel.
 - Alerts are read-only. They do not update game data, commit code, push Git, or deploy.
+- Timeout or fetch failures are treated as review signals, not evidence that a code expired or a reward changed.
 
 ## Keyword Expansion Process
 
