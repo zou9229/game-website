@@ -1,7 +1,19 @@
 import { respData } from '@/lib/resp';
 import { getAllConfigs, filterPublicConfigs } from '@/modules/config/service';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
+const noStore = {
+  headers: {
+    'Cache-Control': 'no-store, no-cache, must-revalidate',
+  },
+};
+
 const publicKeys = [
+  'app_name',
+  'app_description',
+  'app_logo',
   'email_auth_enabled',
   'google_auth_enabled',
   'google_one_tap_enabled',
@@ -40,5 +52,5 @@ export async function GET() {
     configs.email_verification_enabled === 'true' && emailConfigured
       ? 'true'
       : 'false';
-  return respData(result);
+  return respData(result, noStore);
 }

@@ -48,7 +48,7 @@ export function Pricing({ title }: { title?: string } = {}) {
     useState<PaymentProvider | null>(null);
 
   useEffect(() => {
-    fetch('/api/config/public')
+    fetch('/api/config/public', { cache: 'no-store' })
       .then((r) => r.json())
       .then((res) => {
         if (res.code === 0) setConfigs(res.data || {});

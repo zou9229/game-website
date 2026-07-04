@@ -15,7 +15,7 @@ export function GoogleOneTap() {
 
   useEffect(() => {
     let cancelled = false;
-    fetch('/api/config/public')
+    fetch('/api/config/public', { cache: 'no-store' })
       .then((r) => r.json())
       .then((res) => {
         if (cancelled) return;
