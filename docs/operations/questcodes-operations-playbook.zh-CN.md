@@ -30,14 +30,14 @@ Quest Codes 不是“在线玩小游戏”的网站，而是 Roblox 攻略和兑
 
 当前阶段是：
 
-- 第一版可观察 MVP：约 90%
-- 运营自动化体系：约 58%
+- 第一版可观察 MVP：100%
+- 运营自动化体系：约 95%
 
 这两个数字不是矛盾。
 
-MVP 90% 的意思是：网站已经能上线观察真实数据。
+MVP 100% 的意思是：网站已经能上线观察真实数据，GSC/Bing、sitemap、llms.txt、核心页面、后台审计、source-check、Vertex AI 审核助手、Cloudflare 部署和定时检查链路都已具备。
 
-自动化 58% 的意思是：后台已有审计、source check、管理提示词，但还没有开放“全自动抓取并发布”。这是有意控制风险，不是漏做。
+自动化 95% 的意思是：系统已经能定时检查、记录快照、生成后台提醒，并支持 Vertex AI 辅助审核；剩下 5% 是“自动改页面并发布”，这一步暂时故意不开放，因为 Roblox 兑换码、奖励、tier、掉率、crafting 等事实一旦自动改错，会直接损害网站可信度。
 
 ## 3. 每天应该怎么运营
 
@@ -452,7 +452,7 @@ AI 生成页面强化建议或草稿，由 Codex 审核、改代码、build。
 4. 不编造游戏事实、奖励、掉率、tier 或 patch notes。
 5. 跑 pnpm build。
 6. 有改动则提交推送。
-7. 部署前问我确认。
+7. 低风险修复和 source-confirmed 日期更新可直接部署；涉及 GitHub Actions、认证、计费、全自动发布、数据库破坏性迁移时先确认。
 8. 告诉我 GSC 下一步该看什么。
 ```
 
@@ -498,14 +498,14 @@ AI 生成页面强化建议或草稿，由 Codex 审核、改代码、build。
 
 ## 16. 当前最推荐的下一步
 
-截至 2026-06-25：
+截至 2026-07-04：
 
-1. 先部署最近两个 commit，让线上 Codes 日期和后台向导更新。
-2. 继续观察 GSC 是否出现 impressions。
-3. 如果 GSC 有 query，优先强化已有页面。
-4. 如果 GSC 还没有数据，继续保持 Codes/Updates 新鲜。
-5. 轻量开始外链，不做垃圾外链。
-6. Vertex AI 暂不接自动发布，先规划成 review assistant。
+1. 保持 Codes / Updates 每天 source-check 新鲜。
+2. 观察 GSC 和 Bing 是否开始出现 impressions。
+3. 如果 GSC 有 query，优先强化已有页面，而不是盲目新建重复页。
+4. 如果 GSC 还没有数据，继续保持 Codes/Updates 新鲜，并轻量做外链。
+5. 后台 `Run source check` 和 `Run AI review` 用于辅助判断，不直接发布内容。
+6. Cloudflare 定时 source-check 已配置，下一步只需要看后台快照和外部搜索数据反馈。
 
 ## 17. Vertex AI Review Assistant 当前怎么用
 
@@ -555,3 +555,71 @@ AI 生成页面强化建议或草稿，由 Codex 审核、改代码、build。
 - 你可以消耗 Vertex AI 额度来提高运营效率。
 - 后台能更清楚地告诉你哪些可以改、哪些不能改。
 - 自动化体系继续推进，但不会牺牲内容可信度。
+
+## 18. Cloudflare 定时 Source Check
+
+当前线上 Worker 已配置每天运行一次 source-check：
+
+```text
+0 9 * * *  # UTC 09:00，中国时间 17:00
+```
+
+触发位置：
+
+- `wrangler.jsonc` 里的 `triggers.crons`
+- `src/worker.ts` 里的 `scheduled(...)`
+
+它会执行和后台 `Run source check` 相同的读取逻辑，并把结果作为 snapshot 写入数据库。
+
+它会做什么：
+
+- 抓取可信来源，检查当前 tracked active code term 是否还被来源提到。
+- 记录 `healthySources`、`attentionCount`、blocked / failed source。
+- 给 `/admin/game-data` 提供最新自动检查结果。
+- 如果后续配置外部 webhook，可以把高优先级提醒推到 Slack、Discord、飞书或通用 webhook。
+
+它不会做什么：
+
+- 不会自动改页面文件。
+- 不会自动把 code 改成 active / expired。
+- 不会自动改 reward、tier、drop rate、crafting cost、patch notes。
+- 不会 commit、push 或 deploy。
+
+为什么这样设计：
+
+自动化最安全的边界是“发现问题并生成审查信号”。真正改公开页面时，仍然需要 Codex 根据 7Deer skill 的规则，只发布来源确认的数据。
+
+外部 HTTP cron 备用入口：
+
+```text
+https://questcodes.com/api/cron/game-data/source-check
+```
+
+需要请求头二选一：
+
+```text
+Authorization: Bearer <CRON_SECRET>
+```
+
+或：
+
+```text
+x-cron-secret: <CRON_SECRET>
+```
+
+`CRON_SECRET` 只用于外部 HTTP 调用。Cloudflare 原生定时任务在 Worker 内部运行，不需要发送这个 header。
+
+可选配置：
+
+```text
+GAME_DATA_SOURCE_CHECK_TIMEOUT_MS=15000
+GAME_DATA_ALERT_WEBHOOK_URL=
+GAME_DATA_ALERT_WEBHOOK_FORMAT=generic
+GAME_DATA_ALERT_MIN_PRIORITY=high
+```
+
+注意：
+
+- source-check 超时或抓取失败只代表“需要人工复核”，不代表 code 已过期。
+- 如果 PC Gamer 确认但 PCGamesN / Fandom / Roblox API 被 403 拦截，页面应该保持保守展示。
+- 只有多个可信来源一致，且不涉及奖励、掉率、tier、crafting 等高风险事实时，才考虑低风险自动化。
