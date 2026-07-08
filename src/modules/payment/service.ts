@@ -11,6 +11,7 @@ import {
 import {
   PaymentStatus,
   PaymentType,
+  SubscriptionCycleType,
   type CheckoutSession,
   type PaymentEvent,
   type PaymentOrder,
@@ -255,8 +256,17 @@ export async function handleWebhook(params: {
   const eventType = event.eventType;
 
   // Route event to appropriate handler
-  if (eventType === 'checkout.success' || eventType === 'payment.success') {
+  if (eventType === 'checkout.success') {
     await handleCheckoutSuccess(session, params.provider);
+  } else if (eventType === 'payment.success') {
+    if (
+      session.paymentInfo?.subscriptionCycleType ===
+      SubscriptionCycleType.RENEWAL
+    ) {
+      await handleSubscriptionRenewal(session, params.provider);
+    } else {
+      await handleCheckoutSuccess(session, params.provider);
+    }
   } else if (eventType === 'subscribe.updated') {
     await handleSubscriptionUpdated(session, params.provider);
   } else if (eventType === 'subscribe.canceled') {
