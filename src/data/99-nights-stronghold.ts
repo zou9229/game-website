@@ -15,7 +15,7 @@ export type StrongholdSection = {
 };
 
 export const ninetyNineNightsStronghold = {
-  checkedAt: '2026-06-20',
+  checkedAt: '2026-07-09',
   summary:
     'Cultist Stronghold is a high-risk structure in 99 Nights in the Forest with repeatable raids, scaling levels, cultist waves, and diamond chest rewards. Use it after you have ranged damage, supplies, and a clear reason to risk the run.',
   sections: [
@@ -38,12 +38,12 @@ export const ninetyNineNightsStronghold = {
         {
           name: 'Fandom Cultist Stronghold',
           url: 'https://99-nights-in-the-forest.fandom.com/wiki/Cultist_Stronghold',
-          checkedAt: '2026-06-20',
+          checkedAt: '2026-07-09',
         },
         {
           name: 'Fandom Cultist',
           url: 'https://99-nights-in-the-forest.fandom.com/wiki/Cultist',
-          checkedAt: '2026-06-20',
+          checkedAt: '2026-07-09',
         },
       ],
     },
@@ -66,12 +66,12 @@ export const ninetyNineNightsStronghold = {
         {
           name: 'Fandom Cultist Stronghold',
           url: 'https://99-nights-in-the-forest.fandom.com/wiki/Cultist_Stronghold',
-          checkedAt: '2026-06-20',
+          checkedAt: '2026-07-09',
         },
         {
           name: 'Fandom Diamonds',
           url: 'https://99-nights-in-the-forest.fandom.com/wiki/Diamonds',
-          checkedAt: '2026-06-20',
+          checkedAt: '2026-07-09',
         },
       ],
     },
@@ -94,7 +94,7 @@ export const ninetyNineNightsStronghold = {
         {
           name: 'Fandom Cultist Stronghold',
           url: 'https://99-nights-in-the-forest.fandom.com/wiki/Cultist_Stronghold',
-          checkedAt: '2026-06-20',
+          checkedAt: '2026-07-09',
         },
         {
           name: 'Sportskeeda Level 4 guide',
@@ -122,17 +122,17 @@ export const ninetyNineNightsStronghold = {
         {
           name: 'Fandom Cultist Stronghold',
           url: 'https://99-nights-in-the-forest.fandom.com/wiki/Cultist_Stronghold',
-          checkedAt: '2026-06-20',
+          checkedAt: '2026-07-09',
         },
         {
           name: 'Fandom Cultist',
           url: 'https://99-nights-in-the-forest.fandom.com/wiki/Cultist',
-          checkedAt: '2026-06-20',
+          checkedAt: '2026-07-09',
         },
         {
           name: 'PC Gamer class tier list',
           url: 'https://www.pcgamer.com/roblox/99-nights-in-the-forest-classes/',
-          checkedAt: '2026-06-20',
+          checkedAt: '2026-07-09',
         },
       ],
     },

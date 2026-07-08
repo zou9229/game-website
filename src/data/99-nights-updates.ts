@@ -13,8 +13,52 @@ export type UpdateEntry = {
 };
 
 export const ninetyNineNightsUpdates = {
-  checkedAt: '2026-07-08',
+  checkedAt: '2026-07-09',
   entries: [
+    {
+      date: '2026-07-09',
+      type: 'guide-data-pass',
+      title: 'July 9 crafting, gems, and Stronghold source-review pass',
+      summary:
+        'Quest Codes rechecked the stale high-priority Crafting, Gems, and Stronghold pages, refreshed confirmed source dates, and made disputed crafting material counts explicit instead of forcing one number.',
+      details: [
+        'Crafting sources still confirmed the core bench, route, bandage, and late-game craft structure, but Farm Plot and Log Wall material counts differed across current source trails.',
+        'The Crafting page now shows the Farm Plot and Log Wall material disagreement directly so players can verify the in-game prompt before spending wood.',
+        'Gems kept PC Gamer and GamesRadar as the current code-reward source trail, removed an unconfirmed active-code source from that method, and added a conservative gameplay-route section backed by Fandom Diamonds and Stronghold sources.',
+        'Stronghold kept the same high-risk route guidance after rechecking Fandom Stronghold/Cultist/Diamonds and PC Gamer class context.',
+        'No invented reward amount, hidden drop rate, hourly farm rate, class tier claim, or patch-note claim was added from this pass.',
+      ],
+      sources: [
+        {
+          name: 'Fandom Crafting',
+          url: 'https://99-nights-in-the-forest.fandom.com/wiki/Crafting',
+        },
+        {
+          name: 'GamesRadar crafting recipes',
+          url: 'https://www.gamesradar.com/games/simulation/99-nights-in-the-forest-crafting-recipes-perks-bench-upgrade/',
+        },
+        {
+          name: 'Beebom crafting recipes',
+          url: 'https://beebom.com/99-nights-in-the-forest-crafting-recipes/',
+        },
+        {
+          name: 'Fandom Diamonds',
+          url: 'https://99-nights-in-the-forest.fandom.com/wiki/Diamonds',
+        },
+        {
+          name: 'Fandom Cultist Stronghold',
+          url: 'https://99-nights-in-the-forest.fandom.com/wiki/Cultist_Stronghold',
+        },
+        {
+          name: 'PC Gamer codes page',
+          url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-codes/',
+        },
+        {
+          name: 'GamesRadar codes page',
+          url: 'https://www.gamesradar.com/games/survival/99-nights-in-the-forest-codes/',
+        },
+      ],
+    },
     {
       date: '2026-07-08',
       type: 'code-check',

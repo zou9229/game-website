@@ -34,33 +34,45 @@ export type CraftingSection = {
 const fandomCraftingSource: CraftingSource = {
   name: 'Fandom Crafting',
   url: 'https://99-nights-in-the-forest.fandom.com/wiki/Crafting',
-  checkedAt: '2026-06-20',
+  checkedAt: '2026-07-09',
+};
+
+const gamesRadarCraftingSource: CraftingSource = {
+  name: 'GamesRadar crafting recipes',
+  url: 'https://www.gamesradar.com/games/simulation/99-nights-in-the-forest-crafting-recipes-perks-bench-upgrade/',
+  checkedAt: '2026-07-09',
+};
+
+const beebomCraftingSource: CraftingSource = {
+  name: 'Beebom crafting recipes',
+  url: 'https://beebom.com/99-nights-in-the-forest-crafting-recipes/',
+  checkedAt: '2026-07-09',
 };
 
 const pcGamerTipsSource: CraftingSource = {
   name: 'PC Gamer survival tips',
   url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-tips/',
-  checkedAt: '2026-06-20',
+  checkedAt: '2026-07-09',
 };
 
 const pcGamerBandagesSource: CraftingSource = {
   name: 'PC Gamer bandage guide',
   url: 'https://www.pcgamer.com/games/survival-crafting/roblox-99-nights-in-the-forest-bandages/',
-  checkedAt: '2026-06-20',
+  checkedAt: '2026-07-09',
 };
 
 const fandomItemsSource: CraftingSource = {
   name: 'Fandom Items',
   url: 'https://99-nights-in-the-forest.fandom.com/wiki/Items',
-  checkedAt: '2026-06-20',
+  checkedAt: '2026-07-09',
 };
 
 export const ninetyNineNightsCrafting = {
-  checkedAt: '2026-06-20',
+  checkedAt: '2026-07-09',
   summary:
     'Crafting in 99 Nights in the Forest decides how safely you can explore, defend camp, recover teammates, farm diamonds, and survive late-game objectives. This page focuses on priority order and source-checked key crafts rather than claiming a complete realtime recipe table.',
   sourceNote:
-    'Fandom provides the main crafting tier data. PC Gamer is used for route priority, bandage crafting, and practical survival context. Community and video sources are treated as demand signals unless they match stronger sources.',
+    'Fandom, GamesRadar, Beebom, and PC Gamer were rechecked for the July source pass. Some material counts differ between sources, so disputed entries are shown as source disagreements instead of a forced exact number.',
   items: [
     {
       name: 'Map',
@@ -71,7 +83,7 @@ export const ninetyNineNightsCrafting = {
       why: 'PC Gamer highlights the map as an early craft because it lets you plan routes beyond camp.',
       caution:
         'A map helps planning, but it does not make dangerous routes safe by itself.',
-      sources: [pcGamerTipsSource],
+      sources: [pcGamerTipsSource, gamesRadarCraftingSource, beebomCraftingSource],
     },
     {
       name: 'Compass',
@@ -82,7 +94,7 @@ export const ninetyNineNightsCrafting = {
       why: 'Fandom says the Compass shows direction information for the Fairy and missing children, which makes it a strong route-planning craft.',
       caution:
         'Craft it after stabilizing basic camp needs; it is a navigation tool, not combat protection.',
-      sources: [fandomCraftingSource, pcGamerTipsSource],
+      sources: [fandomCraftingSource, pcGamerTipsSource, gamesRadarCraftingSource, beebomCraftingSource],
     },
     {
       name: 'Sun Dial',
@@ -93,29 +105,35 @@ export const ninetyNineNightsCrafting = {
       why: 'Fandom says the Sun Dial shows how much time is left until day or night.',
       caution:
         'It is most useful when you actually return before night pressure becomes dangerous.',
-      sources: [fandomCraftingSource, pcGamerTipsSource],
+      sources: [fandomCraftingSource, pcGamerTipsSource, gamesRadarCraftingSource, beebomCraftingSource],
     },
     {
       name: 'Farm Plot',
       tier: 'tier-2',
       role: 'food',
       priority: 'early',
-      materials: ['20 Wood'],
-      why: 'Fandom lists Farm Plot as a crop source, and PC Gamer places farm plots before pushing deeper bench upgrades.',
+      materials: [
+        '10 Wood on GamesRadar/Beebom',
+        '20 Wood on Fandom table',
+      ],
+      why: 'Sources agree Farm Plot is an early crop-stability craft, but the visible material count differs across the current source trail.',
       caution:
-        'Do not spend all wood on farming if your campfire and base defense are still weak.',
-      sources: [fandomCraftingSource, pcGamerTipsSource],
+        'Verify the in-game craft prompt before spending wood; do not spend all wood on farming if campfire and base defense are still weak.',
+      sources: [fandomCraftingSource, gamesRadarCraftingSource, beebomCraftingSource, pcGamerTipsSource],
     },
     {
       name: 'Log Wall or Log Gate',
       tier: 'tier-2',
       role: 'base',
       priority: 'early',
-      materials: ['20 Wood'],
-      why: 'Fandom lists both as base fortification crafts that can be placed more than once.',
+      materials: [
+        'Log Wall: 12 Wood on GamesRadar',
+        'Log Wall/Gate: 20 Wood on Fandom table',
+      ],
+      why: 'Sources agree Log Wall and Log Gate are base fortification crafts, but Log Wall material counts differ between current sources.',
       caution:
-        'Walls help only if you still manage wood, fire, and enemy pathing carefully.',
-      sources: [fandomCraftingSource],
+        'Verify the in-game craft prompt before committing wood; walls help only if you still manage fire, pathing, and return timing carefully.',
+      sources: [fandomCraftingSource, gamesRadarCraftingSource],
     },
     {
       name: 'Crafting Bench Tier 3',
@@ -126,7 +144,7 @@ export const ninetyNineNightsCrafting = {
       why: 'Unlocks Tier 3 crafts such as Crock Pot, Biofuel Processor, Torch, Lightning Rod, and Good Bed.',
       caution:
         'Upgrade after basic map and survival needs; rushing bench upgrades without supplies can strand the route.',
-      sources: [fandomCraftingSource, pcGamerTipsSource],
+      sources: [fandomCraftingSource, pcGamerTipsSource, gamesRadarCraftingSource, beebomCraftingSource],
     },
     {
       name: 'Crock Pot',
@@ -137,7 +155,7 @@ export const ninetyNineNightsCrafting = {
       why: 'Fandom says the Crock Pot combines food to make stew, and PC Gamer treats it as part of the Tier 3 survival route.',
       caution:
         'Food recipes and seasonal dishes can change; this page does not claim a complete cooking list.',
-      sources: [fandomCraftingSource, pcGamerTipsSource],
+      sources: [fandomCraftingSource, pcGamerTipsSource, gamesRadarCraftingSource, beebomCraftingSource],
     },
     {
       name: 'Biofuel Processor',
@@ -148,7 +166,7 @@ export const ninetyNineNightsCrafting = {
       why: 'Fandom says it turns logs, pelts, and some food into biofuel, making it relevant when fuel pressure increases.',
       caution:
         'Do not convert scarce food or materials blindly; fuel planning depends on your route.',
-      sources: [fandomCraftingSource],
+      sources: [fandomCraftingSource, gamesRadarCraftingSource, beebomCraftingSource],
     },
     {
       name: 'Lightning Rod',
@@ -159,7 +177,7 @@ export const ninetyNineNightsCrafting = {
       why: 'Fandom lists Lightning Rod as a storm safety craft, and PC Gamer calls it important before rough storms.',
       caution:
         'It does not replace safe timing; storms can still disrupt routes and visibility.',
-      sources: [fandomCraftingSource, pcGamerTipsSource],
+      sources: [fandomCraftingSource, pcGamerTipsSource, gamesRadarCraftingSource, beebomCraftingSource],
     },
     {
       name: 'Bandage',
@@ -175,7 +193,7 @@ export const ninetyNineNightsCrafting = {
       why: 'PC Gamer says bandages are a priority recovery item for revives and can be crafted at the Anvil / Tool Workshop route.',
       caution:
         'Costs can matter, and PC Gamer notes the resource cost increases after crafts. Save recovery items for revives and emergencies.',
-      sources: [pcGamerBandagesSource, pcGamerTipsSource],
+      sources: [pcGamerBandagesSource, pcGamerTipsSource, beebomCraftingSource],
     },
     {
       name: 'Ammo Crate',
@@ -186,7 +204,7 @@ export const ninetyNineNightsCrafting = {
       why: 'Fandom lists Ammo Crate as a Tier 4 craft that lets players buy ammo with Scrap.',
       caution:
         'This only matters once you are using ranged weapons enough to justify the gem cost.',
-      sources: [fandomCraftingSource],
+      sources: [fandomCraftingSource, gamesRadarCraftingSource, beebomCraftingSource],
     },
     {
       name: 'Oil Drill',
@@ -197,7 +215,7 @@ export const ninetyNineNightsCrafting = {
       why: 'Fandom lists Oil Drill as a Tier 4 craft that periodically drills for oil barrels.',
       caution:
         'The Cultist Gem cost means you should connect this decision to Stronghold or other gem-fragment routes.',
-      sources: [fandomCraftingSource, fandomItemsSource],
+      sources: [fandomCraftingSource, fandomItemsSource, gamesRadarCraftingSource, beebomCraftingSource],
     },
     {
       name: 'Teleporter',
@@ -208,7 +226,7 @@ export const ninetyNineNightsCrafting = {
       why: 'Fandom lists Teleporter as a Tier 4 craft for teleporting across the map when multiple teleporters are placed.',
       caution:
         'Only craft it when your map route is developed enough to benefit from fixed travel points.',
-      sources: [fandomCraftingSource, fandomItemsSource],
+      sources: [fandomCraftingSource, fandomItemsSource, gamesRadarCraftingSource, beebomCraftingSource],
     },
     {
       name: 'Respawn Capsule',
@@ -219,7 +237,7 @@ export const ninetyNineNightsCrafting = {
       why: 'Fandom lists Respawn Capsule as a Tier 5 craft that can automatically respawn a recently dead player after charging.',
       caution:
         'Forest Gem requirements push this into late-game planning, not early survival.',
-      sources: [fandomCraftingSource, fandomItemsSource],
+      sources: [fandomCraftingSource, fandomItemsSource, gamesRadarCraftingSource, beebomCraftingSource],
     },
   ] satisfies CraftingItem[],
   sections: [

@@ -30,7 +30,7 @@ const faqs = [
   {
     question: 'How do I get gems in 99 Nights in the Forest?',
     answer:
-      'The best source-checked route is to redeem current gem or diamond codes first, then use confirmed badge rewards as a secondary source.',
+      'The best source-checked route is to redeem current gem or diamond codes first, then use confirmed badge rewards, daily play routes, and Stronghold-linked chest routes as slower secondary options.',
   },
   {
     question: 'Which 99 Nights in the Forest codes give gems?',
@@ -169,8 +169,9 @@ export default async function GemsPage({
           </h1>
           <p className="text-muted-foreground mt-4 text-lg leading-8">
             A source-checked guide to gem and diamond rewards in 99 Nights in
-            the Forest: current codes, special rewards, badge routes, class
-            spending, and the community claims we do not treat as confirmed.
+            the Forest: current codes, special rewards, badge routes, gameplay
+            routes, class spending, and the community claims we do not treat as
+            confirmed.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
@@ -199,7 +200,8 @@ export default async function GemsPage({
             <p>{ninetyNineNightsGems.note}</p>
             <p>
               The safest action is to redeem checked codes first, then save for
-              classes instead of spending before you know your route.
+              classes or route upgrades instead of spending before you know your
+              plan.
             </p>
           </CardContent>
         </Card>

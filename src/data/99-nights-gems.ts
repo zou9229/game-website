@@ -6,7 +6,7 @@ export type GemSource = {
 
 export type GemMethod = {
   title: string;
-  type: 'code' | 'badge' | 'spending' | 'community-signal';
+  type: 'code' | 'badge' | 'gameplay' | 'spending' | 'community-signal';
   confidence: 'high' | 'medium' | 'low';
   summary: string;
   details: string[];
@@ -14,9 +14,9 @@ export type GemMethod = {
 };
 
 export const ninetyNineNightsGems = {
-  checkedAt: '2026-06-20',
+  checkedAt: '2026-07-09',
   note:
-    'Public guides use both gems and diamonds for the 99 Nights in the Forest premium currency. Quest Codes keeps the wording attached to each source.',
+    'Public guides use both gems and diamonds for the 99 Nights in the Forest premium currency. Quest Codes keeps the wording attached to each source and only treats code rewards as current when the checked code sources still match.',
   methods: [
     {
       title: 'Redeem current gem and diamond codes',
@@ -33,17 +33,12 @@ export const ninetyNineNightsGems = {
         {
           name: 'PC Gamer codes page',
           url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-codes/',
-          checkedAt: '2026-06-20',
+          checkedAt: '2026-07-09',
         },
         {
           name: 'GamesRadar codes page',
           url: 'https://www.gamesradar.com/games/survival/99-nights-in-the-forest-codes/',
-          checkedAt: '2026-06-20',
-        },
-        {
-          name: 'Pocket Gamer codes page',
-          url: 'https://www.pocketgamer.com/roblox/99-nights-in-the-forest-codes/',
-          checkedAt: '2026-06-20',
+          checkedAt: '2026-07-09',
         },
       ],
     },
@@ -62,7 +57,31 @@ export const ninetyNineNightsGems = {
         {
           name: 'PC Gamer Humiliation Badge guide',
           url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-secret-action-humiliation-badge/',
-          checkedAt: '2026-06-20',
+          checkedAt: '2026-07-09',
+        },
+      ],
+    },
+    {
+      title: 'Use source-checked in-game diamond routes after codes',
+      type: 'gameplay',
+      confidence: 'medium',
+      summary:
+        'Fandom lists gameplay routes such as daily quests, Diamond Chests, Golden or Ruby Chests, badges, codes, and purchases, but the safest page treatment is route-level confirmation rather than drop-rate claims.',
+      details: [
+        'Stronghold can connect to Diamond Chest planning, but it should be treated as a prepared combat route instead of a beginner farm.',
+        'Daily quests and chest routes require actual play time, so they are slower than redeeming working codes.',
+        'Quest Codes does not publish exact chest drop rates or hourly diamond farm rates without stronger patch-specific proof.',
+      ],
+      sources: [
+        {
+          name: 'Fandom Diamonds',
+          url: 'https://99-nights-in-the-forest.fandom.com/wiki/Diamonds',
+          checkedAt: '2026-07-09',
+        },
+        {
+          name: 'Fandom Cultist Stronghold',
+          url: 'https://99-nights-in-the-forest.fandom.com/wiki/Cultist_Stronghold',
+          checkedAt: '2026-07-09',
         },
       ],
     },
@@ -81,12 +100,12 @@ export const ninetyNineNightsGems = {
         {
           name: 'PC Gamer tips guide',
           url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-tips/',
-          checkedAt: '2026-06-20',
+          checkedAt: '2026-07-09',
         },
         {
           name: 'GamesRadar classes guide',
           url: 'https://www.gamesradar.com/games/simulation/99-nights-in-the-forest-classes-all/',
-          checkedAt: '2026-06-20',
+          checkedAt: '2026-07-09',
         },
       ],
     },
