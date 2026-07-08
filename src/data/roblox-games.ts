@@ -61,12 +61,12 @@ export const robloxGames: RobloxGame[] = [
     genre: 'Survival',
     maxPlayers: 25,
     createdAt: '2025-03-04',
-    updatedAt: '2026-07-01',
+    updatedAt: '2026-07-04',
     stats: {
-      playing: 393516,
+      playing: 343531,
       visits: 27834841022,
       favorites: 8438845,
-      checkedAt: '2026-07-02',
+      checkedAt: '2026-07-08',
     },
     pages: [
       {
@@ -201,19 +201,19 @@ export const robloxGames: RobloxGame[] = [
         code: 'forestwakesup26',
         reward: '15 gems and 3 random flames',
         status: 'active',
-        note: 'Matched by PC Gamer in the July 4 source check; GamesRadar last confirmed it in the July 3 pass, while PCGamesN and the community wiki remain in the manual review queue because the command-line pass could not confirm them.',
+        note: 'Matched by PC Gamer and GamesRadar in the July 8 admin source check; PCGamesN did not confirm this term in that pass, and the community wiki remains in the manual review queue because it was blocked.',
         sources: [
           {
             name: 'PC Gamer',
             url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-codes/',
             status: 'listed-active',
-            checkedAt: '2026-07-04',
+            checkedAt: '2026-07-08',
           },
           {
             name: 'GamesRadar',
             url: 'https://www.gamesradar.com/games/survival/99-nights-in-the-forest-codes/',
             status: 'listed-active',
-            checkedAt: '2026-07-03',
+            checkedAt: '2026-07-08',
           },
           {
             name: 'Fandom Codes',
@@ -227,25 +227,25 @@ export const robloxGames: RobloxGame[] = [
         code: 'afterparty',
         reward: '15 gems',
         status: 'active',
-        note: 'Matched by PC Gamer in the July 4 source check; GamesRadar last confirmed it in the July 3 pass, PCGamesN last confirmed it in the July 2 pass, and blocked sources remain in manual review.',
+        note: 'Matched by PC Gamer, PCGamesN, and GamesRadar in the July 8 admin source check. Blocked sources and high-risk status terms remain in manual review, so the reward and active label were not changed.',
         sources: [
           {
             name: 'PC Gamer',
             url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-codes/',
             status: 'listed-active',
-            checkedAt: '2026-07-04',
+            checkedAt: '2026-07-08',
           },
           {
             name: 'PCGamesN',
             url: 'https://www.pcgamesn.com/99-nights-in-the-forest/codes',
             status: 'listed-active',
-            checkedAt: '2026-07-02',
+            checkedAt: '2026-07-08',
           },
           {
             name: 'GamesRadar',
             url: 'https://www.gamesradar.com/games/survival/99-nights-in-the-forest-codes/',
             status: 'listed-active',
-            checkedAt: '2026-07-03',
+            checkedAt: '2026-07-08',
           },
           {
             name: 'Fandom Codes',
