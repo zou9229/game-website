@@ -338,7 +338,7 @@ Indexing issues:
 
 ## 12. AdSense 什么时候接
 
-当前建议：可以开始申请 Google AdSense，但不要在审核通过前开启 Auto ads。
+当前建议：可以开始申请 Google AdSense。提交审核时需要填入 Publisher ID 并开启 `Enable Auto ads`，让 Google 能检测到 AdSense code；审核通过前不要再额外加手动广告位或 affiliate 块。
 
 申请前应满足：
 
@@ -361,8 +361,9 @@ Indexing issues:
 1. 先去 AdSense 添加 `questcodes.com` 并提交审核。
 2. 审核期间保持网站稳定，继续更新 Codes / Updates，不要大幅改版。
 3. 拿到 Publisher ID 后，在 `/admin/settings` -> `Analytics` -> `Google AdSense` 填入。
-4. 审核未通过前，`Enable Auto ads` 保持关闭。
-5. 审核通过后，再打开 `Enable Auto ads`，先观察 3-7 天页面体验和收入数据。
+4. 打开 `Enable Auto ads`，让首页、`/codes`、`/roblox/...` 公开内容页加载 AdSense code。
+5. 审核期间保持网站稳定，不再加手动广告位、不改广告布局。
+6. 审核通过后，先观察 3-7 天页面体验和收入数据，再决定是否增加手动 ad slot。
 
 暂不优先接入：
 

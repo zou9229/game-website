@@ -982,6 +982,7 @@ After approval:
 - Start with restrained placements.
 - Avoid aggressive interstitials.
 - Keep code tables and guide answers easy to read.
+- Do not add manual ad slots until the initial AdSense review is complete.
 
 Why this matters:
 
