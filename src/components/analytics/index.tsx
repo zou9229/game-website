@@ -1,6 +1,5 @@
 import { getAllConfigs } from '@/modules/config/service';
 
-import { GoogleAdSense } from './google-adsense';
 import { GoogleAnalytics } from './google-analytics';
 import { Plausible } from './plausible';
 
@@ -14,22 +13,16 @@ type ConfigMap = Record<string, string>;
 export async function Analytics({ configs }: { configs?: ConfigMap } = {}) {
   const resolvedConfigs = configs ?? (await getAllConfigs());
   const gaId = resolvedConfigs.google_analytics_id?.trim();
-  const adsenseEnabled = resolvedConfigs.google_adsense_enabled === 'true';
-  const adsensePublisherId =
-    resolvedConfigs.google_adsense_publisher_id?.trim();
   const plausibleDomain = resolvedConfigs.plausible_domain?.trim();
   const plausibleSrc = resolvedConfigs.plausible_src?.trim();
 
-  if (!gaId && !plausibleDomain && (!adsenseEnabled || !adsensePublisherId)) {
+  if (!gaId && !plausibleDomain) {
     return null;
   }
 
   return (
     <>
       {gaId ? <GoogleAnalytics measurementId={gaId} /> : null}
-      {adsenseEnabled && adsensePublisherId ? (
-        <GoogleAdSense publisherId={adsensePublisherId} />
-      ) : null}
       {plausibleDomain ? (
         <Plausible domain={plausibleDomain} src={plausibleSrc || undefined} />
       ) : null}

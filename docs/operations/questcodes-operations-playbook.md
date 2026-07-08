@@ -970,6 +970,13 @@ Apply when:
 - Site is not visually empty.
 - No broken admin/public routes.
 
+Current implementation:
+
+- Admin settings already include Google AdSense Publisher ID and Auto ads toggle.
+- `/ads.txt` is generated after a valid Publisher ID is configured.
+- Auto ads load only on public content entry points: homepage, `/codes`, and `/roblox/...`.
+- Admin, auth, account/settings, and legal pages should not load AdSense.
+
 After approval:
 
 - Start with restrained placements.

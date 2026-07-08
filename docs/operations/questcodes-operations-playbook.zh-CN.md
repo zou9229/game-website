@@ -338,7 +338,7 @@ Indexing issues:
 
 ## 12. AdSense 什么时候接
 
-不要急着开广告。
+当前建议：可以开始申请 Google AdSense，但不要在审核通过前开启 Auto ads。
 
 申请前应满足：
 
@@ -348,6 +348,27 @@ Indexing issues:
 - 主要页面无报错
 - GSC 至少有初步 indexed / impressions
 - 页面阅读体验不被广告破坏
+
+当前工程状态：
+
+- 后台已有 `Google AdSense` 配置项。
+- 填入 Publisher ID 后，`/ads.txt` 会自动生成。
+- `Enable Auto ads` 打开后，广告脚本只会加载在首页、`/codes`、`/roblox/...` 公开内容页。
+- 后台、登录页、设置页、法律页不加载 AdSense，避免污染审核和用户体验。
+
+推荐接入顺序：
+
+1. 先去 AdSense 添加 `questcodes.com` 并提交审核。
+2. 审核期间保持网站稳定，继续更新 Codes / Updates，不要大幅改版。
+3. 拿到 Publisher ID 后，在 `/admin/settings` -> `Analytics` -> `Google AdSense` 填入。
+4. 审核未通过前，`Enable Auto ads` 保持关闭。
+5. 审核通过后，再打开 `Enable Auto ads`，先观察 3-7 天页面体验和收入数据。
+
+暂不优先接入：
+
+- Ezoic / Mediavine / Raptive：通常需要更高流量门槛或更复杂审核，新站不适合优先。
+- NordVPN 这类泛 VPN affiliate：当前页面意图是 Roblox codes / guides，强塞 VPN 会降低信任。
+- Roblox gift card / gaming accessories affiliate：可以后续做，但要等有真实流量和对应购买意图页面。
 
 为什么：
 
