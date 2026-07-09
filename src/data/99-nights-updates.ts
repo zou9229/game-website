@@ -5,7 +5,7 @@ export type UpdateSource = {
 
 export type UpdateEntry = {
   date: string;
-  type: 'code-check' | 'guide-data-pass' | 'roblox-page-update';
+  type: 'code-check' | 'guide-data-pass' | 'page-build' | 'roblox-page-update';
   title: string;
   summary: string;
   details: string[];
@@ -15,6 +15,37 @@ export type UpdateEntry = {
 export const ninetyNineNightsUpdates = {
   checkedAt: '2026-07-09',
   entries: [
+    {
+      date: '2026-07-09',
+      type: 'page-build',
+      title: 'July 9 GSC-driven Pelt Trader page pass',
+      summary:
+        'Quest Codes added a Pelt Trader page after Google Search Console showed impressions for Pelt Trader, Medkit, and Wolf Pelt queries.',
+      details: [
+        'The new page targets a distinct long-tail intent instead of expanding the broad Roblox or generic codes keywords.',
+        'Wolf Pelt, Medkit, Bandage, and Pelt Trader claims are separated so a Medkit search does not become an unsupported trader-reward claim.',
+        'The page links back to Bandages, Crafting, Survival Guide, Map, Missing Kids, and Stronghold for route planning.',
+        'No trader drop rate, hidden trader refresh rule, guaranteed Medkit trade, or invented reward table was added from this pass.',
+      ],
+      sources: [
+        {
+          name: 'Fandom Pelt Trader',
+          url: 'https://99-nights-in-the-forest.fandom.com/wiki/Pelt_Trader',
+        },
+        {
+          name: 'Fandom Wolf Pelt',
+          url: 'https://99-nights-in-the-forest.fandom.com/wiki/Wolf_Pelt',
+        },
+        {
+          name: 'Fandom Medkit',
+          url: 'https://99-nights-in-the-forest.fandom.com/wiki/Medkit',
+        },
+        {
+          name: 'PC Gamer bandage guide',
+          url: 'https://www.pcgamer.com/games/survival-crafting/roblox-99-nights-in-the-forest-bandages/',
+        },
+      ],
+    },
     {
       date: '2026-07-09',
       type: 'guide-data-pass',

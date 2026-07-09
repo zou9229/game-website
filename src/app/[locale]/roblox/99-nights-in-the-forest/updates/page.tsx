@@ -61,6 +61,7 @@ const faqs = [
 const typeLabels = {
   'code-check': 'Code check',
   'guide-data-pass': 'Guide data pass',
+  'page-build': 'Page build',
   'roblox-page-update': 'Roblox metadata',
 };
 

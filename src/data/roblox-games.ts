@@ -126,6 +126,13 @@ export const robloxGames: RobloxGame[] = [
         status: 'live',
       },
       {
+        title: 'Pelt Trader',
+        href: '/roblox/99-nights-in-the-forest/pelt-trader',
+        description:
+          'Pelt Trader route decisions for Wolf Pelt, Medkit recovery, bandage materials, and source-checked trade cautions.',
+        status: 'live',
+      },
+      {
         title: 'Badges',
         href: '/roblox/99-nights-in-the-forest/badges',
         description:

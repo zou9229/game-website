@@ -69,6 +69,13 @@ export const seoKeywords: Record<string, string[]> = {
     'how to craft bandages in 99 nights in the forest',
     '99 nights in the forest bandages',
   ],
+  ninetyNineNightsPeltTrader: [
+    '99 nights in the forest pelt trader',
+    '99 nights pelt trader medkit',
+    '99 nights pelt trader wolf pelt',
+    '99 nights in the forest wolf pelt',
+    '99 nights medkit pelt trader',
+  ],
   ninetyNineNightsBadges: [
     '99 nights in the forest badges',
     '99 nights badge guide',

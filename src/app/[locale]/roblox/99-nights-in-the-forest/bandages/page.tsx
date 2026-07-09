@@ -104,6 +104,10 @@ const relatedPages = [
     title: 'Crafting bench and recipes',
   },
   {
+    href: '/roblox/99-nights-in-the-forest/pelt-trader',
+    title: 'Pelt Trader and Wolf Pelt',
+  },
+  {
     href: '/roblox/99-nights-in-the-forest/survival-guide',
     title: 'Survival guide',
   },

@@ -78,6 +78,7 @@ const pageGroups = [
       'Crafting',
       'Crafting Bench 5',
       'Bandages',
+      'Pelt Trader',
       'Gem of the Forest',
       'Forest Gem Fragments',
     ],

@@ -9,6 +9,7 @@ import { ninetyNineNightsForestGemFragments } from '@/data/99-nights-forest-gem-
 import { ninetyNineNightsGems } from '@/data/99-nights-gems';
 import { ninetyNineNightsMapGuide } from '@/data/99-nights-map';
 import { ninetyNineNightsMissingKids } from '@/data/99-nights-missing-kids';
+import { ninetyNineNightsPeltTrader } from '@/data/99-nights-pelt-trader';
 import { ninetyNineNightsStronghold } from '@/data/99-nights-stronghold';
 import { ninetyNineNightsSurvivalGuide } from '@/data/99-nights-survival-guide';
 import { ninetyNineNightsTamingFlute } from '@/data/99-nights-taming-flute';
@@ -92,6 +93,15 @@ export const ninetyNineNightsFreshnessEntries: FreshnessEntry[] = [
     cadenceDays: 7,
     owner: 'manual-review',
     note: 'Recovery mechanics and crafting costs need review after health or revive changes.',
+  },
+  {
+    title: 'Pelt Trader',
+    href: '/roblox/99-nights-in-the-forest/pelt-trader',
+    kind: 'guide',
+    checkedAt: ninetyNineNightsPeltTrader.checkedAt,
+    cadenceDays: 14,
+    owner: 'manual-review',
+    note: 'Pelt Trader, Wolf Pelt, and Medkit claims should stay tied to source tables or in-game confirmation.',
   },
   {
     title: 'Gems',

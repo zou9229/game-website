@@ -14,6 +14,7 @@ const priorityPageTitles = [
   'Crafting',
   'Crafting Bench 5',
   'Bandages',
+  'Pelt Trader',
   'Classes',
   'Class Tier List',
   'Animals',
