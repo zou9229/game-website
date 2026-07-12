@@ -98,6 +98,10 @@ export const seoKeywords: Record<string, string[]> = {
   ],
   ninetyNineNightsClasses: [
     '99 nights in the forest classes',
+    '99 nights in the forest roblox classes list',
+    'all the classes in 99 nights in the forest',
+    '99 nights in the forest all classes list',
+    '99 nights in the forest assassin class',
     '99 nights best classes',
     '99 nights class guide',
   ],

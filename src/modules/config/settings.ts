@@ -886,10 +886,10 @@ export function getSettings(): Setting[] {
     },
     {
       name: 'google_adsense_enabled',
-      title: 'Enable Auto ads',
+      title: 'Load AdSense script',
       type: 'switch',
       defaultValue: 'false',
-      tip: 'Enable only after AdSense has approved the site. ads.txt is generated whenever Publisher ID is configured.',
+      tip: 'Enable during site review so Google can verify the script. Auto ads are controlled separately in the AdSense dashboard. ads.txt is generated whenever Publisher ID is configured.',
       group: 'google_adsense',
       tab: 'analytics',
     },

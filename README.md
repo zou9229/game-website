@@ -67,9 +67,10 @@ does not scrape external sites or publish content automatically.
 Google Analytics and Google AdSense are configured from `/admin/settings` under
 the Analytics tab. Google Analytics uses the GA4 Measurement ID. AdSense uses a
 Publisher ID (`ca-pub-...` or `pub-...`), generates `/ads.txt`, and only injects
-Auto ads when the AdSense switch is enabled. Keep Auto ads disabled until the
-site is approved and has enough indexed content to avoid hurting early SEO
-quality.
+the AdSense verification/ads script when its switch is enabled. Enable the
+script during AdSense site review; control Auto ads separately in the AdSense
+dashboard after approval. Keep intrusive formats disabled while early search
+traffic and user engagement are still being measured.
 
 ## Content Strategy
 

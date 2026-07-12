@@ -153,11 +153,10 @@ const relatedGuides = [
   },
 ];
 
-const faqs = [
+const buildFaqs = (latestCodeCheckedAt: string) => [
   {
     question: 'What are the active 99 Nights in the Forest codes?',
-    answer:
-      'As of July 2, 2026, forestwakesup26 and afterparty are listed as active by PC Gamer and GamesRadar. PCGamesN confirmed afterparty but not forestwakesup26, Fandom was blocked, and Roblox metadata was confirmed separately, so conflicting labels stay under manual review.',
+    answer: `As of ${latestCodeCheckedAt}, PC Gamer still lists forestwakesup26 and afterparty. Other sources were blocked or unavailable in the latest command-line pass, so rewards and status labels remain conservative until manual review.`,
   },
   {
     question: 'How do I redeem 99 Nights in the Forest codes?',
@@ -274,6 +273,7 @@ export default async function CodesPage({
     },
     { name: 'Codes', item: canonical },
   ]);
+  const faqs = buildFaqs(latestCodeCheckedAt);
   const faqSchema = buildFAQSchema(faqs);
   const howToSchema = buildHowToSchema({
     name: 'How to redeem 99 Nights in the Forest codes',

@@ -456,7 +456,7 @@
       "vertex_ai_service_account_json": "Service Account JSON",
       "google_analytics_id": "Measurement ID",
       "google_adsense_publisher_id": "Publisher ID",
-      "google_adsense_enabled": "启用 Auto ads",
+      "google_adsense_enabled": "加载 AdSense 验证/广告脚本",
       "plausible_domain": "域名",
       "plausible_src": "脚本地址",
       "crisp_enabled": "启用 Crisp",

@@ -208,13 +208,13 @@ export const robloxGames: RobloxGame[] = [
         code: 'forestwakesup26',
         reward: '15 gems and 3 random flames',
         status: 'active',
-        note: 'Matched by PC Gamer and GamesRadar in the July 8 admin source check; PCGamesN did not confirm this term in that pass, and the community wiki remains in the manual review queue because it was blocked.',
+        note: 'PC Gamer still matched this term in the July 12 source check. GamesRadar last confirmed it on July 8; PCGamesN and the community wiki remain in the manual review queue because the latest command-line check was blocked.',
         sources: [
           {
             name: 'PC Gamer',
             url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-codes/',
             status: 'listed-active',
-            checkedAt: '2026-07-08',
+            checkedAt: '2026-07-12',
           },
           {
             name: 'GamesRadar',
@@ -234,13 +234,13 @@ export const robloxGames: RobloxGame[] = [
         code: 'afterparty',
         reward: '15 gems',
         status: 'active',
-        note: 'Matched by PC Gamer, PCGamesN, and GamesRadar in the July 8 admin source check. Blocked sources and high-risk status terms remain in manual review, so the reward and active label were not changed.',
+        note: 'PC Gamer still matched this term in the July 12 source check. PCGamesN and GamesRadar last confirmed it on July 8; blocked sources and high-risk status terms remain in manual review, so the reward and active label were not changed.',
         sources: [
           {
             name: 'PC Gamer',
             url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-codes/',
             status: 'listed-active',
-            checkedAt: '2026-07-08',
+            checkedAt: '2026-07-12',
           },
           {
             name: 'PCGamesN',

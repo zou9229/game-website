@@ -74,15 +74,15 @@ export async function generateMetadata({
   );
 
   return {
-    title: `99 Nights in the Forest Classes (${monthYear})`,
+    title: `All 99 Nights in the Forest Classes List (${monthYear})`,
     description:
-      'A checked 99 Nights in the Forest classes reference with tier groups, starter picks, solo recommendations, and co-op support choices.',
+      'All 99 Nights in the Forest Roblox classes in one checked list, with tier groups, starter picks, solo recommendations, and co-op choices.',
     keywords: seoKeywords.ninetyNineNightsClasses,
     alternates: {
       canonical,
     },
     openGraph: {
-      title: `99 Nights in the Forest Classes (${monthYear})`,
+      title: `All 99 Nights in the Forest Classes List (${monthYear})`,
       description:
         'Compare 99 Nights in the Forest classes by tier and pick your next diamond unlock.',
       url: canonical,
@@ -112,6 +112,14 @@ export default async function ClassesPage({
     { name: 'Classes', item: pageUrl },
   ]);
   const faqSchema = buildFAQSchema(faqs);
+  const allClasses = ninetyNineNightsClasses.tiers
+    .flatMap((tier) =>
+      tier.classes.map((className) => ({
+        className,
+        tier: tier.label,
+      }))
+    )
+    .sort((a, b) => a.className.localeCompare(b.className));
   const videoGameSchema = buildVideoGameSchema({
     name: game.name,
     description: game.description,
@@ -153,12 +161,12 @@ export default async function ClassesPage({
           </div>
           <div className="space-y-4">
             <h1 className="max-w-4xl text-4xl font-bold tracking-tight sm:text-5xl">
-              99 Nights in the Forest Classes
+              All 99 Nights in the Forest Classes List
             </h1>
             <p className="text-muted-foreground max-w-3xl text-lg">
-              Compare the current class tiers, starter choices, solo targets,
-              and co-op support picks before spending diamonds in 99 Nights in
-              the Forest.
+              Browse every class name in our checked Roblox classes list, then
+              compare tier groups, starter choices, solo targets, and co-op
+              support picks before spending diamonds.
             </p>
           </div>
           <div className="flex flex-wrap gap-3">
@@ -220,6 +228,30 @@ export default async function ClassesPage({
             </CardContent>
           </Card>
         ))}
+      </section>
+
+      <section className="space-y-4">
+        <div>
+          <h2 className="text-2xl font-semibold tracking-tight">
+            All classes in 99 Nights in the Forest
+          </h2>
+          <p className="text-muted-foreground mt-2 max-w-3xl">
+            This alphabetical list contains {allClasses.length} class names from
+            the source-checked class groups dated{' '}
+            {ninetyNineNightsClasses.checkedAt}. Tier labels summarize the cited
+            guide and are not official Roblox balance notes.
+          </p>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {allClasses.map(({ className, tier }) => (
+            <Card key={className}>
+              <CardContent className="flex items-center justify-between gap-3 py-4">
+                <span className="font-medium">{className}</span>
+                <Badge variant="outline">{tier}</Badge>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
       </section>
 
       <section className="space-y-4">
