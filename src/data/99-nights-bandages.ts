@@ -31,19 +31,19 @@ export type BandageMethod = {
 const pcGamerBandageSource: BandageSource = {
   name: 'PC Gamer bandage guide',
   url: 'https://www.pcgamer.com/games/survival-crafting/roblox-99-nights-in-the-forest-bandages/',
-  checkedAt: '2026-07-01',
+  checkedAt: '2026-07-13',
 };
 
 const pcGamerReviveSource: BandageSource = {
   name: 'PC Gamer revive guide',
   url: 'https://www.pcgamer.com/games/survival-crafting/roblox-99-nights-in-the-forest-revive/',
-  checkedAt: '2026-07-01',
+  checkedAt: '2026-07-13',
 };
 
 const pcGamerTipsSource: BandageSource = {
   name: 'PC Gamer survival tips',
   url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-tips/',
-  checkedAt: '2026-07-01',
+  checkedAt: '2026-07-13',
 };
 
 const fandomBandageSource: BandageSource = {
@@ -61,15 +61,15 @@ const fandomMedkitSource: BandageSource = {
 const beebomCraftingSource: BandageSource = {
   name: 'Beebom crafting recipes',
   url: 'https://beebom.com/99-nights-in-the-forest-crafting-recipes/',
-  checkedAt: '2026-07-01',
+  checkedAt: '2026-07-13',
 };
 
 export const ninetyNineNightsBandages = {
-  checkedAt: '2026-07-01',
+  checkedAt: '2026-07-13',
   summary:
     'Bandages are a recovery and revive item in 99 Nights in the Forest. The checked route is to find the Tool Workshop / Anvil, select the Bandage recipe, and craft it with Rabbit Foot and Wolf Pelt materials.',
   sourceNote:
-    'PC Gamer is used for the practical Anvil route, requirements, cooldown, and revive handling. Beebom is used to cross-check the Tool Workshop context. Fandom remains an auxiliary source from the previous manual pass because it was blocked by the command-line check on July 1.',
+    'PC Gamer was rechecked on July 13 for the practical Anvil route, requirements, cooldown, revive handling, and survival context. Beebom was rechecked for the Tool Workshop recipe context. Fandom remains an auxiliary source from the previous manual pass because it was not part of this refresh.',
   requirements: [
     {
       label: 'Campfire Level 4',

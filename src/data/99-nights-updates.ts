@@ -13,8 +13,62 @@ export type UpdateEntry = {
 };
 
 export const ninetyNineNightsUpdates = {
-  checkedAt: '2026-07-12',
+  checkedAt: '2026-07-13',
   entries: [
+    {
+      date: '2026-07-13',
+      type: 'code-check',
+      title: 'July 13 manual code-source review',
+      summary:
+        'PC Gamer still listed all three current code terms and kept happyhalloween in the expired section, so Quest Codes refreshed the source trail without changing rewards or status labels.',
+      details: [
+        'forestwakesup26 and afterparty remained in the active-code list with the same rewards.',
+        'yay fishing remained a chat-based special activation rather than a normal code-box claim.',
+        'happyhalloween remained in expired history.',
+        'No new code, reward amount, Roblox stat, drop rate, tier claim, or patch-note claim was added.',
+      ],
+      sources: [
+        {
+          name: 'PC Gamer codes page',
+          url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-codes/',
+        },
+      ],
+    },
+    {
+      date: '2026-07-13',
+      type: 'guide-data-pass',
+      title: 'July 13 classes, animals, and bandages source review',
+      summary:
+        'Quest Codes rechecked three high-value manual-review datasets against their existing source trails and refreshed only claims that remained visible in those sources.',
+      details: [
+        'The PC Gamer class tier groups still matched the published Classes and Class Tier List pages.',
+        'The PC Gamer animal table still matched the 11 listed animals, food requirements, flute tiers, and biome notes.',
+        'PC Gamer and Beebom still supported the Bandage recipe, Tool Workshop route, revive use, and related cautions.',
+        'No invented class stat, animal drop rate, hidden tame chance, or unverified crafting cost was added.',
+      ],
+      sources: [
+        {
+          name: 'PC Gamer classes guide',
+          url: 'https://www.pcgamer.com/roblox/99-nights-in-the-forest-classes/',
+        },
+        {
+          name: 'PC Gamer animal taming guide',
+          url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-animal-taming/',
+        },
+        {
+          name: 'PC Gamer bandage guide',
+          url: 'https://www.pcgamer.com/games/survival-crafting/roblox-99-nights-in-the-forest-bandages/',
+        },
+        {
+          name: 'PC Gamer revive guide',
+          url: 'https://www.pcgamer.com/games/survival-crafting/roblox-99-nights-in-the-forest-revive/',
+        },
+        {
+          name: 'Beebom crafting recipes',
+          url: 'https://beebom.com/99-nights-in-the-forest-crafting-recipes/',
+        },
+      ],
+    },
     {
       date: '2026-07-12',
       type: 'code-check',

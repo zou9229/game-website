@@ -12,16 +12,16 @@ export function RobloxSiteShell({ children }: { children: React.ReactNode }) {
   const latestCodeCheckedAt = getLatestCodeCheckedAt(featuredGame);
 
   return (
-    <div className="bg-background text-foreground min-h-screen">
-      <header className="border-border/80 bg-card/95 sticky top-0 z-50 border-b shadow-sm backdrop-blur">
-        <div className="border-primary/30 bg-primary/10 border-b">
-          <div className="text-muted-foreground mx-auto flex min-h-8 max-w-6xl flex-wrap items-center justify-between gap-2 px-4 py-1.5 text-xs sm:px-6 lg:px-8">
+    <div className="quest-game-shell min-h-screen bg-[#edf4ed] text-emerald-950 dark:bg-[#07110d] dark:text-emerald-50 [&>main]:bg-transparent">
+      <header className="sticky top-0 z-50 border-b border-white/10 bg-[#061611]/95 text-white shadow-md backdrop-blur">
+        <div className="border-b border-lime-200/10 bg-[#0a2418]">
+          <div className="mx-auto flex min-h-8 max-w-6xl flex-wrap items-center justify-between gap-2 px-4 py-1.5 text-xs text-white/58 sm:px-6 lg:px-8">
             <span>
               Source-checked Roblox guides, code history, and update notes.
             </span>
             <span>
               Codes checked {latestCodeCheckedAt}
-              <span className="text-muted-foreground/60 mx-1">/</span>
+              <span className="mx-1 text-white/28">/</span>
               Game data {featuredGame.stats.checkedAt}
             </span>
           </div>
@@ -41,8 +41,8 @@ export function RobloxSiteShell({ children }: { children: React.ReactNode }) {
               />
               <span>{envConfigs.app_name}</span>
             </Link>
-            <div className="border-border hidden h-8 border-l md:block" />
-            <p className="text-muted-foreground hidden max-w-[260px] text-xs leading-5 md:block">
+            <div className="hidden h-8 border-l border-white/12 md:block" />
+            <p className="hidden max-w-[260px] text-xs leading-5 text-white/54 md:block">
               Practical Roblox routes for players who need the answer now.
             </p>
           </div>
@@ -52,31 +52,31 @@ export function RobloxSiteShell({ children }: { children: React.ReactNode }) {
             className="flex flex-wrap items-center gap-1.5 text-sm"
           >
             <Link
-              className="text-muted-foreground hover:bg-accent hover:text-foreground rounded-md px-2.5 py-1.5 transition-colors"
+              className="rounded-md px-2.5 py-1.5 text-white/64 transition-colors hover:bg-white/10 hover:text-white"
               href="/roblox"
             >
               Roblox
             </Link>
             <Link
-              className="text-muted-foreground hover:bg-accent hover:text-foreground rounded-md px-2.5 py-1.5 transition-colors"
+              className="rounded-md px-2.5 py-1.5 text-white/64 transition-colors hover:bg-white/10 hover:text-white"
               href="/codes"
             >
               Codes
             </Link>
             <Link
-              className="text-muted-foreground hover:bg-accent hover:text-foreground rounded-md px-2.5 py-1.5 transition-colors"
+              className="rounded-md px-2.5 py-1.5 text-white/64 transition-colors hover:bg-white/10 hover:text-white"
               href="/roblox/99-nights-in-the-forest/class-tier-list"
             >
               Tier Lists
             </Link>
             <Link
-              className="text-muted-foreground hover:bg-accent hover:text-foreground rounded-md px-2.5 py-1.5 transition-colors"
+              className="rounded-md px-2.5 py-1.5 text-white/64 transition-colors hover:bg-white/10 hover:text-white"
               href="/roblox/99-nights-in-the-forest/updates"
             >
               Updates
             </Link>
             <Link
-              className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md px-3 py-1.5 font-medium shadow-xs transition-colors"
+              className="rounded-md bg-lime-300 px-3 py-1.5 font-bold text-emerald-950 shadow-xs transition-colors hover:bg-lime-200"
               href="/roblox/99-nights-in-the-forest"
             >
               99 Nights hub
@@ -87,7 +87,7 @@ export function RobloxSiteShell({ children }: { children: React.ReactNode }) {
 
       {children}
 
-      <footer className="border-border/80 bg-card border-t">
+      <footer className="border-t border-white/10 bg-[#061611] text-white">
         <div className="mx-auto grid max-w-6xl gap-6 px-4 py-8 text-sm sm:px-6 md:grid-cols-[1.2fr_0.8fr] lg:px-8">
           <div className="space-y-3">
             <div className="flex items-center gap-2 font-semibold">
@@ -99,7 +99,7 @@ export function RobloxSiteShell({ children }: { children: React.ReactNode }) {
               />
               {envConfigs.app_name}
             </div>
-            <p className="text-muted-foreground max-w-2xl leading-6">
+            <p className="max-w-2xl leading-6 text-white/56">
               Fan-made Roblox codes and guide pages with visible source trails,
               checked dates, and practical internal links. Quest Codes is not
               affiliated with Roblox, the Roblox Corporation, or{' '}
@@ -108,19 +108,19 @@ export function RobloxSiteShell({ children }: { children: React.ReactNode }) {
           </div>
           <div className="flex flex-col gap-2 md:items-end">
             <Link
-              className="text-muted-foreground hover:text-foreground"
+              className="text-white/58 hover:text-white"
               href="/roblox/99-nights-in-the-forest/codes"
             >
               Current 99 Nights codes
             </Link>
             <Link
-              className="text-muted-foreground hover:text-foreground"
+              className="text-white/58 hover:text-white"
               href="/roblox/99-nights-in-the-forest"
             >
               99 Nights guide hub
             </Link>
             <a
-              className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1"
+              className="inline-flex items-center gap-1 text-white/58 hover:text-white"
               href={featuredGame.robloxUrl}
               rel="noopener noreferrer"
               target="_blank"

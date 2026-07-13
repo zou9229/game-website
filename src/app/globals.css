@@ -118,6 +118,17 @@
   }
 }
 
+@layer components {
+  .quest-game-shell [data-slot='card'] {
+    border-color: color-mix(in oklab, var(--primary) 16%, var(--border));
+    box-shadow: 0 12px 32px rgb(3 20 13 / 0.06);
+  }
+
+  .dark .quest-game-shell [data-slot='card'] {
+    box-shadow: 0 14px 36px rgb(0 0 0 / 0.28);
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
