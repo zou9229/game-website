@@ -20,17 +20,35 @@ export const ninetyNineNightsUpdates = {
       type: 'code-check',
       title: 'July 13 manual code-source review',
       summary:
-        'PC Gamer still listed all three current code terms and kept happyhalloween in the expired section, so Quest Codes refreshed the source trail without changing rewards or status labels.',
+        'PC Gamer, GamesRadar, PCGamesN, and the community wiki were manually reviewed after the automated check. Confirmed code labels stayed unchanged, source dates were refreshed, and current Roblox metadata was recorded.',
       details: [
-        'forestwakesup26 and afterparty remained in the active-code list with the same rewards.',
-        'yay fishing remained a chat-based special activation rather than a normal code-box claim.',
-        'happyhalloween remained in expired history.',
-        'No new code, reward amount, Roblox stat, drop rate, tier claim, or patch-note claim was added.',
+        'PC Gamer, GamesRadar, and Fandom still list forestwakesup26 as active; PCGamesN does not list it, so the three-source confirmation remains visible.',
+        'All four reviewed sources still list afterparty as active with the same 15-gem reward.',
+        'PC Gamer, GamesRadar, and Fandom treat yay fishing as a one-time in-game activation, while PCGamesN lists it as expired; Quest Codes keeps the conflict visible with the special label.',
+        'All four reviewed sources keep happyhalloween in expired history.',
+        'The Roblox Games API reported an updated timestamp of 2026-07-11, 396,612 playing, 28,160,466,565 visits, and 8,623,998 favorites at check time.',
+        'No new code, reward amount, drop rate, tier claim, crafting fact, or patch-note claim was added.',
       ],
       sources: [
         {
           name: 'PC Gamer codes page',
           url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-codes/',
+        },
+        {
+          name: 'GamesRadar codes page',
+          url: 'https://www.gamesradar.com/games/survival/99-nights-in-the-forest-codes/',
+        },
+        {
+          name: 'PCGamesN codes page',
+          url: 'https://www.pcgamesn.com/99-nights-in-the-forest/codes',
+        },
+        {
+          name: 'Fandom codes page',
+          url: 'https://99-nights-in-the-forest.fandom.com/wiki/Codes',
+        },
+        {
+          name: 'Roblox Games API',
+          url: 'https://games.roblox.com/v1/games?universeIds=7326934954',
         },
       ],
     },
