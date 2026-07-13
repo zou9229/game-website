@@ -25,23 +25,23 @@ export type ForestGemFragmentStep = {
 const fandomGemSource: ForestGemFragmentSource = {
   name: 'Fandom Gem of the Forest',
   url: 'https://99-nights-in-the-forest.fandom.com/wiki/Gem_of_the_Forest',
-  checkedAt: '2026-06-21',
+  checkedAt: '2026-07-13',
 };
 
 const fandomStrongholdSource: ForestGemFragmentSource = {
   name: 'Fandom Cultist Stronghold',
   url: 'https://99-nights-in-the-forest.fandom.com/wiki/Cultist_Stronghold',
-  checkedAt: '2026-06-21',
+  checkedAt: '2026-07-13',
 };
 
 const fandomCraftingSource: ForestGemFragmentSource = {
   name: 'Fandom Crafting',
   url: 'https://99-nights-in-the-forest.fandom.com/wiki/Crafting',
-  checkedAt: '2026-06-21',
+  checkedAt: '2026-07-13',
 };
 
 export const ninetyNineNightsForestGemFragments = {
-  checkedAt: '2026-06-21',
+  checkedAt: '2026-07-13',
   summary:
     'Forest Gem fragments are the source-checked way to build toward a full Gem of the Forest in long 99 Nights in the Forest runs. The important facts are simple: fragments are tied to Day 100+ nighttime raid cultists, and 4 fragments can be combined into 1 full Forest Gem.',
   sourceNote:

@@ -17,6 +17,46 @@ export const ninetyNineNightsUpdates = {
   entries: [
     {
       date: '2026-07-13',
+      type: 'guide-data-pass',
+      title: 'July 13 map, progression, and taming source review',
+      summary:
+        'Quest Codes rechecked nine manual-review datasets and corrected the Taming Flute route after the old Upgrade Station was replaced by the Tool Trader.',
+      details: [
+        'Map, missing kids, badges, Crafting Bench 5, Forest Gem, Forest Gem fragments, Zookeeper vs Beastmaster, and survival claims remained supported by their checked sources.',
+        'The Taming Flute page now sends players to the Tool Trader workshop near camp instead of the removed Upgrade Station.',
+        'Fandom and Beebom confirm that the Tool Trader sells a Taming Flute for 20 Mossy Coins and upgrades tools after their XP requirement is met.',
+        'Weak secondary references that were not reopened in this pass retain their older source-check dates.',
+        'No invented drop rate, tier score, hidden tame chance, badge total, or crafting cost was added.',
+      ],
+      sources: [
+        {
+          name: 'Fandom Tool Trader',
+          url: 'https://99-nights-in-the-forest.fandom.com/wiki/Tool_Trader',
+        },
+        {
+          name: 'Beebom Tool Trader guide',
+          url: 'https://beebom.com/99-nights-in-the-forest-tool-trader-guide/',
+        },
+        {
+          name: 'PC Gamer missing kids guide',
+          url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-missing-kid-locations/',
+        },
+        {
+          name: 'GamesRadar crafting recipes',
+          url: 'https://www.gamesradar.com/games/simulation/99-nights-in-the-forest-crafting-recipes-perks-bench-upgrade/',
+        },
+        {
+          name: 'Fandom Gem of the Forest',
+          url: 'https://99-nights-in-the-forest.fandom.com/wiki/Gem_of_the_Forest',
+        },
+        {
+          name: 'PC Gamer survival tips',
+          url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-tips/',
+        },
+      ],
+    },
+    {
+      date: '2026-07-13',
       type: 'code-check',
       title: 'July 13 manual code-source review',
       summary:

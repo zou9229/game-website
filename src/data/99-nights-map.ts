@@ -15,7 +15,7 @@ export type MapGuideSection = {
 };
 
 export const ninetyNineNightsMapGuide = {
-  checkedAt: '2026-06-20',
+  checkedAt: '2026-07-13',
   summary:
     'The 99 Nights in the Forest map is best treated as a route-planning tool: craft it early, uncover fog while exploring, use icons to avoid wasted trips, and connect locations to survival goals.',
   sections: [
@@ -38,7 +38,7 @@ export const ninetyNineNightsMapGuide = {
         {
           name: '99 Nights in the Forest Wiki: The Map',
           url: 'https://99-nights-in-the-forest.fandom.com/wiki/The_Map',
-          checkedAt: '2026-06-20',
+          checkedAt: '2026-07-13',
         },
         {
           name: 'GamerBlurb map expansion guide',
@@ -66,7 +66,7 @@ export const ninetyNineNightsMapGuide = {
         {
           name: '99 Nights in the Forest Wiki: Locations',
           url: 'https://99-nights-in-the-forest.fandom.com/wiki/Locations',
-          checkedAt: '2026-06-20',
+          checkedAt: '2026-07-13',
         },
       ],
     },
@@ -89,7 +89,7 @@ export const ninetyNineNightsMapGuide = {
         {
           name: 'PC Gamer missing kids guide',
           url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-missing-kid-locations/',
-          checkedAt: '2026-06-20',
+          checkedAt: '2026-07-13',
         },
       ],
     },
@@ -112,7 +112,7 @@ export const ninetyNineNightsMapGuide = {
         {
           name: '99 Nights in the Forest Wiki: Cultist Stronghold',
           url: 'https://99-nights-in-the-forest.fandom.com/wiki/Cultist_Stronghold',
-          checkedAt: '2026-06-20',
+          checkedAt: '2026-07-13',
         },
         {
           name: '99 Nights in the Forest Wiki: Tips and Tricks',

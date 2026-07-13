@@ -147,7 +147,7 @@ export default function HomePage() {
               href="/"
             >
               <img
-                src="/logo.png"
+                src={envConfigs.app_logo}
                 alt=""
                 className="h-9 w-8 object-contain"
                 aria-hidden="true"

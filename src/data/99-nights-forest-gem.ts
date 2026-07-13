@@ -26,29 +26,29 @@ export type ForestGemUse = {
 const fandomGemSource: ForestGemSource = {
   name: 'Fandom Gem of the Forest',
   url: 'https://99-nights-in-the-forest.fandom.com/wiki/Gem_of_the_Forest',
-  checkedAt: '2026-06-21',
+  checkedAt: '2026-07-13',
 };
 
 const fandomCraftingSource: ForestGemSource = {
   name: 'Fandom Crafting',
   url: 'https://99-nights-in-the-forest.fandom.com/wiki/Crafting',
-  checkedAt: '2026-06-21',
+  checkedAt: '2026-07-13',
 };
 
 const fandomStrongholdSource: ForestGemSource = {
   name: 'Fandom Cultist Stronghold',
   url: 'https://99-nights-in-the-forest.fandom.com/wiki/Cultist_Stronghold',
-  checkedAt: '2026-06-21',
+  checkedAt: '2026-07-13',
 };
 
 const gamesRadarCraftingSource: ForestGemSource = {
   name: 'GamesRadar crafting guide',
   url: 'https://www.gamesradar.com/games/simulation/99-nights-in-the-forest-crafting-recipes-perks-bench-upgrade/',
-  checkedAt: '2026-06-21',
+  checkedAt: '2026-07-13',
 };
 
 export const ninetyNineNightsForestGem = {
-  checkedAt: '2026-06-21',
+  checkedAt: '2026-07-13',
   summary:
     'Gem of the Forest is a late-game 99 Nights in the Forest crafting material used for Crafting Bench Level 5 and Tier 5 crafts. It is separate from the normal gems or diamonds used for classes and code rewards.',
   sourceNote:

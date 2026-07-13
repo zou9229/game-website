@@ -16,7 +16,7 @@ export type MissingKidRoute = {
 };
 
 export const ninetyNineNightsMissingKids = {
-  checkedAt: '2026-06-20',
+  checkedAt: '2026-07-13',
   summary:
     'The missing kids route is one of the main progression goals in 99 Nights in the Forest. Use the map and compass first, then rescue each child only when your campfire, gear, food, and combat route are stable enough.',
   routeNotes: [
@@ -43,12 +43,12 @@ export const ninetyNineNightsMissingKids = {
         {
           name: 'PC Gamer missing kids guide',
           url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-missing-kid-locations/',
-          checkedAt: '2026-06-20',
+          checkedAt: '2026-07-13',
         },
         {
           name: '99 Nights in the Forest Wiki: Missing Children',
           url: 'https://99-nights-in-the-forest.fandom.com/wiki/Missing_Children',
-          checkedAt: '2026-06-20',
+          checkedAt: '2026-07-13',
         },
       ],
     },
@@ -69,12 +69,12 @@ export const ninetyNineNightsMissingKids = {
         {
           name: 'PC Gamer missing kids guide',
           url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-missing-kid-locations/',
-          checkedAt: '2026-06-20',
+          checkedAt: '2026-07-13',
         },
         {
           name: '99 Nights in the Forest Wiki: Missing Children',
           url: 'https://99-nights-in-the-forest.fandom.com/wiki/Missing_Children',
-          checkedAt: '2026-06-20',
+          checkedAt: '2026-07-13',
         },
       ],
     },
@@ -95,12 +95,12 @@ export const ninetyNineNightsMissingKids = {
         {
           name: 'PC Gamer missing kids guide',
           url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-missing-kid-locations/',
-          checkedAt: '2026-06-20',
+          checkedAt: '2026-07-13',
         },
         {
           name: '99 Nights in the Forest Wiki: Missing Children',
           url: 'https://99-nights-in-the-forest.fandom.com/wiki/Missing_Children',
-          checkedAt: '2026-06-20',
+          checkedAt: '2026-07-13',
         },
       ],
     },
@@ -121,12 +121,12 @@ export const ninetyNineNightsMissingKids = {
         {
           name: 'PC Gamer missing kids guide',
           url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-missing-kid-locations/',
-          checkedAt: '2026-06-20',
+          checkedAt: '2026-07-13',
         },
         {
           name: '99 Nights in the Forest Wiki: Missing Children',
           url: 'https://99-nights-in-the-forest.fandom.com/wiki/Missing_Children',
-          checkedAt: '2026-06-20',
+          checkedAt: '2026-07-13',
         },
       ],
     },

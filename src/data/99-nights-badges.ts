@@ -15,11 +15,11 @@ export type BadgeCluster = {
 };
 
 export const ninetyNineNightsBadges = {
-  checkedAt: '2026-06-20',
+  checkedAt: '2026-07-13',
   summary:
     'Badges are achievement goals in 99 Nights in the Forest. They matter for SEO users because badge rewards connect survival goals, class progression, and free diamond searches.',
   rewardNote:
-    'The community wiki lists badges as first-time diamond rewards and says the list changed on 2026-06-13. Treat exact totals as source-checked wiki data, not an official guarantee.',
+    'The community wiki lists badges as first-time diamond rewards and continues to change with game updates. Treat exact totals as source-checked wiki data, not an official guarantee.',
   clusters: [
     {
       title: 'Starter badges to collect first',
@@ -40,7 +40,7 @@ export const ninetyNineNightsBadges = {
         {
           name: '99 Nights in the Forest Wiki badge list',
           url: 'https://99-nights-in-the-forest.fandom.com/wiki/Badges',
-          checkedAt: '2026-06-20',
+          checkedAt: '2026-07-13',
         },
       ],
     },
@@ -63,7 +63,7 @@ export const ninetyNineNightsBadges = {
         {
           name: '99 Nights in the Forest Wiki badge list',
           url: 'https://99-nights-in-the-forest.fandom.com/wiki/Badges',
-          checkedAt: '2026-06-20',
+          checkedAt: '2026-07-13',
         },
         {
           name: 'MuMuPlayer all badges guide',
@@ -92,7 +92,7 @@ export const ninetyNineNightsBadges = {
         {
           name: '99 Nights in the Forest Wiki badge list',
           url: 'https://99-nights-in-the-forest.fandom.com/wiki/Badges',
-          checkedAt: '2026-06-20',
+          checkedAt: '2026-07-13',
         },
         {
           name: 'Times of India Hunting Badge guide',
@@ -120,7 +120,7 @@ export const ninetyNineNightsBadges = {
         {
           name: 'PC Gamer Humiliation Badge guide',
           url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-secret-action-humiliation-badge/',
-          checkedAt: '2026-06-20',
+          checkedAt: '2026-07-13',
         },
       ],
     },

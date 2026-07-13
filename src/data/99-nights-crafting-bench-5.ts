@@ -32,19 +32,19 @@ export type CraftingBench5Section = {
 const fandomCraftingSource: CraftingBench5Source = {
   name: 'Fandom Crafting',
   url: 'https://99-nights-in-the-forest.fandom.com/wiki/Crafting',
-  checkedAt: '2026-06-21',
+  checkedAt: '2026-07-13',
 };
 
 const fandomGemSource: CraftingBench5Source = {
   name: 'Fandom Gem of the Forest',
   url: 'https://99-nights-in-the-forest.fandom.com/wiki/Gem_of_the_Forest',
-  checkedAt: '2026-06-21',
+  checkedAt: '2026-07-13',
 };
 
 const gamesRadarCraftingSource: CraftingBench5Source = {
   name: 'GamesRadar crafting recipes',
   url: 'https://www.gamesradar.com/games/simulation/99-nights-in-the-forest-crafting-recipes-perks-bench-upgrade/',
-  checkedAt: '2026-06-21',
+  checkedAt: '2026-07-13',
 };
 
 const redditDecisionSource: CraftingBench5Source = {
@@ -54,7 +54,7 @@ const redditDecisionSource: CraftingBench5Source = {
 };
 
 export const ninetyNineNightsCraftingBench5 = {
-  checkedAt: '2026-06-21',
+  checkedAt: '2026-07-13',
   summary:
     'Crafting Bench 5 is the late-game 99 Nights in the Forest workbench upgrade that costs heavy Wood, Scrap, and a Gem of the Forest. It unlocks high-impact crafts such as Respawn Capsule, Temporal Accelerometer, Weather Machine, and Recycler.',
   sourceNote:

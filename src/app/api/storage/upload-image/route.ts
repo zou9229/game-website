@@ -14,13 +14,21 @@ const extFromMime = (mimeType: string) => {
     'image/png': 'png',
     'image/webp': 'webp',
     'image/gif': 'gif',
-    'image/svg+xml': 'svg',
     'image/avif': 'avif',
-    'image/heic': 'heic',
-    'image/heif': 'heif',
   };
   return map[mimeType] || '';
 };
+
+const ALLOWED_IMAGE_TYPES = new Set([
+  'image/jpeg',
+  'image/jpg',
+  'image/png',
+  'image/webp',
+  'image/gif',
+  'image/avif',
+]);
+const MAX_FILES_PER_REQUEST = 5;
+const MAX_UPLOAD_BYTES = 10 * 1024 * 1024;
 
 // Hard cap for inline base64 (no storage configured). Keep small — fits comfortably
 // in a TEXT column and a JSON response. Configurable via INLINE_IMAGE_MAX_KB.
@@ -42,6 +50,9 @@ export async function POST(req: Request) {
     const formData = await req.formData();
     const files = formData.getAll('files') as File[];
     if (!files.length) return respErr('No files provided');
+    if (files.length > MAX_FILES_PER_REQUEST) {
+      return respErr(`Upload at most ${MAX_FILES_PER_REQUEST} images at once`);
+    }
 
     const useStorage = isStorageConfigured();
     const storage = useStorage ? getStorage() : null;
@@ -53,12 +64,15 @@ export async function POST(req: Request) {
     }> = [];
 
     for (const file of files) {
-      if (!file.type.startsWith('image/')) {
-        return respErr(`File ${file.name} is not an image`);
+      if (!ALLOWED_IMAGE_TYPES.has(file.type)) {
+        return respErr(`Unsupported image type for ${file.name}`);
       }
 
       const arrayBuffer = await file.arrayBuffer();
       const body = new Uint8Array(arrayBuffer);
+      if (body.length > MAX_UPLOAD_BYTES) {
+        return respErr(`Image ${file.name} exceeds the 10MB upload limit`);
+      }
 
       // No storage configured → return data URL (caller persists it).
       if (!storage) {

@@ -4,10 +4,11 @@ export const AUTH_SECRET_PLACEHOLDER =
 export const envConfigs: Record<string, string> = {
   // App
   app_url: process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000',
-  app_name: process.env.NEXT_PUBLIC_APP_NAME ?? 'ShipAny Next',
+  app_name: process.env.NEXT_PUBLIC_APP_NAME ?? 'Quest Codes',
   app_description:
-    process.env.NEXT_PUBLIC_APP_DESCRIPTION ?? 'Ship your SaaS faster',
-  app_logo: process.env.NEXT_PUBLIC_APP_LOGO ?? '/logo.png',
+    process.env.NEXT_PUBLIC_APP_DESCRIPTION ??
+    'Source-checked Roblox codes, game guides, tier lists, and update references.',
+  app_logo: process.env.NEXT_PUBLIC_APP_LOGO ?? '/icon-192.png',
 
   // Database
   database_url: process.env.DATABASE_URL ?? '',

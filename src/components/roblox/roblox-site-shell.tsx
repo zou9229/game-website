@@ -34,7 +34,7 @@ export function RobloxSiteShell({ children }: { children: React.ReactNode }) {
               href="/"
             >
               <img
-                src="/logo.png"
+                src={envConfigs.app_logo}
                 alt=""
                 className="h-9 w-8 object-contain"
                 aria-hidden="true"
@@ -52,31 +52,31 @@ export function RobloxSiteShell({ children }: { children: React.ReactNode }) {
             className="flex flex-wrap items-center gap-1.5 text-sm"
           >
             <Link
-              className="rounded-md px-2.5 py-1.5 text-white/64 transition-colors hover:bg-white/10 hover:text-white"
+              className="inline-flex min-h-10 items-center rounded-md px-2.5 py-1.5 text-white/64 transition-colors hover:bg-white/10 hover:text-white"
               href="/roblox"
             >
               Roblox
             </Link>
             <Link
-              className="rounded-md px-2.5 py-1.5 text-white/64 transition-colors hover:bg-white/10 hover:text-white"
+              className="inline-flex min-h-10 items-center rounded-md px-2.5 py-1.5 text-white/64 transition-colors hover:bg-white/10 hover:text-white"
               href="/codes"
             >
               Codes
             </Link>
             <Link
-              className="rounded-md px-2.5 py-1.5 text-white/64 transition-colors hover:bg-white/10 hover:text-white"
+              className="inline-flex min-h-10 items-center rounded-md px-2.5 py-1.5 text-white/64 transition-colors hover:bg-white/10 hover:text-white"
               href="/roblox/99-nights-in-the-forest/class-tier-list"
             >
               Tier Lists
             </Link>
             <Link
-              className="rounded-md px-2.5 py-1.5 text-white/64 transition-colors hover:bg-white/10 hover:text-white"
+              className="inline-flex min-h-10 items-center rounded-md px-2.5 py-1.5 text-white/64 transition-colors hover:bg-white/10 hover:text-white"
               href="/roblox/99-nights-in-the-forest/updates"
             >
               Updates
             </Link>
             <Link
-              className="rounded-md bg-lime-300 px-3 py-1.5 font-bold text-emerald-950 shadow-xs transition-colors hover:bg-lime-200"
+              className="inline-flex min-h-10 items-center rounded-md bg-lime-300 px-3 py-1.5 font-bold text-emerald-950 shadow-xs transition-colors hover:bg-lime-200"
               href="/roblox/99-nights-in-the-forest"
             >
               99 Nights hub
@@ -92,7 +92,7 @@ export function RobloxSiteShell({ children }: { children: React.ReactNode }) {
           <div className="space-y-3">
             <div className="flex items-center gap-2 font-semibold">
               <img
-                src="/logo.png"
+                src={envConfigs.app_logo}
                 alt=""
                 className="h-7 w-6 object-contain"
                 aria-hidden="true"

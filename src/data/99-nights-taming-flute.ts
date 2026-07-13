@@ -19,47 +19,53 @@ export type TamingFluteStep = {
 };
 
 export const ninetyNineNightsTamingFlute = {
-  checkedAt: '2026-06-21',
+  checkedAt: '2026-07-13',
   sources: [
     {
       name: 'Fandom Taming Flute',
       url: 'https://99-nights-in-the-forest.fandom.com/wiki/Taming_Flute',
-      checkedAt: '2026-06-21',
+      checkedAt: '2026-07-13',
       note: 'Used for flute variants, obtainment paths, general use, and animal tier list checks.',
     },
     {
       name: 'Fandom Taming',
       url: 'https://99-nights-in-the-forest.fandom.com/wiki/Taming',
-      checkedAt: '2026-06-21',
+      checkedAt: '2026-07-13',
       note: 'Used for the taming minigame, feeding stages, reset caution, and pet limit caveats.',
     },
     {
-      name: 'Fandom Upgrade Station',
-      url: 'https://99-nights-in-the-forest.fandom.com/wiki/Upgrade_Station',
-      checkedAt: '2026-06-21',
-      note: 'Used for the Upgrade Station / Skills Building bench location and flute upgrade station role.',
+      name: 'Fandom Tool Trader',
+      url: 'https://99-nights-in-the-forest.fandom.com/wiki/Tool_Trader',
+      checkedAt: '2026-07-13',
+      note: 'Used for the current Tool Trader location, tool purchase, and upgrade-workshop route.',
+    },
+    {
+      name: 'Beebom Tool Trader guide',
+      url: 'https://beebom.com/99-nights-in-the-forest-tool-trader-guide/',
+      checkedAt: '2026-07-13',
+      note: 'Used to confirm that the old Upgrade Station was replaced by the Tool Trader workshop.',
     },
     {
       name: 'PC Gamer Taming Flute',
       url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-how-to-upgrade-taming-flute/',
-      checkedAt: '2026-06-21',
-      note: 'Used for practical upgrade route, class starting flute notes, and XP route planning.',
+      checkedAt: '2026-07-13',
+      note: 'Used for class starting flute notes, XP route planning, and animal progression context.',
     },
     {
       name: 'PC Gamer Animal Taming',
       url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-animal-taming/',
-      checkedAt: '2026-06-21',
+      checkedAt: '2026-07-13',
       note: 'Used for animal food requirements and Old/Good/Strong Flute group checks.',
     },
   ] satisfies TamingFluteSource[],
   summary:
-    'The Taming Flute lets you start animal taming, gain flute XP through taming and pet care, then upgrade toward stronger animal tiers at the Upgrade Station / Skills Building.',
+    'The Taming Flute lets you start animal taming, gain flute XP through taming and pet care, then upgrade toward stronger animal tiers at the Tool Trader workshop near the campfire.',
   keyFacts: [
     'The listed flute tiers are Old Taming Flute, Good Taming Flute, and Strong Taming Flute.',
-    'Non-taming classes can obtain a flute through map routes such as the animal shelter or Pelt Trader path.',
+    'Non-taming classes can buy a flute from the Tool Trader or use map routes such as the animal shelter or Pelt Trader path.',
     'Zookeeper starts with the Old Taming Flute in the checked PC Gamer route notes.',
     'Beastmaster starts with the Good Taming Flute in the checked PC Gamer route notes.',
-    'The Upgrade Station / Skills Building contains the Taming Flute upgrade bench.',
+    'The old Upgrade Station was removed; current sources place flute purchasing and upgrades at the Tool Trader workshop.',
     'Using a flute on another animal while one is mid-tame can reset the current taming progress.',
   ],
   obtainment: [
@@ -71,11 +77,11 @@ export const ninetyNineNightsTamingFlute = {
         'This route avoids spending diamonds on a taming class before you know whether an animal-focused run is worth it.',
     },
     {
-      title: 'Pelt Trader route',
+      title: 'Tool Trader route',
       summary:
-        'The checked sources list a Pelt Trader path, with PC Gamer describing a Wolf Pelt trade.',
+        'The current Tool Trader sells the Taming Flute for 20 Mossy Coins and provides the workshop used for upgrades.',
       detail:
-        'Treat this as a backup route when shelter pathing is inconvenient or when pelts are already available.',
+        'Use this as the predictable route when the shelter or Pelt Trader path is inconvenient; the Tool Trader appears near the campfire as the run progresses.',
     },
     {
       title: 'Class starting route',
@@ -108,11 +114,11 @@ export const ninetyNineNightsTamingFlute = {
         'This is useful for normal runs because you can progress the flute while continuing the main survival route.',
     },
     {
-      title: 'Use the upgrade bench',
+      title: 'Use the Tool Trader workshop',
       summary:
-        'When the flute XP bar is ready, go to the Upgrade Station / Skills Building and use the Taming Flute bench.',
+        'When the flute XP bar is ready, equip the flute and use the workshop beside the Tool Trader.',
       detail:
-        'Fandom identifies the Taming Flute upgrade bench on the left side of the Upgrade Station entrance.',
+        'The old Upgrade Station route is obsolete; current Fandom and Beebom sources identify the Tool Trader as its replacement.',
     },
     {
       title: 'Plan Good and Strong targets first',

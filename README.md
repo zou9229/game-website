@@ -14,7 +14,7 @@ Live site: https://questcodes.com
 - Cloudflare Workers deployment through ShipAny vinext
 - Admin-only game data freshness audit page at `/admin/game-data`
 - Quest Codes operating skill at
-  `.agent/skills/questcodes-99nights-keyword-to-page/SKILL.md`
+  `.agents/skills/questcodes-99nights-keyword-to-page/SKILL.md`
 
 ## Tech Stack
 
@@ -59,8 +59,12 @@ the repository.
 ## Admin
 
 The admin panel is available at `/admin` for authorized users. The game data
-freshness tab at `/admin/game-data` currently performs a read-only audit. It
-does not scrape external sites or publish content automatically.
+tab at `/admin/game-data` provides freshness auditing, external source checks,
+and optional Vertex AI review. These actions produce read-only review
+snapshots; they do not silently rewrite public guide facts. The protected cron
+route can run source checks and operator alerts while the site is unattended.
+Publishing confirmed content changes still happens through a reviewed Git
+commit and Cloudflare deployment.
 
 ## Monetization And Tracking
 

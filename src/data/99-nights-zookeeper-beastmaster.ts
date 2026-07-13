@@ -18,42 +18,42 @@ export type ComparedTamingClass = {
 };
 
 export const ninetyNineNightsZookeeperBeastmaster = {
-  checkedAt: '2026-06-21',
+  checkedAt: '2026-07-13',
   sources: [
     {
       name: 'PC Gamer classes guide',
       url: 'https://www.pcgamer.com/roblox/99-nights-in-the-forest-classes/',
-      checkedAt: '2026-06-21',
+      checkedAt: '2026-07-13',
       note: 'Used for broad class tier context and general class recommendations.',
     },
     {
       name: 'PC Gamer Taming Flute guide',
       url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-how-to-upgrade-taming-flute/',
-      checkedAt: '2026-06-21',
+      checkedAt: '2026-07-13',
       note: 'Used for starting flute notes, pet limit notes, and upgrade-route context.',
     },
     {
       name: 'PC Gamer animal taming guide',
       url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-animal-taming/',
-      checkedAt: '2026-06-21',
+      checkedAt: '2026-07-13',
       note: 'Used for animal planning context and flute-tier pressure.',
     },
     {
       name: 'Fandom Zookeeper',
       url: 'https://99-nights-in-the-forest.fandom.com/wiki/Zookeeper',
-      checkedAt: '2026-06-21',
+      checkedAt: '2026-07-13',
       note: 'Used for Zookeeper class cost, pet limit, and progression notes.',
     },
     {
       name: 'Fandom Classes',
       url: 'https://99-nights-in-the-forest.fandom.com/wiki/Classes',
-      checkedAt: '2026-06-21',
+      checkedAt: '2026-07-13',
       note: 'Used to cross-check Zookeeper class wording against the class list.',
     },
     {
       name: 'PCGamesN tier list',
       url: 'https://www.pcgamesn.com/99-nights-in-the-forest/tier-list',
-      checkedAt: '2026-06-21',
+      checkedAt: '2026-07-13',
       note: 'Used as a competing tier-list signal because it ranks Beastmaster and Zookeeper differently from PC Gamer.',
     },
   ] satisfies ClassComparisonSource[],

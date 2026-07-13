@@ -31,7 +31,7 @@ export function SiteHeader({ navLinks }: { navLinks?: NavLink[] }) {
         {/* Brand */}
         <Link href="/" className="flex items-center gap-2">
           <img
-            src="/logo.png"
+            src={envConfigs.app_logo}
             alt=""
             className="h-9 w-8 object-contain"
             aria-hidden="true"
@@ -76,8 +76,10 @@ export function SiteHeader({ navLinks }: { navLinks?: NavLink[] }) {
 
         {/* Mobile toggle */}
         <button
-          className="p-2 md:hidden"
+          className="inline-flex size-10 items-center justify-center md:hidden"
           onClick={() => setMobileOpen(!mobileOpen)}
+          aria-label={mobileOpen ? 'Close navigation' : 'Open navigation'}
+          aria-expanded={mobileOpen}
         >
           {mobileOpen ? <X className="size-5" /> : <Menu className="size-5" />}
         </button>

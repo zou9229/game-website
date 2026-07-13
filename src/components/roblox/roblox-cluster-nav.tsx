@@ -196,7 +196,7 @@ export function RobloxClusterNav() {
         <div className="mt-4 flex gap-2 overflow-x-auto pb-1">
           <Link
             className={cn(
-              'shrink-0 rounded-md border px-3 py-1.5 text-sm font-medium transition-colors',
+              'inline-flex min-h-10 shrink-0 items-center rounded-md border px-3 py-1.5 text-sm font-medium transition-colors',
               isGameHub
                 ? currentPage
                   ? 'border-lime-300 bg-lime-300 text-emerald-950'
@@ -217,7 +217,7 @@ export function RobloxClusterNav() {
             return (
               <Link
                 className={cn(
-                  'shrink-0 rounded-md border px-3 py-1.5 text-sm font-medium transition-colors',
+                  'inline-flex min-h-10 shrink-0 items-center rounded-md border px-3 py-1.5 text-sm font-medium transition-colors',
                   active
                     ? currentPage
                       ? 'border-lime-300 bg-lime-300 text-emerald-950'
