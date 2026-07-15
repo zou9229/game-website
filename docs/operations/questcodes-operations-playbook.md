@@ -625,10 +625,11 @@ Effect:
 
 ## Scheduled Source Checks
 
-Quest Codes runs a Cloudflare-native scheduled source check once per day:
+Quest Codes runs Cloudflare-native scheduled source checks twice per day:
 
 ```text
-0 9 * * *  # 09:00 UTC / 17:00 China time
+0 1 * * *   # 01:00 UTC / 09:00 China time
+0 13 * * *  # 13:00 UTC / 21:00 China time
 ```
 
 The scheduled Worker handler records snapshots with this reason:
@@ -670,6 +671,7 @@ What it does:
 - Marks the snapshot reason as `cloudflare-cron` for the native scheduler, or `scheduled-cron-api` for the HTTP endpoint.
 - Lets `/admin/game-data` show the latest automated check result.
 - Feeds the in-admin `Operator alerts` panel so the site owner can see review-before-publish and blocked states without reading raw source data first.
+- When `GAME_DATA_AUTO_AI_REVIEW_ENABLED` is true and a source check reports attention signals, it creates a read-only Vertex AI triage snapshot.
 - Can send optional high-priority operator alerts to an external webhook when `GAME_DATA_ALERT_WEBHOOK_URL` is configured.
 
 What it does not do:
@@ -685,9 +687,9 @@ Why this matters:
 - Guide facts still need human/Codex review because wrong game data hurts trust.
 - The safe automation boundary is "detect and report" first, "publish" only after verified review.
 
-Suggested schedule:
+Current schedule:
 
-- Once daily while traffic is low. This is currently configured in `wrangler.jsonc`.
+- Twice daily while the tracked game is active. This is configured in `wrangler.jsonc`.
 - Twice daily only if GSC shows codes-page impressions or the game has active update/event volatility.
 
 Next safe upgrade:

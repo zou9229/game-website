@@ -78,6 +78,8 @@ export const envConfigs: Record<string, string> = {
   // Operations
   cron_secret: process.env.CRON_SECRET ?? '',
   game_data_cron_enabled: process.env.GAME_DATA_CRON_ENABLED ?? '',
+  game_data_auto_ai_review_enabled:
+    process.env.GAME_DATA_AUTO_AI_REVIEW_ENABLED ?? '',
 
   // Locale
   locale: process.env.NEXT_PUBLIC_DEFAULT_LOCALE ?? 'en',

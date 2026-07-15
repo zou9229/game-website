@@ -1,6 +1,10 @@
 import handler from 'vinext/server/app-router-entry';
 
-import { runGameDataSourceCheck } from '@/modules/game-data-sync/service';
+import { getAllConfigs } from '@/modules/config/service';
+import {
+  runGameDataAiReview,
+  runGameDataSourceCheck,
+} from '@/modules/game-data-sync/service';
 
 type WorkerEnv = {
   ASSETS?: {
@@ -22,6 +26,21 @@ async function runScheduledGameDataSourceCheck(event: ScheduledEvent) {
   const snapshot = await runGameDataSourceCheck('cloudflare-cron', {
     notifyOperator: true,
   });
+  const configs = await getAllConfigs();
+  const autoAiReviewEnabled =
+    configs.game_data_auto_ai_review_enabled === 'true';
+  let aiReviewStatus = autoAiReviewEnabled
+    ? 'skipped-sources-healthy'
+    : 'disabled';
+
+  if (autoAiReviewEnabled && snapshot.reviewPlan.state !== 'safe-to-monitor') {
+    try {
+      const review = await runGameDataAiReview(configs, 'cloudflare-cron-auto');
+      aiReviewStatus = `${review.decision}:${review.model}`;
+    } catch (error: any) {
+      aiReviewStatus = `failed:${error?.message || 'unknown error'}`;
+    }
+  }
 
   console.log(
     [
@@ -29,6 +48,7 @@ async function runScheduledGameDataSourceCheck(event: ScheduledEvent) {
       `cron=${event.cron}`,
       `healthy=${snapshot.healthySources}/${snapshot.sourceCount}`,
       `attention=${snapshot.attentionCount}`,
+      `ai-review=${aiReviewStatus}`,
       snapshot.notification
         ? `notification=${snapshot.notification.sent ? 'sent' : snapshot.notification.skippedReason || snapshot.notification.error || 'not-sent'}`
         : 'notification=not-configured',

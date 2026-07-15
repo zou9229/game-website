@@ -491,7 +491,7 @@ export default function AdminGameDataPage() {
       alerts.push({
         title: 'No source-check snapshot loaded',
         detail:
-          'Run source check, or wait for the daily Cloudflare Cron snapshot, before asking Codex to publish data changes.',
+          'Run source check, or wait for the next Cloudflare Cron snapshot, before asking Codex to publish data changes.',
         priority: 'medium',
         action: 'Run source check',
       });
@@ -578,8 +578,9 @@ export default function AdminGameDataPage() {
           <p className="text-muted-foreground max-w-3xl">
             Read-only audit for Quest Codes game data. It shows which Roblox
             pages are fresh, due soon, or stale before a manual source check or
-            scheduled data job creates a review snapshot. Scheduled checks do
-            not publish live content.
+            scheduled data job creates a review snapshot. Scheduled alerts can
+            also trigger a read-only Vertex AI review, but never publish live
+            content.
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -690,12 +691,12 @@ export default function AdminGameDataPage() {
             ))}
           </div>
           <div className="text-muted-foreground bg-background mt-4 rounded-md border p-3 text-sm leading-6">
-            Automation status: review-assisted automation is working. The
-            Cloudflare scheduled source check is configured and in-admin
-            operator alerts are active. Full auto-publish is intentionally not
-            enabled yet because wrong Roblox codes, rewards, stats, or tier
-            claims would damage trust. The next safe upgrade is an external
-            notification channel for high-priority alerts.
+            Automation status: Cloudflare checks sources twice daily. When a
+            check reports blocked, missing-term, or high-risk signals, Vertex AI
+            can automatically create a read-only triage snapshot. Full
+            auto-publish is intentionally disabled because wrong Roblox codes,
+            rewards, stats, or tier claims would damage trust. Configure an
+            external webhook if alerts must reach you outside this admin page.
           </div>
         </CardContent>
       </Card>

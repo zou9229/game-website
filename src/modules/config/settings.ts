@@ -38,6 +38,7 @@ export function getSettingTabs(): SettingTab[] {
     { name: 'storage', title: 'Storage' },
     { name: 'ai', title: 'AI' },
     { name: 'analytics', title: 'Analytics' },
+    { name: 'operations', title: 'Operations' },
     { name: 'customer_service', title: 'Customer Service' },
     { name: 'custom', title: 'Custom' },
   ];
@@ -191,6 +192,13 @@ export function getSettingGroups(): SettingGroup[] {
       description:
         'Inject AdSense Auto ads after approval and generate ads.txt from the configured publisher ID',
       tab: 'analytics',
+    },
+    {
+      name: 'game_data_automation',
+      title: 'Game Data Automation',
+      description:
+        'Scheduled source monitoring and review-only AI triage for Roblox data',
+      tab: 'operations',
     },
     {
       name: 'plausible',
@@ -892,6 +900,17 @@ export function getSettings(): Setting[] {
       tip: 'Enable during site review so Google can verify the script. Auto ads are controlled separately in the AdSense dashboard. ads.txt is generated whenever Publisher ID is configured.',
       group: 'google_adsense',
       tab: 'analytics',
+    },
+
+    // Operations / Game Data Automation
+    {
+      name: 'game_data_auto_ai_review_enabled',
+      title: 'Auto-run Vertex AI on source alerts',
+      type: 'switch',
+      defaultValue: 'false',
+      tip: 'When scheduled source checks return blocked, missing-term, or high-risk signals, automatically create a read-only Vertex AI review snapshot. This never edits or publishes public game data.',
+      group: 'game_data_automation',
+      tab: 'operations',
     },
 
     // ─── Analytics / Plausible ───────────────────────────────────────

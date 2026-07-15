@@ -60,9 +60,10 @@ the repository.
 
 The admin panel is available at `/admin` for authorized users. The game data
 tab at `/admin/game-data` provides freshness auditing, external source checks,
-and optional Vertex AI review. These actions produce read-only review
-snapshots; they do not silently rewrite public guide facts. The protected cron
-route can run source checks and operator alerts while the site is unattended.
+and Vertex AI review. Cloudflare Cron runs source checks twice daily and can
+automatically create a read-only AI triage snapshot when sources need
+attention. These actions do not silently rewrite public guide facts. The
+protected cron route remains available as a fallback for external schedulers.
 Publishing confirmed content changes still happens through a reviewed Git
 commit and Cloudflare deployment.
 

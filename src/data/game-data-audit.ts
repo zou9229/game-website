@@ -173,7 +173,7 @@ export function buildGameDataFreshnessAudit(now = new Date()) {
       weight: 15,
     },
     {
-      complete: staleManualItems.length > 0,
+      complete: staleManualItems.length === 0,
       weight: 20,
     },
   ];

@@ -578,12 +578,13 @@ AI 生成页面强化建议或草稿，由 Codex 审核、改代码、build。
 - 后台能更清楚地告诉你哪些可以改、哪些不能改。
 - 自动化体系继续推进，但不会牺牲内容可信度。
 
-## 18. Cloudflare 定时 Source Check
+## 18. Cloudflare 定时 Source Check 与 AI 分诊
 
-当前线上 Worker 已配置每天运行一次 source-check：
+当前线上 Worker 已配置每天运行两次 source-check：
 
 ```text
-0 9 * * *  # UTC 09:00，中国时间 17:00
+0 1 * * *   # UTC 01:00，中国时间 09:00
+0 13 * * *  # UTC 13:00，中国时间 21:00
 ```
 
 触发位置：
@@ -598,6 +599,7 @@ AI 生成页面强化建议或草稿，由 Codex 审核、改代码、build。
 - 抓取可信来源，检查当前 tracked active code term 是否还被来源提到。
 - 记录 `healthySources`、`attentionCount`、blocked / failed source。
 - 给 `/admin/game-data` 提供最新自动检查结果。
+- 当后台 `Operations -> Game Data Automation` 的自动 AI 开关开启，并且检查结果不是 `safe-to-monitor` 时，自动调用 Vertex AI 生成只读分诊 snapshot。
 - 如果后续配置外部 webhook，可以把高优先级提醒推到 Slack、Discord、飞书或通用 webhook。
 
 它不会做什么：
@@ -606,6 +608,8 @@ AI 生成页面强化建议或草稿，由 Codex 审核、改代码、build。
 - 不会自动把 code 改成 active / expired。
 - 不会自动改 reward、tier、drop rate、crafting cost、patch notes。
 - 不会 commit、push 或 deploy。
+
+自动 Vertex AI 分诊只在来源出现 blocked、缺词或高风险信号时运行。来源全部健康时会跳过，避免无意义消耗额度。AI 失败不会影响 source-check 快照入库，也不会造成公开页面变化。
 
 为什么这样设计：
 
