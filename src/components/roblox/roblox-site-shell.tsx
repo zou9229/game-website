@@ -6,10 +6,29 @@ import { ExternalLink } from 'lucide-react';
 
 import { Link } from '@/core/i18n/navigation';
 import { envConfigs } from '@/config';
+import { getLatestGameDataSourceCheck } from '@/modules/game-data-sync/service';
 
-export function RobloxSiteShell({ children }: { children: React.ReactNode }) {
+function toDateLabel(value?: string) {
+  if (!value) return null;
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return null;
+
+  return date.toISOString().slice(0, 10);
+}
+
+export async function RobloxSiteShell({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const featuredGame = getFeaturedRobloxGame();
   const latestCodeCheckedAt = getLatestCodeCheckedAt(featuredGame);
+  const latestSourceCheck = await getLatestGameDataSourceCheck().catch(
+    () => null
+  );
+  const sourceMonitorCheckedAt =
+    toDateLabel(latestSourceCheck?.generatedAt) ?? latestCodeCheckedAt;
 
   return (
     <div className="quest-game-shell min-h-screen bg-[#edf4ed] text-emerald-950 dark:bg-[#07110d] dark:text-emerald-50 [&>main]:bg-transparent">
@@ -20,9 +39,9 @@ export function RobloxSiteShell({ children }: { children: React.ReactNode }) {
               Source-checked Roblox guides, code history, and update notes.
             </span>
             <span>
-              Codes checked {latestCodeCheckedAt}
+              Editorial check {latestCodeCheckedAt}
               <span className="mx-1 text-white/28">/</span>
-              Game data {featuredGame.stats.checkedAt}
+              Source monitor {sourceMonitorCheckedAt}
             </span>
           </div>
         </div>
