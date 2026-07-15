@@ -136,9 +136,37 @@ export default function HomePage() {
   const activeCodes = featuredGame.codes.filter(
     (code) => code.status === 'active' || code.status === 'special'
   );
+  const organizationId = `${getBaseUrl()}/#organization`;
+  const websiteId = `${getBaseUrl()}/#website`;
+  const publisherSchema = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Organization',
+        '@id': organizationId,
+        name: envConfigs.app_name,
+        url: getBaseUrl(),
+        logo: `${getBaseUrl()}/icon-192.png`,
+        email: 'contact@questcodes.com',
+        description: envConfigs.app_description,
+      },
+      {
+        '@type': 'WebSite',
+        '@id': websiteId,
+        name: envConfigs.app_name,
+        url: getBaseUrl(),
+        inLanguage: 'en',
+        publisher: { '@id': organizationId },
+      },
+    ],
+  };
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(publisherSchema) }}
+      />
       <main className="min-h-screen bg-[#edf4ed] text-emerald-950">
         <header className="sticky top-0 z-50 border-b border-white/10 bg-[#061611]/92 text-white shadow-sm backdrop-blur">
           <div className="mx-auto flex min-h-16 max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
@@ -479,7 +507,10 @@ export default function HomePage() {
               Quest Codes is a fan-made guide site and is not affiliated with
               Roblox or any Roblox game developer.
             </p>
-            <div className="flex gap-4">
+            <div className="flex flex-wrap gap-x-4 gap-y-2">
+              <Link href="/about">About</Link>
+              <Link href="/contact">Contact</Link>
+              <Link href="/editorial-policy">Editorial</Link>
               <Link href="/privacy-policy">Privacy</Link>
               <Link href="/terms-of-service">Terms</Link>
               <a

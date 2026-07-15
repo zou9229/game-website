@@ -26,15 +26,10 @@ export function getBaseUrl() {
   return (envConfigs.app_url || 'http://localhost:3000').replace(/\/$/, '');
 }
 
-export function ensureTrailingSlash(path: string) {
-  if (path === '/') return '/';
-  return path.endsWith('/') ? path : `${path}/`;
-}
-
 export function canonicalUrl(path: string, locale: string) {
-  const normalizedPath = ensureTrailingSlash(
-    path.startsWith('/') ? path : `/${path}`
-  );
+  const prefixedPath = path.startsWith('/') ? path : `/${path}`;
+  const normalizedPath =
+    prefixedPath === '/' ? '/' : prefixedPath.replace(/\/+$/, '');
   const localePrefix = locale === defaultLocale ? '' : `/${locale}`;
   return `${getBaseUrl()}${localePrefix}${normalizedPath}`;
 }

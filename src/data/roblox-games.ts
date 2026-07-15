@@ -208,19 +208,19 @@ export const robloxGames: RobloxGame[] = [
         code: 'forestwakesup26',
         reward: '15 gems and 3 random flames',
         status: 'active',
-        note: 'PC Gamer, GamesRadar, and the community wiki listed this code and reward during the July 13 manual review. PCGamesN did not list it, so the active label remains backed by the three confirming sources.',
+        note: 'PC Gamer and GamesRadar reconfirmed this code and reward on July 15. The community wiki last confirmed it on July 13; PCGamesN did not list it in that review, so the active label stays tied to the confirming sources.',
         sources: [
           {
             name: 'PC Gamer',
             url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-codes/',
             status: 'listed-active',
-            checkedAt: '2026-07-13',
+            checkedAt: '2026-07-15',
           },
           {
             name: 'GamesRadar',
             url: 'https://www.gamesradar.com/games/survival/99-nights-in-the-forest-codes/',
             status: 'listed-active',
-            checkedAt: '2026-07-13',
+            checkedAt: '2026-07-15',
           },
           {
             name: 'Fandom Codes',
@@ -234,13 +234,13 @@ export const robloxGames: RobloxGame[] = [
         code: 'afterparty',
         reward: '15 gems',
         status: 'active',
-        note: 'PC Gamer, PCGamesN, GamesRadar, and the community wiki all listed this code and reward during the July 13 manual source review.',
+        note: 'PC Gamer and GamesRadar reconfirmed this code and reward on July 15. PCGamesN and the community wiki last confirmed the same active label during the July 13 review.',
         sources: [
           {
             name: 'PC Gamer',
             url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-codes/',
             status: 'listed-active',
-            checkedAt: '2026-07-13',
+            checkedAt: '2026-07-15',
           },
           {
             name: 'PCGamesN',
@@ -252,7 +252,7 @@ export const robloxGames: RobloxGame[] = [
             name: 'GamesRadar',
             url: 'https://www.gamesradar.com/games/survival/99-nights-in-the-forest-codes/',
             status: 'listed-active',
-            checkedAt: '2026-07-13',
+            checkedAt: '2026-07-15',
           },
           {
             name: 'Fandom Codes',
@@ -266,13 +266,13 @@ export const robloxGames: RobloxGame[] = [
         code: 'yay fishing',
         reward: '2 gems',
         status: 'special',
-        note: 'PC Gamer, GamesRadar, and the community wiki list this as a one-time chat-based activation, while PCGamesN lists it as expired. Keep the disagreement visible and treat it as a special in-game activation rather than a normal code-box claim.',
+        note: 'PC Gamer and GamesRadar reconfirmed this as a one-time chat-based activation on July 15. The community wiki last agreed on July 13, while PCGamesN listed it as expired, so the disagreement remains visible with a special label.',
         sources: [
           {
             name: 'PC Gamer',
             url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-codes/',
             status: 'listed-active',
-            checkedAt: '2026-07-13',
+            checkedAt: '2026-07-15',
           },
           {
             name: 'PCGamesN',
@@ -284,7 +284,7 @@ export const robloxGames: RobloxGame[] = [
             name: 'GamesRadar',
             url: 'https://www.gamesradar.com/games/survival/99-nights-in-the-forest-codes/',
             status: 'listed-active',
-            checkedAt: '2026-07-13',
+            checkedAt: '2026-07-15',
           },
           {
             name: 'Fandom Codes',
@@ -298,13 +298,13 @@ export const robloxGames: RobloxGame[] = [
         code: 'happyhalloween',
         reward: 'Expired seasonal reward',
         status: 'expired',
-        note: 'PC Gamer reconfirmed this seasonal code in the expired section on July 13. PCGamesN, GamesRadar, and the community wiki also list it as expired.',
+        note: 'PC Gamer and GamesRadar reconfirmed this seasonal code in their expired sections on July 15. PCGamesN and the community wiki last confirmed the same expired label on July 13.',
         sources: [
           {
             name: 'PC Gamer',
             url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-codes/',
             status: 'listed-expired',
-            checkedAt: '2026-07-13',
+            checkedAt: '2026-07-15',
           },
           {
             name: 'PCGamesN',
@@ -316,7 +316,7 @@ export const robloxGames: RobloxGame[] = [
             name: 'GamesRadar',
             url: 'https://www.gamesradar.com/games/survival/99-nights-in-the-forest-codes/',
             status: 'listed-expired',
-            checkedAt: '2026-07-13',
+            checkedAt: '2026-07-15',
           },
           {
             name: 'Fandom Codes',

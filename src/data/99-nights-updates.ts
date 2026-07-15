@@ -13,8 +13,33 @@ export type UpdateEntry = {
 };
 
 export const ninetyNineNightsUpdates = {
-  checkedAt: '2026-07-13',
+  checkedAt: '2026-07-15',
   entries: [
+    {
+      date: '2026-07-15',
+      type: 'code-check',
+      title: 'July 15 code-source review',
+      summary:
+        'PC Gamer and GamesRadar reconfirmed all published code labels. No new code, reward, or redemption route was added.',
+      details: [
+        'forestwakesup26 remains active for 15 gems and 3 random flames in both checked sources.',
+        'afterparty remains active for 15 gems in both checked sources.',
+        'yay fishing remains a one-time chat-based activation in PC Gamer and GamesRadar; Quest Codes keeps its special label because an older PCGamesN check disagreed.',
+        'happyhalloween remains expired in both checked sources.',
+        'PCGamesN, Fandom, and the Roblox Games API were blocked in the command-line pass, so their stored source dates and Roblox metadata were not refreshed.',
+        'No invented code, reward, patch detail, or game statistic was published.',
+      ],
+      sources: [
+        {
+          name: 'PC Gamer codes page',
+          url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-codes/',
+        },
+        {
+          name: 'GamesRadar codes page',
+          url: 'https://www.gamesradar.com/games/survival/99-nights-in-the-forest-codes/',
+        },
+      ],
+    },
     {
       date: '2026-07-13',
       type: 'guide-data-pass',

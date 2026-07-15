@@ -8,6 +8,8 @@ import { envConfigs } from '@/config';
 import { defaultLocale, locales } from '@/config/locale';
 
 const PAGE_SLUGS = [
+  'about',
+  'contact',
   'privacy-policy',
   'terms-of-service',
   'editorial-policy',
@@ -83,6 +85,17 @@ export async function generateMetadata({
     title: page.meta.title,
     description: page.meta.description,
     alternates: { canonical },
+    openGraph: {
+      title: page.meta.title,
+      description: page.meta.description,
+      url: canonical,
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: page.meta.title,
+      description: page.meta.description,
+    },
   };
 }
 

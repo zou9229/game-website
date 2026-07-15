@@ -26,6 +26,8 @@ export async function Footer() {
     {
       title: t('footer.resources'),
       links: [
+        { label: 'About Quest Codes', href: '/about' },
+        { label: 'Contact', href: '/contact' },
         {
           label: t('footer.docs'),
           href: '/roblox/99-nights-in-the-forest/updates',

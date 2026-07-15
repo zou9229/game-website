@@ -28,6 +28,18 @@ const corePages: LlmPage[] = [
       'Index of published Roblox code pages with active rewards, expired history, and source checks.',
   },
   {
+    title: 'About Quest Codes',
+    path: '/about',
+    description:
+      'Publisher identity, editorial approach, update process, fan-site status, and advertising independence.',
+  },
+  {
+    title: 'Contact Quest Codes',
+    path: '/contact',
+    description:
+      'Contact information for code corrections, guide sources, copyright, privacy, and advertising questions.',
+  },
+  {
     title: 'Editorial Policy',
     path: '/editorial-policy',
     description:
@@ -144,8 +156,10 @@ export function buildLlmsText({ full = false }: { full?: boolean } = {}) {
       '- Community submissions are planned, but new claims need verification before publication.',
       '- New Roblox game clusters should only be added after keyword demand, source availability, and page-cluster fit are confirmed.',
       '',
-      '## Legal',
+      '## Trust And Legal',
       '',
+      `- [About Quest Codes](${absoluteUrl('/about')})`,
+      `- [Contact Quest Codes](${absoluteUrl('/contact')})`,
       `- [Privacy Policy](${absoluteUrl('/privacy-policy')})`,
       `- [Terms of Service](${absoluteUrl('/terms-of-service')})`,
       `- [Editorial Policy](${absoluteUrl('/editorial-policy')})`

@@ -106,7 +106,7 @@ export function RobloxSiteShell({ children }: { children: React.ReactNode }) {
               {featuredGame.developer}.
             </p>
           </div>
-          <div className="flex flex-col gap-2 md:items-end">
+          <div className="grid grid-cols-2 gap-x-5 gap-y-2 md:justify-items-end">
             <Link
               className="text-white/58 hover:text-white"
               href="/roblox/99-nights-in-the-forest/codes"
@@ -118,6 +118,24 @@ export function RobloxSiteShell({ children }: { children: React.ReactNode }) {
               href="/roblox/99-nights-in-the-forest"
             >
               99 Nights guide hub
+            </Link>
+            <Link className="text-white/58 hover:text-white" href="/about">
+              About
+            </Link>
+            <Link className="text-white/58 hover:text-white" href="/contact">
+              Contact
+            </Link>
+            <Link
+              className="text-white/58 hover:text-white"
+              href="/editorial-policy"
+            >
+              Editorial policy
+            </Link>
+            <Link
+              className="text-white/58 hover:text-white"
+              href="/privacy-policy"
+            >
+              Privacy policy
             </Link>
             <a
               className="inline-flex items-center gap-1 text-white/58 hover:text-white"

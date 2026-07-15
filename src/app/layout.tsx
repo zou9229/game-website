@@ -4,6 +4,10 @@ import { ThemeProvider } from 'next-themes';
 
 import { envConfigs } from '@/config';
 import { getAllConfigs } from '@/modules/config/service';
+import {
+  isValidAdSensePublisherId,
+  normalizeAdSenseClientId,
+} from '@/lib/adsense';
 import { Analytics } from '@/components/analytics';
 import { CustomerService } from '@/components/customer-service';
 import { GoogleOneTap } from '@/components/google-one-tap';
@@ -63,9 +67,19 @@ export default async function RootLayout({
   const configs = await getAllConfigs();
   const googleOneTapEnabled =
     configs.google_one_tap_enabled === 'true' && !!configs.google_client_id;
+  const adsenseClientId =
+    configs.google_adsense_enabled === 'true' &&
+    isValidAdSensePublisherId(configs.google_adsense_publisher_id)
+      ? normalizeAdSenseClientId(configs.google_adsense_publisher_id)
+      : '';
 
   return (
     <html lang={locale} suppressHydrationWarning>
+      <head>
+        {adsenseClientId ? (
+          <meta name="google-adsense-account" content={adsenseClientId} />
+        ) : null}
+      </head>
       <body className="font-sans antialiased">
         <ThemeProvider
           attribute="class"

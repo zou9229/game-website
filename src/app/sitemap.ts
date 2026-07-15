@@ -6,13 +6,12 @@ import {
 import { robloxGames } from '@/data/roblox-games';
 
 import { defaultLocale } from '@/config/locale';
-import { ensureTrailingSlash, getBaseUrl } from '@/lib/seo';
+import { getBaseUrl } from '@/lib/seo';
 
 function localizedUrl(path: string, locale: string) {
+  const prefixedPath = path.startsWith('/') ? path : `/${path}`;
   const cleanPath =
-    path === '/'
-      ? '/'
-      : ensureTrailingSlash(path.startsWith('/') ? path : `/${path}`);
+    prefixedPath === '/' ? '/' : prefixedPath.replace(/\/+$/, '');
   const localePrefix = locale === defaultLocale ? '' : `/${locale}`;
   return `${getBaseUrl()}${localePrefix}${cleanPath}`;
 }
@@ -69,22 +68,34 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const staticRoutes = [
     {
+      path: '/about',
+      priority: 0.4,
+      changeFrequency: 'monthly' as const,
+      lastModified: '2026-07-15',
+    },
+    {
+      path: '/contact',
+      priority: 0.4,
+      changeFrequency: 'monthly' as const,
+      lastModified: '2026-07-15',
+    },
+    {
       path: '/privacy-policy',
       priority: 0.3,
       changeFrequency: 'yearly' as const,
-      lastModified: '2026-07-12',
+      lastModified: '2026-07-15',
     },
     {
       path: '/terms-of-service',
       priority: 0.3,
       changeFrequency: 'yearly' as const,
-      lastModified: '2026-06-20',
+      lastModified: '2026-07-15',
     },
     {
       path: '/editorial-policy',
       priority: 0.4,
       changeFrequency: 'monthly' as const,
-      lastModified: '2026-06-24',
+      lastModified: '2026-07-15',
     },
   ];
 
