@@ -57,10 +57,15 @@ const builtConfig = JSON.parse(readFileSync(builtConfigPath, 'utf8'));
 const crons = builtConfig.triggers?.crons ?? [];
 
 if (crons.length > 0) {
-  const wranglerBin =
-    process.platform === 'win32' ? 'wrangler.CMD' : 'wrangler';
-  const wrangler = join(process.cwd(), 'node_modules', '.bin', wranglerBin);
+  const wrangler = join(
+    process.cwd(),
+    'node_modules',
+    'wrangler',
+    'bin',
+    'wrangler.js'
+  );
   const triggerArgs = [
+    wrangler,
     'triggers',
     'deploy',
     '-c',
@@ -69,11 +74,10 @@ if (crons.length > 0) {
     builtConfig.name,
     ...crons.flatMap((cron) => ['--triggers', cron]),
   ];
-  const triggerResult = spawnSync(wrangler, triggerArgs, {
+  const triggerResult = spawnSync(process.execPath, triggerArgs, {
     stdio: 'inherit',
     env: process.env,
     cwd: process.cwd(),
-    shell: process.platform === 'win32',
   });
 
   if (triggerResult.error) {
