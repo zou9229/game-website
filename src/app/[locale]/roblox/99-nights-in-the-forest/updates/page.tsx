@@ -1,16 +1,14 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import {
-  getFreshnessAgeDays,
-  getFreshnessStatus,
-  ninetyNineNightsFreshnessEntries,
-} from '@/data/99-nights-freshness';
 import { ninetyNineNightsUpdates } from '@/data/99-nights-updates';
+import { buildGameDataFreshnessAudit } from '@/data/game-data-audit';
 import { getRobloxGame } from '@/data/roblox-games';
 import { seoKeywords } from '@/data/seo-keywords';
 import { ExternalLink, RefreshCw } from 'lucide-react';
 
 import { Link } from '@/core/i18n/navigation';
+import { getLatestGameDataSourceCheck } from '@/modules/game-data-sync/service';
+import { buildFreshnessOverridesFromSourceCheck } from '@/lib/game-data-source-check';
 import {
   buildBreadcrumbSchema,
   buildFAQSchema,
@@ -39,7 +37,7 @@ const faqs = [
   {
     question: 'How often are 99 Nights in the Forest updates checked?',
     answer:
-      'Codes are checked after major updates, events, and source changes. Broader guides are refreshed when a reliable source confirms a game change.',
+      'Cloudflare checks code sources and Roblox metadata twice daily. Broader guides are refreshed only when a reliable source confirms a game change.',
   },
   {
     question: 'Why do some entries say metadata only?',
@@ -70,6 +68,33 @@ const freshnessTone = {
   'due-soon': 'secondary',
   stale: 'destructive',
 } as const;
+
+const monitorTone = {
+  'safe-to-monitor': 'default',
+  'review-before-publish': 'secondary',
+  blocked: 'destructive',
+  delayed: 'destructive',
+} as const;
+
+const sourceMonitorDelayHours = 26;
+
+function getSnapshotAgeHours(value?: string) {
+  if (!value) return null;
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return null;
+
+  return Math.max(0, Math.floor((Date.now() - date.getTime()) / 3_600_000));
+}
+
+function formatSnapshotTime(value?: string) {
+  if (!value) return 'No scheduled snapshot yet';
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return 'Invalid snapshot time';
+
+  return date.toISOString().replace('T', ' ').slice(0, 16) + ' UTC';
+}
 
 export async function generateMetadata({
   params,
@@ -107,6 +132,26 @@ export default async function UpdatesPage({
 }) {
   const { locale } = await params;
   if (!game) notFound();
+
+  const latestSourceCheck = await getLatestGameDataSourceCheck().catch(
+    () => null
+  );
+  const sourceMonitorAgeHours = getSnapshotAgeHours(
+    latestSourceCheck?.generatedAt
+  );
+  const sourceMonitorDelayed =
+    sourceMonitorAgeHours === null ||
+    sourceMonitorAgeHours > sourceMonitorDelayHours;
+  const sourceMonitorState = sourceMonitorDelayed
+    ? 'delayed'
+    : (latestSourceCheck?.reviewPlan.state ?? 'delayed');
+  const freshnessOverrides = latestSourceCheck
+    ? buildFreshnessOverridesFromSourceCheck(latestSourceCheck)
+    : undefined;
+  const freshnessAudit = buildGameDataFreshnessAudit(
+    new Date(),
+    freshnessOverrides
+  );
 
   const pageUrl = canonicalUrl(
     '/roblox/99-nights-in-the-forest/updates/',
@@ -171,7 +216,7 @@ export default async function UpdatesPage({
 
           <Badge variant="outline" className="mb-4 gap-1.5">
             <RefreshCw className="size-3.5" />
-            Checked {ninetyNineNightsUpdates.checkedAt}
+            Editorial checked {ninetyNineNightsUpdates.checkedAt}
           </Badge>
           <h1 className="text-foreground text-4xl font-semibold tracking-tight md:text-5xl">
             99 Nights in the Forest updates and code checks
@@ -219,57 +264,110 @@ export default async function UpdatesPage({
       </section>
 
       <section className="mx-auto max-w-6xl px-4 pb-16 sm:px-6 lg:px-8">
+        <Card className="mb-8">
+          <CardHeader>
+            <div className="flex flex-wrap items-center gap-2">
+              <Badge variant={monitorTone[sourceMonitorState]}>
+                {sourceMonitorState}
+              </Badge>
+              <Badge variant="outline">Cloudflare Cron</Badge>
+              <Badge variant="outline">Read-only monitor</Badge>
+            </div>
+            <CardTitle>Latest automated source monitor</CardTitle>
+            <CardDescription>
+              This snapshot reports source availability and matching terms. It
+              never changes public code status or guide facts by itself.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="grid gap-4 text-sm sm:grid-cols-3">
+            <div className="rounded-md border p-4">
+              <span className="text-muted-foreground block">Last run</span>
+              <span className="mt-1 block font-medium">
+                {formatSnapshotTime(latestSourceCheck?.generatedAt)}
+              </span>
+              <span className="text-muted-foreground mt-1 block text-xs">
+                {sourceMonitorAgeHours === null
+                  ? 'Waiting for the first scheduled run.'
+                  : `${sourceMonitorAgeHours} hour(s) ago`}
+              </span>
+            </div>
+            <div className="rounded-md border p-4">
+              <span className="text-muted-foreground block">Source health</span>
+              <span className="mt-1 block font-medium">
+                {latestSourceCheck
+                  ? `${latestSourceCheck.healthySources}/${latestSourceCheck.sourceCount} healthy`
+                  : 'Unavailable'}
+              </span>
+              <span className="text-muted-foreground mt-1 block text-xs">
+                {latestSourceCheck
+                  ? `${latestSourceCheck.attentionCount} source(s) need review`
+                  : 'No source result is available.'}
+              </span>
+            </div>
+            <div className="rounded-md border p-4">
+              <span className="text-muted-foreground block">Decision</span>
+              <span className="mt-1 block font-medium">
+                {sourceMonitorDelayed
+                  ? 'Wait for the next scheduled run'
+                  : latestSourceCheck?.reviewPlan.title}
+              </span>
+              <span className="text-muted-foreground mt-1 block text-xs">
+                Public data stays conservative until source disagreements are
+                manually reviewed.
+              </span>
+            </div>
+          </CardContent>
+        </Card>
+
         <section className="mb-8 space-y-4">
           <div>
             <h2 className="text-2xl font-semibold tracking-tight">
               Data freshness dashboard
             </h2>
             <p className="text-muted-foreground mt-2 max-w-3xl">
-              The site is mostly static for speed and Cloudflare cost control,
-              but every major 99 Nights page has a checked date and review
-              cadence. This table is the bridge to scheduled checks.
+              Automation candidates use the latest successful source-monitor
+              date. Manual guide facts keep their separate editorial review date
+              and never become fresh from a crawler result alone.
             </p>
           </div>
 
           <div className="grid gap-3 md:grid-cols-2">
-            {ninetyNineNightsFreshnessEntries.map((entry) => {
-              const status = getFreshnessStatus(entry);
-              const ageDays = getFreshnessAgeDays(entry.checkedAt);
-
-              return (
-                <Card key={entry.href}>
-                  <CardHeader>
-                    <div className="flex flex-wrap items-center gap-2">
-                      <Badge variant={freshnessTone[status]}>{status}</Badge>
-                      <Badge variant="outline">{entry.kind}</Badge>
-                      <Badge variant="outline">{entry.owner}</Badge>
-                    </div>
-                    <CardTitle>{entry.title}</CardTitle>
-                    <CardDescription>{entry.note}</CardDescription>
-                  </CardHeader>
-                  <CardContent className="grid gap-3 text-sm sm:grid-cols-3">
-                    <div>
-                      <span className="text-muted-foreground block">
-                        Checked
-                      </span>
-                      <span className="font-medium">{entry.checkedAt}</span>
-                    </div>
-                    <div>
-                      <span className="text-muted-foreground block">Age</span>
-                      <span className="font-medium">{ageDays} days</span>
-                    </div>
-                    <div>
-                      <span className="text-muted-foreground block">
-                        Cadence
-                      </span>
-                      <span className="font-medium">
-                        {entry.cadenceDays} days
-                      </span>
-                    </div>
-                  </CardContent>
-                </Card>
-              );
-            })}
+            {freshnessAudit.items.map((entry) => (
+              <Card key={entry.href}>
+                <CardHeader>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Badge variant={freshnessTone[entry.status]}>
+                      {entry.status}
+                    </Badge>
+                    <Badge variant="outline">{entry.kind}</Badge>
+                    <Badge variant="outline">{entry.owner}</Badge>
+                  </div>
+                  <CardTitle>{entry.title}</CardTitle>
+                  <CardDescription>{entry.note}</CardDescription>
+                </CardHeader>
+                <CardContent className="grid gap-3 text-sm sm:grid-cols-3">
+                  <div>
+                    <span className="text-muted-foreground block">Checked</span>
+                    <span className="font-medium">{entry.checkedAt}</span>
+                    <span className="text-muted-foreground mt-1 block text-xs">
+                      {entry.freshnessBasis === 'automated-source-monitor'
+                        ? `Source monitor; editorial ${entry.editorialCheckedAt}`
+                        : 'Editorial review'}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground block">Age</span>
+                    <span className="font-medium">{entry.ageDays} days</span>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground block">Cadence</span>
+                    <span className="font-medium">
+                      {entry.cadenceDays} days
+                    </span>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </section>
 

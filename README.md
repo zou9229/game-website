@@ -71,6 +71,8 @@ The 99 Nights game hub may render the latest verified Roblox Games API
 metadata from the scheduled D1 snapshot (playing, visits, favorites, and game
 updated time). It falls back to the committed values if the official API check
 is missing or invalid. This does not auto-publish codes or guide claims.
+The public Updates page also shows the latest read-only Cron snapshot, source
+health, decision state, and separate source-monitor/editorial freshness dates.
 The admin audit labels whether each date comes from editorial review or the
 automated source monitor, so monitoring does not masquerade as guide review.
 The deploy command also reapplies the configured Cron triggers after a

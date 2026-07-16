@@ -599,6 +599,7 @@ AI 生成页面强化建议或草稿，由 Codex 审核、改代码、build。
 - 抓取可信来源，检查当前 tracked active code term 是否还被来源提到。
 - 记录 `healthySources`、`attentionCount`、blocked / failed source。
 - 给 `/admin/game-data` 提供最新自动检查结果。
+- 公开 Updates 页面显示最新只读 Cron 快照、来源健康数、决策状态，并区分自动监测日期与人工编辑日期。
 - 后台对自动候选数据标记 `source monitor`，并保留独立的人工编辑日期；攻略事实仍只认可人工复核日期。
 - 成功验证 Roblox Games API 后，游戏 Hub 自动显示在线人数、访问量、收藏数和官方更新时间；API 失败或字段异常时回退到代码中已提交的数据。
 - 当后台 `Operations -> Game Data Automation` 的自动 AI 开关开启，并且检查结果不是 `safe-to-monitor` 时，自动调用 Vertex AI 生成只读分诊 snapshot。

@@ -670,6 +670,7 @@ What it does:
 - Stores the latest source-check snapshot in the config table.
 - Marks the snapshot reason as `cloudflare-cron` for the native scheduler, or `scheduled-cron-api` for the HTTP endpoint.
 - Lets `/admin/game-data` show the latest automated check result.
+- Lets the public Updates page show the latest read-only Cron snapshot, source health, decision state, and separate source-monitor/editorial dates.
 - Marks automation-candidate freshness as `source monitor` while retaining the separate editorial review date; guide pages remain editorial-only.
 - Lets the public game hub show verified Roblox Games API metadata (playing, visits, favorites, and official update time), with committed fallback values.
 - Feeds the in-admin `Operator alerts` panel so the site owner can see review-before-publish and blocked states without reading raw source data first.
