@@ -34,45 +34,45 @@ export type CraftingSection = {
 const fandomCraftingSource: CraftingSource = {
   name: 'Fandom Crafting',
   url: 'https://99-nights-in-the-forest.fandom.com/wiki/Crafting',
-  checkedAt: '2026-07-09',
+  checkedAt: '2026-07-16',
 };
 
 const gamesRadarCraftingSource: CraftingSource = {
   name: 'GamesRadar crafting recipes',
   url: 'https://www.gamesradar.com/games/simulation/99-nights-in-the-forest-crafting-recipes-perks-bench-upgrade/',
-  checkedAt: '2026-07-09',
+  checkedAt: '2026-07-16',
 };
 
 const beebomCraftingSource: CraftingSource = {
   name: 'Beebom crafting recipes',
   url: 'https://beebom.com/99-nights-in-the-forest-crafting-recipes/',
-  checkedAt: '2026-07-09',
+  checkedAt: '2026-07-16',
 };
 
 const pcGamerTipsSource: CraftingSource = {
   name: 'PC Gamer survival tips',
   url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-tips/',
-  checkedAt: '2026-07-09',
+  checkedAt: '2026-07-16',
 };
 
 const pcGamerBandagesSource: CraftingSource = {
   name: 'PC Gamer bandage guide',
   url: 'https://www.pcgamer.com/games/survival-crafting/roblox-99-nights-in-the-forest-bandages/',
-  checkedAt: '2026-07-09',
+  checkedAt: '2026-07-16',
 };
 
 const fandomItemsSource: CraftingSource = {
   name: 'Fandom Items',
   url: 'https://99-nights-in-the-forest.fandom.com/wiki/Items',
-  checkedAt: '2026-07-09',
+  checkedAt: '2026-07-16',
 };
 
 export const ninetyNineNightsCrafting = {
-  checkedAt: '2026-07-09',
+  checkedAt: '2026-07-16',
   summary:
     'Crafting in 99 Nights in the Forest decides how safely you can explore, defend camp, recover teammates, farm diamonds, and survive late-game objectives. This page focuses on priority order and source-checked key crafts rather than claiming a complete realtime recipe table.',
   sourceNote:
-    'Fandom, GamesRadar, Beebom, and PC Gamer were rechecked for the July source pass. Some material counts differ between sources, so disputed entries are shown as source disagreements instead of a forced exact number.',
+    'Fandom, GamesRadar, Beebom, and PC Gamer were rechecked on July 16. Some material counts differ between sources, so disputed entries are shown as source disagreements instead of a forced exact number.',
   items: [
     {
       name: 'Map',

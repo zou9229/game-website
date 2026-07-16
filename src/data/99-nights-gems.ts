@@ -14,7 +14,7 @@ export type GemMethod = {
 };
 
 export const ninetyNineNightsGems = {
-  checkedAt: '2026-07-09',
+  checkedAt: '2026-07-16',
   note:
     'Public guides use both gems and diamonds for the 99 Nights in the Forest premium currency. Quest Codes keeps the wording attached to each source and only treats code rewards as current when the checked code sources still match.',
   methods: [
@@ -33,12 +33,12 @@ export const ninetyNineNightsGems = {
         {
           name: 'PC Gamer codes page',
           url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-codes/',
-          checkedAt: '2026-07-09',
+          checkedAt: '2026-07-16',
         },
         {
           name: 'GamesRadar codes page',
           url: 'https://www.gamesradar.com/games/survival/99-nights-in-the-forest-codes/',
-          checkedAt: '2026-07-09',
+          checkedAt: '2026-07-16',
         },
       ],
     },
@@ -57,7 +57,7 @@ export const ninetyNineNightsGems = {
         {
           name: 'PC Gamer Humiliation Badge guide',
           url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-secret-action-humiliation-badge/',
-          checkedAt: '2026-07-09',
+          checkedAt: '2026-07-16',
         },
       ],
     },
@@ -76,12 +76,12 @@ export const ninetyNineNightsGems = {
         {
           name: 'Fandom Diamonds',
           url: 'https://99-nights-in-the-forest.fandom.com/wiki/Diamonds',
-          checkedAt: '2026-07-09',
+          checkedAt: '2026-07-16',
         },
         {
           name: 'Fandom Cultist Stronghold',
           url: 'https://99-nights-in-the-forest.fandom.com/wiki/Cultist_Stronghold',
-          checkedAt: '2026-07-09',
+          checkedAt: '2026-07-16',
         },
       ],
     },
@@ -100,12 +100,12 @@ export const ninetyNineNightsGems = {
         {
           name: 'PC Gamer tips guide',
           url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-tips/',
-          checkedAt: '2026-07-09',
+          checkedAt: '2026-07-16',
         },
         {
           name: 'GamesRadar classes guide',
           url: 'https://www.gamesradar.com/games/simulation/99-nights-in-the-forest-classes-all/',
-          checkedAt: '2026-07-09',
+          checkedAt: '2026-07-16',
         },
       ],
     },
