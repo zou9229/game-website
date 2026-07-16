@@ -41,4 +41,50 @@ if (result.error) {
   console.error(result.error.message);
 }
 
-process.exit(result.status ?? 1);
+if (result.status !== 0) {
+  process.exit(result.status ?? 1);
+}
+
+const builtConfigPath = join(process.cwd(), 'dist', 'server', 'wrangler.json');
+if (!existsSync(builtConfigPath)) {
+  console.error(
+    'Cloudflare deploy succeeded, but the built Wrangler config is missing.'
+  );
+  process.exit(1);
+}
+
+const builtConfig = JSON.parse(readFileSync(builtConfigPath, 'utf8'));
+const crons = builtConfig.triggers?.crons ?? [];
+
+if (crons.length > 0) {
+  const wranglerBin =
+    process.platform === 'win32' ? 'wrangler.CMD' : 'wrangler';
+  const wrangler = join(process.cwd(), 'node_modules', '.bin', wranglerBin);
+  const triggerArgs = [
+    'triggers',
+    'deploy',
+    '-c',
+    builtConfigPath,
+    '--name',
+    builtConfig.name,
+    ...crons.flatMap((cron) => ['--triggers', cron]),
+  ];
+  const triggerResult = spawnSync(wrangler, triggerArgs, {
+    stdio: 'inherit',
+    env: process.env,
+    cwd: process.cwd(),
+    shell: process.platform === 'win32',
+  });
+
+  if (triggerResult.error) {
+    console.error(triggerResult.error.message);
+  }
+  if (triggerResult.status !== 0) {
+    console.error(
+      'Worker deployed, but scheduled trigger synchronization failed.'
+    );
+    process.exit(triggerResult.status ?? 1);
+  }
+}
+
+process.exit(0);

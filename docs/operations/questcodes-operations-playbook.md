@@ -670,6 +670,8 @@ What it does:
 - Stores the latest source-check snapshot in the config table.
 - Marks the snapshot reason as `cloudflare-cron` for the native scheduler, or `scheduled-cron-api` for the HTTP endpoint.
 - Lets `/admin/game-data` show the latest automated check result.
+- Marks automation-candidate freshness as `source monitor` while retaining the separate editorial review date; guide pages remain editorial-only.
+- Lets the public game hub show verified Roblox Games API metadata (playing, visits, favorites, and official update time), with committed fallback values.
 - Feeds the in-admin `Operator alerts` panel so the site owner can see review-before-publish and blocked states without reading raw source data first.
 - When `GAME_DATA_AUTO_AI_REVIEW_ENABLED` is true and a source check reports attention signals, it creates a read-only Vertex AI triage snapshot.
 - Can send optional high-priority operator alerts to an external webhook when `GAME_DATA_ALERT_WEBHOOK_URL` is configured.
@@ -677,6 +679,7 @@ What it does:
 What it does not do:
 
 - It does not rewrite source files.
+- It does not infer code status or guide facts from Roblox metadata.
 - It does not change code status, rewards, tier claims, crafting costs, drop rates, or patch notes.
 - It does not commit, push, or deploy.
 - It does not replace manual review.
@@ -691,6 +694,7 @@ Current schedule:
 
 - Twice daily while the tracked game is active. This is configured in `wrangler.jsonc`.
 - Twice daily only if GSC shows codes-page impressions or the game has active update/event volatility.
+- `pnpm run deploy` reapplies the built Cron schedule after a successful Worker deployment and fails loudly if trigger synchronization fails.
 
 Next safe upgrade:
 

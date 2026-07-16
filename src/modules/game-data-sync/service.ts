@@ -56,6 +56,14 @@ export type GameDataSourceCheckRunResult = GameDataSourceCheckSnapshot & {
   notification?: GameDataOperatorAlertNotification;
 };
 
+export type VerifiedRobloxGameMetadata = {
+  checkedAt: string;
+  updatedAt?: string;
+  playing?: number;
+  visits?: number;
+  favorites?: number;
+};
+
 async function readConfigValue(name: string) {
   const [row] = await db()
     .select()
@@ -131,6 +139,48 @@ export async function getLatestGameDataSourceCheck() {
   } catch {
     return null;
   }
+}
+
+function parseNonNegativeInteger(value?: string) {
+  if (!value || !/^\d+$/.test(value)) return undefined;
+
+  const parsed = Number(value);
+  return Number.isSafeInteger(parsed) && parsed >= 0 ? parsed : undefined;
+}
+
+function parseIsoTimestamp(value?: string) {
+  if (!value) return undefined;
+
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? undefined : parsed.toISOString();
+}
+
+export async function getLatestVerifiedRobloxMetadata(): Promise<VerifiedRobloxGameMetadata | null> {
+  const snapshot = await getLatestGameDataSourceCheck();
+  const result = snapshot?.results.find(
+    (item) =>
+      item.kind === 'metadata' &&
+      item.sourceName === 'Roblox Games API' &&
+      item.ok
+  );
+  if (!result) return null;
+
+  const signals = new Map(
+    (Array.isArray(result.signals) ? result.signals : []).map((signal) => [
+      signal.label,
+      signal.value,
+    ])
+  );
+  const checkedAt = parseIsoTimestamp(result.checkedAt);
+  if (!checkedAt) return null;
+
+  return {
+    checkedAt,
+    updatedAt: parseIsoTimestamp(signals.get('Updated')),
+    playing: parseNonNegativeInteger(signals.get('Playing')),
+    visits: parseNonNegativeInteger(signals.get('Visits')),
+    favorites: parseNonNegativeInteger(signals.get('Favorites')),
+  };
 }
 
 function parseModelList(value: unknown) {

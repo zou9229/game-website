@@ -67,6 +67,15 @@ protected cron route remains available as a fallback for external schedulers.
 Publishing confirmed content changes still happens through a reviewed Git
 commit and Cloudflare deployment.
 
+The 99 Nights game hub may render the latest verified Roblox Games API
+metadata from the scheduled D1 snapshot (playing, visits, favorites, and game
+updated time). It falls back to the committed values if the official API check
+is missing or invalid. This does not auto-publish codes or guide claims.
+The admin audit labels whether each date comes from editorial review or the
+automated source monitor, so monitoring does not masquerade as guide review.
+The deploy command also reapplies the configured Cron triggers after a
+successful Worker upload.
+
 ## Monetization And Tracking
 
 Google Analytics and Google AdSense are configured from `/admin/settings` under

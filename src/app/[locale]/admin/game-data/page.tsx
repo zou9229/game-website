@@ -32,6 +32,8 @@ type FreshnessItem = {
   href: string;
   kind: string;
   checkedAt: string;
+  editorialCheckedAt: string;
+  freshnessBasis: 'editorial' | 'automated-source-monitor';
   cadenceDays: number;
   owner: string;
   note: string;
@@ -1339,7 +1341,14 @@ export default function AdminGameDataPage() {
                         </Link>
                       </td>
                       <td className="py-3 pr-4">{item.kind}</td>
-                      <td className="py-3 pr-4">{item.checkedAt}</td>
+                      <td className="py-3 pr-4">
+                        <div>{item.checkedAt}</div>
+                        <div className="text-muted-foreground mt-1 max-w-40 text-xs leading-5">
+                          {item.freshnessBasis === 'automated-source-monitor'
+                            ? `source monitor; editorial ${item.editorialCheckedAt}`
+                            : 'editorial review'}
+                        </div>
+                      </td>
                       <td className="py-3 pr-4">{item.ageDays}d</td>
                       <td className="py-3 pr-4">{item.cadenceDays}d</td>
                       <td className="py-3 pr-4">{item.owner}</td>

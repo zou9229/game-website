@@ -55,6 +55,10 @@ export type GameDataSourceCheckSnapshot = {
   results: GameDataSourceCheckResult[];
 };
 
+export type GameDataFreshnessOverrides = Partial<
+  Record<GameDataSourceKind, string>
+>;
+
 const SOURCE_CHECK_TARGETS: GameDataSourceCheckTarget[] = [
   {
     id: 'pc-gamer-99-nights-codes',
@@ -398,6 +402,28 @@ export function buildGameDataSourceReviewPlan(
         ? 'At least one trusted source confirmed the tracked active terms, but blocked sources or high-risk terms mean public data should stay conservative until manual review.'
         : 'Tracked source terms look healthy. No automatic public content change is needed unless a manual review finds changed rewards, status labels, or source wording.',
     recommendations,
+  };
+}
+
+export function buildFreshnessOverridesFromSourceCheck(
+  snapshot: GameDataSourceCheckSnapshot
+): GameDataFreshnessOverrides {
+  const generatedAt = new Date(snapshot.generatedAt);
+  if (Number.isNaN(generatedAt.getTime())) return {};
+
+  const checkedAt = generatedAt.toISOString().slice(0, 10);
+  const results = Array.isArray(snapshot.results) ? snapshot.results : [];
+  const healthyCodes = results.some(
+    (result) => result.kind === 'codes' && result.ok
+  );
+  const healthyMetadata = results.some(
+    (result) => result.kind === 'metadata' && result.ok
+  );
+
+  return {
+    codes: healthyCodes ? checkedAt : undefined,
+    metadata: healthyMetadata ? checkedAt : undefined,
+    updates: healthyCodes || healthyMetadata ? checkedAt : undefined,
   };
 }
 

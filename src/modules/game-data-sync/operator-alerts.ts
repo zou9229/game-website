@@ -3,7 +3,10 @@ import {
   type FreshnessPriority,
 } from '@/data/game-data-audit';
 
-import type { GameDataSourceCheckSnapshot } from '@/lib/game-data-source-check';
+import {
+  buildFreshnessOverridesFromSourceCheck,
+  type GameDataSourceCheckSnapshot,
+} from '@/lib/game-data-source-check';
 
 export type GameDataOperatorAlert = {
   priority: FreshnessPriority;
@@ -57,7 +60,10 @@ function isAtOrAbovePriority(
 export function buildGameDataOperatorAlerts(
   snapshot: GameDataSourceCheckSnapshot
 ): GameDataOperatorAlert[] {
-  const audit = buildGameDataFreshnessAudit(new Date(snapshot.generatedAt));
+  const audit = buildGameDataFreshnessAudit(
+    new Date(snapshot.generatedAt),
+    buildFreshnessOverridesFromSourceCheck(snapshot)
+  );
   const alerts: GameDataOperatorAlert[] = [];
   const staleHighItems = audit.items.filter(
     (item) => item.status === 'stale' && item.priority === 'high'

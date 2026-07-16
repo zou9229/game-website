@@ -599,15 +599,20 @@ AI 生成页面强化建议或草稿，由 Codex 审核、改代码、build。
 - 抓取可信来源，检查当前 tracked active code term 是否还被来源提到。
 - 记录 `healthySources`、`attentionCount`、blocked / failed source。
 - 给 `/admin/game-data` 提供最新自动检查结果。
+- 后台对自动候选数据标记 `source monitor`，并保留独立的人工编辑日期；攻略事实仍只认可人工复核日期。
+- 成功验证 Roblox Games API 后，游戏 Hub 自动显示在线人数、访问量、收藏数和官方更新时间；API 失败或字段异常时回退到代码中已提交的数据。
 - 当后台 `Operations -> Game Data Automation` 的自动 AI 开关开启，并且检查结果不是 `safe-to-monitor` 时，自动调用 Vertex AI 生成只读分诊 snapshot。
 - 如果后续配置外部 webhook，可以把高优先级提醒推到 Slack、Discord、飞书或通用 webhook。
 
 它不会做什么：
 
 - 不会自动改页面文件。
+- 不会根据 Roblox 元数据推断兑换码状态、奖励或攻略事实。
 - 不会自动把 code 改成 active / expired。
 - 不会自动改 reward、tier、drop rate、crafting cost、patch notes。
 - 不会 commit、push 或 deploy。
+
+每次 `pnpm run deploy` 成功上传 Worker 后，部署脚本会再次同步 `wrangler.jsonc` 中的 Cron 计划；如果触发器同步失败，命令会明确报错，避免出现“网站已部署但自动任务未生效”。
 
 自动 Vertex AI 分诊只在来源出现 blocked、缺词或高风险信号时运行。来源全部健康时会跳过，避免无意义消耗额度。AI 失败不会影响 source-check 快照入库，也不会造成公开页面变化。
 

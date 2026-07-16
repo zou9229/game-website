@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 
 import { Link } from '@/core/i18n/navigation';
+import { getLatestVerifiedRobloxMetadata } from '@/modules/game-data-sync/service';
 import {
   buildBreadcrumbSchema,
   buildVideoGameSchema,
@@ -138,6 +139,18 @@ export default async function GameHubPage({
 
   if (!game) return null;
 
+  const verifiedMetadata = await getLatestVerifiedRobloxMetadata().catch(
+    () => null
+  );
+  const liveStats = {
+    playing: verifiedMetadata?.playing ?? game.stats.playing,
+    visits: verifiedMetadata?.visits ?? game.stats.visits,
+    favorites: verifiedMetadata?.favorites ?? game.stats.favorites,
+  };
+  const metadataCheckedAt =
+    verifiedMetadata?.checkedAt.slice(0, 10) ?? game.stats.checkedAt;
+  const officialUpdatedAt =
+    verifiedMetadata?.updatedAt?.slice(0, 10) ?? game.updatedAt;
   const latestCodeCheckedAt = getLatestCodeCheckedAt(game);
   const livePages = game.pages.filter((page) => page.status === 'live');
   const activeCodeCount = game.codes.filter(
@@ -156,7 +169,7 @@ export default async function GameHubPage({
     imageUrl: game.imageUrl,
     developer: game.developer,
     genre: game.genre,
-    dateModified: game.updatedAt,
+    dateModified: officialUpdatedAt,
   });
 
   return (
@@ -209,7 +222,7 @@ export default async function GameHubPage({
                 ['Live guide pages', livePages.length.toString()],
                 [
                   'Roblox visits',
-                  `${(game.stats.visits / 1000000000).toFixed(1)}B`,
+                  `${(liveStats.visits / 1000000000).toFixed(1)}B`,
                 ],
               ].map(([label, value]) => (
                 <div
@@ -316,9 +329,9 @@ export default async function GameHubPage({
       <section className="border-border/80 bg-card border-y">
         <div className="mx-auto grid max-w-6xl gap-4 px-4 py-8 sm:px-6 md:grid-cols-4 lg:px-8">
           {[
-            ['Playing', game.stats.playing.toLocaleString()],
-            ['Visits', game.stats.visits.toLocaleString()],
-            ['Favorites', game.stats.favorites.toLocaleString()],
+            ['Playing', liveStats.playing.toLocaleString()],
+            ['Visits', liveStats.visits.toLocaleString()],
+            ['Favorites', liveStats.favorites.toLocaleString()],
             ['Max players', game.maxPlayers.toString()],
           ].map(([label, value]) => (
             <Card key={label} className="rounded-lg">
@@ -329,6 +342,11 @@ export default async function GameHubPage({
             </Card>
           ))}
         </div>
+        <p className="text-muted-foreground mx-auto max-w-6xl px-4 pb-6 text-xs sm:px-6 lg:px-8">
+          Official Roblox API metadata checked {metadataCheckedAt}. Game last
+          updated {officialUpdatedAt}. Static fallback values are used if the
+          automated source check cannot be verified.
+        </p>
       </section>
 
       <section className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">

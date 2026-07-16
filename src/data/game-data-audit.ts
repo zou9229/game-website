@@ -5,6 +5,7 @@ import {
   type FreshnessStatus,
   ninetyNineNightsFreshnessEntries,
 } from '@/data/99-nights-freshness';
+import type { GameDataFreshnessOverrides } from '@/lib/game-data-source-check';
 
 export type FreshnessPriority = 'high' | 'medium' | 'low';
 
@@ -13,6 +14,8 @@ export type FreshnessAuditItem = FreshnessEntry & {
   status: FreshnessStatus;
   priority: FreshnessPriority;
   recommendedAction: string;
+  editorialCheckedAt: string;
+  freshnessBasis: 'editorial' | 'automated-source-monitor';
 };
 
 export type FreshnessAuditAction = {
@@ -93,19 +96,30 @@ function getRecommendedAction(
   return 'No action now. Keep this page manual-review unless reliable source data changes.';
 }
 
-export function buildGameDataFreshnessAudit(now = new Date()) {
+export function buildGameDataFreshnessAudit(
+  now = new Date(),
+  overrides: GameDataFreshnessOverrides = {}
+) {
   const items: FreshnessAuditItem[] = ninetyNineNightsFreshnessEntries
     .map((entry) => {
-      const ageDays = getFreshnessAgeDays(entry.checkedAt, now);
-      const status = getFreshnessStatus(entry, now);
+      const overrideCheckedAt =
+        entry.kind === 'guide' ? undefined : overrides[entry.kind];
+      const checkedAt = overrideCheckedAt ?? entry.checkedAt;
+      const effectiveEntry = { ...entry, checkedAt };
+      const ageDays = getFreshnessAgeDays(checkedAt, now);
+      const status = getFreshnessStatus(effectiveEntry, now);
       const priority = getPriority(entry, status);
 
       return {
-        ...entry,
+        ...effectiveEntry,
         ageDays,
         status,
         priority,
         recommendedAction: getRecommendedAction(entry, status),
+        editorialCheckedAt: entry.checkedAt,
+        freshnessBasis: overrideCheckedAt
+          ? 'automated-source-monitor'
+          : 'editorial',
       };
     })
     .sort((a, b) => {
@@ -136,9 +150,6 @@ export function buildGameDataFreshnessAudit(now = new Date()) {
   );
   const manualReviewItems = items.filter(
     (item) => item.owner === 'manual-review'
-  );
-  const automationFresh = automationItems.filter(
-    (item) => item.status === 'fresh'
   );
   const automationNotStale = automationItems.filter(
     (item) => item.status !== 'stale'
@@ -192,7 +203,7 @@ export function buildGameDataFreshnessAudit(now = new Date()) {
       weight: 10,
     },
     {
-      complete: automationFresh.length === automationItems.length,
+      complete: automationNotStale.length === automationItems.length,
       weight: 10,
     },
     {
