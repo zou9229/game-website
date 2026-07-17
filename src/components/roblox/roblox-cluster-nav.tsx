@@ -61,7 +61,7 @@ export function RobloxClusterNav() {
             src={clusterImageUrl}
             alt=""
             aria-hidden="true"
-            className="absolute inset-0 h-full w-full object-cover object-center opacity-25"
+            className="quest-hero-media absolute inset-0 h-full w-full object-cover object-center opacity-25"
           />
           <div className="absolute inset-0 bg-black/65" />
         </>
@@ -140,19 +140,20 @@ export function RobloxClusterNav() {
             </span>
             <span
               className={cn(
-                'rounded-full border px-2.5 py-1',
+                'inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1',
                 currentPage
                   ? 'border-lime-200/20 bg-lime-200/10 text-lime-100'
                   : 'border-border bg-background'
               )}
             >
+              <span className="quest-live-dot" aria-hidden="true" />
               codes checked {latestCodeCheckedAt}
             </span>
           </div>
         </div>
 
         {currentPage ? (
-          <div className="mt-5 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+          <div className="quest-enter mt-5 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex min-w-0 items-center gap-4">
               <img
                 src={gameIconUrl}

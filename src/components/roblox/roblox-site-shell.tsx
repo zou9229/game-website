@@ -31,11 +31,12 @@ export async function RobloxSiteShell({
     toDateLabel(latestSourceCheck?.generatedAt) ?? latestCodeCheckedAt;
 
   return (
-    <div className="quest-game-shell min-h-screen bg-[#edf4ed] text-emerald-950 dark:bg-[#07110d] dark:text-emerald-50 [&>main]:bg-transparent">
+    <div className="quest-game-shell min-h-screen overflow-x-clip bg-[#edf4ed] text-emerald-950 dark:bg-[#07110d] dark:text-emerald-50 [&>main]:bg-transparent">
       <header className="sticky top-0 z-50 border-b border-white/10 bg-[#061611]/95 text-white shadow-md backdrop-blur">
         <div className="border-b border-lime-200/10 bg-[#0a2418]">
           <div className="mx-auto flex min-h-8 max-w-6xl flex-wrap items-center justify-between gap-2 px-4 py-1.5 text-xs text-white/58 sm:px-6 lg:px-8">
-            <span>
+            <span className="inline-flex items-center gap-2">
+              <span className="quest-live-dot" aria-hidden="true" />
               Source-checked Roblox guides, code history, and update notes.
             </span>
             <span>
@@ -46,7 +47,7 @@ export async function RobloxSiteShell({
           </div>
         </div>
 
-        <div className="mx-auto flex min-h-16 max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
+        <div className="mx-auto flex min-h-16 max-w-6xl flex-col items-stretch justify-between gap-3 px-4 py-3 sm:flex-row sm:flex-wrap sm:items-center sm:px-6 lg:px-8">
           <div className="flex items-center gap-5">
             <Link
               className="flex items-center gap-2 font-semibold tracking-tight"
@@ -68,7 +69,7 @@ export async function RobloxSiteShell({
 
           <nav
             aria-label="Roblox guide navigation"
-            className="flex flex-wrap items-center gap-1.5 text-sm"
+            className="flex w-full min-w-0 flex-wrap items-center gap-1.5 text-sm sm:w-auto sm:justify-end"
           >
             <Link
               className="inline-flex min-h-10 items-center rounded-md px-2.5 py-1.5 text-white/64 transition-colors hover:bg-white/10 hover:text-white"

@@ -26,7 +26,7 @@ export function GuideMediaPanel({
   const supportingImages = images.slice(1);
 
   return (
-    <Card className="mb-8 overflow-hidden rounded-lg">
+    <Card className="quest-media-panel mb-8 overflow-hidden rounded-lg">
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>

@@ -169,7 +169,7 @@ export default function HomePage() {
       />
       <main className="min-h-screen bg-[#edf4ed] text-emerald-950">
         <header className="sticky top-0 z-50 border-b border-white/10 bg-[#061611]/92 text-white shadow-sm backdrop-blur">
-          <div className="mx-auto flex min-h-16 max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
+          <div className="mx-auto flex min-h-16 max-w-6xl flex-col items-stretch justify-between gap-3 px-4 py-3 sm:flex-row sm:flex-wrap sm:items-center sm:px-6 lg:px-8">
             <Link
               className="flex items-center gap-2 font-semibold tracking-tight"
               href="/"
@@ -182,7 +182,7 @@ export default function HomePage() {
               />
               {envConfigs.app_name}
             </Link>
-            <nav className="flex flex-wrap items-center gap-1.5 text-sm">
+            <nav className="flex w-full min-w-0 flex-wrap items-center gap-1.5 text-sm sm:w-auto sm:justify-end">
               <Link
                 className="rounded-md px-2.5 py-1.5 text-white/70 transition-colors hover:bg-white/10 hover:text-white"
                 href="/roblox"
@@ -215,14 +215,14 @@ export default function HomePage() {
           <img
             src={heroImageUrl}
             alt="99 Nights in the Forest Roblox thumbnail used as Quest Codes hero background"
-            className="absolute inset-0 h-full w-full object-cover"
+            className="quest-hero-media absolute inset-0 h-full w-full object-cover"
             fetchPriority="high"
           />
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(3,10,8,0.96)_0%,rgba(3,10,8,0.84)_42%,rgba(3,10,8,0.48)_72%,rgba(3,10,8,0.76)_100%)]" />
           <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#edf4ed] via-[#edf4ed]/70 to-transparent" />
 
           <div className="relative mx-auto grid min-h-[58svh] max-w-6xl items-center gap-10 lg:grid-cols-[minmax(0,0.98fr)_minmax(360px,0.78fr)]">
-            <div className="max-w-3xl space-y-7">
+            <div className="quest-enter max-w-3xl space-y-7">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="inline-flex items-center gap-2 rounded-full border border-lime-200/20 bg-lime-200/10 px-4 py-2 text-xs font-semibold tracking-[0.18em] text-lime-100 uppercase">
                   <Gamepad2 className="size-3.5" />
@@ -273,7 +273,7 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="rounded-lg border border-lime-200/20 bg-[#062016]/88 p-4 shadow-2xl shadow-black/35 backdrop-blur-md sm:p-5">
+            <div className="quest-enter quest-enter-delay-2 rounded-lg border border-lime-200/20 bg-[#062016]/88 p-4 shadow-2xl shadow-black/35 backdrop-blur-md sm:p-5">
               <div className="mb-4 flex items-center justify-between gap-3">
                 <span className="inline-flex items-center gap-2 rounded-full bg-lime-200/12 px-3 py-1.5 text-xs font-semibold tracking-[0.16em] text-lime-100 uppercase">
                   <Sparkles className="size-3.5" />
@@ -348,12 +348,12 @@ export default function HomePage() {
                   <Link
                     key={card.href}
                     href={card.href}
-                    className="group relative min-h-[330px] overflow-hidden rounded-lg border border-emerald-950/12 bg-zinc-950 shadow-sm"
+                    className="quest-image-card group relative min-h-[330px] overflow-hidden rounded-lg border border-emerald-950/12 bg-zinc-950 shadow-sm"
                   >
                     <img
                       src={card.image}
                       alt={`${card.title} visual for 99 Nights in the Forest`}
-                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="quest-image-card-media absolute inset-0 h-full w-full object-cover"
                       loading="lazy"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/36 to-black/12" />
