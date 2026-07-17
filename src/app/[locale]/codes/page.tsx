@@ -15,7 +15,6 @@ import {
   canonicalUrl,
   currentMonthYear,
 } from '@/lib/seo';
-import { ConfiguredGoogleAdSense } from '@/components/analytics/google-adsense';
 import { Badge } from '@/components/ui/badge';
 import {
   Card,
@@ -39,6 +38,10 @@ export async function generateMetadata({
     description:
       'Browse source-checked Roblox code pages with active rewards, expired history, redemption notes, and related game guides.',
     keywords: seoKeywords.codesIndex,
+    robots: {
+      index: false,
+      follow: true,
+    },
     alternates: { canonical },
     openGraph: {
       title: `Roblox Codes Index (${monthYear}) - Quest Codes`,
@@ -248,7 +251,6 @@ export default async function CodesIndexPage({
           </Card>
         </section>
       </main>
-      <ConfiguredGoogleAdSense />
     </>
   );
 }

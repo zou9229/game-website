@@ -11,7 +11,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Field,
-  FieldDescription,
   FieldGroup,
   FieldLabel,
   FieldSeparator,
@@ -64,15 +63,6 @@ export default function SignInPage() {
   const afterLoginUrl = redirectParam
     ? `/auth-callback?redirect=${encodeURIComponent(redirectParam)}`
     : safeCallbackUrl || '/settings';
-
-  // Carry callbackUrl/redirect across to sign-up so the destination survives the switch.
-  const switchQuery = (() => {
-    const p = new URLSearchParams();
-    if (safeCallbackUrl) p.set('callbackUrl', safeCallbackUrl);
-    if (redirectParam) p.set('redirect', redirectParam);
-    const s = p.toString();
-    return s ? `?${s}` : '';
-  })();
 
   useEffect(() => {
     fetch('/api/config/public')
@@ -256,15 +246,6 @@ export default function SignInPage() {
                         <Button type="submit" disabled={loading}>
                           {loading ? '...' : t('sign.sign_in_title')}
                         </Button>
-                        <FieldDescription className="text-center">
-                          {t('sign.no_account')}{' '}
-                          <Link
-                            href={`/sign-up${switchQuery}`}
-                            className="underline underline-offset-4"
-                          >
-                            {t('sign.sign_up_title')}
-                          </Link>
-                        </FieldDescription>
                       </Field>
                     </>
                   )}

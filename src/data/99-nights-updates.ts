@@ -13,8 +13,32 @@ export type UpdateEntry = {
 };
 
 export const ninetyNineNightsUpdates = {
-  checkedAt: '2026-07-15',
+  checkedAt: '2026-07-17',
   entries: [
+    {
+      date: '2026-07-17',
+      type: 'code-check',
+      title: 'July 17 partial code-source confirmation',
+      summary:
+        'PC Gamer and GamesRadar reconfirmed the two tracked active codes. Three blocked sources remain on the manual review queue, so no disputed status or Roblox statistic changed.',
+      details: [
+        'forestwakesup26 remains active for 15 gems and 3 random flames in both reachable sources.',
+        'afterparty remains active for 15 gems in both reachable sources.',
+        'PCGamesN, the Fandom Codes Wiki, and the Roblox Games API returned HTTP 403 in this command-line pass.',
+        'happyhalloween appeared in reachable source text, but its expired label remains unchanged until the surrounding source section is manually reviewed.',
+        'Roblox visits, favorites, player count, special-code labels, and expired-code labels were not refreshed from this partial result.',
+      ],
+      sources: [
+        {
+          name: 'PC Gamer codes page',
+          url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-codes/',
+        },
+        {
+          name: 'GamesRadar codes page',
+          url: 'https://www.gamesradar.com/games/survival/99-nights-in-the-forest-codes/',
+        },
+      ],
+    },
     {
       date: '2026-07-15',
       type: 'code-check',

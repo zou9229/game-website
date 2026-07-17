@@ -74,6 +74,7 @@ function getSocialProviders(configs: Record<string, string>) {
     providers.google = {
       clientId: configs.google_client_id,
       clientSecret: configs.google_client_secret,
+      disableSignUp: true,
     };
   }
 
@@ -81,6 +82,7 @@ function getSocialProviders(configs: Record<string, string>) {
     providers.github = {
       clientId: configs.github_client_id,
       clientSecret: configs.github_client_secret,
+      disableSignUp: true,
     };
   }
 
@@ -139,7 +141,7 @@ function getAuthPlugins(configs: Record<string, string> | undefined) {
   if (!configs) return [];
   const plugins: any[] = [];
   if (configs.google_client_id && configs.google_one_tap_enabled === 'true') {
-    plugins.push(oneTap());
+    plugins.push(oneTap({ disableSignup: true }));
   }
   return plugins;
 }
@@ -228,6 +230,7 @@ export function getAuth(configs?: Record<string, string>) {
     },
     emailAndPassword: {
       enabled: emailAndPasswordEnabled,
+      disableSignUp: true,
       requireEmailVerification: emailVerificationEnabled,
       autoSignIn: !emailVerificationEnabled,
       sendResetPassword: async ({ user, url }) => {

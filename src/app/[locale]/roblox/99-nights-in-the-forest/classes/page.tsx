@@ -78,6 +78,10 @@ export async function generateMetadata({
     description:
       'All 99 Nights in the Forest Roblox classes in one checked list, with tier groups, starter picks, solo recommendations, and co-op choices.',
     keywords: seoKeywords.ninetyNineNightsClasses,
+    robots: {
+      index: false,
+      follow: true,
+    },
     alternates: {
       canonical,
     },

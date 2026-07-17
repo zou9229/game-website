@@ -19,7 +19,7 @@ export async function Footer() {
         },
         {
           label: 'Class tier list',
-          href: '/roblox/99-nights-in-the-forest/class-tier-list',
+          href: '/roblox/99-nights-in-the-forest/classes',
         },
       ],
     },

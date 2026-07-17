@@ -1,4 +1,3 @@
-import { ConfiguredGoogleAdSense } from '@/components/analytics/google-adsense';
 import { RobloxSiteShell } from '@/components/roblox/roblox-site-shell';
 
 export default function RobloxLayout({
@@ -6,10 +5,5 @@ export default function RobloxLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <>
-      <RobloxSiteShell>{children}</RobloxSiteShell>
-      <ConfiguredGoogleAdSense />
-    </>
-  );
+  return <RobloxSiteShell>{children}</RobloxSiteShell>;
 }

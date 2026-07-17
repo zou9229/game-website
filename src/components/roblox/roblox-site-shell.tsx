@@ -84,7 +84,7 @@ export async function RobloxSiteShell({
             </Link>
             <Link
               className="inline-flex min-h-10 items-center rounded-md px-2.5 py-1.5 text-white/64 transition-colors hover:bg-white/10 hover:text-white"
-              href="/roblox/99-nights-in-the-forest/class-tier-list"
+              href="/roblox/99-nights-in-the-forest/classes"
             >
               Tier Lists
             </Link>

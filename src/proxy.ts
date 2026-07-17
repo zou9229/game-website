@@ -11,6 +11,13 @@ const nonIndexablePath = new RegExp(
 export default function proxy(request: NextRequest) {
   const response = handleI18nRouting(request);
 
+  response.headers.set('X-Content-Type-Options', 'nosniff');
+  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+  response.headers.set(
+    'Permissions-Policy',
+    'camera=(), microphone=(), geolocation=()'
+  );
+
   if (nonIndexablePath.test(request.nextUrl.pathname)) {
     response.headers.set('X-Robots-Tag', 'noindex, nofollow');
   }

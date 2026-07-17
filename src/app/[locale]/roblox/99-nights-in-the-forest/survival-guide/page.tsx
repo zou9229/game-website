@@ -85,6 +85,10 @@ export async function generateMetadata({
     description:
       'A checked 99 Nights in the Forest survival guide for campfire priorities, early looting, upgrades, navigation tools, and team recovery.',
     keywords: seoKeywords.ninetyNineNightsSurvivalGuide,
+    robots: {
+      index: false,
+      follow: true,
+    },
     alternates: {
       canonical,
     },

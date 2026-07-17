@@ -76,6 +76,10 @@ export async function generateMetadata({
     description:
       'A checked 99 Nights in the Forest animal taming reference with flute requirements, food requirements, biome notes, and beginner targets.',
     keywords: seoKeywords.ninetyNineNightsAnimals,
+    robots: {
+      index: false,
+      follow: true,
+    },
     alternates: {
       canonical,
     },

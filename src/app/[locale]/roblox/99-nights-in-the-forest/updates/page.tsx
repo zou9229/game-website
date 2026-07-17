@@ -63,6 +63,11 @@ const typeLabels = {
   'roblox-page-update': 'Roblox metadata',
 };
 
+const playerFacingEntries = ninetyNineNightsUpdates.entries.filter(
+  (entry, index, entries) =>
+    entries.findIndex((candidate) => candidate.type === entry.type) === index
+);
+
 const freshnessTone = {
   fresh: 'default',
   'due-soon': 'secondary',
@@ -113,6 +118,10 @@ export async function generateMetadata({
     description:
       'Track 99 Nights in the Forest updates, code checks, source changes, guide refreshes, and Roblox metadata without invented patch notes.',
     keywords: seoKeywords.ninetyNineNightsUpdates,
+    robots: {
+      index: false,
+      follow: true,
+    },
     alternates: { canonical },
     openGraph: {
       title: `99 Nights in the Forest Updates (${monthYear})`,
@@ -169,7 +178,7 @@ export default async function UpdatesPage({
     name: '99 Nights in the Forest update checks',
     description:
       'Code checks, guide refreshes, and metadata update notes for 99 Nights in the Forest.',
-    items: ninetyNineNightsUpdates.entries.map((entry) => ({
+    items: playerFacingEntries.map((entry) => ({
       name: entry.title,
       url: `${pageUrl}#${entry.date}-${entry.type}`,
       description: entry.summary,
@@ -372,7 +381,17 @@ export default async function UpdatesPage({
         </section>
 
         <div className="space-y-4">
-          {ninetyNineNightsUpdates.entries.map((entry) => (
+          <div className="mb-5">
+            <h2 className="text-2xl font-semibold tracking-tight">
+              Latest meaningful checks
+            </h2>
+            <p className="text-muted-foreground mt-2 max-w-3xl leading-7">
+              This public history keeps the latest entry for each kind of player
+              impact. Repeated no-change crawler runs stay in the administrator
+              audit log instead of becoming duplicate public articles.
+            </p>
+          </div>
+          {playerFacingEntries.map((entry) => (
             <Card id={`${entry.date}-${entry.type}`} key={entry.title}>
               <CardHeader>
                 <div className="flex flex-wrap items-center gap-2">

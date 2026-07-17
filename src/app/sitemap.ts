@@ -8,6 +8,13 @@ import { robloxGames } from '@/data/roblox-games';
 import { defaultLocale } from '@/config/locale';
 import { getBaseUrl } from '@/lib/seo';
 
+const reviewOnlyPaths = new Set([
+  '/roblox/99-nights-in-the-forest/classes',
+  '/roblox/99-nights-in-the-forest/animals',
+  '/roblox/99-nights-in-the-forest/survival-guide',
+  '/roblox/99-nights-in-the-forest/updates',
+]);
+
 function localizedUrl(path: string, locale: string) {
   const prefixedPath = path.startsWith('/') ? path : `/${path}`;
   const cleanPath =
@@ -41,26 +48,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ninetyNineNightsFreshnessEntries.map((entry) => [entry.href, entry])
   );
   const latestContentCheck = latestCheckedAt(ninetyNineNightsFreshnessEntries);
-  const codesCheck =
-    freshnessByPath.get('/roblox/99-nights-in-the-forest/codes')?.checkedAt ??
-    latestContentCheck;
 
   const englishContentRoutes = [
     {
       path: '/',
       priority: 1,
-      changeFrequency: 'weekly' as const,
-      lastModified: latestContentCheck,
-    },
-    {
-      path: '/codes',
-      priority: 0.9,
-      changeFrequency: 'daily' as const,
-      lastModified: codesCheck,
-    },
-    {
-      path: '/roblox',
-      priority: 0.9,
       changeFrequency: 'weekly' as const,
       lastModified: latestContentCheck,
     },
@@ -83,7 +75,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       path: '/privacy-policy',
       priority: 0.3,
       changeFrequency: 'yearly' as const,
-      lastModified: '2026-07-15',
+      lastModified: '2026-07-17',
     },
     {
       path: '/terms-of-service',
@@ -111,7 +103,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
         lastModified: gameFreshness?.checkedAt ?? game.stats.checkedAt,
       },
       ...game.pages
-        .filter((page) => page.status === 'live')
+        .filter(
+          (page) => page.status === 'live' && !reviewOnlyPaths.has(page.href)
+        )
         .map((page) => {
           const freshness = freshnessByPath.get(page.href);
 

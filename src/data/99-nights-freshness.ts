@@ -176,15 +176,6 @@ export const ninetyNineNightsFreshnessEntries: FreshnessEntry[] = [
     note: 'Class unlocks, perks, and costs need review after balance changes.',
   },
   {
-    title: 'Class Tier List',
-    href: '/roblox/99-nights-in-the-forest/class-tier-list',
-    kind: 'guide',
-    checkedAt: ninetyNineNightsClasses.checkedAt,
-    cadenceDays: 7,
-    owner: 'manual-review',
-    note: 'Tier-list claims need source review because they are opinion-heavy and competitive.',
-  },
-  {
     title: 'Animals',
     href: '/roblox/99-nights-in-the-forest/animals',
     kind: 'guide',

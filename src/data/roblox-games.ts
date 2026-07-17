@@ -161,13 +161,6 @@ export const robloxGames: RobloxGame[] = [
         status: 'live',
       },
       {
-        title: 'Class Tier List',
-        href: '/roblox/99-nights-in-the-forest/class-tier-list',
-        description:
-          'Ranked classes for survival, team play, and solo runs based on the checked class data pass.',
-        status: 'live',
-      },
-      {
         title: 'Animals',
         href: '/roblox/99-nights-in-the-forest/animals',
         description:
@@ -208,19 +201,19 @@ export const robloxGames: RobloxGame[] = [
         code: 'forestwakesup26',
         reward: '15 gems and 3 random flames',
         status: 'active',
-        note: 'PC Gamer and GamesRadar reconfirmed this code and reward on July 15. The community wiki last confirmed it on July 13; PCGamesN did not list it in that review, so the active label stays tied to the confirming sources.',
+        note: 'PC Gamer and GamesRadar reconfirmed this code and reward on July 17. The community wiki last confirmed it on July 13; PCGamesN could not be reopened in this review, so the active label stays tied to the confirming sources.',
         sources: [
           {
             name: 'PC Gamer',
             url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-codes/',
             status: 'listed-active',
-            checkedAt: '2026-07-15',
+            checkedAt: '2026-07-17',
           },
           {
             name: 'GamesRadar',
             url: 'https://www.gamesradar.com/games/survival/99-nights-in-the-forest-codes/',
             status: 'listed-active',
-            checkedAt: '2026-07-15',
+            checkedAt: '2026-07-17',
           },
           {
             name: 'Fandom Codes',
@@ -234,13 +227,13 @@ export const robloxGames: RobloxGame[] = [
         code: 'afterparty',
         reward: '15 gems',
         status: 'active',
-        note: 'PC Gamer and GamesRadar reconfirmed this code and reward on July 15. PCGamesN and the community wiki last confirmed the same active label during the July 13 review.',
+        note: 'PC Gamer and GamesRadar reconfirmed this code and reward on July 17. PCGamesN and the community wiki last confirmed the same active label during the July 13 review.',
         sources: [
           {
             name: 'PC Gamer',
             url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-codes/',
             status: 'listed-active',
-            checkedAt: '2026-07-15',
+            checkedAt: '2026-07-17',
           },
           {
             name: 'PCGamesN',
@@ -252,7 +245,7 @@ export const robloxGames: RobloxGame[] = [
             name: 'GamesRadar',
             url: 'https://www.gamesradar.com/games/survival/99-nights-in-the-forest-codes/',
             status: 'listed-active',
-            checkedAt: '2026-07-15',
+            checkedAt: '2026-07-17',
           },
           {
             name: 'Fandom Codes',

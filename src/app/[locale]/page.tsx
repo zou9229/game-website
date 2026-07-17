@@ -55,7 +55,7 @@ const routeCards = [
   },
   {
     title: 'Class and animal picks',
-    href: '/roblox/99-nights-in-the-forest/class-tier-list',
+    href: '/roblox/99-nights-in-the-forest/classes',
     description:
       'Compare class choices, taming routes, Zookeeper, Beastmaster, and animal planning.',
     image: '/imgs/roblox/99-nights-thumbnail-3.jpg',
@@ -197,7 +197,7 @@ export default function HomePage() {
               </Link>
               <Link
                 className="rounded-md px-2.5 py-1.5 text-white/70 transition-colors hover:bg-white/10 hover:text-white"
-                href="/roblox/99-nights-in-the-forest/class-tier-list"
+                href="/roblox/99-nights-in-the-forest/classes"
               >
                 Tier Lists
               </Link>
@@ -324,7 +324,7 @@ export default function HomePage() {
           <div className="mx-auto max-w-6xl">
             <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <p className="text-xs font-bold tracking-[0.18em] text-emerald-800/70 uppercase">
+                <p className="text-xs font-bold tracking-[0.18em] text-emerald-900 uppercase">
                   Start with the answer
                 </p>
                 <h2 className="mt-2 text-3xl font-black tracking-tight text-emerald-950 sm:text-4xl">
@@ -390,13 +390,13 @@ export default function HomePage() {
         <section className="border-y border-emerald-950/10 bg-white/48 px-4 py-14 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-6xl">
             <div className="mb-8 max-w-2xl">
-              <p className="text-xs font-bold tracking-[0.18em] text-emerald-800/70 uppercase">
+              <p className="text-xs font-bold tracking-[0.18em] text-emerald-900 uppercase">
                 Guide mission board
               </p>
               <h2 className="mt-2 text-3xl font-black tracking-tight text-emerald-950 sm:text-4xl">
                 A focused 99 Nights cluster before adding more games.
               </h2>
-              <p className="mt-3 text-sm leading-6 text-emerald-950/62">
+              <p className="mt-3 text-sm leading-6 text-emerald-950/80">
                 The first cluster is intentionally narrow: one popular game,
                 stronger internal links, checked dates, and pages that answer
                 specific player intent.
@@ -428,7 +428,7 @@ export default function HomePage() {
                             <span className="block font-semibold">
                               {page.title}
                             </span>
-                            <span className="mt-1 line-clamp-2 block text-xs leading-5 text-emerald-950/58">
+                            <span className="mt-1 line-clamp-2 block text-xs leading-5 text-emerald-950/80">
                               {page.description}
                             </span>
                           </span>
@@ -502,7 +502,7 @@ export default function HomePage() {
         </section>
 
         <footer className="border-t border-emerald-950/10 bg-[#edf4ed]">
-          <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-8 text-sm text-emerald-950/64 sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
+          <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-8 text-sm text-emerald-950/80 sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
             <p>
               Quest Codes is a fan-made guide site and is not affiliated with
               Roblox or any Roblox game developer.

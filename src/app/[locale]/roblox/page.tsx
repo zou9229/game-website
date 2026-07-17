@@ -32,6 +32,10 @@ export async function generateMetadata({
     description:
       'Fresh Roblox codes, game guides, tier lists, and tool pages for high-demand Roblox games.',
     keywords: seoKeywords.robloxHub,
+    robots: {
+      index: false,
+      follow: true,
+    },
     alternates: { canonical },
     openGraph: {
       title: `Roblox Codes and Game Tools (${monthYear})`,
