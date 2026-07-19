@@ -219,25 +219,25 @@ export default async function CodesIndexPage({
 
           <Card className="mt-6">
             <CardHeader>
-              <CardTitle>How new Roblox code pages get added</CardTitle>
+              <CardTitle>How we choose new Roblox code pages</CardTitle>
               <CardDescription>
-                This is the scaling rule for Quest Codes, not an open copy-paste
-                directory.
+                Each page must help players and have a source trail we can
+                maintain.
               </CardDescription>
             </CardHeader>
             <CardContent className="grid gap-4 md:grid-cols-3">
               {[
                 {
-                  title: 'Demand signal',
-                  text: 'The game needs search demand from Semrush, YouTube, Google suggestions, or active gaming media coverage.',
+                  title: 'Player need',
+                  text: 'The game needs clear, repeated player questions that a focused code page can answer quickly.',
                 },
                 {
                   title: 'Source trail',
                   text: 'Codes must be supported by public source pages, official posts, or repeatable checks.',
                 },
                 {
-                  title: 'Cluster fit',
-                  text: 'A code page is stronger when it can link to a guide, tier list, update tracker, or wiki-style reference.',
+                  title: 'Useful next steps',
+                  text: 'A code page should connect players to relevant guides, class choices, update notes, or progression help.',
                 },
               ].map((item) => (
                 <div key={item.title} className="rounded-md border p-4">

@@ -129,9 +129,9 @@ export const ninetyNineNightsPeltTrader = {
       intent: 'trade-caution',
       confidence: 'medium',
       summary:
-        'GSC shows players search Pelt Trader with Medkit and Wolf Pelt, but that does not make every community shortcut confirmed.',
+        'Players often connect the Pelt Trader, Medkit, and Wolf Pelt, but that does not make every community shortcut confirmed.',
       details: [
-        'Use search demand as a clue for what players need explained.',
+        'Start with the route decision the player needs to make, then separate confirmed facts from community assumptions.',
         'Keep exact trader-item claims tied to source tables or visible in-game confirmation.',
         'Send recovery questions back to Bandages, Survival Guide, and Map pages when the safer answer is route planning.',
       ],

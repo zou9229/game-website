@@ -323,7 +323,7 @@ export default async function ClassesPage({
           <CardHeader>
             <CardTitle>Next pages</CardTitle>
             <CardDescription>
-              Use the class list with the rest of the 99 Nights content cluster.
+              Use the class list with the routes and decisions it affects.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-3 text-sm">

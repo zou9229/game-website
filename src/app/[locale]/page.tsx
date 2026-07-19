@@ -467,14 +467,14 @@ export default function HomePage() {
           <div className="mx-auto grid max-w-6xl gap-5 md:grid-cols-[1fr_320px] md:items-center">
             <div>
               <p className="text-xs font-bold tracking-[0.18em] text-lime-100/70 uppercase">
-                Current roadmap
+                Publishing standard
               </p>
               <h2 className="mt-2 text-3xl font-black tracking-tight">
-                More Roblox games come after the first cluster earns data.
+                More Roblox games come after their guides pass source review.
               </h2>
               <p className="mt-3 max-w-2xl text-sm leading-6 text-white/68">
-                We are watching GSC impressions, Semrush long tails, YouTube
-                demand, and source freshness before scaling into the next game.
+                We add a game when its codes and guides answer clear player
+                questions, link to reliable sources, and can be kept current.
               </p>
             </div>
             <div className="rounded-lg border border-white/12 bg-white/8 p-4">

@@ -313,8 +313,8 @@ export default async function BandagesPage({
 
       <section className="mx-auto max-w-6xl px-4 pb-16 sm:px-6 lg:px-8">
         <GuideMediaPanel
-          title="Bandage route media and video research"
-          description="Real game thumbnails for survival pressure plus video-search demand around the Tool Workshop and revive routes."
+          title="Bandage route media and video references"
+          description="Real game thumbnails for survival pressure plus current videos covering the Tool Workshop and revive routes."
           images={[
             ninetyNineNightsMedia.images[2],
             ninetyNineNightsMedia.images[1],

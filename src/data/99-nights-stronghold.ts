@@ -143,7 +143,7 @@ export const ninetyNineNightsStronghold = {
       summary:
         'Community posts and videos are useful for discovering player questions, but they should not override source-checked reward or level data.',
       do: [
-        'Use videos to spot search demand around diamond farming, level 4 clears, and solo raid tactics.',
+        'Use current videos to compare how players approach diamond farming, level 4 clears, and solo raid tactics.',
         'Use Reddit threads to discover common pain points such as whether level 4 is worth farming.',
         'Promote a tactic only after it matches stronger source data or repeated gameplay evidence.',
       ],

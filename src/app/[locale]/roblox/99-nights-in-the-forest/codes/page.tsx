@@ -8,6 +8,7 @@ import { seoKeywords } from '@/data/seo-keywords';
 import { AlertTriangle, CheckCircle2, ExternalLink } from 'lucide-react';
 
 import { Link } from '@/core/i18n/navigation';
+import { getLatestGameDataSourceCheck } from '@/modules/game-data-sync/service';
 import {
   buildBreadcrumbSchema,
   buildFAQSchema,
@@ -258,6 +259,14 @@ export default async function CodesPage({
   const specialCodes = game.codes.filter((code) => code.status === 'special');
   const expiredCodes = game.codes.filter((code) => code.status === 'expired');
   const latestCodeCheckedAt = getLatestCodeCheckedAt(game);
+  const latestSourceCheck = await getLatestGameDataSourceCheck().catch(
+    () => null
+  );
+  const latestCodeMonitorAt = latestSourceCheck?.results.some(
+    (result) => result.kind === 'codes' && result.ok
+  )
+    ? latestSourceCheck.generatedAt.slice(0, 10)
+    : null;
   const activeCodeNames = activeCodes.map((code) => code.code).join(', ');
   const gemRewardCodes = game.codes.filter(
     (code) =>
@@ -320,9 +329,16 @@ export default async function CodesPage({
             <span className="text-foreground">Codes</span>
           </nav>
 
-          <Badge variant="outline" className="mb-4">
-            Codes checked {latestCodeCheckedAt}
-          </Badge>
+          <div className="mb-4 flex flex-wrap gap-2">
+            <Badge variant="outline">
+              Editorial check {latestCodeCheckedAt}
+            </Badge>
+            {latestCodeMonitorAt ? (
+              <Badge variant="secondary">
+                Sources monitored {latestCodeMonitorAt}
+              </Badge>
+            ) : null}
+          </div>
           <h1 className="text-foreground text-4xl font-semibold tracking-tight md:text-5xl">
             99 Nights in the Forest codes ({monthYear})
           </h1>
@@ -367,7 +383,7 @@ export default async function CodesPage({
             <div className="border-border mt-4 border-t pt-4">
               <div className="mb-3 flex items-center gap-2 text-sm font-medium">
                 <CheckCircle2 className="text-primary size-4" />
-                Today&apos;s copy queue
+                Codes to try
               </div>
               <div className="space-y-3">
                 {[...activeCodes, ...specialCodes].map((code) => (
@@ -408,8 +424,11 @@ export default async function CodesPage({
               Quick answer: working codes today
             </h2>
             <CardDescription>
-              Codes checked {latestCodeCheckedAt}. Use this summary before
-              starting another run.
+              Status reviewed {latestCodeCheckedAt}
+              {latestCodeMonitorAt
+                ? `; trusted sources monitored ${latestCodeMonitorAt}`
+                : ''}
+              . Use this summary before starting another run.
             </CardDescription>
           </CardHeader>
           <CardContent className="grid gap-5 lg:grid-cols-[1fr_280px]">

@@ -65,7 +65,7 @@ export const ninetyNineNightsFreshnessEntries: FreshnessEntry[] = [
     checkedAt: game.stats.checkedAt,
     cadenceDays: 7,
     owner: 'automation-candidate',
-    note: 'Public stats and game updated date are useful freshness signals but not the main SEO value.',
+    note: 'Public stats and the game updated date are useful freshness signals, but player-facing guides remain the main value.',
   },
   {
     title: 'Crafting',

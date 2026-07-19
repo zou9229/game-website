@@ -17,7 +17,7 @@ export type BadgeCluster = {
 export const ninetyNineNightsBadges = {
   checkedAt: '2026-07-13',
   summary:
-    'Badges are achievement goals in 99 Nights in the Forest. They matter for SEO users because badge rewards connect survival goals, class progression, and free diamond searches.',
+    'Badges are achievement goals in 99 Nights in the Forest. Their rewards connect survival milestones, class progression, challenge runs, and free diamond routes.',
   rewardNote:
     'The community wiki lists badges as first-time diamond rewards and continues to change with game updates. Treat exact totals as source-checked wiki data, not an official guarantee.',
   clusters: [

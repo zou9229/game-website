@@ -286,9 +286,9 @@ export default async function PeltTraderPage({
               Pelt Trader route decisions
             </h2>
             <p className="text-muted-foreground mt-2 max-w-3xl">
-              These sections target the exact search pattern now showing in GSC:
-              Pelt Trader, Medkit, and Wolf Pelt. The page keeps confirmed facts
-              separate from unconfirmed shortcuts.
+              Pelt Trader, Medkit, and Wolf Pelt are connected route decisions.
+              These sections keep confirmed facts separate from unconfirmed
+              shortcuts so you can protect scarce recovery materials.
             </p>
           </div>
 
@@ -387,7 +387,7 @@ export default async function PeltTraderPage({
             <CardHeader>
               <CardTitle>FAQ</CardTitle>
               <CardDescription>
-                Short answers for the current GSC query pattern.
+                Short answers for common trader and recovery questions.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">

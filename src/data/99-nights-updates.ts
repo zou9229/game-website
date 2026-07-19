@@ -198,11 +198,11 @@ export const ninetyNineNightsUpdates = {
     {
       date: '2026-07-09',
       type: 'page-build',
-      title: 'July 9 GSC-driven Pelt Trader page pass',
+      title: 'July 9 Pelt Trader decision guide pass',
       summary:
-        'Quest Codes added a Pelt Trader page after Google Search Console showed impressions for Pelt Trader, Medkit, and Wolf Pelt queries.',
+        'Quest Codes added a Pelt Trader page to answer the connected Wolf Pelt, Medkit, Bandage, and trader route decisions.',
       details: [
-        'The new page targets a distinct long-tail intent instead of expanding the broad Roblox or generic codes keywords.',
+        'The new page keeps this route decision separate from the broader codes and survival guides.',
         'Wolf Pelt, Medkit, Bandage, and Pelt Trader claims are separated so a Medkit search does not become an unsupported trader-reward claim.',
         'The page links back to Bandages, Crafting, Survival Guide, Map, Missing Kids, and Stronghold for route planning.',
         'No trader drop rate, hidden trader refresh rule, guaranteed Medkit trade, or invented reward table was added from this pass.',
