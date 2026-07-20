@@ -63,6 +63,19 @@ export function getCookieFromCtx(ctx: any, name: string): string | undefined {
   return getCookieFromHeader(cookieHeader, name);
 }
 
+export function getClientIpFromCtx(ctx: any): string {
+  const forwarded = getHeaderValue(ctx, 'x-forwarded-for');
+  if (forwarded) {
+    const first = forwarded.split(',')[0]?.trim();
+    if (first) return first;
+  }
+  return (
+    getHeaderValue(ctx, 'cf-connecting-ip') ||
+    getHeaderValue(ctx, 'x-real-ip') ||
+    ''
+  );
+}
+
 export function guessLocaleFromAcceptLanguage(
   acceptLanguage: string | undefined
 ) {

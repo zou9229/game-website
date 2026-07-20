@@ -17,7 +17,9 @@
     "payments": "支付",
     "subscriptions": "订阅",
     "credits": "积分",
-    "invite_codes": "邀请码"
+    "invite_codes": "邀请码",
+    "support": "客户支持",
+    "tickets": "工单管理"
   },
   "stats": {
     "total_users": "总用户数",
@@ -31,6 +33,8 @@
     "no_users": "暂无用户",
     "user_col": "用户",
     "email_col": "邮箱",
+    "source_col": "来源",
+    "ip_col": "注册 IP",
     "credits_col": "积分",
     "joined_col": "注册时间",
     "actions_col": "操作",
@@ -179,6 +183,8 @@
     "description_placeholder": "简短描述",
     "author_field": "作者",
     "author_placeholder": "作者名称",
+    "content_field": "正文",
+    "content_placeholder": "开始撰写文章…",
     "category_field": "分类",
     "category_placeholder": "选择分类",
     "status_field": "状态",
@@ -207,6 +213,22 @@
     "type": "类型",
     "provider": "支付方式",
     "created_at": "创建时间",
+    "search_placeholder": "搜索订单号或邮箱...",
+    "edit_title": "编辑订单",
+    "edit_description": "修改订单状态和产品信息",
+    "status_label": "状态",
+    "status_pending": "待支付",
+    "status_created": "已创建",
+    "status_paid": "已支付",
+    "status_failed": "失败",
+    "status_deleted": "已删除",
+    "product_id_label": "产品 ID",
+    "product_name_label": "产品名称",
+    "product_description_label": "描述",
+    "save": "保存",
+    "saving": "保存中...",
+    "cancel": "取消",
+    "update_success": "订单已更新",
     "tab_all": "全部",
     "tab_subscription": "订阅",
     "tab_one_time": "一次性"
@@ -315,6 +337,7 @@
       "storage": "存储",
       "ai": "AI",
       "analytics": "统计",
+      "ads": "广告",
       "customer_service": "客服",
       "custom": "自定义"
     },
@@ -360,7 +383,11 @@
       },
       "plausible": {
         "title": "Plausible",
-        "description": "注入 plausible.js（云版或自托管）"
+        "description": "支持云版或自托管 Plausible 的新版站点专属脚本及旧版脚本"
+      },
+      "adsense": {
+        "title": "Google AdSense",
+        "description": "全站注入 AdSense 脚本，并根据配置的 Publisher ID 生成 /ads.txt"
       },
       "crisp": {
         "title": "Crisp",
@@ -444,6 +471,7 @@
       "google_analytics_id": "Measurement ID",
       "plausible_domain": "域名",
       "plausible_src": "脚本地址",
+      "adsense_code": "Publisher ID",
       "crisp_enabled": "启用 Crisp",
       "crisp_website_id": "网站 ID",
       "tawk_enabled": "启用 Tawk.to",
@@ -457,5 +485,32 @@
       "alipay_test_amount": "留空使用实际金额，填 1 则支付 ¥0.01",
       "wechat_test_amount": "留空使用实际金额，填 1 则支付 ¥0.01"
     }
+  },
+  "tickets": {
+    "title": "工单管理",
+    "description": "查看并回复用户工单",
+    "title_col": "主题",
+    "user_col": "用户",
+    "status_col": "状态",
+    "updated_col": "最后更新",
+    "actions_col": "操作",
+    "tab_all": "全部",
+    "tab_open": "待处理",
+    "tab_replied": "处理中",
+    "tab_closed": "已关闭",
+    "status_open": "待处理",
+    "status_replied": "处理中",
+    "status_closed": "已关闭",
+    "empty": "暂无工单",
+    "reply_placeholder": "输入回复内容...",
+    "reply_submit": "发送回复",
+    "replying": "发送中...",
+    "reply_success": "回复已发送",
+    "status_updated": "状态已更新",
+    "close_ticket": "关闭工单",
+    "reopen_ticket": "重新打开",
+    "admin": "管理员",
+    "latest_reply_col": "最新回复",
+    "created_col": "创建时间"
   }
 }

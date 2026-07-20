@@ -36,7 +36,7 @@ interface Permission {
   title: string;
 }
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 20;
 
 export default function RolesPage() {
   const t = useTranslations('admin');
@@ -302,42 +302,56 @@ export default function RolesPage() {
                 {t('roles.create_description')}
               </DialogDescription>
             </DialogHeader>
-            <div className="space-y-4 py-4">
-              <div className="space-y-2">
-                <Label>{t('roles.name_field')}</Label>
-                <Input
-                  value={form.name}
-                  onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  placeholder={t('roles.name_placeholder')}
-                />
+            <form
+              className="grid gap-4"
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleCreate();
+              }}
+            >
+              <div className="space-y-4 py-4">
+                <div className="space-y-2">
+                  <Label>{t('roles.name_field')}</Label>
+                  <Input
+                    value={form.name}
+                    onChange={(e) => setForm({ ...form, name: e.target.value })}
+                    placeholder={t('roles.name_placeholder')}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>{t('roles.title_field')}</Label>
+                  <Input
+                    value={form.title}
+                    onChange={(e) =>
+                      setForm({ ...form, title: e.target.value })
+                    }
+                    placeholder={t('roles.title_placeholder')}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>{t('roles.description_field')}</Label>
+                  <Input
+                    value={form.description}
+                    onChange={(e) =>
+                      setForm({ ...form, description: e.target.value })
+                    }
+                    placeholder={t('roles.description_placeholder')}
+                  />
+                </div>
               </div>
-              <div className="space-y-2">
-                <Label>{t('roles.title_field')}</Label>
-                <Input
-                  value={form.title}
-                  onChange={(e) => setForm({ ...form, title: e.target.value })}
-                  placeholder={t('roles.title_placeholder')}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>{t('roles.description_field')}</Label>
-                <Input
-                  value={form.description}
-                  onChange={(e) =>
-                    setForm({ ...form, description: e.target.value })
-                  }
-                  placeholder={t('roles.description_placeholder')}
-                />
-              </div>
-            </div>
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setCreateOpen(false)}>
-                {t('roles.cancel')}
-              </Button>
-              <Button onClick={handleCreate} disabled={saving}>
-                {t('roles.save')}
-              </Button>
-            </DialogFooter>
+              <DialogFooter>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setCreateOpen(false)}
+                >
+                  {t('roles.cancel')}
+                </Button>
+                <Button type="submit" disabled={saving}>
+                  {t('roles.save')}
+                </Button>
+              </DialogFooter>
+            </form>
           </DialogContent>
         </Dialog>
       </div>
@@ -370,46 +384,58 @@ export default function RolesPage() {
             <DialogTitle>{t('roles.edit_title')}</DialogTitle>
             <DialogDescription>{t('roles.edit_description')}</DialogDescription>
           </DialogHeader>
-          <div className="space-y-4 py-4">
-            <div className="space-y-2">
-              <Label>{t('roles.name_field')}</Label>
-              <Input
-                value={editForm.name}
-                onChange={(e) =>
-                  setEditForm({ ...editForm, name: e.target.value })
-                }
-                placeholder={t('roles.name_placeholder')}
-              />
+          <form
+            className="grid gap-4"
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleEdit();
+            }}
+          >
+            <div className="space-y-4 py-4">
+              <div className="space-y-2">
+                <Label>{t('roles.name_field')}</Label>
+                <Input
+                  value={editForm.name}
+                  onChange={(e) =>
+                    setEditForm({ ...editForm, name: e.target.value })
+                  }
+                  placeholder={t('roles.name_placeholder')}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>{t('roles.title_field')}</Label>
+                <Input
+                  value={editForm.title}
+                  onChange={(e) =>
+                    setEditForm({ ...editForm, title: e.target.value })
+                  }
+                  placeholder={t('roles.title_placeholder')}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>{t('roles.description_field')}</Label>
+                <Input
+                  value={editForm.description}
+                  onChange={(e) =>
+                    setEditForm({ ...editForm, description: e.target.value })
+                  }
+                  placeholder={t('roles.description_placeholder')}
+                />
+              </div>
             </div>
-            <div className="space-y-2">
-              <Label>{t('roles.title_field')}</Label>
-              <Input
-                value={editForm.title}
-                onChange={(e) =>
-                  setEditForm({ ...editForm, title: e.target.value })
-                }
-                placeholder={t('roles.title_placeholder')}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>{t('roles.description_field')}</Label>
-              <Input
-                value={editForm.description}
-                onChange={(e) =>
-                  setEditForm({ ...editForm, description: e.target.value })
-                }
-                placeholder={t('roles.description_placeholder')}
-              />
-            </div>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setEditingRole(null)}>
-              {t('roles.cancel')}
-            </Button>
-            <Button onClick={handleEdit} disabled={saving}>
-              {t('roles.save')}
-            </Button>
-          </DialogFooter>
+            <DialogFooter>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setEditingRole(null)}
+              >
+                {t('roles.cancel')}
+              </Button>
+              <Button type="submit" disabled={saving}>
+                {t('roles.save')}
+              </Button>
+            </DialogFooter>
+          </form>
         </DialogContent>
       </Dialog>
 
@@ -443,38 +469,50 @@ export default function RolesPage() {
               {t('roles.manage_permissions_description')}
             </DialogDescription>
           </DialogHeader>
-          <div className="max-h-64 space-y-3 overflow-y-auto py-4">
-            {allPermissions.map((perm) => (
-              <label
-                key={perm.id}
-                className="flex cursor-pointer items-center gap-3"
-              >
-                <Checkbox
-                  checked={assignedPermIds.has(perm.id)}
-                  onCheckedChange={() => togglePermission(perm.id)}
-                />
-                <div>
-                  <div className="text-sm font-medium">{perm.title}</div>
-                  <div className="text-muted-foreground font-mono text-xs">
-                    {perm.code}
+          <form
+            className="grid gap-4"
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSavePermissions();
+            }}
+          >
+            <div className="max-h-64 space-y-3 overflow-y-auto py-4">
+              {allPermissions.map((perm) => (
+                <label
+                  key={perm.id}
+                  className="flex cursor-pointer items-center gap-3"
+                >
+                  <Checkbox
+                    checked={assignedPermIds.has(perm.id)}
+                    onCheckedChange={() => togglePermission(perm.id)}
+                  />
+                  <div>
+                    <div className="text-sm font-medium">{perm.title}</div>
+                    <div className="text-muted-foreground font-mono text-xs">
+                      {perm.code}
+                    </div>
                   </div>
-                </div>
-              </label>
-            ))}
-            {allPermissions.length === 0 && (
-              <p className="text-muted-foreground py-4 text-center text-sm">
-                {t('permissions.no_permissions')}
-              </p>
-            )}
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setPermRole(null)}>
-              {t('roles.cancel')}
-            </Button>
-            <Button onClick={handleSavePermissions} disabled={permSaving}>
-              {t('roles.save')}
-            </Button>
-          </DialogFooter>
+                </label>
+              ))}
+              {allPermissions.length === 0 && (
+                <p className="text-muted-foreground py-4 text-center text-sm">
+                  {t('permissions.no_permissions')}
+                </p>
+              )}
+            </div>
+            <DialogFooter>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setPermRole(null)}
+              >
+                {t('roles.cancel')}
+              </Button>
+              <Button type="submit" disabled={permSaving}>
+                {t('roles.save')}
+              </Button>
+            </DialogFooter>
+          </form>
         </DialogContent>
       </Dialog>
     </div>

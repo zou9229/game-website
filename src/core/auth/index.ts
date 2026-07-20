@@ -10,6 +10,12 @@ import { VerifyEmail } from '@/core/email/templates/verify-email';
 import { AUTH_SECRET_PLACEHOLDER, envConfigs } from '@/config';
 import * as schema from '@/config/db/schema';
 import { getAllConfigs } from '@/modules/config/service';
+import {
+  getClientIpFromCtx,
+  getCookieFromCtx,
+  getHeaderValue,
+  guessLocaleFromAcceptLanguage,
+} from '@/lib/cookie';
 import { getUuid } from '@/lib/hash';
 
 function assertProductionAuthSecret() {
@@ -223,6 +229,30 @@ export function getAuth(configs?: Record<string, string>) {
           input: false,
           required: false,
           defaultValue: '',
+        },
+      },
+    },
+    databaseHooks: {
+      user: {
+        create: {
+          before: async (userData: any, ctx: any) => {
+            let utmSource = getCookieFromCtx(ctx, 'utm_source') || '';
+            try {
+              utmSource = decodeURIComponent(utmSource);
+            } catch {}
+            utmSource = utmSource.replace(/[^\w.\-]/g, '').slice(0, 100);
+
+            return {
+              data: {
+                ...userData,
+                utmSource,
+                ip: getClientIpFromCtx(ctx).slice(0, 100),
+                locale: guessLocaleFromAcceptLanguage(
+                  getHeaderValue(ctx, 'accept-language')
+                ),
+              },
+            };
+          },
         },
       },
     },

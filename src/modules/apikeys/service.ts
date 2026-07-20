@@ -1,8 +1,9 @@
 import * as crypto from 'crypto';
-import { and, count, eq, isNull, like, type SQL } from 'drizzle-orm';
+import { and, count, eq, isNull, like, sql, type SQL } from 'drizzle-orm';
 
 import { db } from '@/core/db';
 import { apikey } from '@/config/db/schema';
+import { decryptSecret, encryptSecret } from '@/lib/crypto';
 import { getUuid } from '@/lib/hash';
 
 const KEY_PREFIX = 'sk_';
@@ -26,8 +27,10 @@ function generateKey(): { key: string; keyHash: string; keyPrefix: string } {
 }
 
 /**
- * Create a new API key for a user. The plaintext `key` is returned ONCE here
- * — it is never persisted (only the sha256 hash is stored).
+ * Create a new API key for a user. The `key` is also persisted (AES-encrypted
+ * when CONFIG_ENCRYPTION_KEY is set, plaintext otherwise) so the user can copy
+ * it again from the list UI; validation still goes through the indexed sha256
+ * hash.
  */
 export async function create(params: {
   userId: string;
@@ -43,6 +46,7 @@ export async function create(params: {
       userId,
       keyHash,
       keyPrefix,
+      key: await encryptSecret(key),
       title,
       status: 'active',
     })
@@ -52,8 +56,8 @@ export async function create(params: {
 }
 
 /**
- * List active API keys for a user with pagination and optional search on title.
- * Only the prefix is returned — full keys are never readable after creation.
+ * List active API keys for a user with pagination and optional search on
+ * title, most recently used (falling back to created) first.
  */
 export async function list(
   userId: string,
@@ -80,16 +84,28 @@ export async function list(
     .select({
       id: apikey.id,
       keyPrefix: apikey.keyPrefix,
+      key: apikey.key,
       title: apikey.title,
       status: apikey.status,
+      lastUsedAt: apikey.lastUsedAt,
       createdAt: apikey.createdAt,
     })
     .from(apikey)
     .where(where)
+    .orderBy(sql`coalesce(${apikey.lastUsedAt}, ${apikey.createdAt}) desc`)
     .limit(pageSize)
     .offset((page - 1) * pageSize);
 
-  return { items, total: totalResult.count };
+  // Decrypt stored keys for the copy action; undecryptable rows (rotated or
+  // missing CONFIG_ENCRYPTION_KEY) return key=null and the UI hides copy.
+  const decrypted = await Promise.all(
+    items.map(async (item: (typeof items)[number]) => ({
+      ...item,
+      key: item.key ? await decryptSecret(item.key) : null,
+    }))
+  );
+
+  return { items: decrypted, total: totalResult.count };
 }
 
 /**
@@ -111,7 +127,7 @@ export async function validate(key: string): Promise<string | null> {
   if (!key) return null;
   const keyHash = hashKey(key);
   const [row] = await db()
-    .select({ userId: apikey.userId })
+    .select({ id: apikey.id, userId: apikey.userId })
     .from(apikey)
     .where(
       and(
@@ -122,5 +138,14 @@ export async function validate(key: string): Promise<string | null> {
     )
     .limit(1);
 
-  return row?.userId ?? null;
+  if (!row) return null;
+
+  // Best-effort usage tracking — a failed bump must not fail the request.
+  db()
+    .update(apikey)
+    .set({ lastUsedAt: new Date() })
+    .where(eq(apikey.id, row.id))
+    .catch(() => {});
+
+  return row.userId;
 }

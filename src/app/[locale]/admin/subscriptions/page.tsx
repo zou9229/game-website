@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 
+import { formatDateTime } from '@/lib/time';
 import { cn } from '@/lib/utils';
 import { DataTable, type Column } from '@/components/data-table';
 import { Badge } from '@/components/ui/badge';
@@ -24,7 +25,7 @@ interface Subscription {
   createdAt: string;
 }
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 20;
 
 const TABS = ['all', 'month', 'year'] as const;
 type Tab = (typeof TABS)[number];
@@ -84,7 +85,7 @@ export default function SubscriptionsPage() {
 
   function formatDate(d: string | null) {
     if (!d) return '—';
-    return new Date(d).toLocaleDateString();
+    return formatDateTime(d);
   }
 
   const statusVariant = (s: string) => {
@@ -136,7 +137,7 @@ export default function SubscriptionsPage() {
       header: t('subscriptions.created_at'),
       cell: (s) => (
         <span className="text-muted-foreground text-sm">
-          {new Date(s.createdAt).toLocaleDateString()}
+          {formatDateTime(s.createdAt)}
         </span>
       ),
     },

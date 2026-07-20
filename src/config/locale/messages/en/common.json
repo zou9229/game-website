@@ -96,6 +96,10 @@
     "theme_dark": "Dark",
     "theme_system": "System"
   },
+  "pages": {
+    "back_to_home": "Back to home",
+    "last_updated": "Last updated"
+  },
   "not_found": {
     "message": "Page not found",
     "back_home": "Back to home"
@@ -106,8 +110,23 @@
     "retry": "Try again",
     "back_home": "Back to home"
   },
-  "pages": {
-    "back_to_home": "Back to home",
-    "last_updated": "Last updated"
+  "support": {
+    "open_label": "Contact support",
+    "title": "Contact Support",
+    "description": "Submit a ticket and our team will get back to you",
+    "sign_in_notice": "Please sign in to submit a support ticket.",
+    "sign_in": "Sign In",
+    "title_label": "Subject",
+    "title_placeholder": "Brief summary of your issue",
+    "content_label": "Description",
+    "content_placeholder": "Describe your issue in detail...",
+    "track_hint_prefix": "You can track replies in",
+    "track_hint_link": "Support Tickets",
+    "required": "Subject and description are required",
+    "success": "Ticket submitted — we'll get back to you soon",
+    "cancel": "Cancel",
+    "submit": "Submit",
+    "submitting": "Submitting...",
+    "attachments_label": "Images (optional)"
   }
 }

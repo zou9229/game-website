@@ -17,7 +17,9 @@
     "payments": "Payments",
     "subscriptions": "Subscriptions",
     "credits": "Credits",
-    "invite_codes": "Invite Codes"
+    "invite_codes": "Invite Codes",
+    "support": "Support",
+    "tickets": "Tickets"
   },
   "stats": {
     "total_users": "Total Users",
@@ -31,6 +33,8 @@
     "no_users": "No users yet",
     "user_col": "User",
     "email_col": "Email",
+    "source_col": "Source",
+    "ip_col": "Sign-up IP",
     "credits_col": "Credits",
     "joined_col": "Joined",
     "actions_col": "Actions",
@@ -179,6 +183,8 @@
     "description_placeholder": "Brief description",
     "author_field": "Author",
     "author_placeholder": "Author name",
+    "content_field": "Content",
+    "content_placeholder": "Write your post…",
     "category_field": "Category",
     "category_placeholder": "Select category",
     "status_field": "Status",
@@ -207,6 +213,22 @@
     "type": "Type",
     "provider": "Provider",
     "created_at": "Created At",
+    "search_placeholder": "Search order no or email...",
+    "edit_title": "Edit Order",
+    "edit_description": "Update order status and product information",
+    "status_label": "Status",
+    "status_pending": "Pending",
+    "status_created": "Created",
+    "status_paid": "Paid",
+    "status_failed": "Failed",
+    "status_deleted": "Deleted",
+    "product_id_label": "Product ID",
+    "product_name_label": "Product Name",
+    "product_description_label": "Description",
+    "save": "Save",
+    "saving": "Saving...",
+    "cancel": "Cancel",
+    "update_success": "Order updated",
     "tab_all": "All",
     "tab_subscription": "Subscription",
     "tab_one_time": "One-Time"
@@ -315,6 +337,7 @@
       "storage": "Storage",
       "ai": "AI",
       "analytics": "Analytics",
+      "ads": "Ads",
       "customer_service": "Customer Service",
       "custom": "Custom"
     },
@@ -387,7 +410,11 @@
       },
       "plausible": {
         "title": "Plausible",
-        "description": "Inject plausible.js for self-hosted or cloud Plausible"
+        "description": "Supports both site-specific and legacy scripts for self-hosted or cloud Plausible"
+      },
+      "adsense": {
+        "title": "Google AdSense",
+        "description": "Inject the AdSense script sitewide and serve /ads.txt from the configured publisher ID"
       },
       "crisp": {
         "title": "Crisp",
@@ -471,6 +498,7 @@
       "google_analytics_id": "Measurement ID",
       "plausible_domain": "Domain",
       "plausible_src": "Script Src",
+      "adsense_code": "Publisher ID",
       "crisp_enabled": "Enable Crisp",
       "crisp_website_id": "Website ID",
       "tawk_enabled": "Enable Tawk.to",
@@ -484,5 +512,32 @@
       "alipay_test_amount": "Leave empty to use real amount, 1 = ¥0.01",
       "wechat_test_amount": "Leave empty to use real amount, 1 = ¥0.01"
     }
+  },
+  "tickets": {
+    "title": "Support Tickets",
+    "description": "View and reply to user tickets",
+    "title_col": "Subject",
+    "user_col": "User",
+    "status_col": "Status",
+    "updated_col": "Last Updated",
+    "actions_col": "Actions",
+    "tab_all": "All",
+    "tab_open": "Open",
+    "tab_replied": "In Progress",
+    "tab_closed": "Closed",
+    "status_open": "Open",
+    "status_replied": "In Progress",
+    "status_closed": "Closed",
+    "empty": "No tickets",
+    "reply_placeholder": "Write a reply...",
+    "reply_submit": "Send Reply",
+    "replying": "Sending...",
+    "reply_success": "Reply sent",
+    "status_updated": "Status updated",
+    "close_ticket": "Close Ticket",
+    "reopen_ticket": "Reopen Ticket",
+    "admin": "Admin",
+    "latest_reply_col": "Latest Reply",
+    "created_col": "Created At"
   }
 }

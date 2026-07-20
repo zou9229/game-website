@@ -101,34 +101,43 @@ export function SettingsTestDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-3">
-          {spec.fields.map((field) => (
-            <TestInput
-              key={field.name}
-              field={field}
-              value={inputs[field.name] ?? ''}
-              onChange={(v) =>
-                setInputs((prev) => ({ ...prev, [field.name]: v }))
-              }
-            />
-          ))}
-        </div>
+        <form
+          className="grid gap-4"
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleRun();
+          }}
+        >
+          <div className="space-y-3">
+            {spec.fields.map((field) => (
+              <TestInput
+                key={field.name}
+                field={field}
+                value={inputs[field.name] ?? ''}
+                onChange={(v) =>
+                  setInputs((prev) => ({ ...prev, [field.name]: v }))
+                }
+              />
+            ))}
+          </div>
 
-        {result && <TestResultView result={result} />}
+          {result && <TestResultView result={result} />}
 
-        <DialogFooter>
-          <Button
-            variant="outline"
-            onClick={() => onOpenChange(false)}
-            disabled={running}
-          >
-            {t('settings.test.close')}
-          </Button>
-          <Button onClick={handleRun} disabled={running || !canRun}>
-            {running && <Loader2 className="size-4 animate-spin" />}
-            {running ? t('settings.test.running') : t('settings.test.run')}
-          </Button>
-        </DialogFooter>
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => onOpenChange(false)}
+              disabled={running}
+            >
+              {t('settings.test.close')}
+            </Button>
+            <Button type="submit" disabled={running || !canRun}>
+              {running && <Loader2 className="size-4 animate-spin" />}
+              {running ? t('settings.test.running') : t('settings.test.run')}
+            </Button>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   );

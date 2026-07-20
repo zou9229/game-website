@@ -5,8 +5,10 @@ import { Pencil, Plus, Trash2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
+import { formatDateTime } from '@/lib/time';
 import { cn } from '@/lib/utils';
 import { DataTable, type Column } from '@/components/data-table';
+import { RichTextEditor } from '@/components/rich-text-editor';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -49,7 +51,7 @@ interface CategoryOption {
   slug: string;
 }
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 20;
 const TABS = ['all', 'published', 'draft'] as const;
 type Tab = (typeof TABS)[number];
 
@@ -155,6 +157,14 @@ export default function PostsPage() {
       status: p.status,
     });
     setEditingPost(p);
+    // list endpoint omits content — load it for the editor
+    fetch(`/api/admin/posts?id=${p.id}`)
+      .then((r) => r.json())
+      .then((res) => {
+        if (res.code === 0)
+          setEditForm((f) => ({ ...f, content: res.data.content || '' }));
+      })
+      .catch(() => {});
   }
 
   async function handleEdit() {
@@ -222,7 +232,7 @@ export default function PostsPage() {
       header: t('posts.created_at'),
       cell: (p) => (
         <span className="text-muted-foreground text-sm">
-          {new Date(p.createdAt).toLocaleDateString()}
+          {formatDateTime(p.createdAt)}
         </span>
       ),
     },
@@ -329,6 +339,14 @@ export default function PostsPage() {
             </SelectContent>
           </Select>
         </div>
+        <div className="space-y-2">
+          <Label>{t('posts.content_field')}</Label>
+          <RichTextEditor
+            value={values.content}
+            onChange={(content) => onChange({ ...values, content })}
+            placeholder={t('posts.content_placeholder')}
+          />
+        </div>
       </div>
     );
   }
@@ -345,22 +363,34 @@ export default function PostsPage() {
             <Plus className="size-4" />
             {t('posts.create')}
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-3xl">
             <DialogHeader>
               <DialogTitle>{t('posts.create_title')}</DialogTitle>
               <DialogDescription>
                 {t('posts.create_description')}
               </DialogDescription>
             </DialogHeader>
-            {renderForm(form, setForm)}
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setCreateOpen(false)}>
-                {t('posts.cancel')}
-              </Button>
-              <Button onClick={handleCreate} disabled={saving}>
-                {t('posts.save')}
-              </Button>
-            </DialogFooter>
+            <form
+              className="grid gap-4"
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleCreate();
+              }}
+            >
+              {renderForm(form, setForm)}
+              <DialogFooter>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setCreateOpen(false)}
+                >
+                  {t('posts.cancel')}
+                </Button>
+                <Button type="submit" disabled={saving}>
+                  {t('posts.save')}
+                </Button>
+              </DialogFooter>
+            </form>
           </DialogContent>
         </Dialog>
       </div>
@@ -404,20 +434,32 @@ export default function PostsPage() {
         open={!!editingPost}
         onOpenChange={(v) => !v && setEditingPost(null)}
       >
-        <DialogContent>
+        <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-3xl">
           <DialogHeader>
             <DialogTitle>{t('posts.edit_title')}</DialogTitle>
             <DialogDescription>{t('posts.edit_description')}</DialogDescription>
           </DialogHeader>
-          {renderForm(editForm, setEditForm)}
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setEditingPost(null)}>
-              {t('posts.cancel')}
-            </Button>
-            <Button onClick={handleEdit} disabled={saving}>
-              {t('posts.save')}
-            </Button>
-          </DialogFooter>
+          <form
+            className="grid gap-4"
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleEdit();
+            }}
+          >
+            {renderForm(editForm, setEditForm)}
+            <DialogFooter>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setEditingPost(null)}
+              >
+                {t('posts.cancel')}
+              </Button>
+              <Button type="submit" disabled={saving}>
+                {t('posts.save')}
+              </Button>
+            </DialogFooter>
+          </form>
         </DialogContent>
       </Dialog>
 

@@ -37,16 +37,6 @@ export default function AdminLayout({
       ],
     },
     {
-      href: '/admin/categories',
-      label: t('nav.content'),
-      icon: FolderOpen,
-      group,
-      items: [
-        { href: '/admin/categories', label: t('nav.categories') },
-        { href: '/admin/posts', label: t('nav.posts') },
-      ],
-    },
-    {
       href: '/admin/payments',
       label: t('nav.billing'),
       icon: CreditCard,
@@ -55,6 +45,17 @@ export default function AdminLayout({
         { href: '/admin/payments', label: t('nav.payments') },
         { href: '/admin/subscriptions', label: t('nav.subscriptions') },
         { href: '/admin/credits', label: t('nav.credits') },
+      ],
+    },
+    {
+      href: '/admin/categories',
+      label: t('nav.content'),
+      icon: FolderOpen,
+      group,
+      items: [
+        { href: '/admin/categories', label: t('nav.categories') },
+        { href: '/admin/posts', label: t('nav.posts') },
+        { href: '/admin/tickets', label: t('nav.tickets') },
       ],
     },
   ];
