@@ -317,6 +317,14 @@ export function getSettings(): Setting[] {
       tab: 'auth',
       defaultValue: 'false',
     },
+    {
+      name: 'desktop_auth_schemes',
+      title: 'Desktop hand-off schemes',
+      type: 'text',
+      placeholder: 'myapp,myapp-dev',
+      group: 'email_auth',
+      tab: 'auth',
+    },
 
     // ─── Auth / Google ───────────────────────────────────────────────
     {

@@ -60,6 +60,10 @@
     "redeem_description": "This app is invite-only. Enter a valid invite code to continue.",
     "redeem_submit": "Continue"
   },
+  "auth_callback": {
+    "redirecting": "Signing you in…",
+    "error": "Could not complete sign-in. Please try again."
+  },
   "pricing": {
     "get_started": "Get Started",
     "processing": "Processing...",

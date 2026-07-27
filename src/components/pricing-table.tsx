@@ -4,6 +4,7 @@ import { useState, type ComponentType, type SVGProps } from 'react';
 import { Check } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
+import { currentPathWithQuery } from '@/lib/redirect';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 
@@ -82,6 +83,8 @@ export function PricingTable({
           credits: plan.credits,
           credits_valid_days: plan.creditsValidDays,
           payment_provider: plan.paymentProvider || 'stripe',
+          // Come back to the page the user paid from.
+          redirect: currentPathWithQuery('/settings/billing'),
         }),
       });
       const data = await res.json();

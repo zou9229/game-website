@@ -60,6 +60,10 @@
     "redeem_description": "本应用为邀请制,请输入有效的邀请码以继续。",
     "redeem_submit": "继续"
   },
+  "auth_callback": {
+    "redirecting": "正在跳转…",
+    "error": "登录未能完成，请重试。"
+  },
   "pricing": {
     "get_started": "立即开始",
     "processing": "处理中...",

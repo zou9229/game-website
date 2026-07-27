@@ -20,6 +20,8 @@ const publicKeys = [
   'google_client_id',
   'github_auth_enabled',
   'invite_code_required',
+  // Custom URL schemes /auth-callback may hand a session token to.
+  'desktop_auth_schemes',
   'select_payment_enabled',
   'default_payment_provider',
   'stripe_enabled',

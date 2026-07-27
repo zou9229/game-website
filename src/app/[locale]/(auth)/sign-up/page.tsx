@@ -7,6 +7,7 @@ import { authClient, signIn, signUp, useSession } from '@/core/auth/client';
 import { Link, useRouter } from '@/core/i18n/navigation';
 import { envConfigs } from '@/config';
 import { defaultLocale } from '@/config/locale';
+import { resolveAfterAuthUrl, safeInternalPath } from '@/lib/redirect';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -54,17 +55,13 @@ export default function SignUpPage() {
   }, [sessionPending, session?.user, router]);
 
   // Allow only same-site relative paths, and never an auth page (would loop).
-  const safeCallbackUrl =
-    callbackUrl &&
-    callbackUrl.startsWith('/') &&
-    !callbackUrl.startsWith('//') &&
-    !/^\/(sign-in|sign-up|verify-email)(\/|\?|$)/.test(callbackUrl)
-      ? callbackUrl
-      : null;
+  const safeCallbackUrl = safeInternalPath(callbackUrl);
 
-  const afterLoginUrl = redirectParam
-    ? `/auth-callback?redirect=${encodeURIComponent(redirectParam)}`
-    : safeCallbackUrl || '/settings';
+  const afterLoginUrl = resolveAfterAuthUrl({
+    redirect: redirectParam,
+    callbackUrl,
+    fallback: '/settings',
+  });
 
   // Carry callbackUrl/redirect across to sign-in so the destination survives the switch.
   const switchQuery = (() => {

@@ -7,6 +7,7 @@ import { toast } from 'sonner';
 
 import { useSession } from '@/core/auth/client';
 import { Link } from '@/core/i18n/navigation';
+import { currentPathWithQuery } from '@/lib/redirect';
 import { cn } from '@/lib/utils';
 import { ImageUploader } from '@/components/image-uploader';
 import { Button, buttonVariants } from '@/components/ui/button';
@@ -96,7 +97,10 @@ export function SupportWidget() {
               <p className="text-muted-foreground text-sm">
                 {t('support.sign_in_notice')}
               </p>
-              <Link href="/sign-in" className={cn(buttonVariants())}>
+              <Link
+                href={`/sign-in?callbackUrl=${encodeURIComponent(currentPathWithQuery('/'))}`}
+                className={cn(buttonVariants())}
+              >
                 {t('support.sign_in')}
               </Link>
             </div>
