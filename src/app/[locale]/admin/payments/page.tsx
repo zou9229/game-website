@@ -173,11 +173,6 @@ export default function PaymentsPage() {
     }
   }
 
-  const statusItems = ORDER_STATUSES.map((s) => ({
-    value: s,
-    label: t(`payments.status_${s}`),
-  }));
-
   const columns: Column<Order>[] = [
     {
       header: t('payments.order_no'),
@@ -277,10 +272,6 @@ export default function PaymentsPage() {
               <Select
                 value={statusFilter}
                 onValueChange={(v) => setStatusFilter(v ?? 'all')}
-                items={[
-                  { value: 'all', label: t('payments.tab_all') },
-                  ...statusItems,
-                ]}
               >
                 <SelectTrigger className="h-8 w-[120px]">
                   <SelectValue />
@@ -329,7 +320,6 @@ export default function PaymentsPage() {
                 <Select
                   value={form.status}
                   onValueChange={(v) => setForm({ ...form, status: v ?? '' })}
-                  items={statusItems}
                 >
                   <SelectTrigger>
                     <SelectValue />

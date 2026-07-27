@@ -10,6 +10,8 @@ import { VerifyEmail } from '@/core/email/templates/verify-email';
 import { AUTH_SECRET_PLACEHOLDER, envConfigs } from '@/config';
 import * as schema from '@/config/db/schema';
 import { getAllConfigs } from '@/modules/config/service';
+import { grantForNewUser } from '@/modules/credits/service';
+import { grantRoleForNewUser } from '@/modules/rbac/service';
 import {
   getClientIpFromCtx,
   getCookieFromCtx,
@@ -252,6 +254,35 @@ export function getAuth(configs?: Record<string, string>) {
                 ),
               },
             };
+          },
+          after: async (createdUser: any) => {
+            // Onboarding side effects. Read configs fresh: authInstance is
+            // cached, so the `configs` captured at build time can be stale
+            // after an admin settings save.
+            const all = await getAllConfigs().catch((error) => {
+              console.error('[auth] new user hook: load configs failed', error);
+              return null;
+            });
+            if (!all) return;
+
+            try {
+              await grantRoleForNewUser({
+                userId: createdUser.id,
+                configs: all,
+              });
+            } catch (error) {
+              console.error('[auth] grant default role failed', error);
+            }
+
+            try {
+              await grantForNewUser({
+                userId: createdUser.id,
+                userEmail: createdUser.email,
+                configs: all,
+              });
+            } catch (error) {
+              console.error('[auth] grant signup credits failed', error);
+            }
           },
         },
       },
