@@ -1,5 +1,21 @@
 export type ClassTier = 'S' | 'A' | 'B' | 'C' | 'D' | 'Event';
 
+export type ClassAvailability = 'active' | 'limited' | 'removed';
+
+export type ClassCurrency =
+  | 'diamonds'
+  | 'candy'
+  | 'candy-canes'
+  | 'eggs';
+
+export type ClassEntry = {
+  name: string;
+  sourceTitle?: string;
+  availability: ClassAvailability;
+  price: number;
+  currency: ClassCurrency;
+};
+
 export type ClassTierGroup = {
   tier: ClassTier;
   label: string;
@@ -7,44 +23,136 @@ export type ClassTierGroup = {
   classes: string[];
 };
 
+const activeClasses: ClassEntry[] = [
+  ['Camper', 10],
+  ['Scavenger', 25],
+  ['Base Defender', 40],
+  ['Hunter', 40],
+  ['Cook', 40, 'Cook Class'],
+  ['Medic', 40],
+  ['Support', 45],
+  ['Fisherman', 50],
+  ['Brute', 50],
+  ['Gambler', 55],
+  ['Ranger', 70],
+  ['Zookeeper', 70],
+  ['Lumberjack', 70],
+  ['Farmer', 80],
+  ['Explorer', 80],
+  ['Undead', 100],
+  ['Berserker', 100],
+  ['Snowman', 100],
+  ['Brawler', 100],
+  ['Grenadier', 100],
+  ['Alien', 100],
+  ['Feaster', 150],
+  ['Chef', 150],
+  ['Poison Master', 200],
+  ['Blacksmith', 200],
+  ['Nightcrawler', 200],
+  ['Fire Bandit', 200],
+  ['Beastmaster', 400],
+  ['Assassin', 500],
+  ['Pyromaniac', 600],
+  ['Necromancer', 600],
+  ['Gunslinger', 600],
+  ['Big Game Hunter', 600],
+  ['Alien Scientist', 600],
+  ['Cyborg', 600],
+  ['Vampire', 600],
+].map(([name, price, sourceTitle]) => ({
+  name: String(name),
+  sourceTitle: sourceTitle ? String(sourceTitle) : undefined,
+  availability: 'active',
+  price: Number(price),
+  currency: 'diamonds',
+}));
+
+const limitedClasses: ClassEntry[] = [
+  {
+    name: 'Trick or Treater',
+    availability: 'limited',
+    price: 30,
+    currency: 'candy',
+  },
+  {
+    name: 'Witch',
+    availability: 'limited',
+    price: 900,
+    currency: 'candy',
+  },
+  {
+    name: "Santa's Helper",
+    availability: 'limited',
+    price: 30,
+    currency: 'candy-canes',
+  },
+  {
+    name: 'Gifting Elf',
+    availability: 'limited',
+    price: 900,
+    currency: 'candy-canes',
+  },
+  {
+    name: 'Engineer',
+    availability: 'limited',
+    price: 1000,
+    currency: 'diamonds',
+  },
+  {
+    name: 'Egg Hunter',
+    availability: 'limited',
+    price: 30,
+    currency: 'eggs',
+  },
+  {
+    name: 'Bunny',
+    sourceTitle: 'Bunny (Class)',
+    availability: 'limited',
+    price: 900,
+    currency: 'eggs',
+  },
+];
+
+const removedClasses: ClassEntry[] = [
+  {
+    name: 'Decorator',
+    availability: 'removed',
+    price: 40,
+    currency: 'diamonds',
+  },
+];
+
 export const ninetyNineNightsClasses = {
-  checkedAt: '2026-07-13',
-  source: {
+  checkedAt: '2026-07-27',
+  inventorySource: {
+    name: '99 Nights in the Forest Wiki',
+    url: 'https://99-nights-in-the-forest.fandom.com/wiki/Classes',
+    revisionAt: '2026-07-19',
+    checkedAt: '2026-07-27',
+    note: 'The class inventory and listed prices come from the July 19 community-wiki revision. The in-game stock remains the final availability check.',
+  },
+  tierSource: {
     name: 'PC Gamer',
     url: 'https://www.pcgamer.com/roblox/99-nights-in-the-forest-classes/',
     lastUpdated: '2025-12-21',
-    checkedAt: '2026-07-13',
+    checkedAt: '2026-07-27',
+    note: 'This is a dated editorial tier snapshot. It does not rank classes added after the source article was published.',
   },
-  recommendations: [
-    {
-      title: 'Best starter path',
-      classes: ['Scavenger', 'Lumberjack', 'Explorer', 'Alien'],
-      note: 'PC Gamer recommends learning the basics with a cheap class before saving for stronger long-term options.',
-    },
-    {
-      title: 'Best solo direction',
-      classes: ['Cyborg', 'Big Game Hunter', 'Necromancer'],
-      note: 'Cyborg is the safest all-around solo target, while Big Game Hunter and Necromancer are late-run options.',
-    },
-    {
-      title: 'Best co-op support mix',
-      classes: ['Lumberjack', 'Chef', 'Blacksmith', 'Base Defender'],
-      note: 'Support classes help larger teams avoid resource pressure as difficulty scales.',
-    },
-  ],
-  tiers: [
+  classes: [...activeClasses, ...limitedClasses, ...removedClasses],
+  tierSnapshot: [
     {
       tier: 'S',
       label: 'S-Tier',
       summary:
-        'Top late-run and high-impact classes for players who can afford premium unlocks.',
+        'Top late-run and high-impact classes in the December 2025 source snapshot.',
       classes: ['Big Game Hunter', 'Cyborg', 'Necromancer', 'Vampire'],
     },
     {
       tier: 'A',
       label: 'A-Tier',
       summary:
-        'Strong choices for solo, co-op, speed, resource support, or specialized damage.',
+        'Strong solo, co-op, speed, resource, or damage choices in the dated snapshot.',
       classes: [
         'Assassin',
         'Beastmaster',
@@ -60,7 +168,7 @@ export const ninetyNineNightsClasses = {
       tier: 'B',
       label: 'B-Tier',
       summary:
-        'Useful classes with tradeoffs, narrower roles, or heavier setup requirements.',
+        'Useful classes with tradeoffs or heavier setup in the dated snapshot.',
       classes: [
         'Alien',
         'Berserker',
@@ -76,7 +184,7 @@ export const ninetyNineNightsClasses = {
       tier: 'C',
       label: 'C-Tier',
       summary:
-        'Niche classes that usually need a team plan or a specific objective to justify the slot.',
+        'Niche classes that usually need a team plan or objective in the dated snapshot.',
       classes: [
         'Base Defender',
         'Cook',
@@ -92,15 +200,15 @@ export const ninetyNineNightsClasses = {
       tier: 'D',
       label: 'D-Tier',
       summary:
-        'Low-impact picks that are usually outclassed once enough diamonds are available.',
+        'Lower-impact picks in the December 2025 source snapshot.',
       classes: ['Camper', 'Decorator', 'Support', 'Hunter', 'Zookeeper'],
     },
     {
       tier: 'Event',
       label: 'Event Classes',
       summary:
-        'Limited-time classes that are useful mainly during their seasonal events.',
+        'The two seasonal classes covered by the December 2025 source snapshot.',
       classes: ["Santa's Helper", 'Trick or Treater'],
     },
-  ],
+  ] satisfies ClassTierGroup[],
 };

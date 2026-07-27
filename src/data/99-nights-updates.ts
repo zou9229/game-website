@@ -13,8 +13,32 @@ export type UpdateEntry = {
 };
 
 export const ninetyNineNightsUpdates = {
-  checkedAt: '2026-07-17',
+  checkedAt: '2026-07-27',
   entries: [
+    {
+      date: '2026-07-27',
+      type: 'guide-data-pass',
+      title: 'July 27 class inventory and indexing review',
+      summary:
+        'Quest Codes replaced the incomplete December 2025 class inventory with a searchable July source snapshot and kept the older tier opinion visibly dated.',
+      details: [
+        'The July 19 community-wiki revision lists 36 active-pool classes, 7 event or limited classes, and 1 removed class.',
+        'The current inventory now includes newer entries such as Alien Scientist, Gunslinger, Nightcrawler, Grenadier, Feaster, Gifting Elf, Egg Hunter, and Bunny.',
+        'The PC Gamer tier groups remain available only as a December 2025 editorial snapshot and do not rank newer classes.',
+        'The Classes page is indexable again because current inventory facts and older tier opinions are now separated instead of presented as one current list.',
+        'No class stock odds, hidden reroll rules, new tier claim, or unreleased class was added.',
+      ],
+      sources: [
+        {
+          name: '99 Nights in the Forest Wiki classes revision',
+          url: 'https://99-nights-in-the-forest.fandom.com/wiki/Classes',
+        },
+        {
+          name: 'PC Gamer dated class tier guide',
+          url: 'https://www.pcgamer.com/roblox/99-nights-in-the-forest-classes/',
+        },
+      ],
+    },
     {
       date: '2026-07-17',
       type: 'code-check',

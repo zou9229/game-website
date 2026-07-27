@@ -157,7 +157,7 @@ export const robloxGames: RobloxGame[] = [
         title: 'Classes',
         href: '/roblox/99-nights-in-the-forest/classes',
         description:
-          'Class unlocks, perks, and best use cases after the class data pass.',
+          'Searchable active, limited, and removed class inventory with listed prices and a clearly dated tier snapshot.',
         status: 'live',
       },
       {

@@ -9,7 +9,6 @@ import { defaultLocale } from '@/config/locale';
 import { getBaseUrl } from '@/lib/seo';
 
 const reviewOnlyPaths = new Set([
-  '/roblox/99-nights-in-the-forest/classes',
   '/roblox/99-nights-in-the-forest/animals',
   '/roblox/99-nights-in-the-forest/survival-guide',
   '/roblox/99-nights-in-the-forest/updates',
