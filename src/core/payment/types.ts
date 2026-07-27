@@ -206,6 +206,32 @@ export enum PaymentEventType {
 export interface EventInfo {}
 
 /**
+ * Thrown when a webhook is authentic but carries an event this app does not
+ * process (unknown event type, or one with no handler). The webhook route acks
+ * these with 2xx so the provider stops redelivering them; every other error is
+ * a real failure and must return a non-2xx so the provider retries.
+ */
+export class WebhookIgnoredError extends Error {
+  // Duck-typed marker: `instanceof` is unreliable when the class is duplicated
+  // across bundle chunks (Workers builds), so isWebhookIgnored checks this too.
+  readonly webhookIgnored = true;
+
+  constructor(message: string) {
+    super(message);
+    this.name = 'WebhookIgnoredError';
+  }
+}
+
+export function isWebhookIgnored(error: unknown): boolean {
+  return (
+    error instanceof WebhookIgnoredError ||
+    (typeof error === 'object' &&
+      error !== null &&
+      (error as { webhookIgnored?: boolean }).webhookIgnored === true)
+  );
+}
+
+/**
  * Payment event interface
  */
 export interface PaymentEvent {

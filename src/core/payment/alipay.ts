@@ -13,6 +13,7 @@ import {
   SubscriptionCycleType,
   SubscriptionInfo,
   SubscriptionStatus,
+  WebhookIgnoredError,
 } from './types';
 
 /**
@@ -169,7 +170,9 @@ export class AlipayProvider implements PaymentProvider {
         eventType = PaymentEventType.PAYMENT_FAILED;
         break;
       default:
-        throw new Error(`Unhandled Alipay trade status: ${tradeStatus}`);
+        throw new WebhookIgnoredError(
+          `Unhandled Alipay trade status: ${tradeStatus}`
+        );
     }
 
     const metadata = params.passback_params
