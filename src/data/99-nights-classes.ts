@@ -11,6 +11,7 @@ export type ClassCurrency =
 export type ClassEntry = {
   name: string;
   sourceTitle?: string;
+  detailHref?: string;
   availability: ClassAvailability;
   price: number;
   currency: ClassCurrency;
@@ -122,6 +123,12 @@ const removedClasses: ClassEntry[] = [
     currency: 'diamonds',
   },
 ];
+
+const assassin = activeClasses.find((entry) => entry.name === 'Assassin');
+if (assassin) {
+  assassin.detailHref =
+    '/roblox/99-nights-in-the-forest/classes/assassin';
+}
 
 export const ninetyNineNightsClasses = {
   checkedAt: '2026-07-27',

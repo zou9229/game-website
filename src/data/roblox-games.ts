@@ -161,6 +161,13 @@ export const robloxGames: RobloxGame[] = [
         status: 'live',
       },
       {
+        title: 'Assassin Class',
+        href: '/roblox/99-nights-in-the-forest/classes/assassin',
+        description:
+          'Assassin cost, rotating-stock unlock route, Katana and Throwing Knife starter kit, perks, level requirements, and tradeoffs.',
+        status: 'live',
+      },
+      {
         title: 'Animals',
         href: '/roblox/99-nights-in-the-forest/animals',
         description:

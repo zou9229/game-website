@@ -6,8 +6,9 @@ import type {
   ClassCurrency,
   ClassEntry,
 } from '@/data/99-nights-classes';
-import { ExternalLink, Search } from 'lucide-react';
+import { ArrowRight, ExternalLink, Search } from 'lucide-react';
 
+import { Link } from '@/core/i18n/navigation';
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
@@ -37,6 +38,10 @@ const currencyLabels: Record<ClassCurrency, string> = {
 function sourceUrl(entry: ClassEntry) {
   const title = entry.sourceTitle ?? entry.name;
   return `https://99-nights-in-the-forest.fandom.com/wiki/${encodeURIComponent(title).replace(/%20/g, '_')}`;
+}
+
+function classAnchor(entry: ClassEntry) {
+  return entry.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 }
 
 export function ClassListBrowser({ classes }: { classes: ClassEntry[] }) {
@@ -106,6 +111,7 @@ export function ClassListBrowser({ classes }: { classes: ClassEntry[] }) {
           {results.map((entry) => (
             <div
               className="border-b p-4 sm:border-r sm:p-5 lg:[&:nth-child(3n)]:border-r-0"
+              id={classAnchor(entry)}
               key={entry.name}
             >
               <div className="flex items-start justify-between gap-3">
@@ -124,15 +130,26 @@ export function ClassListBrowser({ classes }: { classes: ClassEntry[] }) {
                   {availabilityLabels[entry.availability]}
                 </Badge>
               </div>
-              <a
-                className="text-primary mt-4 inline-flex items-center gap-1 text-sm font-medium underline-offset-4 hover:underline"
-                href={sourceUrl(entry)}
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                Source entry
-                <ExternalLink className="size-3.5" />
-              </a>
+              <div className="mt-4 flex flex-wrap gap-x-4 gap-y-2">
+                {entry.detailHref ? (
+                  <Link
+                    className="text-primary inline-flex items-center gap-1 text-sm font-semibold underline-offset-4 hover:underline"
+                    href={entry.detailHref}
+                  >
+                    Full class guide
+                    <ArrowRight className="size-3.5" />
+                  </Link>
+                ) : null}
+                <a
+                  className="text-muted-foreground hover:text-primary inline-flex items-center gap-1 text-sm font-medium underline-offset-4 hover:underline"
+                  href={sourceUrl(entry)}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  Source entry
+                  <ExternalLink className="size-3.5" />
+                </a>
+              </div>
             </div>
           ))}
         </div>

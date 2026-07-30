@@ -13,8 +13,27 @@ export type UpdateEntry = {
 };
 
 export const ninetyNineNightsUpdates = {
-  checkedAt: '2026-07-27',
+  checkedAt: '2026-07-30',
   entries: [
+    {
+      date: '2026-07-30',
+      type: 'page-build',
+      title: 'Assassin class search-intent expansion',
+      summary:
+        'Quest Codes added a dedicated Assassin class reference after Search Console surfaced Assassin and all-classes queries.',
+      details: [
+        'The page records the 500-diamond price, rotating-stock boundary, Katana, 120 Throwing Knives, level perks, and upgrade requirements from the July 11 source revision.',
+        'The Classes inventory now links directly to the detailed Assassin guide and exposes stable class anchors for deep links.',
+        'The all-classes page adds ItemList structured data without presenting the dated tier snapshot as a current ranking.',
+        'No critical-hit probability, stock odds, hidden reroll formula, or new tier claim was invented.',
+      ],
+      sources: [
+        {
+          name: '99 Nights in the Forest Wiki Assassin revision',
+          url: 'https://99-nights-in-the-forest.fandom.com/wiki/Assassin',
+        },
+      ],
+    },
     {
       date: '2026-07-27',
       type: 'guide-data-pass',

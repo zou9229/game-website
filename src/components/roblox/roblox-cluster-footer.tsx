@@ -28,7 +28,7 @@ const routeGroups = [
   {
     title: 'Class and taming',
     description: 'Compare unlock targets before spending diamonds.',
-    links: ['Classes', 'Class Tier List', 'Animals', 'Taming Flute'],
+    links: ['Classes', 'Assassin Class', 'Animals', 'Taming Flute'],
   },
 ];
 

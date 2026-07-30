@@ -105,6 +105,14 @@ export const seoKeywords: Record<string, string[]> = {
     '99 nights best classes',
     '99 nights class guide',
   ],
+  ninetyNineNightsAssassin: [
+    '99 nights in the forest assassin class',
+    'how to get assassin class 99 nights in the forest',
+    '99 nights assassin class',
+    'assassin class 99 nights in the forest',
+    '99 nights assassin perks',
+    '99 nights assassin level requirements',
+  ],
   ninetyNineNightsTierList: [
     '99 nights in the forest tier list',
     '99 nights class tier list',

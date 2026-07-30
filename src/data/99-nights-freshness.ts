@@ -1,4 +1,5 @@
 import { ninetyNineNightsAnimals } from '@/data/99-nights-animals';
+import { ninetyNineNightsAssassin } from '@/data/99-nights-assassin';
 import { ninetyNineNightsBadges } from '@/data/99-nights-badges';
 import { ninetyNineNightsBandages } from '@/data/99-nights-bandages';
 import { ninetyNineNightsClasses } from '@/data/99-nights-classes';
@@ -174,6 +175,15 @@ export const ninetyNineNightsFreshnessEntries: FreshnessEntry[] = [
     cadenceDays: 7,
     owner: 'manual-review',
     note: 'Class unlocks, perks, and costs need review after balance changes.',
+  },
+  {
+    title: 'Assassin Class',
+    href: '/roblox/99-nights-in-the-forest/classes/assassin',
+    kind: 'guide',
+    checkedAt: ninetyNineNightsAssassin.checkedAt,
+    cadenceDays: 7,
+    owner: 'manual-review',
+    note: 'Assassin cost, starter tools, perks, and level requirements need review after class balance changes.',
   },
   {
     title: 'Animals',

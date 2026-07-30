@@ -9,6 +9,7 @@ import { Link } from '@/core/i18n/navigation';
 import {
   buildBreadcrumbSchema,
   buildFAQSchema,
+  buildItemListSchema,
   buildVideoGameSchema,
   canonicalUrl,
   currentMonthYear,
@@ -121,6 +122,18 @@ export default async function ClassesPage({
     { name: 'Classes', item: pageUrl },
   ]);
   const faqSchema = buildFAQSchema(faqs);
+  const itemListSchema = buildItemListSchema({
+    name: 'All 99 Nights in the Forest classes',
+    description:
+      'Searchable current class inventory with listed prices and availability labels.',
+    items: ninetyNineNightsClasses.classes.map((entry) => ({
+      name: entry.name,
+      url: entry.detailHref
+        ? canonicalUrl(`${entry.detailHref}/`, locale)
+        : `${pageUrl}#${entry.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`,
+      description: `${entry.price.toLocaleString()} ${entry.currency.replace(/-/g, ' ')}; ${entry.availability} availability.`,
+    })),
+  });
   const videoGameSchema = buildVideoGameSchema({
     name: game.name,
     description: game.description,
@@ -133,13 +146,15 @@ export default async function ClassesPage({
 
   return (
     <main className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 py-10 sm:px-6 lg:px-8">
-      {[breadcrumbSchema, faqSchema, videoGameSchema].map((schema, index) => (
-        <script
-          key={index}
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-        />
-      ))}
+      {[breadcrumbSchema, faqSchema, itemListSchema, videoGameSchema].map(
+        (schema, index) => (
+          <script
+            key={index}
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+          />
+        )
+      )}
 
       <section className="grid gap-8 lg:grid-cols-[1fr_340px] lg:items-start">
         <div className="space-y-5">
@@ -355,6 +370,10 @@ export default async function ClassesPage({
               {
                 href: '/roblox/99-nights-in-the-forest/zookeeper-vs-beastmaster',
                 title: 'Compare taming classes',
+              },
+              {
+                href: '/roblox/99-nights-in-the-forest/classes/assassin',
+                title: 'Open the Assassin class guide',
               },
             ].map((item) => (
               <Link
