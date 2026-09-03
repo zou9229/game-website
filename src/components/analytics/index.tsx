@@ -16,14 +16,12 @@ export async function Analytics({ configs }: { configs?: ConfigMap } = {}) {
   const plausibleDomain = resolvedConfigs.plausible_domain?.trim();
   const plausibleSrc = resolvedConfigs.plausible_src?.trim();
 
-  if (!gaId && !plausibleDomain) {
-    return null;
-  }
+  if (!gaId && !plausibleDomain && !plausibleSrc) return null;
 
   return (
     <>
       {gaId ? <GoogleAnalytics measurementId={gaId} /> : null}
-      {plausibleDomain ? (
+      {plausibleDomain || plausibleSrc ? (
         <Plausible domain={plausibleDomain} src={plausibleSrc || undefined} />
       ) : null}
     </>

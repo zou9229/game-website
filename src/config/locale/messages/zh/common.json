@@ -60,6 +60,10 @@
     "redeem_description": "本应用为邀请制,请输入有效的邀请码以继续。",
     "redeem_submit": "继续"
   },
+  "auth_callback": {
+    "redirecting": "正在跳转…",
+    "error": "登录未能完成，请重试。"
+  },
   "pricing": {
     "get_started": "立即开始",
     "processing": "处理中...",
@@ -96,6 +100,10 @@
     "theme_dark": "深色模式",
     "theme_system": "跟随系统"
   },
+  "pages": {
+    "back_to_home": "返回首页",
+    "last_updated": "最近更新"
+  },
   "not_found": {
     "message": "页面不存在",
     "back_home": "返回首页"
@@ -106,8 +114,23 @@
     "retry": "重试",
     "back_home": "返回首页"
   },
-  "pages": {
-    "back_to_home": "返回首页",
-    "last_updated": "最近更新"
+  "support": {
+    "open_label": "联系客服",
+    "title": "联系客服",
+    "description": "提交工单反馈问题,我们会尽快回复你",
+    "sign_in_notice": "请先登录后再提交工单。",
+    "sign_in": "去登录",
+    "title_label": "标题",
+    "title_placeholder": "简要描述你的问题",
+    "content_label": "问题描述",
+    "content_placeholder": "详细描述你遇到的问题…",
+    "track_hint_prefix": "提交后可前往",
+    "track_hint_link": "工单支持页面查看回复",
+    "required": "请填写标题和问题描述",
+    "success": "工单已提交,我们会尽快回复",
+    "cancel": "取消",
+    "submit": "提交",
+    "submitting": "提交中…",
+    "attachments_label": "图片附件(可选)"
   }
 }

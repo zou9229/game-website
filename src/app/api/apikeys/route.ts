@@ -18,7 +18,7 @@ export async function GET(req: Request) {
     const page = Math.max(1, parseInt(searchParams.get('page') || '1'));
     const pageSize = Math.min(
       100,
-      Math.max(1, parseInt(searchParams.get('pageSize') || '10'))
+      Math.max(1, parseInt(searchParams.get('pageSize') || '20'))
     );
     const search = searchParams.get('search') || undefined;
 

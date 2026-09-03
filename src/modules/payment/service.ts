@@ -11,11 +11,11 @@ import {
 import {
   PaymentStatus,
   PaymentType,
+  SubscriptionCycleType,
   type CheckoutSession,
   type PaymentEvent,
   type PaymentOrder,
 } from '@/core/payment/types';
-import { envConfigs } from '@/config';
 import { credit, order, subscription } from '@/config/db/schema';
 import { getAllConfigs } from '@/modules/config/service';
 import { calculateCreditExpirationTime } from '@/modules/credits/service';
@@ -148,12 +148,13 @@ export async function createCheckout(params: {
   } = params;
   const pm = await getPaymentManager();
   const orderNo = getUniSeq('ORD');
+  const configs = await getAllConfigs();
+  const appUrl = configs.app_url || 'http://localhost:3000';
 
   // Resolve provider-specific product ID (e.g. Creem product_ids_mapping)
   const resolvedProvider = provider || pm.getDefaultProvider()?.name;
   let resolvedProductId = paymentOrder.productId;
   if (resolvedProvider === 'creem' && paymentOrder.productId) {
-    const configs = await getAllConfigs();
     const mapping = configs.creem_product_ids_mapping;
     if (mapping) {
       try {
@@ -168,9 +169,8 @@ export async function createCheckout(params: {
   }
 
   const finalSuccessUrl =
-    paymentOrder.successUrl ||
-    `${envConfigs.app_url}/settings/billing?success=1`;
-  const callbackSuccessUrl = `${envConfigs.app_url}/api/payment/callback?order_no=${orderNo}&redirect=${encodeURIComponent(finalSuccessUrl)}`;
+    paymentOrder.successUrl || `${appUrl}/settings/billing?success=1`;
+  const callbackSuccessUrl = `${appUrl}/api/payment/callback?order_no=${orderNo}&redirect=${encodeURIComponent(finalSuccessUrl)}`;
 
   const session = await pm.createPayment({
     order: {
@@ -179,8 +179,7 @@ export async function createCheckout(params: {
       orderNo,
       successUrl: callbackSuccessUrl,
       cancelUrl:
-        paymentOrder.cancelUrl ||
-        `${envConfigs.app_url}/settings/billing?canceled=1`,
+        paymentOrder.cancelUrl || `${appUrl}/settings/billing?canceled=1`,
     },
     provider,
   });
@@ -257,8 +256,17 @@ export async function handleWebhook(params: {
   const eventType = event.eventType;
 
   // Route event to appropriate handler
-  if (eventType === 'checkout.success' || eventType === 'payment.success') {
+  if (eventType === 'checkout.success') {
     await handleCheckoutSuccess(session, params.provider);
+  } else if (eventType === 'payment.success') {
+    if (
+      session.paymentInfo?.subscriptionCycleType ===
+      SubscriptionCycleType.RENEWAL
+    ) {
+      await handleSubscriptionRenewal(session, params.provider);
+    } else {
+      await handleCheckoutSuccess(session, params.provider);
+    }
   } else if (eventType === 'subscribe.updated') {
     await handleSubscriptionUpdated(session, params.provider);
   } else if (eventType === 'subscribe.canceled') {

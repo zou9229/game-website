@@ -45,7 +45,7 @@ next-env.d.ts
 
 # database
 /data/
-/drizzle/
+# Keep reviewable SQL migrations and Drizzle snapshots in version control.
 src/config/db/schema.ts
 
 # npm (project uses pnpm)

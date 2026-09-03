@@ -18,6 +18,7 @@ import { toast } from 'sonner';
 
 import { useSession } from '@/core/auth/client';
 import { useRouter } from '@/core/i18n/navigation';
+import { currentPathWithQuery } from '@/lib/redirect';
 import {
   PaymentProviderModal,
   type PaymentProvider,
@@ -59,7 +60,7 @@ export function Pricing({
   useEffect(() => {
     if (skipConfigFetch) return;
 
-    fetch('/api/config/public')
+    fetch('/api/config/public', { cache: 'no-store' })
       .then((r) => r.json())
       .then((res) => {
         if (res.code === 0) setConfigs(res.data || {});
@@ -252,6 +253,8 @@ export function Pricing({
           credits: plan.credits,
           credits_valid_days: plan.creditsValidDays,
           payment_provider: provider,
+          // Come back to the page the user paid from.
+          redirect: currentPathWithQuery('/settings/billing'),
         }),
       });
       const data = await res.json();
@@ -267,10 +270,8 @@ export function Pricing({
 
   async function handleCheckout(plan: PricingPlan) {
     if (!session?.user) {
-      const redirect = encodeURIComponent(
-        typeof window !== 'undefined' ? window.location.pathname : '/pricing'
-      );
-      router.push(`/sign-in?redirect=${redirect}`);
+      const callbackUrl = encodeURIComponent(currentPathWithQuery('/pricing'));
+      router.push(`/sign-in?callbackUrl=${callbackUrl}`);
       return;
     }
 

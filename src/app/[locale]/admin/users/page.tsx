@@ -5,6 +5,7 @@ import { Coins, MoreHorizontal, Shield } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
+import { formatDateTime } from '@/lib/time';
 import { DataTable, type Column } from '@/components/data-table';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -33,6 +34,8 @@ interface User {
   image: string | null;
   createdAt: string;
   credits: number;
+  utmSource: string;
+  ip: string;
 }
 
 interface RoleInfo {
@@ -47,7 +50,7 @@ interface UserRoleInfo {
   roleTitle: string;
 }
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 20;
 
 export default function UsersPage() {
   const t = useTranslations('admin');
@@ -233,6 +236,28 @@ export default function UsersPage() {
       cell: (u) => u.email,
     },
     {
+      header: t('users.source_col'),
+      cell: (u) =>
+        u.utmSource ? (
+          <span className="bg-muted inline-flex rounded-md px-2 py-0.5 text-xs font-medium">
+            {u.utmSource}
+          </span>
+        ) : (
+          <span className="text-muted-foreground">—</span>
+        ),
+    },
+    {
+      header: t('users.ip_col'),
+      cell: (u) =>
+        u.ip ? (
+          <span className="text-muted-foreground font-mono text-xs">
+            {u.ip}
+          </span>
+        ) : (
+          <span className="text-muted-foreground">—</span>
+        ),
+    },
+    {
       header: t('users.credits_col'),
       className: 'w-[120px]',
       cell: (u) => (
@@ -245,7 +270,7 @@ export default function UsersPage() {
       header: t('users.joined_col'),
       cell: (u) => (
         <span className="text-muted-foreground">
-          {new Date(u.createdAt).toLocaleDateString()}
+          {formatDateTime(u.createdAt)}
         </span>
       ),
     },
@@ -364,67 +389,79 @@ export default function UsersPage() {
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-4 py-2">
-            <div className="grid grid-cols-2 gap-2">
-              <button
+          <form
+            className="grid gap-4"
+            onSubmit={(e) => {
+              e.preventDefault();
+              submitCredits();
+            }}
+          >
+            <div className="space-y-4 py-2">
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() => setCreditsAction('grant')}
+                  className={`rounded-md border px-3 py-2 text-sm font-medium transition-colors ${
+                    creditsAction === 'grant'
+                      ? 'border-foreground bg-foreground text-background'
+                      : 'border-border hover:bg-muted'
+                  }`}
+                >
+                  {t('users.credits_action_grant')}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setCreditsAction('deduct')}
+                  className={`rounded-md border px-3 py-2 text-sm font-medium transition-colors ${
+                    creditsAction === 'deduct'
+                      ? 'border-foreground bg-foreground text-background'
+                      : 'border-border hover:bg-muted'
+                  }`}
+                >
+                  {t('users.credits_action_deduct')}
+                </button>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-sm font-medium">
+                  {t('users.credits_amount_label')}
+                </label>
+                <Input
+                  type="number"
+                  min="1"
+                  value={creditsAmount}
+                  onChange={(e) => setCreditsAmount(e.target.value)}
+                  placeholder="0"
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-sm font-medium">
+                  {t('users.credits_desc_label')}
+                </label>
+                <Input
+                  value={creditsDesc}
+                  onChange={(e) => setCreditsDesc(e.target.value)}
+                  placeholder={t('users.credits_desc_placeholder')}
+                />
+              </div>
+            </div>
+
+            <DialogFooter>
+              <Button
                 type="button"
-                onClick={() => setCreditsAction('grant')}
-                className={`rounded-md border px-3 py-2 text-sm font-medium transition-colors ${
-                  creditsAction === 'grant'
-                    ? 'border-foreground bg-foreground text-background'
-                    : 'border-border hover:bg-muted'
-                }`}
+                variant="outline"
+                onClick={() => setCreditsUser(null)}
               >
-                {t('users.credits_action_grant')}
-              </button>
-              <button
-                type="button"
-                onClick={() => setCreditsAction('deduct')}
-                className={`rounded-md border px-3 py-2 text-sm font-medium transition-colors ${
-                  creditsAction === 'deduct'
-                    ? 'border-foreground bg-foreground text-background'
-                    : 'border-border hover:bg-muted'
-                }`}
-              >
-                {t('users.credits_action_deduct')}
-              </button>
-            </div>
-
-            <div className="space-y-1.5">
-              <label className="text-sm font-medium">
-                {t('users.credits_amount_label')}
-              </label>
-              <Input
-                type="number"
-                min="1"
-                value={creditsAmount}
-                onChange={(e) => setCreditsAmount(e.target.value)}
-                placeholder="0"
-              />
-            </div>
-
-            <div className="space-y-1.5">
-              <label className="text-sm font-medium">
-                {t('users.credits_desc_label')}
-              </label>
-              <Input
-                value={creditsDesc}
-                onChange={(e) => setCreditsDesc(e.target.value)}
-                placeholder={t('users.credits_desc_placeholder')}
-              />
-            </div>
-          </div>
-
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setCreditsUser(null)}>
-              {t('roles.cancel')}
-            </Button>
-            <Button onClick={submitCredits} disabled={creditsSubmitting}>
-              {creditsSubmitting
-                ? t('users.credits_submitting')
-                : t('users.credits_submit')}
-            </Button>
-          </DialogFooter>
+                {t('roles.cancel')}
+              </Button>
+              <Button type="submit" disabled={creditsSubmitting}>
+                {creditsSubmitting
+                  ? t('users.credits_submitting')
+                  : t('users.credits_submit')}
+              </Button>
+            </DialogFooter>
+          </form>
         </DialogContent>
       </Dialog>
     </div>

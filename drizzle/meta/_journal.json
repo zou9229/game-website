@@ -1,0 +1,20 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1781932206363,
+      "tag": "0000_clear_lionheart",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1788432720924,
+      "tag": "0001_upstream_tickets_api_keys",
+      "breakpoints": true
+    }
+  ]
+}

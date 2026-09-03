@@ -6,7 +6,45 @@ import { Select as SelectPrimitive } from "@base-ui/react/select"
 import { cn } from "@/lib/utils"
 import { ChevronDownIcon, CheckIcon, ChevronUpIcon } from "lucide-react"
 
-const Select = SelectPrimitive.Root
+type CollectedItem = { label: React.ReactNode; value: unknown }
+
+/**
+ * Walks the JSX tree and collects every `<SelectItem value=... >label</SelectItem>`.
+ * Base UI only knows an item's label while the popup is mounted, so a closed
+ * trigger falls back to rendering the raw value ("all") unless `items` is given.
+ */
+function collectSelectItems(node: React.ReactNode, acc: CollectedItem[]) {
+  React.Children.forEach(node, (child) => {
+    if (!React.isValidElement(child)) return
+    const props = child.props as { children?: React.ReactNode; value?: unknown }
+    if (child.type === SelectItem || child.type === SelectPrimitive.Item) {
+      if (props.value !== undefined) {
+        acc.push({ value: props.value, label: props.children })
+      }
+      return
+    }
+    if (props.children) collectSelectItems(props.children, acc)
+  })
+}
+
+function Select<Value, Multiple extends boolean | undefined = false>({
+  children,
+  items,
+  ...props
+}: SelectPrimitive.Root.Props<Value, Multiple>) {
+  const resolvedItems = React.useMemo(() => {
+    if (items) return items
+    const acc: CollectedItem[] = []
+    collectSelectItems(children, acc)
+    return acc.length ? acc : undefined
+  }, [items, children])
+
+  return (
+    <SelectPrimitive.Root items={resolvedItems} {...props}>
+      {children}
+    </SelectPrimitive.Root>
+  )
+}
 
 function SelectGroup({ className, ...props }: SelectPrimitive.Group.Props) {
   return (

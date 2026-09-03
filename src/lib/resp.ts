@@ -1,13 +1,18 @@
-export function respData(data: any) {
-  return respJson(0, 'ok', data || []);
+export function respData(data: any, init?: ResponseInit) {
+  return respJson(0, 'ok', data ?? [], init);
 }
 
-export function respOk() {
-  return respJson(0, 'ok');
+export function respOk(init?: ResponseInit) {
+  return respJson(0, 'ok', undefined, init);
 }
 
-export function respErr(message: string, status = 200) {
-  return respJson(-1, message, undefined, { status });
+export function respErr(message: string, init?: number | ResponseInit) {
+  return respJson(
+    -1,
+    message,
+    undefined,
+    typeof init === 'number' ? { status: init } : init
+  );
 }
 
 export function respPage(items: any[], total: number) {
@@ -24,7 +29,7 @@ export function respJson(
     code: code,
     message: message,
   };
-  if (data) {
+  if (data !== undefined) {
     json['data'] = data;
   }
   return Response.json(json, init);

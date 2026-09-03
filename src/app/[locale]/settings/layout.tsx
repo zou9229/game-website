@@ -6,12 +6,14 @@ import {
   Home,
   Key,
   LayoutDashboard,
+  LifeBuoy,
   Receipt,
   User,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import { envConfigs } from '@/config';
+import { SupportWidget } from '@/blocks/support-widget';
 import { AppLayout } from '@/components/app-layout';
 
 export default function SettingsLayout({
@@ -53,6 +55,12 @@ export default function SettingsLayout({
       icon: Key,
       group,
     },
+    {
+      href: '/settings/tickets',
+      label: t('settings.nav.tickets'),
+      icon: LifeBuoy,
+      group,
+    },
   ];
 
   const footerNavItems = [
@@ -68,6 +76,7 @@ export default function SettingsLayout({
       brandHref="/settings"
     >
       {children}
+      <SupportWidget />
     </AppLayout>
   );
 }

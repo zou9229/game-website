@@ -8,27 +8,23 @@ export function Plausible({
   domain,
   src = 'https://plausible.io/js/script.js',
 }: {
-  domain: string;
+  domain?: string;
   src?: string;
 }) {
-  if (!domain) return null;
+  if (!src) return null;
   return (
     <>
-      {/* async={true} flags this to React 19 as a hoistable resource —
-          see google-analytics.tsx for the full rationale. */}
-      <script
-        id="plausible-init"
-        async
-        dangerouslySetInnerHTML={{
-          __html: `window.plausible=window.plausible||function(){(window.plausible.q=window.plausible.q||[]).push(arguments)};`,
-        }}
-      />
       <script
         id="plausible-loader"
-        data-domain={domain}
+        data-domain={domain || undefined}
         src={src}
-        defer
         async
+      />
+      <script
+        id="plausible-init"
+        dangerouslySetInnerHTML={{
+          __html: `window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init();`,
+        }}
       />
     </>
   );

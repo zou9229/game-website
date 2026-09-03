@@ -5,6 +5,7 @@ import { Pencil, Plus, Trash2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
+import { formatDateTime } from '@/lib/time';
 import { DataTable, type Column } from '@/components/data-table';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -30,7 +31,7 @@ interface Category {
   createdAt: string;
 }
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 20;
 const emptyForm = { slug: '', title: '', description: '' };
 
 export default function CategoriesPage() {
@@ -180,7 +181,7 @@ export default function CategoriesPage() {
       header: t('categories.created_at'),
       cell: (c) => (
         <span className="text-muted-foreground text-sm">
-          {new Date(c.createdAt).toLocaleDateString()}
+          {formatDateTime(c.createdAt)}
         </span>
       ),
     },
@@ -265,15 +266,27 @@ export default function CategoriesPage() {
                 {t('categories.create_description')}
               </DialogDescription>
             </DialogHeader>
-            {renderForm(form, setForm)}
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setCreateOpen(false)}>
-                {t('categories.cancel')}
-              </Button>
-              <Button onClick={handleCreate} disabled={saving}>
-                {t('categories.save')}
-              </Button>
-            </DialogFooter>
+            <form
+              className="grid gap-4"
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleCreate();
+              }}
+            >
+              {renderForm(form, setForm)}
+              <DialogFooter>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setCreateOpen(false)}
+                >
+                  {t('categories.cancel')}
+                </Button>
+                <Button type="submit" disabled={saving}>
+                  {t('categories.save')}
+                </Button>
+              </DialogFooter>
+            </form>
           </DialogContent>
         </Dialog>
       </div>
@@ -307,15 +320,27 @@ export default function CategoriesPage() {
               {t('categories.edit_description')}
             </DialogDescription>
           </DialogHeader>
-          {renderForm(editForm, setEditForm)}
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setEditingCat(null)}>
-              {t('categories.cancel')}
-            </Button>
-            <Button onClick={handleEdit} disabled={saving}>
-              {t('categories.save')}
-            </Button>
-          </DialogFooter>
+          <form
+            className="grid gap-4"
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleEdit();
+            }}
+          >
+            {renderForm(editForm, setEditForm)}
+            <DialogFooter>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setEditingCat(null)}
+              >
+                {t('categories.cancel')}
+              </Button>
+              <Button type="submit" disabled={saving}>
+                {t('categories.save')}
+              </Button>
+            </DialogFooter>
+          </form>
         </DialogContent>
       </Dialog>
 

@@ -11,6 +11,7 @@ import {
   SubscriptionCycleType,
   SubscriptionInfo,
   SubscriptionStatus,
+  WebhookIgnoredError,
   type PaymentConfigs,
   type PaymentEvent,
   type PaymentOrder,
@@ -244,7 +245,11 @@ export class StripeProvider implements PaymentProvider {
         throw new Error('Signing Secret not configured');
       }
 
-      const event = this.client.webhooks.constructEvent(
+      // Async verification: on Cloudflare Workers the Stripe SDK uses
+      // SubtleCrypto, which has no synchronous API — constructEvent() throws
+      // "SubtleCryptoProvider cannot be used in a synchronous context" there.
+      // constructEventAsync() is correct on Node too, so it's the only path.
+      const event = await this.client.webhooks.constructEventAsync(
         rawBody,
         signature,
         this.configs.signingSecret
@@ -273,7 +278,9 @@ export class StripeProvider implements PaymentProvider {
       }
 
       if (!paymentSession) {
-        throw new Error('Invalid webhook event');
+        throw new WebhookIgnoredError(
+          `No handler for Stripe event: ${event.type}`
+        );
       }
 
       return {
@@ -369,7 +376,9 @@ export class StripeProvider implements PaymentProvider {
       case 'customer.subscription.deleted':
         return PaymentEventType.SUBSCRIBE_CANCELED;
       default:
-        throw new Error(`Unknown Stripe event type: ${eventType}`);
+        throw new WebhookIgnoredError(
+          `Unknown Stripe event type: ${eventType}`
+        );
     }
   }
 

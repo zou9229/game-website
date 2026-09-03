@@ -328,6 +328,14 @@ export function getSettings(): Setting[] {
       tab: 'auth',
       defaultValue: 'false',
     },
+    {
+      name: 'desktop_auth_schemes',
+      title: 'Desktop hand-off schemes',
+      type: 'text',
+      placeholder: 'myapp,myapp-dev',
+      group: 'email_auth',
+      tab: 'auth',
+    },
 
     // ─── Auth / Google ───────────────────────────────────────────────
     {
@@ -919,7 +927,7 @@ export function getSettings(): Setting[] {
       title: 'Domain',
       type: 'text',
       placeholder: 'example.com',
-      tip: 'The domain registered in your Plausible dashboard',
+      tip: 'Optional for the new site-specific script; required by legacy scripts',
       group: 'plausible',
       tab: 'analytics',
     },
@@ -927,8 +935,8 @@ export function getSettings(): Setting[] {
       name: 'plausible_src',
       title: 'Script Src',
       type: 'text',
-      placeholder: 'https://plausible.io/js/script.js',
-      tip: 'Use https://plausible.io/js/script.js for cloud, or your self-hosted URL',
+      placeholder: 'https://plausible.example.com/js/pa-XXXXX.js',
+      tip: 'Paste the complete site-specific script URL from Plausible, or leave blank to use the legacy cloud script',
       group: 'plausible',
       tab: 'analytics',
     },

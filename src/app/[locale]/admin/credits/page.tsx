@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 
+import { formatDateTime } from '@/lib/time';
 import { cn } from '@/lib/utils';
 import { DataTable, type Column } from '@/components/data-table';
 import { Card, CardContent } from '@/components/ui/card';
@@ -22,7 +23,7 @@ interface Credit {
   createdAt: string;
 }
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 20;
 
 const TABS = ['all', 'grant', 'consume'] as const;
 type Tab = (typeof TABS)[number];
@@ -116,7 +117,7 @@ export default function CreditsPage() {
       header: t('credits.expires_at'),
       cell: (c) => (
         <span className="text-muted-foreground text-sm">
-          {c.expiresAt ? new Date(c.expiresAt).toLocaleDateString() : '—'}
+          {c.expiresAt ? formatDateTime(c.expiresAt) : '—'}
         </span>
       ),
     },
@@ -124,7 +125,7 @@ export default function CreditsPage() {
       header: t('credits.created_at'),
       cell: (c) => (
         <span className="text-muted-foreground text-sm">
-          {new Date(c.createdAt).toLocaleDateString()}
+          {formatDateTime(c.createdAt)}
         </span>
       ),
     },

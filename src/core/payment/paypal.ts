@@ -9,6 +9,7 @@ import {
   SubscriptionCycleType,
   SubscriptionInfo,
   SubscriptionStatus,
+  WebhookIgnoredError,
   type PaymentConfigs,
   type PaymentEvent,
   type PaymentOrder,
@@ -761,7 +762,9 @@ export class PayPalProvider implements PaymentProvider {
         return PaymentEventType.PAYMENT_SUCCESS;
 
       default:
-        throw new Error(`Unknown PayPal event type: ${eventType}`);
+        throw new WebhookIgnoredError(
+          `Unknown PayPal event type: ${eventType}`
+        );
     }
   }
 

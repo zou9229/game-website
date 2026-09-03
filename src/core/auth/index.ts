@@ -10,6 +10,14 @@ import { VerifyEmail } from '@/core/email/templates/verify-email';
 import { AUTH_SECRET_PLACEHOLDER, envConfigs } from '@/config';
 import * as schema from '@/config/db/schema';
 import { getAllConfigs } from '@/modules/config/service';
+import { grantForNewUser } from '@/modules/credits/service';
+import { grantRoleForNewUser } from '@/modules/rbac/service';
+import {
+  getClientIpFromCtx,
+  getCookieFromCtx,
+  getHeaderValue,
+  guessLocaleFromAcceptLanguage,
+} from '@/lib/cookie';
 import { getUuid } from '@/lib/hash';
 
 function assertProductionAuthSecret() {
@@ -187,14 +195,17 @@ export function getAuth(configs?: Record<string, string>) {
     ? configs.email_verification_enabled === 'true' &&
       isEmailConfigured(configs)
     : false;
+  const appName = configs?.app_name || envConfigs.app_name;
+  const appUrl = configs?.app_url || envConfigs.app_url;
+  const authUrl = configs?.auth_url || envConfigs.auth_url || appUrl;
 
   const instance = betterAuth({
-    appName: envConfigs.app_name,
-    baseURL: envConfigs.auth_url || envConfigs.app_url,
+    appName,
+    baseURL: authUrl,
     secret: envConfigs.auth_secret,
     trustedOrigins: (request) => {
       const origins: string[] = [];
-      if (envConfigs.app_url) origins.push(envConfigs.app_url);
+      if (appUrl) origins.push(appUrl);
       try {
         const origin = request?.headers?.get?.('origin');
         if (origin && new URL(origin).hostname === 'localhost')
@@ -222,6 +233,59 @@ export function getAuth(configs?: Record<string, string>) {
           input: false,
           required: false,
           defaultValue: '',
+        },
+      },
+    },
+    databaseHooks: {
+      user: {
+        create: {
+          before: async (userData: any, ctx: any) => {
+            let utmSource = getCookieFromCtx(ctx, 'utm_source') || '';
+            try {
+              utmSource = decodeURIComponent(utmSource);
+            } catch {}
+            utmSource = utmSource.replace(/[^\w.\-]/g, '').slice(0, 100);
+
+            return {
+              data: {
+                ...userData,
+                utmSource,
+                ip: getClientIpFromCtx(ctx).slice(0, 100),
+                locale: guessLocaleFromAcceptLanguage(
+                  getHeaderValue(ctx, 'accept-language')
+                ),
+              },
+            };
+          },
+          after: async (createdUser: any) => {
+            // Onboarding side effects. Read configs fresh: authInstance is
+            // cached, so the `configs` captured at build time can be stale
+            // after an admin settings save.
+            const all = await getAllConfigs().catch((error) => {
+              console.error('[auth] new user hook: load configs failed', error);
+              return null;
+            });
+            if (!all) return;
+
+            try {
+              await grantRoleForNewUser({
+                userId: createdUser.id,
+                configs: all,
+              });
+            } catch (error) {
+              console.error('[auth] grant default role failed', error);
+            }
+
+            try {
+              await grantForNewUser({
+                userId: createdUser.id,
+                userEmail: createdUser.email,
+                configs: all,
+              });
+            } catch (error) {
+              console.error('[auth] grant signup credits failed', error);
+            }
+          },
         },
       },
     },
@@ -300,7 +364,7 @@ export function getAuth(configs?: Record<string, string>) {
                 const logoUrl = logo.startsWith('http')
                   ? logo
                   : logo
-                    ? `${envConfigs.app_url || ''}${logo.startsWith('/') ? '' : '/'}${logo}`
+                    ? `${all.app_url || appUrl || ''}${logo.startsWith('/') ? '' : '/'}${logo}`
                     : undefined;
                 const result = await emailCtx.provider.sendEmail({
                   to: user.email,

@@ -101,7 +101,7 @@ export function buildGameDataFreshnessAudit(
   overrides: GameDataFreshnessOverrides = {}
 ) {
   const items: FreshnessAuditItem[] = ninetyNineNightsFreshnessEntries
-    .map((entry) => {
+    .map((entry): FreshnessAuditItem => {
       const overrideCheckedAt =
         entry.kind === 'guide' ? undefined : overrides[entry.kind];
       const checkedAt = overrideCheckedAt ?? entry.checkedAt;

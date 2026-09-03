@@ -30,9 +30,8 @@ export async function getDbConfigs(): Promise<ConfigMap> {
     const rows = await db().select().from(config);
     const result: ConfigMap = {};
     for (const row of rows) {
-      if (row.name && row.value) {
-        result[row.name] = row.value;
-      }
+      if (!row.name || row.value === null || row.value === undefined) continue;
+      result[row.name] = row.value;
     }
 
     cachedConfigs = result;
@@ -70,13 +69,38 @@ const PROTECTED_CONFIG_KEYS: ReadonlySet<string> = new Set([
   'db_max_connections',
 ]);
 
+const SECRET_SETTING_NAMES: ReadonlySet<string> = new Set(
+  getSettings()
+    .filter((s) => s.type === 'password' || s.name.endsWith('_private_key'))
+    .map((s) => s.name)
+);
+
+const SECRET_KEY_PATTERN =
+  /(_secret|_secret_key|_token|_password|_private_key|_api_key|_access_key|_api_v3_key)$/;
+
+export function isSecretConfigKey(name: string): boolean {
+  return SECRET_SETTING_NAMES.has(name) || SECRET_KEY_PATTERN.test(name);
+}
+
+const MASK_PREFIX = '••••••••';
+
+export function maskConfigValue(value: string): string {
+  return value.length > 8 ? MASK_PREFIX + value.slice(-4) : MASK_PREFIX;
+}
+
+export function isMaskedConfigValue(value: string): boolean {
+  return value.startsWith(MASK_PREFIX);
+}
+
 /**
  * Save multiple configs to database (upsert). Protected keys are silently
- * dropped — see PROTECTED_CONFIG_KEYS.
+ * dropped — see PROTECTED_CONFIG_KEYS. Masked values round-tripped from the
+ * admin UI are skipped (the user didn't change them).
  */
 export async function saveConfigs(configs: ConfigMap) {
   const entries = Object.entries(configs).filter(
-    ([name]) => !PROTECTED_CONFIG_KEYS.has(name)
+    ([name, value]) =>
+      !PROTECTED_CONFIG_KEYS.has(name) && !isMaskedConfigValue(value)
   );
   if (entries.length === 0) {
     return;
@@ -111,6 +135,17 @@ export async function getConfig(name: string): Promise<string | undefined> {
   return configs[name];
 }
 
+export async function getAdminConfigs(): Promise<ConfigMap> {
+  const configs = await getAllConfigs();
+  const result: ConfigMap = {};
+  for (const [name, value] of Object.entries(configs)) {
+    if (PROTECTED_CONFIG_KEYS.has(name)) continue;
+    result[name] =
+      isSecretConfigKey(name) && value ? maskConfigValue(value) : value;
+  }
+  return result;
+}
+
 // --- Custom configs -------------------------------------------------------
 
 /** Valid custom config key: letters, digits, and `_ . : -`. */
@@ -135,15 +170,18 @@ export interface CustomConfig {
 
 /**
  * Custom (user-defined) configs: DB-stored key/value pairs that aren't part
- * of any predefined setting or env key. Values are returned decrypted —
- * admin-only, never expose this to non-admins.
+ * of any predefined setting or env key. Secret-like values are masked before
+ * returning to the admin UI.
  */
 export async function getCustomConfigs(): Promise<CustomConfig[]> {
   const reserved = reservedConfigKeys();
   const dbConfigs = await getDbConfigs();
   return Object.entries(dbConfigs)
     .filter(([name]) => !reserved.has(name))
-    .map(([key, value]) => ({ key, value }))
+    .map(([key, value]) => ({
+      key,
+      value: isSecretConfigKey(key) && value ? maskConfigValue(value) : value,
+    }))
     .sort((a, b) => a.key.localeCompare(b.key));
 }
 
@@ -178,7 +216,9 @@ export async function replaceCustomConfigs(
     for (const name of toDelete) {
       await tx.delete(config).where(eq(config.name, name));
     }
-    for (const [name, value] of clean) {
+    for (const [name, value] of clean.filter(
+      ([, value]) => !isMaskedConfigValue(value)
+    )) {
       const [existing] = await tx
         .select()
         .from(config)
@@ -206,7 +246,8 @@ export function filterPublicConfigs(
 ): ConfigMap {
   const result: ConfigMap = {};
   for (const key of publicKeys) {
-    if (configs[key]) {
+    if (PROTECTED_CONFIG_KEYS.has(key) || isSecretConfigKey(key)) continue;
+    if (key in configs) {
       result[key] = configs[key];
     }
   }

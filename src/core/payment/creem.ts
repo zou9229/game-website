@@ -15,6 +15,7 @@ import {
   SubscriptionCycleType,
   SubscriptionInfo,
   SubscriptionStatus,
+  WebhookIgnoredError,
 } from './types';
 
 /**
@@ -194,7 +195,9 @@ export class CreemProvider implements PaymentProvider {
       }
 
       if (!paymentSession) {
-        throw new Error('Invalid webhook event');
+        throw new WebhookIgnoredError(
+          `No handler for creem event: ${event.eventType}`
+        );
       }
 
       return {
@@ -326,7 +329,9 @@ export class CreemProvider implements PaymentProvider {
         // subscription.trialing
         // refund.created
         // dispute.created
-        throw new Error(`Not handle creem event type: ${eventType}`);
+        throw new WebhookIgnoredError(
+          `Not handle creem event type: ${eventType}`
+        );
     }
   }
 

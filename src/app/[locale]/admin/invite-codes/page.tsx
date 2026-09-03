@@ -5,6 +5,7 @@ import { Copy, Plus, Trash2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
+import { formatDateTime } from '@/lib/time';
 import { cn } from '@/lib/utils';
 import { DataTable, type Column } from '@/components/data-table';
 import { Button } from '@/components/ui/button';
@@ -204,7 +205,7 @@ export default function InviteCodesPage() {
       header: t('invite_codes.expires_col'),
       cell: (r) => (
         <span className="text-muted-foreground">
-          {r.expiresAt ? new Date(r.expiresAt).toLocaleDateString() : '—'}
+          {r.expiresAt ? formatDateTime(r.expiresAt) : '—'}
         </span>
       ),
     },
@@ -212,7 +213,7 @@ export default function InviteCodesPage() {
       header: t('invite_codes.created_col'),
       cell: (r) => (
         <span className="text-muted-foreground">
-          {new Date(r.createdAt).toLocaleDateString()}
+          {formatDateTime(r.createdAt)}
         </span>
       ),
     },
@@ -297,64 +298,76 @@ export default function InviteCodesPage() {
               {t('invite_codes.create_description')}
             </DialogDescription>
           </DialogHeader>
-          <div className="space-y-4 py-2">
-            <div className="grid grid-cols-2 gap-3">
+          <form
+            className="grid gap-4"
+            onSubmit={(e) => {
+              e.preventDefault();
+              submitCreate();
+            }}
+          >
+            <div className="space-y-4 py-2">
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1.5">
+                  <Label>{t('invite_codes.count_label')}</Label>
+                  <Input
+                    type="number"
+                    min="1"
+                    max="100"
+                    value={count}
+                    onChange={(e) => setCount(e.target.value)}
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label>{t('invite_codes.max_uses_label')}</Label>
+                  <Input
+                    type="number"
+                    min="1"
+                    value={maxUses}
+                    onChange={(e) => setMaxUses(e.target.value)}
+                  />
+                </div>
+              </div>
               <div className="space-y-1.5">
-                <Label>{t('invite_codes.count_label')}</Label>
+                <Label>{t('invite_codes.trial_days_label')}</Label>
                 <Input
                   type="number"
                   min="1"
-                  max="100"
-                  value={count}
-                  onChange={(e) => setCount(e.target.value)}
+                  value={trialDays}
+                  onChange={(e) => setTrialDays(e.target.value)}
                 />
               </div>
               <div className="space-y-1.5">
-                <Label>{t('invite_codes.max_uses_label')}</Label>
+                <Label>{t('invite_codes.expires_label')}</Label>
                 <Input
-                  type="number"
-                  min="1"
-                  value={maxUses}
-                  onChange={(e) => setMaxUses(e.target.value)}
+                  type="date"
+                  value={expiresAt}
+                  onChange={(e) => setExpiresAt(e.target.value)}
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label>{t('invite_codes.note_label')}</Label>
+                <Input
+                  value={note}
+                  onChange={(e) => setNote(e.target.value)}
+                  placeholder={t('invite_codes.note_placeholder')}
                 />
               </div>
             </div>
-            <div className="space-y-1.5">
-              <Label>{t('invite_codes.trial_days_label')}</Label>
-              <Input
-                type="number"
-                min="1"
-                value={trialDays}
-                onChange={(e) => setTrialDays(e.target.value)}
-              />
-            </div>
-            <div className="space-y-1.5">
-              <Label>{t('invite_codes.expires_label')}</Label>
-              <Input
-                type="date"
-                value={expiresAt}
-                onChange={(e) => setExpiresAt(e.target.value)}
-              />
-            </div>
-            <div className="space-y-1.5">
-              <Label>{t('invite_codes.note_label')}</Label>
-              <Input
-                value={note}
-                onChange={(e) => setNote(e.target.value)}
-                placeholder={t('invite_codes.note_placeholder')}
-              />
-            </div>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setCreateOpen(false)}>
-              {t('invite_codes.cancel')}
-            </Button>
-            <Button onClick={submitCreate} disabled={submitting}>
-              {submitting
-                ? t('invite_codes.creating')
-                : t('invite_codes.create_submit')}
-            </Button>
-          </DialogFooter>
+            <DialogFooter>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setCreateOpen(false)}
+              >
+                {t('invite_codes.cancel')}
+              </Button>
+              <Button type="submit" disabled={submitting}>
+                {submitting
+                  ? t('invite_codes.creating')
+                  : t('invite_codes.create_submit')}
+              </Button>
+            </DialogFooter>
+          </form>
         </DialogContent>
       </Dialog>
 

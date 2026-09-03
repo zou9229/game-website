@@ -55,16 +55,20 @@ export default function AdminSettingsPage() {
   const groups = getSettingGroups();
   const settings = getSettings();
 
+  async function loadConfigs() {
+    const [cfg, custom] = await Promise.all([
+      fetch('/api/admin/config', { cache: 'no-store' }).then((r) => r.json()),
+      fetch('/api/admin/config/custom', { cache: 'no-store' }).then((r) =>
+        r.json()
+      ),
+    ]);
+    if (cfg.code === 0) setConfigs(cfg.data);
+    if (custom.code === 0) setCustomRows(custom.data);
+  }
+
   useEffect(() => {
-    Promise.all([
-      fetch('/api/admin/config').then((r) => r.json()),
-      fetch('/api/admin/config/custom').then((r) => r.json()),
-    ])
-      .then(([cfg, custom]) => {
-        if (cfg.code === 0) setConfigs(cfg.data);
-        if (custom.code === 0) setCustomRows(custom.data);
-        setLoaded(true);
-      })
+    loadConfigs()
+      .then(() => setLoaded(true))
       .catch(() => setLoaded(true));
   }, []);
 
@@ -116,11 +120,13 @@ export default function AdminSettingsPage() {
 
       const res = await fetch(url, {
         method: 'POST',
+        cache: 'no-store',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
       const data = await res.json();
       if (data.code === 0) {
+        await loadConfigs();
         toast.success(t('settings.save_success'));
       } else {
         toast.error(data.message);
