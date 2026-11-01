@@ -106,7 +106,9 @@ For each candidate:
 
 Every new public content page needs:
 
-- `generateMetadata` with Month Year, description, keywords, and canonical.
+- `generateMetadata` with a stable intent-specific title, description, and canonical.
+- Include Month Year only when the underlying content was actually reviewed for
+  that period. Never advance titles or checked dates just because time passed.
 - Breadcrumb JSON-LD.
 - FAQPage JSON-LD when the page answers questions.
 - VideoGame JSON-LD when the page is a game hub or major game page.
@@ -136,6 +138,11 @@ Manual-review pages:
 
 If data is stale, report the source-check action first. Do not auto-publish
 high-risk guide changes.
+
+For a low-maintenance continuation, read
+`docs/planning/questcodes-recovery-2026-11-01.zh-CN.md` before expanding content.
+Scheduled source checks and AI reviews are monitoring, not automatic public
+fact updates. Reused reviews retain their original generated date.
 
 ## Verification
 

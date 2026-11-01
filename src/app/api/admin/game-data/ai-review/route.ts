@@ -3,6 +3,7 @@ import { headers } from 'next/headers';
 import { getAuth } from '@/core/auth';
 import { getAllConfigs } from '@/modules/config/service';
 import {
+  getGameDataAiReviewAutomationStatus,
   getLatestGameDataAiReview,
   runGameDataAiReview,
 } from '@/modules/game-data-sync/service';
@@ -25,7 +26,11 @@ export async function GET() {
     const guard = await requireAdmin('admin.settings.read');
     if (guard.error) return respErr(guard.error);
 
-    return respData(await getLatestGameDataAiReview());
+    const [review, automation] = await Promise.all([
+      getLatestGameDataAiReview(),
+      getGameDataAiReviewAutomationStatus(),
+    ]);
+    return respData(review ? { ...review, automation } : null);
   } catch (error: any) {
     return respErr(error.message || 'Internal error');
   }

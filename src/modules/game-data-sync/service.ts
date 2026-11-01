@@ -4,6 +4,11 @@ import { generateTextWithVertexGemini } from '@/core/ai/vertex-gemini';
 import { db } from '@/core/db';
 import { config } from '@/config/db/schema';
 import {
+  aiReviewReuseHours,
+  canReuseGameDataAiReview,
+  gameDataReviewFingerprint,
+} from '@/lib/game-data-ai-review-policy';
+import {
   buildGameDataSourceCheckSnapshot,
   buildGameDataSourceReviewPlan,
   type GameDataSourceCheckSnapshot,
@@ -17,6 +22,7 @@ import {
 const SNAPSHOT_KEY = 'questcodes.gameData.sourceCheck.snapshot';
 const STATUS_KEY = 'questcodes.gameData.sourceCheck.status';
 const AI_REVIEW_KEY = 'questcodes.gameData.aiReview.snapshot';
+const AI_AUTOMATION_KEY = 'questcodes.gameData.aiReview.automationStatus';
 
 export type GameDataAiReviewDecision =
   | 'safe-to-monitor'
@@ -35,6 +41,7 @@ export type GameDataAiReviewSnapshot = {
   provider: 'vertex';
   model: string;
   sourceCheckGeneratedAt?: string;
+  sourceFingerprint?: string;
   decision: GameDataAiReviewDecision;
   confidence: 'low' | 'medium' | 'high';
   summary: string;
@@ -275,6 +282,7 @@ function normalizeAiReview(
     reason: string;
     model: string;
     sourceCheckGeneratedAt?: string;
+    sourceFingerprint: string;
     rawText: string;
   }
 ): GameDataAiReviewSnapshot {
@@ -302,6 +310,7 @@ function normalizeAiReview(
     provider: 'vertex',
     model: params.model,
     sourceCheckGeneratedAt: params.sourceCheckGeneratedAt,
+    sourceFingerprint: params.sourceFingerprint,
     decision,
     confidence,
     summary: String(parsed?.summary || '').slice(0, 700),
@@ -376,14 +385,21 @@ ${JSON.stringify(compactSnapshot, null, 2)}`;
 
 export async function runGameDataAiReview(
   configs: VertexReviewConfigs,
-  reason = 'manual'
+  reason = 'manual',
+  sourceCheck?: GameDataSourceCheckSnapshot
 ) {
-  const latestSourceCheck = await getLatestGameDataSourceCheck();
+  const latestSourceCheck =
+    sourceCheck ?? (await getLatestGameDataSourceCheck());
   if (!latestSourceCheck) {
     throw new Error('Run source check before AI review.');
   }
 
   const runtime = getVertexReviewRuntime(configs);
+  const sourceFingerprint = await gameDataReviewFingerprint(latestSourceCheck, [
+    runtime.projectId,
+    runtime.location,
+    ...runtime.models,
+  ]);
   if (!runtime.serviceAccountJson) {
     throw new Error(
       'Vertex AI service account json is not configured. Set VERTEX_AI_SERVICE_ACCOUNT_JSON as a Cloudflare secret or fill vertex_ai_service_account_json in admin settings.'
@@ -424,6 +440,7 @@ export async function runGameDataAiReview(
         reason,
         model: result.model,
         sourceCheckGeneratedAt: latestSourceCheck.generatedAt,
+        sourceFingerprint,
         rawText: result.text,
       });
 
@@ -459,4 +476,70 @@ export async function getLatestGameDataAiReview() {
   } catch {
     return null;
   }
+}
+
+export type GameDataAiReviewAutomationStatus = {
+  checkedAt: string;
+  sourceCheckGeneratedAt: string;
+  status: 'disabled' | 'sources-healthy' | 'reused' | 'reviewed' | 'failed';
+  reuseHours: number;
+  reviewGeneratedAt?: string;
+  error?: string;
+};
+
+export async function getGameDataAiReviewAutomationStatus() {
+  const raw = await readConfigValue(AI_AUTOMATION_KEY);
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw) as GameDataAiReviewAutomationStatus;
+  } catch {
+    return null;
+  }
+}
+
+export async function runScheduledGameDataAiReview(
+  snapshot: GameDataSourceCheckSnapshot,
+  configs: VertexReviewConfigs
+) {
+  const reuseHours = aiReviewReuseHours(
+    configs.game_data_ai_review_reuse_hours
+  );
+  const status: GameDataAiReviewAutomationStatus = {
+    checkedAt: new Date().toISOString(),
+    sourceCheckGeneratedAt: snapshot.generatedAt,
+    status: 'disabled',
+    reuseHours,
+  };
+  if (configs.game_data_auto_ai_review_enabled === 'true') {
+    status.status = 'sources-healthy';
+    if (snapshot.reviewPlan.state !== 'safe-to-monitor') {
+      try {
+        const runtime = getVertexReviewRuntime(configs);
+        const fingerprint = await gameDataReviewFingerprint(snapshot, [
+          runtime.projectId,
+          runtime.location,
+          ...runtime.models,
+        ]);
+        const previous = await getLatestGameDataAiReview();
+        if (canReuseGameDataAiReview(previous, fingerprint, reuseHours)) {
+          status.status = 'reused';
+          status.reviewGeneratedAt = previous!.generatedAt;
+        } else {
+          const review = await runGameDataAiReview(
+            configs,
+            'cloudflare-cron-auto',
+            snapshot
+          );
+          status.status = 'reviewed';
+          status.reviewGeneratedAt = review.generatedAt;
+        }
+      } catch (error: unknown) {
+        status.status = 'failed';
+        status.error =
+          error instanceof Error ? error.message : 'Unknown AI review error';
+      }
+    }
+  }
+  await writeConfigValue(AI_AUTOMATION_KEY, JSON.stringify(status));
+  return status;
 }

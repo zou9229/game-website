@@ -220,10 +220,11 @@ Classes 页面引用旧版本排名，Pelt Trader 页面有大量“不要假定
 
 ## 发布状态与生产迁移
 
-本轮内容修复已在本地准备，不应误认为已经上线。
-上次合并的生产迁移仍未执行：D1 只登记 `0000_clear_lionheart.sql`，没有 ticket/ticket_message，apikey 缺 key/last_used_at。
-因此不能直接把包含新工单与 API Key 功能的整个 main 当作完全兼容旧生产库的版本部署。
+**2026-11-01 后续发布更新：上述内容修复和 AI 审核复用策略已经部署生产。**
+完整验收与操作说明见 [本次发布记录](../operations/questcodes-recovery-release-2026-11-01.zh-CN.md)。
 
-待审核的既有迁移：`drizzle/0001_upstream_tickets_api_keys.sql`，只有两张新增工单表、索引与两个可空 API Key 字段。
-部署前按 AGENTS.md 的生产数据库规则审核迁移、准备恢复点、应用增量，再部署并验证。
-本轮没有修改生产数据库，也没有把其他攻略的旧事实自动发布为新版本。
+初次诊断时，生产库只有 `0000_clear_lionheart.sql`，缺少已合并的工单与 API Key 字段。
+后续已审核并应用 `drizzle/0001_upstream_tickets_api_keys.sql`，仅新增两张表、索引与两个可空字段。
+部署前取得 D1 恢复点并导出备份；备份已在本地临时数据库恢复验证，迁移后已有账号与内容行数保持一致。
+生产 Worker 版本为 `3576c6b5-7002-4463-9bcd-aac12e66c674`。
+没有把其他攻略的旧事实自动发布为新版本，也没有改动 GitHub 流水线。

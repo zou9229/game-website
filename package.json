@@ -20,6 +20,7 @@
     "game-data:audit": "tsx scripts/audit-game-data.ts",
     "game-data:source-check": "tsx scripts/with-env.ts tsx scripts/game-data-source-check.ts",
     "test:merge": "tsx --test tests/upstream-merge.test.ts",
+    "test:operations": "tsx --test tests/game-data-ai-review-policy.test.ts",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "prepare": "husky"

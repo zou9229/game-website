@@ -921,6 +921,16 @@ export function getSettings(): Setting[] {
       tab: 'operations',
     },
 
+    {
+      name: 'game_data_ai_review_reuse_hours',
+      title: 'Reuse unchanged AI review (hours)',
+      type: 'number',
+      defaultValue: '24',
+      tip: 'Reuse a recent review when the detected source signals and review model are unchanged. Accepts 1-168 hours; default 24. New detected signals trigger a new review. Manual Run AI review always bypasses reuse. This does not publish game facts.',
+      group: 'game_data_automation',
+      tab: 'operations',
+    },
+
     // ─── Analytics / Plausible ───────────────────────────────────────
     {
       name: 'plausible_domain',

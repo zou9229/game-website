@@ -148,6 +148,12 @@ type AiReviewSnapshot = {
   publishGuardrails: string[];
   operatorNextStep: string;
   rawText?: string;
+  automation?: {
+    checkedAt: string;
+    status: 'disabled' | 'sources-healthy' | 'reused' | 'reviewed' | 'failed';
+    reuseHours: number;
+    error?: string;
+  } | null;
 };
 
 type OperatorAlert = {
@@ -990,6 +996,17 @@ export default function AdminGameDataPage() {
                     <p className="text-muted-foreground mt-1 text-xs">
                       Model: {aiReview.model}. Last run:{' '}
                       {new Date(aiReview.generatedAt).toLocaleString()}
+                    </p>
+                  ) : null}
+                  {aiReview?.automation ? (
+                    <p className="text-muted-foreground mt-1 text-xs">
+                      Scheduled check:{' '}
+                      {new Date(aiReview.automation.checkedAt).toLocaleString()}
+                      . AI status: {aiReview.automation.status}. Reuse window:{' '}
+                      {aiReview.automation.reuseHours}h.
+                      {aiReview.automation.status === 'failed'
+                        ? ' Review the scheduled run before relying on this result.'
+                        : ''}
                     </p>
                   ) : null}
                 </div>
