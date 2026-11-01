@@ -24,7 +24,6 @@ import {
   buildItemListSchema,
   buildVideoGameSchema,
   canonicalUrl,
-  currentMonthYear,
 } from '@/lib/seo';
 import { GuideMediaPanel } from '@/components/roblox/guide-media-panel';
 import { Badge } from '@/components/ui/badge';
@@ -91,20 +90,19 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const monthYear = currentMonthYear();
   const canonical = canonicalUrl(
     '/roblox/99-nights-in-the-forest/map/',
     locale
   );
 
   return {
-    title: `99 Nights in the Forest Map and Locations (${monthYear})`,
+    title: `99 Nights in the Forest Map and Locations`,
     description:
       'A source-checked 99 Nights in the Forest map guide for crafting the map, expanding revealed areas, planning locations, and finding missing kids safely.',
     keywords: seoKeywords.ninetyNineNightsMap,
     alternates: { canonical },
     openGraph: {
-      title: `99 Nights in the Forest Map and Locations (${monthYear})`,
+      title: `99 Nights in the Forest Map and Locations`,
       description:
         'Use the 99 Nights in the Forest map as a route planner for locations, missing kids, and danger zones.',
       url: canonical,

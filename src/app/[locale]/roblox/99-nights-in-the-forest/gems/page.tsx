@@ -12,7 +12,6 @@ import {
   buildItemListSchema,
   buildVideoGameSchema,
   canonicalUrl,
-  currentMonthYear,
 } from '@/lib/seo';
 import { CopyCodeButton } from '@/components/roblox/copy-code-button';
 import { Badge } from '@/components/ui/badge';
@@ -66,20 +65,19 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const monthYear = currentMonthYear();
   const canonical = canonicalUrl(
     '/roblox/99-nights-in-the-forest/gems/',
     locale
   );
 
   return {
-    title: `99 Nights in the Forest Gems and Diamonds (${monthYear})`,
+    title: `99 Nights in the Forest Gems and Diamonds`,
     description:
       'How to get 99 Nights in the Forest gems and diamonds from working codes, special rewards, badges, and checked source notes.',
     keywords: seoKeywords.ninetyNineNightsGems,
     alternates: { canonical },
     openGraph: {
-      title: `99 Nights in the Forest Gems and Diamonds (${monthYear})`,
+      title: `99 Nights in the Forest Gems and Diamonds`,
       description:
         'Source-checked gem and diamond routes for 99 Nights in the Forest.',
       url: canonical,

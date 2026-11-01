@@ -4,11 +4,7 @@ import { seoKeywords } from '@/data/seo-keywords';
 import { Gamepad2 } from 'lucide-react';
 
 import { Link } from '@/core/i18n/navigation';
-import {
-  buildBreadcrumbSchema,
-  canonicalUrl,
-  currentMonthYear,
-} from '@/lib/seo';
+import { buildBreadcrumbSchema, canonicalUrl } from '@/lib/seo';
 import { Badge } from '@/components/ui/badge';
 import {
   Card,
@@ -24,11 +20,10 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const monthYear = currentMonthYear();
   const canonical = canonicalUrl('/roblox/', locale);
 
   return {
-    title: `Roblox Codes and Game Tools (${monthYear})`,
+    title: `Roblox Codes and Game Tools`,
     description:
       'Fresh Roblox codes, game guides, tier lists, and tool pages for high-demand Roblox games.',
     keywords: seoKeywords.robloxHub,
@@ -38,7 +33,7 @@ export async function generateMetadata({
     },
     alternates: { canonical },
     openGraph: {
-      title: `Roblox Codes and Game Tools (${monthYear})`,
+      title: `Roblox Codes and Game Tools`,
       description:
         'Fresh Roblox codes, game guides, tier lists, and tool pages for high-demand Roblox games.',
       url: canonical,

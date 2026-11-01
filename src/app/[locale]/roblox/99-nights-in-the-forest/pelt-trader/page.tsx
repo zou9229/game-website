@@ -18,7 +18,6 @@ import {
   buildItemListSchema,
   buildVideoGameSchema,
   canonicalUrl,
-  currentMonthYear,
 } from '@/lib/seo';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -113,20 +112,19 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const monthYear = currentMonthYear();
   const canonical = canonicalUrl(
     '/roblox/99-nights-in-the-forest/pelt-trader/',
     locale
   );
 
   return {
-    title: `99 Nights in the Forest Pelt Trader Guide (${monthYear})`,
+    title: `99 Nights in the Forest Pelt Trader Guide`,
     description:
       'Source-checked Pelt Trader guide for 99 Nights in the Forest covering Wolf Pelt, Medkit, bandages, trade cautions, and recovery route decisions.',
     keywords: seoKeywords.ninetyNineNightsPeltTrader,
     alternates: { canonical },
     openGraph: {
-      title: `99 Nights in the Forest Pelt Trader Guide (${monthYear})`,
+      title: `99 Nights in the Forest Pelt Trader Guide`,
       description:
         'Decide whether to trade Wolf Pelt, save it for bandages, or keep Medkit for dangerous routes.',
       url: canonical,

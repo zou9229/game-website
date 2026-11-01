@@ -11,7 +11,6 @@ import {
   buildFAQSchema,
   buildVideoGameSchema,
   canonicalUrl,
-  currentMonthYear,
 } from '@/lib/seo';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -74,14 +73,13 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const monthYear = currentMonthYear();
   const canonical = canonicalUrl(
     '/roblox/99-nights-in-the-forest/survival-guide/',
     locale
   );
 
   return {
-    title: `99 Nights in the Forest Survival Guide (${monthYear})`,
+    title: `99 Nights in the Forest Survival Guide`,
     description:
       'A checked 99 Nights in the Forest survival guide for campfire priorities, early looting, upgrades, navigation tools, and team recovery.',
     keywords: seoKeywords.ninetyNineNightsSurvivalGuide,
@@ -93,7 +91,7 @@ export async function generateMetadata({
       canonical,
     },
     openGraph: {
-      title: `99 Nights in the Forest Survival Guide (${monthYear})`,
+      title: `99 Nights in the Forest Survival Guide`,
       description:
         'Learn the practical survival route for 99 Nights in the Forest before wasting resources or losing the campfire.',
       url: canonical,

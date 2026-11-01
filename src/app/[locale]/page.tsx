@@ -20,7 +20,7 @@ import {
 
 import { Link } from '@/core/i18n/navigation';
 import { envConfigs } from '@/config';
-import { canonicalUrl, currentMonthYear, getBaseUrl } from '@/lib/seo';
+import { canonicalUrl, getBaseUrl } from '@/lib/seo';
 import { ConfiguredGoogleAdSense } from '@/components/analytics/google-adsense';
 import { CopyCodeButton } from '@/components/roblox/copy-code-button';
 import { GuideMediaPanel } from '@/components/roblox/guide-media-panel';
@@ -106,10 +106,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const canonical = canonicalUrl('/', locale);
-  const monthYear = currentMonthYear();
 
   return {
-    title: `Quest Codes - Roblox Codes and Game Guides (${monthYear})`,
+    title: `Quest Codes - Roblox Codes and Game Guides`,
     description:
       'Quest Codes tracks working Roblox game codes, class tier lists, survival guides, animal taming references, and source-checked game updates.',
     keywords: seoKeywords.home,
@@ -117,7 +116,7 @@ export async function generateMetadata({
       canonical,
     },
     openGraph: {
-      title: `Quest Codes - Roblox Codes and Game Guides (${monthYear})`,
+      title: `Quest Codes - Roblox Codes and Game Guides`,
       description:
         'Source-checked Roblox codes, class tier lists, survival guides, and game references.',
       url: canonical,
@@ -238,9 +237,9 @@ export default function HomePage() {
                   Codes, routes, and decisions for Roblox players.
                 </h1>
                 <p className="mt-5 max-w-2xl text-base leading-7 text-white/74 sm:text-lg">
-                  Quest Codes turns current Roblox code checks, class choices,
-                  crafting routes, and survival questions into fast, practical
-                  guide pages with visible source trails.
+                  Find 99 Nights in the Forest codes, compare class choices, and
+                  plan your next survival run. Each guide shows its review date
+                  so you can check how recent the advice is.
                 </p>
               </div>
 
@@ -266,8 +265,8 @@ export default function HomePage() {
                   value={activeCodes.length.toString()}
                 />
                 <HeroStat
-                  label="Game visits"
-                  value={`${(featuredGame.stats.visits / 1000000000).toFixed(1)}B`}
+                  label="Guide pages"
+                  value={livePages.length.toString()}
                 />
                 <HeroStat label="Codes checked" value={latestCodeCheckedAt} />
               </div>
@@ -277,7 +276,7 @@ export default function HomePage() {
               <div className="mb-4 flex items-center justify-between gap-3">
                 <span className="inline-flex items-center gap-2 rounded-full bg-lime-200/12 px-3 py-1.5 text-xs font-semibold tracking-[0.16em] text-lime-100 uppercase">
                   <Sparkles className="size-3.5" />
-                  Today&apos;s code desk
+                  Codes to try
                 </span>
                 <span className="rounded-full bg-white/10 px-3 py-1.5 text-xs font-semibold tracking-[0.14em] text-white/60 uppercase">
                   {featuredGame.shortName}
@@ -379,8 +378,8 @@ export default function HomePage() {
         <section className="px-4 pb-8 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-6xl">
             <GuideMediaPanel
-              title="Real game media and research signals"
-              description="Official Roblox thumbnails give visual context, while YouTube searches help spot player questions before we turn them into source-checked pages."
+              title="Explore 99 Nights in the Forest"
+              description="Official game thumbnails and links to video searches for crafting, recovery, and updates. Video links open search results, not a walkthrough tested by Quest Codes."
               images={ninetyNineNightsMedia.images}
               videoSearches={ninetyNineNightsMedia.videoSearches}
             />
@@ -394,12 +393,12 @@ export default function HomePage() {
                 Guide mission board
               </p>
               <h2 className="mt-2 text-3xl font-black tracking-tight text-emerald-950 sm:text-4xl">
-                A focused 99 Nights cluster before adding more games.
+                Plan your next 99 Nights run.
               </h2>
               <p className="mt-3 text-sm leading-6 text-emerald-950/80">
-                The first cluster is intentionally narrow: one popular game,
-                stronger internal links, checked dates, and pages that answer
-                specific player intent.
+                Start with rewards, prepare your route, then compare the gear
+                and classes you want to use. Check each guide&apos;s review date
+                before relying on prices or event details.
               </p>
             </div>
 
@@ -467,14 +466,14 @@ export default function HomePage() {
           <div className="mx-auto grid max-w-6xl gap-5 md:grid-cols-[1fr_320px] md:items-center">
             <div>
               <p className="text-xs font-bold tracking-[0.18em] text-lime-100/70 uppercase">
-                Publishing standard
+                Guide library
               </p>
               <h2 className="mt-2 text-3xl font-black tracking-tight">
-                More Roblox games come after their guides pass source review.
+                Find the next answer for your run.
               </h2>
               <p className="mt-3 max-w-2xl text-sm leading-6 text-white/68">
-                We add a game when its codes and guides answer clear player
-                questions, link to reliable sources, and can be kept current.
+                Browse the 99 Nights guide hub for class references, crafting
+                plans, recovery items, and routes back to camp.
               </p>
             </div>
             <div className="rounded-lg border border-white/12 bg-white/8 p-4">

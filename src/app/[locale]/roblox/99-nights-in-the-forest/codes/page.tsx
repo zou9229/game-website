@@ -15,7 +15,6 @@ import {
   buildHowToSchema,
   buildVideoGameSchema,
   canonicalUrl,
-  currentMonthYear,
 } from '@/lib/seo';
 import { CopyCodeButton } from '@/components/roblox/copy-code-button';
 import { Badge } from '@/components/ui/badge';
@@ -37,11 +36,10 @@ import {
 const game = getRobloxGame('99-nights-in-the-forest');
 const codesPath = '/roblox/99-nights-in-the-forest/codes/';
 
-const getPageTitle = (monthYear: string) =>
-  `99 Nights in the Forest Codes (${monthYear}) - Rewards`;
+const pageTitle = '99 Nights in the Forest Codes - Rewards and Redemption';
 
-const getPageDescription = (monthYear: string) =>
-  `Find working 99 Nights in the Forest codes for ${monthYear}, gem rewards, all active and expired codes, redemption steps, and source checks.`;
+const pageDescription =
+  'Check source-listed 99 Nights in the Forest codes, diamond rewards, fishing chat redemption, expired entries, and the date each code was reviewed.';
 
 const redeemSteps = [
   {
@@ -62,7 +60,7 @@ const redeemSteps = [
   },
   {
     name: 'Use chat for special codes',
-    text: 'For yay fishing, try the in-game chat path because checked sources disagree on its normal code-box status.',
+    text: 'For yay fishing, use the in-game chat while fishing instead of entering it in the lobby code box. This is a one-time reward.',
   },
 ];
 
@@ -99,7 +97,7 @@ const troubleshootingNotes = [
 const searchDemandNotes = [
   {
     title: 'All codes in 99 Nights in the Forest',
-    text: 'This page keeps active, special/conflicting, and expired entries together so an all-codes search does not send you to separate thin lists.',
+    text: 'Use the active table for lobby codes, the special section for fishing chat redemption, and the expired list to avoid retrying old rewards.',
   },
   {
     title: '99 Nights in the Forest codes for 700 gems',
@@ -111,7 +109,7 @@ const searchDemandNotes = [
   },
   {
     title: 'Merch codes',
-    text: 'No checked source currently confirms a public merch code for this game. Merch-only, private, or screenshot-only claims stay out of the active table until they have a source trail.',
+    text: 'This table covers publicly shared codes. A code supplied with merchandise may be unique or single-use; do not post your private code or expect it to work for other accounts.',
   },
 ];
 
@@ -154,10 +152,10 @@ const relatedGuides = [
   },
 ];
 
-const buildFaqs = (latestCodeCheckedAt: string) => [
+const buildFaqs = (latestCodeCheckedAt: string, activeCodeNames: string) => [
   {
     question: 'What are the active 99 Nights in the Forest codes?',
-    answer: `As of ${latestCodeCheckedAt}, PC Gamer still lists forestwakesup26 and afterparty. Other sources were blocked or unavailable in the latest command-line pass, so rewards and status labels remain conservative until manual review.`,
+    answer: `The public source lists checked on ${latestCodeCheckedAt} include ${activeCodeNames}. These are source-listed codes, not redemption tests performed by Quest Codes. The fishing chat reward is explained separately.`,
   },
   {
     question: 'How do I redeem 99 Nights in the Forest codes?',
@@ -167,7 +165,7 @@ const buildFaqs = (latestCodeCheckedAt: string) => [
   {
     question: 'Why is yay fishing marked as special?',
     answer:
-      'PC Gamer describes yay fishing as a chat-based redemption, while PCGamesN lists it as expired. For that reason, it is not shown as a normal active code.',
+      'The sources checked on November 1 describe a one-time chat reward while fishing. It stays separate because it does not use the normal lobby code box.',
   },
   {
     question: 'How often should I check for new codes?',
@@ -187,7 +185,7 @@ const buildFaqs = (latestCodeCheckedAt: string) => [
   {
     question: 'Are there merch codes for 99 Nights in the Forest?',
     answer:
-      'No checked public source currently confirms a merch code. If a merch code appears, it should be treated as unverified until the source and redemption path are clear.',
+      'This page lists publicly shared codes, not unique codes included with purchased merchandise. Keep single-use codes private and follow the redemption instructions supplied with the item.',
   },
   {
     question: 'Is this site affiliated with Roblox?',
@@ -208,9 +206,8 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const monthYear = currentMonthYear();
-  const title = getPageTitle(monthYear);
-  const description = getPageDescription(monthYear);
+  const title = pageTitle;
+  const description = pageDescription;
   const canonical = canonicalUrl(codesPath, locale);
 
   return {
@@ -253,7 +250,6 @@ export default async function CodesPage({
 
   if (!game) return null;
 
-  const monthYear = currentMonthYear();
   const canonical = canonicalUrl(codesPath, locale);
   const activeCodes = game.codes.filter((code) => code.status === 'active');
   const specialCodes = game.codes.filter((code) => code.status === 'special');
@@ -271,7 +267,7 @@ export default async function CodesPage({
   const gemRewardCodes = game.codes.filter(
     (code) =>
       (code.status === 'active' || code.status === 'special') &&
-      code.reward.toLowerCase().includes('gem')
+      /gem|diamond/i.test(code.reward)
   );
   const breadcrumbSchema = buildBreadcrumbSchema([
     { name: 'Home', item: canonicalUrl('/', locale) },
@@ -282,7 +278,7 @@ export default async function CodesPage({
     },
     { name: 'Codes', item: canonical },
   ]);
-  const faqs = buildFaqs(latestCodeCheckedAt);
+  const faqs = buildFaqs(latestCodeCheckedAt, activeCodeNames);
   const faqSchema = buildFAQSchema(faqs);
   const howToSchema = buildHowToSchema({
     name: 'How to redeem 99 Nights in the Forest codes',
@@ -340,12 +336,13 @@ export default async function CodesPage({
             ) : null}
           </div>
           <h1 className="text-foreground text-4xl font-semibold tracking-tight md:text-5xl">
-            99 Nights in the Forest codes ({monthYear})
+            99 Nights in the Forest codes
           </h1>
           <p className="text-muted-foreground mt-4 text-lg leading-8">
-            Working 99 Nights in the Forest codes, reward notes, source checks,
-            expired-code history, and redemption troubleshooting for Roblox
-            players. We mark conflicting source data instead of hiding it.
+            Copy the codes listed by the sources below, check their rewards, and
+            use the correct redemption menu. Source reviews and in-game
+            redemption tests are different; Quest Codes has not performed an
+            in-game test for this list.
           </p>
           <div className="mt-6 flex flex-wrap gap-3 text-sm">
             <a
@@ -421,7 +418,7 @@ export default async function CodesPage({
         <Card className="rounded-lg">
           <CardHeader>
             <h2 className="text-2xl font-semibold tracking-tight">
-              Quick answer: working codes today
+              Quick answer: source-listed codes
             </h2>
             <CardDescription>
               Status reviewed {latestCodeCheckedAt}
@@ -434,14 +431,13 @@ export default async function CodesPage({
           <CardContent className="grid gap-5 lg:grid-cols-[1fr_280px]">
             <div className="text-muted-foreground space-y-3 text-sm leading-6">
               <p>
-                For {monthYear}, the active 99 Nights in the Forest codes we
-                currently treat as working are{' '}
+                The source lists reviewed on {latestCodeCheckedAt} include{' '}
                 <span className="text-foreground font-mono font-medium">
                   {activeCodeNames || 'no active codes'}
                 </span>
-                . The code <span className="font-mono">yay fishing</span> stays
-                in the special section because sources disagree on whether it
-                should be redeemed through chat or treated as expired.
+                . The code <span className="font-mono">yay fishing</span> uses
+                chat while fishing and stays in the special section so you do
+                not enter it in the lobby code box.
               </p>
               <p>
                 The table below keeps rewards, copy buttons, source links, and
@@ -472,11 +468,10 @@ export default async function CodesPage({
         <Card className="mt-6 rounded-lg">
           <CardHeader>
             <h2 className="text-2xl font-semibold tracking-tight">
-              Common code searches we track
+              Common code questions
             </h2>
             <CardDescription>
-              These notes answer rising search variants without turning each
-              phrase into a duplicate page.
+              What to check before trying reward claims or merchandise codes.
             </CardDescription>
           </CardHeader>
           <CardContent className="grid gap-3 md:grid-cols-2">
@@ -585,8 +580,8 @@ export default async function CodesPage({
                 Special / conflicting code
               </h2>
               <CardDescription>
-                These are not treated as normal active codes because source data
-                conflicts or the redemption path differs.
+                These entries use a different redemption path or have a source
+                disagreement explained in their notes.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -734,8 +729,7 @@ export default async function CodesPage({
               Related 99 Nights guides
             </h2>
             <CardDescription>
-              Internal links help players move from codes to the next decision
-              point in the game.
+              Plan how to spend diamonds, choose a class, or prepare for a run.
             </CardDescription>
           </CardHeader>
           <CardContent className="grid gap-3 md:grid-cols-2">

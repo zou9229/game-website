@@ -18,7 +18,6 @@ import {
   buildBreadcrumbSchema,
   buildVideoGameSchema,
   canonicalUrl,
-  currentMonthYear,
   getBaseUrl,
 } from '@/lib/seo';
 import { CopyCodeButton } from '@/components/roblox/copy-code-button';
@@ -108,17 +107,16 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const monthYear = currentMonthYear();
   const canonical = canonicalUrl('/roblox/99-nights-in-the-forest/', locale);
 
   return {
-    title: `99 Nights in the Forest Guide and Tools (${monthYear})`,
+    title: `99 Nights in the Forest Guide and Tools`,
     description:
       '99 Nights in the Forest Roblox hub with codes, class references, tier list, animals, survival guide, and checked game facts.',
     keywords: seoKeywords.ninetyNineNightsHub,
     alternates: { canonical },
     openGraph: {
-      title: `99 Nights in the Forest Guide and Tools (${monthYear})`,
+      title: `99 Nights in the Forest Guide and Tools`,
       description:
         '99 Nights in the Forest Roblox hub with codes, class references, tier list, animals, survival guide, and checked game facts.',
       url: canonical,

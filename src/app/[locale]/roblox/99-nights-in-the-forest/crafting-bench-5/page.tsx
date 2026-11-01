@@ -25,7 +25,6 @@ import {
   buildItemListSchema,
   buildVideoGameSchema,
   canonicalUrl,
-  currentMonthYear,
 } from '@/lib/seo';
 import { GuideMediaPanel } from '@/components/roblox/guide-media-panel';
 import { Badge } from '@/components/ui/badge';
@@ -148,20 +147,19 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const monthYear = currentMonthYear();
   const canonical = canonicalUrl(
     '/roblox/99-nights-in-the-forest/crafting-bench-5/',
     locale
   );
 
   return {
-    title: `99 Nights in the Forest Crafting Bench 5 (${monthYear})`,
+    title: `99 Nights in the Forest Crafting Bench 5`,
     description:
       'Crafting Bench 5 requirements, Forest Gem route, Tier 5 recipes, and whether Respawn Capsule, Temporal Accelerometer, Weather Machine, or Recycler is best.',
     keywords: seoKeywords.ninetyNineNightsCraftingBench5,
     alternates: { canonical },
     openGraph: {
-      title: `99 Nights in the Forest Crafting Bench 5 (${monthYear})`,
+      title: `99 Nights in the Forest Crafting Bench 5`,
       description:
         'Upgrade requirements, Forest Gem planning, and Tier 5 recipe decisions for 99 Nights in the Forest.',
       url: canonical,

@@ -84,7 +84,16 @@ const SOURCE_CHECK_TARGETS: GameDataSourceCheckTarget[] = [
     kind: 'codes',
     sourceName: 'GamesRadar',
     url: 'https://www.gamesradar.com/games/survival/99-nights-in-the-forest-codes/',
-    expectedTerms: ['forestwakesup26', 'afterparty'],
+    expectedTerms: ['awardwinner_yay', 'forestwakesup26', 'afterparty'],
+    highRiskTerms: ['happyhalloween'],
+  },
+  {
+    id: 'pocket-tactics-99-nights-codes',
+    title: '99 Nights codes',
+    kind: 'codes',
+    sourceName: 'Pocket Tactics',
+    url: 'https://www.pockettactics.com/99-nights-in-the-forest-codes',
+    expectedTerms: ['awardwinner_yay', 'forestwakesup26', 'afterparty'],
     highRiskTerms: ['happyhalloween'],
   },
   {

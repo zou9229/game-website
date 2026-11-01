@@ -19,7 +19,6 @@ import {
   buildItemListSchema,
   buildVideoGameSchema,
   canonicalUrl,
-  currentMonthYear,
 } from '@/lib/seo';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -85,20 +84,19 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const monthYear = currentMonthYear();
   const canonical = canonicalUrl(
     '/roblox/99-nights-in-the-forest/badges/',
     locale
   );
 
   return {
-    title: `99 Nights in the Forest Badges Guide (${monthYear})`,
+    title: `99 Nights in the Forest Badges Guide`,
     description:
       'Source-checked 99 Nights in the Forest badge guide covering starter badges, diamond rewards, challenge badges, and the Humiliation Badge route.',
     keywords: seoKeywords.ninetyNineNightsBadges,
     alternates: { canonical },
     openGraph: {
-      title: `99 Nights in the Forest Badges Guide (${monthYear})`,
+      title: `99 Nights in the Forest Badges Guide`,
       description:
         'Plan badge routes for 99 Nights in the Forest without relying on unsourced diamond claims.',
       url: canonical,

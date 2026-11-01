@@ -13,7 +13,6 @@ import {
   buildBreadcrumbSchema,
   buildItemListSchema,
   canonicalUrl,
-  currentMonthYear,
 } from '@/lib/seo';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -30,11 +29,10 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const monthYear = currentMonthYear();
   const canonical = canonicalUrl('/codes/', locale);
 
   return {
-    title: `Roblox Codes Index (${monthYear}) - Quest Codes`,
+    title: `Roblox Codes Index - Quest Codes`,
     description:
       'Browse source-checked Roblox code pages with active rewards, expired history, redemption notes, and related game guides.',
     keywords: seoKeywords.codesIndex,
@@ -44,7 +42,7 @@ export async function generateMetadata({
     },
     alternates: { canonical },
     openGraph: {
-      title: `Roblox Codes Index (${monthYear}) - Quest Codes`,
+      title: `Roblox Codes Index - Quest Codes`,
       description:
         'Source-checked Roblox code pages with active rewards, expired history, and related guides.',
       url: canonical,

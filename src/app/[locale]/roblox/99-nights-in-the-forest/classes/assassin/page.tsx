@@ -22,7 +22,6 @@ import {
   buildItemListSchema,
   buildVideoGameSchema,
   canonicalUrl,
-  currentMonthYear,
 } from '@/lib/seo';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -93,12 +92,11 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const monthYear = currentMonthYear();
   const canonical = canonicalUrl(
     '/roblox/99-nights-in-the-forest/classes/assassin/',
     locale
   );
-  const title = `99 Nights in the Forest Assassin Class Guide (${monthYear})`;
+  const title = `99 Nights in the Forest Assassin Class Guide`;
   const description =
     'How to get the Assassin class in 99 Nights in the Forest, with its 500-diamond cost, Katana, Throwing Knives, perks, level requirements, and tradeoffs.';
 

@@ -20,7 +20,6 @@ import {
   buildItemListSchema,
   buildVideoGameSchema,
   canonicalUrl,
-  currentMonthYear,
 } from '@/lib/seo';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -109,20 +108,19 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const monthYear = currentMonthYear();
   const canonical = canonicalUrl(
     '/roblox/99-nights-in-the-forest/taming-flute/',
     locale
   );
 
   return {
-    title: `99 Nights in the Forest Taming Flute Guide (${monthYear})`,
+    title: `99 Nights in the Forest Taming Flute Guide`,
     description:
       'How to get and upgrade the Taming Flute in 99 Nights in the Forest, with Old, Good, and Strong Flute tiers, XP route, and animal planning notes.',
     keywords: seoKeywords.ninetyNineNightsTamingFlute,
     alternates: { canonical },
     openGraph: {
-      title: `99 Nights in the Forest Taming Flute Guide (${monthYear})`,
+      title: `99 Nights in the Forest Taming Flute Guide`,
       description:
         'Get the Taming Flute, build flute XP, upgrade it at the Skills Building, and plan animals by Old, Good, and Strong Flute tiers.',
       url: canonical,

@@ -20,7 +20,6 @@ import {
   buildItemListSchema,
   buildVideoGameSchema,
   canonicalUrl,
-  currentMonthYear,
 } from '@/lib/seo';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -132,20 +131,19 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const monthYear = currentMonthYear();
   const canonical = canonicalUrl(
     '/roblox/99-nights-in-the-forest/gem-of-the-forest/',
     locale
   );
 
   return {
-    title: `99 Nights in the Forest Gem of the Forest (${monthYear})`,
+    title: `99 Nights in the Forest Gem of the Forest`,
     description:
       'How to get Gem of the Forest in 99 Nights in the Forest from Stronghold rewards, Day 100 raids, chest drops, fragments, and Tier 5 crafting uses.',
     keywords: seoKeywords.ninetyNineNightsForestGem,
     alternates: { canonical },
     openGraph: {
-      title: `99 Nights in the Forest Gem of the Forest (${monthYear})`,
+      title: `99 Nights in the Forest Gem of the Forest`,
       description:
         'Source-checked Forest Gem sources, fragment notes, and Tier 5 craft decisions.',
       url: canonical,

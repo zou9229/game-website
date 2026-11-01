@@ -44,6 +44,25 @@ export type RobloxGame = {
   codes: GameCode[];
 };
 
+const codeReviewDate = '2026-11-01';
+
+function reviewedCodeSources(status: GameCodeSource['status']): GameCodeSource[] {
+  return [
+    {
+      name: 'GamesRadar',
+      url: 'https://www.gamesradar.com/games/survival/99-nights-in-the-forest-codes/',
+      status,
+      checkedAt: codeReviewDate,
+    },
+    {
+      name: 'Pocket Tactics',
+      url: 'https://www.pockettactics.com/99-nights-in-the-forest-codes',
+      status,
+      checkedAt: codeReviewDate,
+    },
+  ];
+}
+
 export const robloxGames: RobloxGame[] = [
   {
     slug: '99-nights-in-the-forest',
@@ -205,28 +224,24 @@ export const robloxGames: RobloxGame[] = [
     ],
     codes: [
       {
+        code: 'awardwinner_yay',
+        reward: '15 diamonds and 3 random flames',
+        status: 'active',
+        note: 'GamesRadar and Pocket Tactics list this code and reward in their active lists, checked November 1. GamesRadar displays the code in uppercase; Pocket Tactics uses the lowercase spelling shown here. Quest Codes has not tested redemption in-game.',
+        sources: reviewedCodeSources('listed-active'),
+      },
+      {
         code: 'forestwakesup26',
         reward: '15 gems and 3 random flames',
         status: 'active',
-        note: 'PC Gamer and GamesRadar reconfirmed this code and reward on July 17. The community wiki last confirmed it on July 13; PCGamesN could not be reopened in this review, so the active label stays tied to the confirming sources.',
+        note: 'GamesRadar, Pocket Tactics, and PC Gamer list 15 diamonds (also called gems) and 3 random flames, checked November 1. This is a source cross-check, not an in-game redemption test.',
         sources: [
+          ...reviewedCodeSources('listed-active'),
           {
             name: 'PC Gamer',
             url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-codes/',
             status: 'listed-active',
-            checkedAt: '2026-07-17',
-          },
-          {
-            name: 'GamesRadar',
-            url: 'https://www.gamesradar.com/games/survival/99-nights-in-the-forest-codes/',
-            status: 'listed-active',
-            checkedAt: '2026-07-17',
-          },
-          {
-            name: 'Fandom Codes',
-            url: 'https://99-nights-in-the-forest.fandom.com/wiki/Codes',
-            status: 'listed-active',
-            checkedAt: '2026-07-13',
+            checkedAt: codeReviewDate,
           },
         ],
       },
@@ -234,31 +249,14 @@ export const robloxGames: RobloxGame[] = [
         code: 'afterparty',
         reward: '15 gems',
         status: 'active',
-        note: 'PC Gamer and GamesRadar reconfirmed this code and reward on July 17. PCGamesN and the community wiki last confirmed the same active label during the July 13 review.',
+        note: 'GamesRadar, Pocket Tactics, and PC Gamer list 15 diamonds (gems), checked November 1. Quest Codes has not tested redemption in-game.',
         sources: [
+          ...reviewedCodeSources('listed-active'),
           {
             name: 'PC Gamer',
             url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-codes/',
             status: 'listed-active',
-            checkedAt: '2026-07-17',
-          },
-          {
-            name: 'PCGamesN',
-            url: 'https://www.pcgamesn.com/99-nights-in-the-forest/codes',
-            status: 'listed-active',
-            checkedAt: '2026-07-13',
-          },
-          {
-            name: 'GamesRadar',
-            url: 'https://www.gamesradar.com/games/survival/99-nights-in-the-forest-codes/',
-            status: 'listed-active',
-            checkedAt: '2026-07-17',
-          },
-          {
-            name: 'Fandom Codes',
-            url: 'https://99-nights-in-the-forest.fandom.com/wiki/Codes',
-            status: 'listed-active',
-            checkedAt: '2026-07-13',
+            checkedAt: codeReviewDate,
           },
         ],
       },
@@ -266,31 +264,14 @@ export const robloxGames: RobloxGame[] = [
         code: 'yay fishing',
         reward: '2 gems',
         status: 'special',
-        note: 'PC Gamer and GamesRadar reconfirmed this as a one-time chat-based activation on July 15. The community wiki last agreed on July 13, while PCGamesN listed it as expired, so the disagreement remains visible with a special label.',
+        note: 'GamesRadar, Pocket Tactics, and PC Gamer list this one-time chat code for use while fishing, checked November 1. It stays separate because it does not use the normal lobby code box. Quest Codes has not tested redemption in-game.',
         sources: [
+          ...reviewedCodeSources('listed-active'),
           {
             name: 'PC Gamer',
             url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-codes/',
             status: 'listed-active',
-            checkedAt: '2026-07-15',
-          },
-          {
-            name: 'PCGamesN',
-            url: 'https://www.pcgamesn.com/99-nights-in-the-forest/codes',
-            status: 'listed-expired',
-            checkedAt: '2026-07-13',
-          },
-          {
-            name: 'GamesRadar',
-            url: 'https://www.gamesradar.com/games/survival/99-nights-in-the-forest-codes/',
-            status: 'listed-active',
-            checkedAt: '2026-07-15',
-          },
-          {
-            name: 'Fandom Codes',
-            url: 'https://99-nights-in-the-forest.fandom.com/wiki/Codes',
-            status: 'listed-active',
-            checkedAt: '2026-07-13',
+            checkedAt: codeReviewDate,
           },
         ],
       },
@@ -298,31 +279,14 @@ export const robloxGames: RobloxGame[] = [
         code: 'happyhalloween',
         reward: 'Expired seasonal reward',
         status: 'expired',
-        note: 'PC Gamer and GamesRadar reconfirmed this seasonal code in their expired sections on July 15. PCGamesN and the community wiki last confirmed the same expired label on July 13.',
+        note: 'GamesRadar, Pocket Tactics, and PC Gamer place this code in expired lists, checked November 1. A past Halloween reward is not proof that it has been reactivated for a new event.',
         sources: [
+          ...reviewedCodeSources('listed-expired'),
           {
             name: 'PC Gamer',
             url: 'https://www.pcgamer.com/games/roblox/99-nights-in-the-forest-codes/',
             status: 'listed-expired',
-            checkedAt: '2026-07-15',
-          },
-          {
-            name: 'PCGamesN',
-            url: 'https://www.pcgamesn.com/99-nights-in-the-forest/codes',
-            status: 'listed-expired',
-            checkedAt: '2026-07-13',
-          },
-          {
-            name: 'GamesRadar',
-            url: 'https://www.gamesradar.com/games/survival/99-nights-in-the-forest-codes/',
-            status: 'listed-expired',
-            checkedAt: '2026-07-15',
-          },
-          {
-            name: 'Fandom Codes',
-            url: 'https://99-nights-in-the-forest.fandom.com/wiki/Codes',
-            status: 'listed-expired',
-            checkedAt: '2026-07-13',
+            checkedAt: codeReviewDate,
           },
         ],
       },

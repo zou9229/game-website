@@ -23,7 +23,6 @@ import {
   buildItemListSchema,
   buildVideoGameSchema,
   canonicalUrl,
-  currentMonthYear,
 } from '@/lib/seo';
 import { GuideMediaPanel } from '@/components/roblox/guide-media-panel';
 import { Badge } from '@/components/ui/badge';
@@ -143,20 +142,19 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const monthYear = currentMonthYear();
   const canonical = canonicalUrl(
     '/roblox/99-nights-in-the-forest/bandages/',
     locale
   );
 
   return {
-    title: `How to Craft Bandages in 99 Nights in the Forest (${monthYear})`,
+    title: `How to Craft Bandages in 99 Nights in the Forest`,
     description:
       'How to craft bandages in 99 Nights in the Forest with Anvil requirements, Rabbit Foot and Wolf Pelt materials, revive use, cooldown notes, and sources.',
     keywords: seoKeywords.ninetyNineNightsBandages,
     alternates: { canonical },
     openGraph: {
-      title: `How to Craft Bandages in 99 Nights in the Forest (${monthYear})`,
+      title: `How to Craft Bandages in 99 Nights in the Forest`,
       description:
         'Bandage crafting route, Anvil requirements, Rabbit Foot and Wolf Pelt materials, revive use, and source checks.',
       url: canonical,

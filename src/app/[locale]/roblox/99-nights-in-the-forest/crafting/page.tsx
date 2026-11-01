@@ -21,7 +21,6 @@ import {
   buildItemListSchema,
   buildVideoGameSchema,
   canonicalUrl,
-  currentMonthYear,
 } from '@/lib/seo';
 import { GuideMediaPanel } from '@/components/roblox/guide-media-panel';
 import { Badge } from '@/components/ui/badge';
@@ -152,20 +151,19 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const monthYear = currentMonthYear();
   const canonical = canonicalUrl(
     '/roblox/99-nights-in-the-forest/crafting/',
     locale
   );
 
   return {
-    title: `99 Nights in the Forest Crafting Guide (${monthYear})`,
+    title: `99 Nights in the Forest Crafting Guide`,
     description:
       'Source-checked 99 Nights in the Forest crafting guide for map, crafting bench, Crock Pot, bandages, fuel, weather, and late-game gem crafts.',
     keywords: seoKeywords.ninetyNineNightsCrafting,
     alternates: { canonical },
     openGraph: {
-      title: `99 Nights in the Forest Crafting Guide (${monthYear})`,
+      title: `99 Nights in the Forest Crafting Guide`,
       description:
         'Crafting priorities, key recipes, bench upgrades, bandages, and late-game craft decisions for 99 Nights in the Forest.',
       url: canonical,

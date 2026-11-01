@@ -15,7 +15,6 @@ import {
   buildItemListSchema,
   buildVideoGameSchema,
   canonicalUrl,
-  currentMonthYear,
 } from '@/lib/seo';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -107,14 +106,13 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const monthYear = currentMonthYear();
   const canonical = canonicalUrl(
     '/roblox/99-nights-in-the-forest/updates/',
     locale
   );
 
   return {
-    title: `99 Nights in the Forest Updates (${monthYear}) - Code Checks`,
+    title: `99 Nights in the Forest Updates - Code Checks`,
     description:
       'Track 99 Nights in the Forest updates, code checks, source changes, guide refreshes, and Roblox metadata without invented patch notes.',
     keywords: seoKeywords.ninetyNineNightsUpdates,
@@ -124,7 +122,7 @@ export async function generateMetadata({
     },
     alternates: { canonical },
     openGraph: {
-      title: `99 Nights in the Forest Updates (${monthYear})`,
+      title: `99 Nights in the Forest Updates`,
       description:
         'Source-checked 99 Nights updates, code checks, and guide refresh notes.',
       url: canonical,

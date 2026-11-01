@@ -24,7 +24,6 @@ import {
   buildItemListSchema,
   buildVideoGameSchema,
   canonicalUrl,
-  currentMonthYear,
 } from '@/lib/seo';
 import { GuideMediaPanel } from '@/components/roblox/guide-media-panel';
 import { Badge } from '@/components/ui/badge';
@@ -79,20 +78,19 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const monthYear = currentMonthYear();
   const canonical = canonicalUrl(
     '/roblox/99-nights-in-the-forest/missing-kids/',
     locale
   );
 
   return {
-    title: `99 Nights in the Forest Missing Kids Locations (${monthYear})`,
+    title: `99 Nights in the Forest Missing Kids Locations`,
     description:
       'Source-checked 99 Nights in the Forest missing kids route guide for Dino Kid, Kraken Kid, Squid Kid, Koala Kid, map planning, and rescue prep.',
     keywords: seoKeywords.ninetyNineNightsMissingKids,
     alternates: { canonical },
     openGraph: {
-      title: `99 Nights in the Forest Missing Kids Locations (${monthYear})`,
+      title: `99 Nights in the Forest Missing Kids Locations`,
       description:
         'Plan the missing kids route with map, compass, campfire, gear, and rescue risk notes.',
       url: canonical,

@@ -18,7 +18,6 @@ import {
   buildItemListSchema,
   buildVideoGameSchema,
   canonicalUrl,
-  currentMonthYear,
 } from '@/lib/seo';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -75,20 +74,19 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const monthYear = currentMonthYear();
   const canonical = canonicalUrl(
     '/roblox/99-nights-in-the-forest/zookeeper-vs-beastmaster/',
     locale
   );
 
   return {
-    title: `Zookeeper vs Beastmaster 99 Nights (${monthYear})`,
+    title: `Zookeeper vs Beastmaster 99 Nights`,
     description:
       'Zookeeper vs Beastmaster in 99 Nights in the Forest with source-checked class roles, flute starts, pet-limit notes, diamond cost caveats, and verdict.',
     keywords: seoKeywords.ninetyNineNightsZookeeperBeastmaster,
     alternates: { canonical },
     openGraph: {
-      title: `Zookeeper vs Beastmaster 99 Nights (${monthYear})`,
+      title: `Zookeeper vs Beastmaster 99 Nights`,
       description:
         'Compare Zookeeper and Beastmaster before spending diamonds on an animal-focused class route.',
       url: canonical,

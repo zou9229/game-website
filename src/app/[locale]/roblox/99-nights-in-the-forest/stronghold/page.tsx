@@ -25,7 +25,6 @@ import {
   buildItemListSchema,
   buildVideoGameSchema,
   canonicalUrl,
-  currentMonthYear,
 } from '@/lib/seo';
 import { GuideMediaPanel } from '@/components/roblox/guide-media-panel';
 import { Badge } from '@/components/ui/badge';
@@ -147,20 +146,19 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const monthYear = currentMonthYear();
   const canonical = canonicalUrl(
     '/roblox/99-nights-in-the-forest/stronghold/',
     locale
   );
 
   return {
-    title: `99 Nights in the Forest Stronghold Guide (${monthYear})`,
+    title: `99 Nights in the Forest Stronghold Guide`,
     description:
       'Cultist Stronghold guide for 99 Nights in the Forest with diamond farming notes, level 4 risk, class prep, and checked source links.',
     keywords: seoKeywords.ninetyNineNightsStronghold,
     alternates: { canonical },
     openGraph: {
-      title: `99 Nights in the Forest Stronghold Guide (${monthYear})`,
+      title: `99 Nights in the Forest Stronghold Guide`,
       description:
         'Plan Cultist Stronghold raids with source-checked diamond, level, class, and risk notes.',
       url: canonical,

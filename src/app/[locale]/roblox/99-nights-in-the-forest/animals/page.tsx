@@ -11,7 +11,6 @@ import {
   buildFAQSchema,
   buildVideoGameSchema,
   canonicalUrl,
-  currentMonthYear,
 } from '@/lib/seo';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -65,14 +64,13 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const monthYear = currentMonthYear();
   const canonical = canonicalUrl(
     '/roblox/99-nights-in-the-forest/animals/',
     locale
   );
 
   return {
-    title: `99 Nights in the Forest Animals and Taming (${monthYear})`,
+    title: `99 Nights in the Forest Animals and Taming`,
     description:
       'A checked 99 Nights in the Forest animal taming reference with flute requirements, food requirements, biome notes, and beginner targets.',
     keywords: seoKeywords.ninetyNineNightsAnimals,
@@ -84,7 +82,7 @@ export async function generateMetadata({
       canonical,
     },
     openGraph: {
-      title: `99 Nights in the Forest Animals and Taming (${monthYear})`,
+      title: `99 Nights in the Forest Animals and Taming`,
       description:
         'Compare tameable animals, food requirements, and flute requirements before building an animal-focused run.',
       url: canonical,

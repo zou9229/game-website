@@ -13,7 +13,6 @@ import {
   buildItemListSchema,
   buildVideoGameSchema,
   canonicalUrl,
-  currentMonthYear,
 } from '@/lib/seo';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -118,20 +117,19 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const monthYear = currentMonthYear();
   const canonical = canonicalUrl(
     '/roblox/99-nights-in-the-forest/forest-gem-fragments/',
     locale
   );
 
   return {
-    title: `99 Nights in the Forest Forest Gem Fragments (${monthYear})`,
+    title: `99 Nights in the Forest Forest Gem Fragments`,
     description:
       'How to get Forest Gem fragments in 99 Nights in the Forest from Day 100+ nighttime raids, how 4 fragments combine, and when to spend the full gem.',
     keywords: seoKeywords.ninetyNineNightsForestGemFragments,
     alternates: { canonical },
     openGraph: {
-      title: `99 Nights in the Forest Forest Gem Fragments (${monthYear})`,
+      title: `99 Nights in the Forest Forest Gem Fragments`,
       description:
         'Source-checked Forest Gem fragment route, combine rule, and first-spend decision.',
       url: canonical,

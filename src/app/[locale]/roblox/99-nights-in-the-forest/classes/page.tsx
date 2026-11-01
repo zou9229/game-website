@@ -12,7 +12,6 @@ import {
   buildItemListSchema,
   buildVideoGameSchema,
   canonicalUrl,
-  currentMonthYear,
 } from '@/lib/seo';
 import { ClassListBrowser } from '@/components/roblox/class-list-browser';
 import { Badge } from '@/components/ui/badge';
@@ -77,14 +76,13 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const monthYear = currentMonthYear();
   const canonical = canonicalUrl(
     '/roblox/99-nights-in-the-forest/classes/',
     locale
   );
 
   return {
-    title: `All 99 Nights in the Forest Classes List (${monthYear})`,
+    title: `All 99 Nights in the Forest Classes List`,
     description:
       'Search all 99 Nights in the Forest classes, listed prices, active and limited availability, plus a clearly dated class tier snapshot.',
     keywords: seoKeywords.ninetyNineNightsClasses,
@@ -92,7 +90,7 @@ export async function generateMetadata({
       canonical,
     },
     openGraph: {
-      title: `All 99 Nights in the Forest Classes List (${monthYear})`,
+      title: `All 99 Nights in the Forest Classes List`,
       description:
         'Search the checked 99 Nights class inventory and separate current availability from older tier opinions.',
       url: canonical,
